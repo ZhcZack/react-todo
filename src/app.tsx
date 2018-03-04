@@ -1,15 +1,46 @@
 import * as React from 'react'
 import { ListView } from './components/list-view'
-import { AreaView } from './components/areaview'
+import { AreaView } from './components/area-view'
 
-export class App extends React.Component {
+interface AppProps {
+
+}
+
+interface AppState {
+    currentListName: string
+}
+
+export class App extends React.Component<AppProps, AppState> {
+    constructor(props: AppProps) {
+        super(props)
+        this.state = {
+            currentListName: '我的一天'
+        }
+
+        // bind methods
+        this.switchList = this.switchList.bind(this)
+    }
+
+    /**
+     * 切换当前列表
+     * @param listName 列表名称
+     */
+    switchList(listName: string) {
+        // console.log('switchList: name is ' + listName)
+        this.setState({
+            currentListName: listName
+        })
+    }
+
     render() {
         return (
             <div id="app">
-                <ListView />
+                <ListView
+                    currentListName={this.state.currentListName}
+                    switchList={this.switchList} />
                 <AreaView
-                    listName={'我的一天'} />
+                    listName={this.state.currentListName} />
             </div>
-        );
+        )
     }
 }

@@ -129,12 +129,18 @@
     flex: 0 1 30px;
     display: flex;
     justify-content: center;
-    align-items: center; }
+    align-items: center;
+    cursor: pointer; }
+    #add-new-item #close-button:hover {
+      background-color: rgba(206, 197, 197, 0.2); }
   #add-new-item #add-button {
     flex: 0 1 60px;
     display: flex;
     justify-content: center;
-    align-items: center; }
+    align-items: center;
+    cursor: pointer; }
+    #add-new-item #add-button:hover {
+      background-color: rgba(206, 197, 197, 0.2); }
 
 .custom-checkbox {
   font-size: 1.5rem;

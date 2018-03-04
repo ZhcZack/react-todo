@@ -22,7 +22,7 @@ export class ListServer {
     }
 
     get names(): string[] {
-        return this.lists
+        return JSON.parse(JSON.stringify(this.lists))
     }
 
     addNewList(name: string) {
