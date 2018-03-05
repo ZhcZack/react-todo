@@ -1,24 +1,27 @@
-import * as React from 'react'
-import { ListView } from './components/list-view'
-import { AreaView } from './components/area-view'
+import * as React from 'react';
+import { ListView } from './components/list-view';
+import { AreaView } from './components/area-view';
 
 interface AppProps {
 
 }
 
 interface AppState {
-    currentListName: string
+    currentListName: string;
 }
 
+/** 
+ * App主内容区域
+ */
 export class App extends React.Component<AppProps, AppState> {
     constructor(props: AppProps) {
-        super(props)
+        super(props);
         this.state = {
             currentListName: '我的一天'
-        }
+        };
 
         // bind methods
-        this.switchList = this.switchList.bind(this)
+        this.switchList = this.switchList.bind(this);
     }
 
     /**
@@ -26,10 +29,10 @@ export class App extends React.Component<AppProps, AppState> {
      * @param listName 列表名称
      */
     switchList(listName: string) {
-        // console.log('switchList: name is ' + listName)
+        // console.log('switchList: name is ' + listName);
         this.setState({
             currentListName: listName
-        })
+        });
     }
 
     render() {
@@ -41,6 +44,6 @@ export class App extends React.Component<AppProps, AppState> {
                 <AreaView
                     listName={this.state.currentListName} />
             </div>
-        )
+        );
     }
 }

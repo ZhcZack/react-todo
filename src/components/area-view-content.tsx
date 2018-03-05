@@ -1,10 +1,10 @@
-import * as React from 'react'
-import { TodoItem } from '../interface'
+import * as React from 'react';
+import { TodoItem } from '../interface';
 
 interface AreaViewContentProps {
-    items: TodoItem[]
-    checkboxClicked(e: React.MouseEvent<HTMLDivElement>, name: string): void
-    itemClicked(e: React.MouseEvent<HTMLLIElement>, name: string): void
+    items: TodoItem[];
+    checkboxClicked(e: React.MouseEvent<HTMLDivElement>, name: string): void;
+    itemClicked(e: React.MouseEvent<HTMLLIElement>, name: string): void;
 }
 
 interface AreaViewContentState {
@@ -22,6 +22,6 @@ export class AreaViewContent extends React.Component<AreaViewContentProps, AreaV
                     </li>)}
                 </ul>
             </div>
-        )
+        );
     }
 }

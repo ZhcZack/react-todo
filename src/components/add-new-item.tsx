@@ -1,10 +1,10 @@
-import * as React from 'react'
+import * as React from 'react';
 
 interface AddNewItemPros {
-    value: string
-    onValueChange(e: React.ChangeEvent<HTMLInputElement>): void
-    onAddClicked(e: React.MouseEvent<HTMLSpanElement>): void
-    onCancelClicked(e: React.MouseEvent<HTMLSpanElement>): void
+    value: string;
+    onValueChange(e: React.ChangeEvent<HTMLInputElement>): void;
+    onAddClicked(e: React.MouseEvent<HTMLSpanElement>): void;
+    onCancelClicked(e: React.MouseEvent<HTMLSpanElement>): void;
 }
 
 export class AddNewItem extends React.Component<AddNewItemPros, {}> {
@@ -15,6 +15,6 @@ export class AddNewItem extends React.Component<AddNewItemPros, {}> {
                 <span id="close-button" className={this.props.value.length > 0 ? '' : 'hide'} onClick={this.props.onCancelClicked}>X</span>
                 <span id="add-button" className={this.props.value.length > 0 ? '' : 'hide'} onClick={this.props.onAddClicked}>添加</span>
             </div>
-        )
+        );
     }
 }

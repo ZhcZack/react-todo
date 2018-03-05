@@ -38,7 +38,8 @@
       text-align: center; }
 
 #areaview-area {
-  width: calc(100% - 280px); }
+  width: calc(100% - 280px);
+  display: flex; }
 
 #areaview {
   width: calc(100%); }

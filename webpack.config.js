@@ -7,7 +7,7 @@ const extractSass = new ExtractTextPlugin({
 const path = require('path');
 
 module.exports = {
-    entry: ['./src/index.tsx', './src/styles/index.scss'],
+    entry: './src/index.tsx',
     devtool: 'source-map',
     output: {
         filename: 'bundle.js',
