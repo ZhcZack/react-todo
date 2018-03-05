@@ -22,6 +22,7 @@
         }
         .title {
             flex: 4 1 calc(100% - 30px);
+            font-weight: bold;
         }
     }
     .actions {
@@ -32,6 +33,9 @@
         height: 40px;
         display: flex;
         background-color: white;
+        .disappear:hover, .delete:hover {
+            background-color: $list-hover-color;
+        }
     }
     .disappear, .delete {
         flex: 1 1 30px;

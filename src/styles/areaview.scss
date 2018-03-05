@@ -39,6 +39,8 @@
         }
     }
     #areaview-content {
+        max-height: calc(100vh - 200px - 60px);
+        overflow: auto;
         ul {
             margin: 0 20px;
         }

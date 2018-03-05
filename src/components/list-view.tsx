@@ -1,34 +1,30 @@
 import * as React from 'react';
-import { ListServer } from './list-server';
 
 interface ListViewProps {
     currentListName: string;
+    listNames: string[];
+    addNewList(listName: string): void;
     switchList(listName: string): void;
 }
 
 interface ListViewState {
-    listNames: string[];
+
 }
 
 /**
  * 列表目录
  */
 export class ListView extends React.Component<ListViewProps, ListViewState> {
-    private server: ListServer;
     /**用于命名新列表的计数器 */
     private count: number;
 
     constructor(props: ListViewProps) {
         super(props);
-        this.server = new ListServer();
         this.count = -1;
-        this.state = {
-            listNames: this.server.names
-        };
 
         // bind methods 
         this.addNewList = this.addNewList.bind(this);
-        // this.handleClick = this.handleClick.bind(this)
+        this.addNewList = this.addNewList.bind(this);
     }
 
     /**
@@ -44,19 +40,10 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
     /**
      * 添加新列表 
      */
-    private addNewList() {
-        let names = this.server.names;
+    private addNewList(e: React.MouseEvent<HTMLDivElement>) {
+        e.stopPropagation();
         let name = this.getListName();
-        while (true) {
-            if (names.indexOf(name) !== -1) {
-                name = this.getListName();
-            } else {
-                break;
-            }
-        }
-        names.push(name);
-        this.server.addNewList(name);
-        this.setState({ listNames: names });
+        this.props.addNewList(name);
     }
 
     /**
@@ -71,12 +58,12 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
         return (
             <div id="listview">
                 <ul>
-                    {this.state.listNames.map(name => <li className={this.props.currentListName === name ? 'list-item active' : 'list-item'} key={name} onClick={e => this.handleClick(e, name)}>
+                    {this.props.listNames.map(name => <li className={this.props.currentListName === name ? 'list-item active' : 'list-item'} key={name} onClick={e => this.handleClick(e, name)}>
                         <span className="item-name">{name}</span>
                         <span className="number-of-items"></span>
                     </li>)}
                 </ul>
-                <div id="add-new-list" onClick={this.addNewList}>新建清单</div>
+                <div id="add-new-list" onClick={e => this.addNewList(e)}><span>+</span>新建清单</div>
             </div>
         );
     }

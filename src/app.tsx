@@ -1,37 +1,64 @@
 import * as React from 'react';
 import { ListView } from './components/list-view';
 import { AreaView } from './components/area-view';
+import { ListServer } from './components/list-server';
+
 
 interface AppProps {
 
 }
 
 interface AppState {
-    currentListName: string;
+    /**最后处理todo事项的列表名称 */
+    lastModifiedListName: string;
+    /**列表们的名称 */
+    listNames: string[];
 }
 
 /** 
  * App主内容区域
  */
 export class App extends React.Component<AppProps, AppState> {
+    /**列表服务 */
+    private server: ListServer;
+
     constructor(props: AppProps) {
         super(props);
+        this.server = new ListServer();
         this.state = {
-            currentListName: '我的一天'
+            lastModifiedListName: this.server.lastModified,
+            listNames: this.server.names
         };
 
         // bind methods
         this.switchList = this.switchList.bind(this);
+        this.addNewList = this.addNewList.bind(this);
     }
 
     /**
      * 切换当前列表
      * @param listName 列表名称
      */
-    switchList(listName: string) {
+    private switchList(listName: string) {
         // console.log('switchList: name is ' + listName);
+        this.server.lastModified = listName;
         this.setState({
-            currentListName: listName
+            lastModifiedListName: listName
+        });
+    }
+
+    /**
+     * 添加新列表
+     * @param listName 列表名称
+     */
+    private addNewList(listName: string) {
+        let names = this.state.listNames;
+        if (names.indexOf(listName) !== -1) { return; }
+        this.server.addNewList(listName);
+        this.server.lastModified = listName;
+        this.setState({
+            lastModifiedListName: listName,
+            listNames: this.server.names
         });
     }
 
@@ -39,10 +66,12 @@ export class App extends React.Component<AppProps, AppState> {
         return (
             <div id="app">
                 <ListView
-                    currentListName={this.state.currentListName}
-                    switchList={this.switchList} />
+                    currentListName={this.state.lastModifiedListName}
+                    switchList={this.switchList}
+                    addNewList={this.addNewList}
+                    listNames={this.state.listNames} />
                 <AreaView
-                    listName={this.state.currentListName} />
+                    listName={this.state.lastModifiedListName} />
             </div>
         );
     }

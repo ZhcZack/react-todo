@@ -66,8 +66,11 @@
     flex-direction: column-reverse; }
     #areaview #areaview-head .name {
       font-size: 2rem; }
-  #areaview #areaview-content ul {
-    margin: 0 20px; }
+  #areaview #areaview-content {
+    max-height: calc(100vh - 200px - 60px);
+    overflow: auto; }
+    #areaview #areaview-content ul {
+      margin: 0 20px; }
 
 #detailview {
   width: 280px;
@@ -86,7 +89,8 @@
     #detailview .title-content .custom-checkbox {
       flex: 1 1 30px; }
     #detailview .title-content .title {
-      flex: 4 1 calc(100% - 30px); }
+      flex: 4 1 calc(100% - 30px);
+      font-weight: bold; }
   #detailview .actions {
     position: absolute;
     bottom: 0;
@@ -109,13 +113,14 @@
 
 #add-new-list {
   height: 40px;
-  display: flex;
-  align-items: center;
   padding: 0 10px;
   cursor: pointer;
   color: blue; }
   #add-new-list:hover {
     background-color: rgba(206, 197, 197, 0.5); }
+  #add-new-list > span {
+    font-size: 1.5em;
+    margin-right: 10px; }
 
 #add-new-item {
   margin: 0 20px;
@@ -123,6 +128,17 @@
   height: 60px;
   display: flex;
   border-bottom: 1px solid rgba(206, 197, 197, 0.5); }
+  #add-new-item > * {
+    height: 30px; }
+  #add-new-item .symbol {
+    font-weight: bold;
+    font-size: 1.5em;
+    color: blue;
+    flex: 0 1 30px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
   #add-new-item #input-area {
     border: none;
     flex: 10 1 100px; }

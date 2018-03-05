@@ -3,13 +3,17 @@
 // custom views
 #add-new-list {
     height: 40px;
-    display: flex;
-    align-items: center;
+    // display: flex;
+    // align-items: center;
     padding: 0 10px;
     cursor: pointer;
     color: blue;
     &:hover {
         background-color: $border-color;
+    }
+    > span {
+        font-size: 1.5em;
+        margin-right: 10px;
     }
 }
 
@@ -19,6 +23,19 @@
     height: 60px;
     display: flex;
     border-bottom: 1px solid $border-color;
+    > * {
+        height: 30px;
+    }
+    .symbol {
+        font-weight: bold;
+        font-size: 1.5em;
+        color: blue;
+        flex: 0 1 30px;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
     #input-area {
         border: none;
         flex: 10 1 100px;

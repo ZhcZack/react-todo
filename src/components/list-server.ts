@@ -37,6 +37,18 @@ export class ListServer {
     }
 
     /**
+     * 最后一次操作todo的列表名称
+     */
+    get lastModified(): string {
+        let result = localStorage.getItem('list-name-before-closed');
+        return result === null ? '我的一天' : result;
+    }
+
+    set lastModified(listName: string) {
+        localStorage.setItem('list-name-before-closed', listName);
+    }
+
+    /**
      * 添加一个新列表
      * @param name 新列表名称
      */
