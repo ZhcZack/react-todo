@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ListView } from './components/list-view';
-import { AreaView } from './components/area-view';
+import { AreaView } from './components/areaview/area-view';
 import { ListServer } from './components/list-server';
 
 
@@ -33,6 +33,15 @@ export class App extends React.Component<AppProps, AppState> {
         // bind methods
         this.switchList = this.switchList.bind(this);
         this.addNewList = this.addNewList.bind(this);
+        this.renameList = this.renameList.bind(this)
+    }
+
+    private renameList(oldName: string, newName: string) {
+        this.server.renameList(oldName, newName)
+        this.setState({
+            listNames: this.server.names,
+            lastModifiedListName: newName
+        })
     }
 
     /**
@@ -71,7 +80,8 @@ export class App extends React.Component<AppProps, AppState> {
                     addNewList={this.addNewList}
                     listNames={this.state.listNames} />
                 <AreaView
-                    listName={this.state.lastModifiedListName} />
+                    listName={this.state.lastModifiedListName}
+                    renameList={this.renameList} />
             </div>
         );
     }

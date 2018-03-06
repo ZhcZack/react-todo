@@ -31,6 +31,16 @@ export class ListServer {
         localStorage.setItem('todo-app-list', JSON.stringify({ lists: this.lists }));
     }
 
+    // TODO: 更改名字的时候要转移数据
+    renameList(oldName: string, newName: string) {
+        if (oldName === newName) { return }
+        let index = this.lists.indexOf(oldName)
+        if (index === -1) { return }
+        this.lists.splice(index, 1, newName)
+        this.lastModified = newName
+        this.save()
+    }
+
     /**列表项目的字符串数组 */
     get names(): string[] {
         return JSON.parse(JSON.stringify(this.lists));

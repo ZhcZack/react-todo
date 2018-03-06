@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TodoItem } from '../interface';
+import { TodoItem } from '../../interface';
 
 interface AreaViewContentProps {
     items: TodoItem[];

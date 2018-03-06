@@ -99,6 +99,8 @@
     height: 40px;
     display: flex;
     background-color: white; }
+    #detailview .actions .disappear:hover, #detailview .actions .delete:hover {
+      background-color: #87ceeb; }
   #detailview .disappear, #detailview .delete {
     flex: 1 1 30px;
     display: flex;

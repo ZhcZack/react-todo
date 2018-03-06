@@ -1,12 +1,14 @@
 import * as React from 'react';
-import { TodoItem } from '../interface';
-import { DetailView } from './detail-view';
-import { ItemServer } from './item-server';
+import { TodoItem } from '../../interface';
+import { DetailView } from './../detail-view';
+import { ItemServer } from './../item-server';
 import { AddNewItem } from './add-new-item';
 import { AreaViewContent } from './area-view-content';
+import { EditableHead } from './editable-head';
 
 interface AreaViewProps {
     listName: string;
+    renameList(oldName: string, newName: string): void
 }
 
 interface AreaViewState {
@@ -37,6 +39,34 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
         this.hideDetailView = this.hideDetailView.bind(this);
         this.addNewItem = this.addNewItem.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
+        this.renameList = this.renameList.bind(this)
+    }
+
+    render() {
+        return (
+            <div id="areaview-area">
+                <div id="areaview" className={this.state.detailItem ? 'shrink' : ''}>
+                    <EditableHead
+                        listName={this.props.listName}
+                        renameList={this.renameList} />
+                    <AreaViewContent
+                        items={this.state.items}
+                        checkboxClicked={this.toggleItem}
+                        itemClicked={this.displayDetailView} />
+                    <AddNewItem
+                        value={this.state.inputValue}
+                        onValueChange={this.handleInput}
+                        onAddClicked={this.addNewItem}
+                        onCancelClicked={this.cancelInput}
+                    />
+                </div>
+                {this.state.detailItem && <DetailView
+                    item={this.state.detailItem}
+                    onCloseClicked={this.hideDetailView}
+                    onDeleteClicked={this.deleteItem}
+                    onToggleClicked={this.toggleItemFromDetailView} />}
+            </div>
+        )
     }
 
     // componentDidMount() {
@@ -47,6 +77,10 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
         this.server.listName = nextProps.listName;
         const items = this.server.items;
         this.setState({ items });
+    }
+
+    private renameList(name: string) {
+        this.props.renameList(this.props.listName, name)
     }
 
     /**
@@ -138,32 +172,5 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
         this.server.deleteItem(this.state.detailItem.name);
         const items = this.server.items;
         this.setState({ items, detailItem: undefined });
-    }
-
-    render() {
-        return (
-            <div id="areaview-area">
-                <div id="areaview" className={this.state.detailItem ? 'shrink' : ''}>
-                    <div id="areaview-head">
-                        <div className="name">{this.props.listName}</div>
-                    </div>
-                    <AreaViewContent
-                        items={this.state.items}
-                        checkboxClicked={this.toggleItem}
-                        itemClicked={this.displayDetailView} />
-                    <AddNewItem
-                        value={this.state.inputValue}
-                        onValueChange={this.handleInput}
-                        onAddClicked={this.addNewItem}
-                        onCancelClicked={this.cancelInput}
-                    />
-                </div>
-                {this.state.detailItem && <DetailView
-                    item={this.state.detailItem}
-                    onCloseClicked={this.hideDetailView}
-                    onDeleteClicked={this.deleteItem}
-                    onToggleClicked={this.toggleItemFromDetailView} />}
-            </div>
-        )
     }
 }
