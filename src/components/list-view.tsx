@@ -24,7 +24,6 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
 
         // bind methods 
         this.addNewList = this.addNewList.bind(this);
-        this.addNewList = this.addNewList.bind(this);
     }
 
     /**
@@ -41,9 +40,9 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
      * 添加新列表 
      */
     private addNewList(e: React.MouseEvent<HTMLDivElement>) {
-        e.stopPropagation();
-        let name = this.getListName();
-        this.props.addNewList(name);
+        e.stopPropagation()
+        let name = this.getListName()
+        this.props.addNewList(name)
     }
 
     /**
@@ -63,7 +62,7 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
                         <span className="number-of-items"></span>
                     </li>)}
                 </ul>
-                <div id="add-new-list" onClick={e => this.addNewList(e)}><span>+</span>新建清单</div>
+                <div id="add-new-list" onClick={this.addNewList}><span>+</span>新建清单</div>
             </div>
         );
     }

@@ -72,13 +72,13 @@ export class App extends React.Component<AppProps, AppState> {
      * @param listName 列表名称
      */
     private addNewList(listName: string) {
-        let names = this.state.listNames;
-        if (names.indexOf(listName) !== -1) { return; }
-        this.server.addNewList(listName);
+        let names = this.state.listNames
+        if (names.indexOf(listName) !== -1) { return }
+        this.server.addNewList(listName)
         this.setState({
             lastModifiedListName: listName,
             listNames: this.server.lists
-        });
+        })
     }
 
     render() {

@@ -44,6 +44,7 @@ export class DataServer {
 
     set lastModified(name: string) {
         this.data.lastModified = name
+        this.save()
     }
 
     addNewList(name: string) {
@@ -63,11 +64,34 @@ export class DataServer {
     }
 
     renameList(oldName: string, newName: string) {
-
+        if (oldName === newName) { return }
+        const index = this.listNameIndex(oldName)
+        if (index < 0) { return }
+        this.data.lists[0].name = newName
+        if (this.data.lastModified === oldName) {
+            this.data.lastModified = newName
+        }
+        this.save()
     }
 
     deleteList(name: string) {
+        if (this.data.lists.length < 2) { return }
+        const index = this.listNameIndex(name)
+        if (index === -1) { return }
+        this.data.lists.splice(index, 1)
+        this.data.lastModified = this.data.lists[0].name
+        this.save()
+    }
 
+    private listNameIndex(name: string): number {
+        let index = -1
+        for (let i = 0; i < this.data.lists.length; i++) {
+            if (this.data.lists[i].name === name) {
+                index = i
+                break
+            }
+        }
+        return index
     }
 
     /**从本地加载数据，没有则初始化数据 */
