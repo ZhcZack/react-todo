@@ -3,7 +3,7 @@ import * as React from 'react';
 interface ListViewProps {
     currentListName: string;
     listNames: string[];
-    addNewList(listName: string): void;
+    addNewList(name: string): void;
     switchList(listName: string): void;
 }
 

@@ -1,31 +1,27 @@
 import * as React from 'react';
-import { TodoItem } from '../../interface';
+import { TodoItem, TodoList } from '../../interface';
 import { DetailView } from './../detail-view';
-import { ItemServer } from './../item-server';
 import { AddNewItem } from './add-new-item';
 import { AreaViewContent } from './area-view-content';
 import { EditableHead } from './editable-head';
 
 interface AreaViewProps {
-    listName: string;
+    listName: string
+    todoItems: TodoItem[]
     renameList(oldName: string, newName: string): void
+    deleteList(name: string): void
 }
 
 interface AreaViewState {
-    items: TodoItem[];
     detailItem?: TodoItem;
     inputValue: string;
 }
 
 export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
-    private server: ItemServer;
 
     constructor(props: AreaViewProps) {
         super(props);
-        this.server = new ItemServer();
-        this.server.listName = this.props.listName;
         this.state = {
-            items: this.server.items,
             detailItem: undefined,
             inputValue: ''
         };
@@ -48,9 +44,10 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
                 <div id="areaview" className={this.state.detailItem ? 'shrink' : ''}>
                     <EditableHead
                         listName={this.props.listName}
-                        renameList={this.renameList} />
+                        renameList={this.renameList}
+                        deleteList={this.props.deleteList} />
                     <AreaViewContent
-                        items={this.state.items}
+                        items={this.props.todoItems}
                         checkboxClicked={this.toggleItem}
                         itemClicked={this.displayDetailView} />
                     <AddNewItem
@@ -74,11 +71,12 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
     // }
 
     componentWillReceiveProps(nextProps: AreaViewProps) {
-        this.server.listName = nextProps.listName;
-        const items = this.server.items;
-        this.setState({ items });
     }
 
+    /**
+     * 更改列表名称
+     * @param name 新的列表名称
+     */
     private renameList(name: string) {
         this.props.renameList(this.props.listName, name)
     }
@@ -103,9 +101,6 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
     private toggleItem(e: React.MouseEvent<HTMLDivElement>, name: string) {
         e.stopPropagation();
         // 切换完成状态
-        this.server.toggleItem(name);
-        const items = this.server.items;
-        this.setState({ items, inputValue: '' });
     }
 
     /**
@@ -127,9 +122,6 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
      */
     private addNewItem(e: React.MouseEvent<HTMLSpanElement>) {
         e.stopPropagation();
-        this.server.addNewItem(this.state.inputValue);
-        const items = this.server.items;
-        this.setState({ items, inputValue: '' });
     }
 
     /**
@@ -147,10 +139,9 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
      * @param name 选中`TodoItem`的名称
      */
     private displayDetailView(e: React.MouseEvent<HTMLLIElement>, name: string) {
-        const item = this.server.itemWithName(name);
-        this.setState({
-            detailItem: item
-        });
+        // this.setState({
+        //     detailItem: item
+        // });
     }
 
     /**
@@ -169,8 +160,5 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
      */
     private deleteItem(e: React.MouseEvent<HTMLSpanElement>) {
         if (!this.state.detailItem) { return; }
-        this.server.deleteItem(this.state.detailItem.name);
-        const items = this.server.items;
-        this.setState({ items, detailItem: undefined });
     }
 }

@@ -20,6 +20,20 @@ export class ItemServer {
     }
 
     /**
+     * 更改列表名称
+     * 
+     * 这里出现这个方法的原因是，更改名称之后要将之前保存的内容转移到新列表名下，并且要删除之前的内容。
+     * @param oldName 旧列表名
+     * @param newName 新列表名
+     */
+    renameList(oldName: string, newName: string) {
+        if (oldName === newName) { return }
+        this._listName = newName
+        this.save()
+        localStorage.removeItem(oldName)
+    }
+
+    /**
      * 根据名称切换对应todo的完成状态
      * @param name todo的名称
      */
@@ -103,7 +117,7 @@ export class ItemServer {
      * 将代办事项内容与对应的列表名称一起保存到本地数据中
      */
     private save() {
-        localStorage.setItem(this._listName, JSON.stringify({ todos: this.todoItems }));
+        localStorage.setItem(this._listName, JSON.stringify({ todos: this.todoItems, length: this.todoItems.length }));
     }
 
     /**

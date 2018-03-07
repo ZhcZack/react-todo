@@ -32,6 +32,12 @@ export class ListServer {
     }
 
     // TODO: 更改名字的时候要转移数据
+    // DONE：数据已转移
+    /**
+     * 更改列表名称
+     * @param oldName 旧列表名
+     * @param newName 新列表名
+     */
     renameList(oldName: string, newName: string) {
         if (oldName === newName) { return }
         let index = this.lists.indexOf(oldName)
@@ -39,6 +45,25 @@ export class ListServer {
         this.lists.splice(index, 1, newName)
         this.lastModified = newName
         this.save()
+    }
+
+    /**
+     * 删除列表
+     * 
+     * 删除成功返回`true`，失败返回`false`
+     * @param name 要删除的列表名称
+     */
+    deleteList(name: string): boolean {
+        let index = this.lists.indexOf(name)
+        if (index === -1) {
+            return false
+        }
+        if (this.lists.length <= 1) { return false }
+        this.lists.splice(index, 1)
+        localStorage.removeItem(name)
+        this.lastModified = this.lists[0]
+        this.save()
+        return true
     }
 
     /**列表项目的字符串数组 */
