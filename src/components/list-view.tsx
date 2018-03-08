@@ -1,10 +1,14 @@
-import * as React from 'react';
+import * as React from 'react'
 
 interface ListViewProps {
-    currentListName: string;
-    listNames: string[];
-    addNewList(name: string): void;
-    switchList(listName: string): void;
+    /**当前进行处理的列表名称 */
+    currentListName: string
+    /**所有列表名称 */
+    listNames: string[]
+    /**添加新列表 */
+    addNewList(name: string): void
+    /**切换area view显示的列表 */
+    switchList(listName: string): void
 }
 
 interface ListViewState {

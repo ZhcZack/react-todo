@@ -28,13 +28,25 @@ export class DataServer {
         return result
     }
 
-    itemsInList(listName: string): TodoItem[] {
+    itemsOfList(listName: string): TodoItem[] {
         for (let i = 0; i < this.data.lists.length; i++) {
             if (this.data.lists[i].name === listName) {
                 return JSON.parse(JSON.stringify(this.data.lists[i].items))
             }
         }
         return []
+    }
+
+    itemInList(itemName: string, listName: string): TodoItem | undefined {
+        const listIndex = this.listNameIndex(listName)
+        if (listIndex < 0) { return }
+        const items = this.data.lists[listIndex].items
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].name === itemName) {
+                return JSON.parse(JSON.stringify(items[i])) as TodoItem
+            }
+        }
+        return
     }
 
     get lastModified(): string {
@@ -66,11 +78,9 @@ export class DataServer {
     renameList(oldName: string, newName: string) {
         if (oldName === newName) { return }
         const index = this.listNameIndex(oldName)
-        if (index < 0) { return }
-        this.data.lists[0].name = newName
-        if (this.data.lastModified === oldName) {
-            this.data.lastModified = newName
-        }
+        if (index === -1) { return }
+        this.data.lists[index].name = newName
+        this.data.lastModified = newName
         this.save()
     }
 
@@ -81,6 +91,59 @@ export class DataServer {
         this.data.lists.splice(index, 1)
         this.data.lastModified = this.data.lists[0].name
         this.save()
+    }
+
+    deleteItemInList(itemName: string, listName: string) {
+        const listIndex = this.listNameIndex(listName)
+        if (listIndex < 0) { return }
+        const list = this.data.lists[listIndex]
+
+        let itemIndex = -1
+        for (let i = 0; i < list.items.length; i++) {
+            if (list.items[i].name === itemName) {
+                itemIndex = i
+            }
+        }
+
+        list.items.splice(itemIndex, 1)
+        this.save()
+    }
+
+    addNewItemInList(itemName: string, listName: string) {
+        const listIndex = this.listNameIndex(listName)
+        if (listIndex < 0) { return }
+
+        const items = this.data.lists[listIndex].items
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].name === itemName) {
+                return
+            }
+        }
+
+        const newItem = this.createTodoItem(itemName)
+        this.data.lists[listIndex].items.push(newItem)
+        this.data.lists[listIndex].count++
+        this.save()
+    }
+
+    toggleItemInList(itemName: string, listName: string) {
+        const listIndex = this.listNameIndex(listName)
+        if (listIndex < 0) { return }
+        const items = this.data.lists[listIndex].items
+        for (let item of items) {
+            if (item.name === itemName) {
+                item.done = !item.done
+            }
+        }
+        this.save()
+    }
+
+    private createTodoItem(name: string): TodoItem {
+        return {
+            name,
+            done: false,
+            time: new Date().toLocaleDateString()
+        }
     }
 
     private listNameIndex(name: string): number {

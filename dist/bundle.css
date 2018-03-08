@@ -37,14 +37,10 @@
       flex: 1 1 20px;
       text-align: center; }
 
-#areaview-area {
-  width: calc(100% - 280px);
-  display: flex; }
-
 #areaview {
-  width: calc(100%); }
+  width: calc(100% - 280px); }
   #areaview.shrink {
-    width: calc(100% - 280px); }
+    width: calc(100% - 280px - 280px); }
   #areaview .todo-item {
     height: 60px;
     display: flex;
@@ -100,7 +96,7 @@
     display: flex;
     background-color: white; }
     #detailview .actions .disappear:hover, #detailview .actions .delete:hover {
-      background-color: #87ceeb; }
+      background-color: rgba(206, 197, 197, 0.5); }
   #detailview .disappear, #detailview .delete {
     flex: 1 1 30px;
     display: flex;

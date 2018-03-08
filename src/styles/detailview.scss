@@ -34,7 +34,7 @@
         display: flex;
         background-color: white;
         .disappear:hover, .delete:hover {
-            background-color: $list-hover-color;
+            background-color: $border-color;
         }
     }
     .disappear, .delete {

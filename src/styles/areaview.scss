@@ -1,14 +1,9 @@
 // todo area view
 
-#areaview-area {
-    width: calc(100% - 280px);
-    display: flex;
-}
-
 #areaview {
-    width: calc(100%);
+    width: calc(100% - 280px);
     &.shrink {
-        width: calc(100% - 280px);
+        width: calc(100% - 280px - 280px);
     }
     .todo-item {
         height: 60px;

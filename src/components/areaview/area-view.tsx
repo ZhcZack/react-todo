@@ -6,62 +6,63 @@ import { AreaViewContent } from './area-view-content';
 import { EditableHead } from './editable-head';
 
 interface AreaViewProps {
+    /**列表名称 */
     listName: string
+    /**列表下的所有todo事项 */
     todoItems: TodoItem[]
+    /**列表是否要紧缩 */
+    shrink: boolean
+    /**todo事项点击，处理方法 */
+    itemClicked(itemName: string, listName: string): void
+    /**重命名列表，处理方法 */
     renameList(oldName: string, newName: string): void
+    /**删除列表处理方法 */
     deleteList(name: string): void
+    /**在列表中添加新todo项目，处理方法 */
+    addNewItemInList(itemName: string, listName: string): void
+    /**切换todo事项完成状态，处理方法 */
+    toggleItemInList(itemName: string, listName: string): void
 }
 
 interface AreaViewState {
-    detailItem?: TodoItem;
-    inputValue: string;
+    /**文本框输入的数据内容 */
+    inputValue: string
 }
 
 export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
 
     constructor(props: AreaViewProps) {
-        super(props);
+        super(props)
         this.state = {
-            detailItem: undefined,
             inputValue: ''
-        };
+        }
 
         // bind methods
-        this.handleInput = this.handleInput.bind(this);
-        this.cancelInput = this.cancelInput.bind(this);
-        this.toggleItem = this.toggleItem.bind(this);
-        this.toggleItemFromDetailView = this.toggleItemFromDetailView.bind(this);
-        this.displayDetailView = this.displayDetailView.bind(this);
-        this.hideDetailView = this.hideDetailView.bind(this);
-        this.addNewItem = this.addNewItem.bind(this);
-        this.deleteItem = this.deleteItem.bind(this);
+        this.handleInput = this.handleInput.bind(this)
+        this.cancelInput = this.cancelInput.bind(this)
+        this.toggleItem = this.toggleItem.bind(this)
+        this.displayDetailView = this.displayDetailView.bind(this)
+        this.addNewItem = this.addNewItem.bind(this)
         this.renameList = this.renameList.bind(this)
     }
 
     render() {
         return (
-            <div id="areaview-area">
-                <div id="areaview" className={this.state.detailItem ? 'shrink' : ''}>
-                    <EditableHead
-                        listName={this.props.listName}
-                        renameList={this.renameList}
-                        deleteList={this.props.deleteList} />
-                    <AreaViewContent
-                        items={this.props.todoItems}
-                        checkboxClicked={this.toggleItem}
-                        itemClicked={this.displayDetailView} />
-                    <AddNewItem
-                        value={this.state.inputValue}
-                        onValueChange={this.handleInput}
-                        onAddClicked={this.addNewItem}
-                        onCancelClicked={this.cancelInput}
-                    />
-                </div>
-                {this.state.detailItem && <DetailView
-                    item={this.state.detailItem}
-                    onCloseClicked={this.hideDetailView}
-                    onDeleteClicked={this.deleteItem}
-                    onToggleClicked={this.toggleItemFromDetailView} />}
+            <div id="areaview" className={this.props.shrink ? 'shrink' : ''}>
+                <EditableHead
+                    listName={this.props.listName}
+                    renameList={this.renameList}
+                    deleteList={this.props.deleteList} />
+                <AreaViewContent
+                    items={this.props.todoItems}
+                    checkboxClicked={this.toggleItem}
+                    itemClicked={this.displayDetailView} />
+                <AddNewItem
+                    value={this.state.inputValue}
+                    onValueChange={this.handleInput}
+                    onAddClicked={this.addNewItem}
+                    onCancelClicked={this.cancelInput}
+                />
             </div>
         )
     }
@@ -87,10 +88,10 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
      */
     private handleInput(e: React.ChangeEvent<HTMLInputElement>) {
         // console.log(e.target)
-        const value = e.target.value;
+        const value = e.target.value
         this.setState({
             inputValue: value
-        });
+        })
     }
 
     /**
@@ -99,21 +100,9 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
      * @param name `TodoItem`的名称
      */
     private toggleItem(e: React.MouseEvent<HTMLDivElement>, name: string) {
-        e.stopPropagation();
+        e.stopPropagation()
         // 切换完成状态
-    }
-
-    /**
-     * 在detail view中切换item的完成状态
-     * @param e 鼠标点击事件
-     */
-    private toggleItemFromDetailView(e: React.MouseEvent<HTMLSpanElement>) {
-        e.stopPropagation();
-        if (!this.state.detailItem) { return; }
-        const item = JSON.parse(JSON.stringify(this.state.detailItem!)) as TodoItem;
-        item.done = !item.done;
-        this.setState({ detailItem: item });
-        this.toggleItem(e as React.MouseEvent<HTMLDivElement>, item.name);
+        this.props.toggleItemInList(name, this.props.listName)
     }
 
     /**
@@ -121,7 +110,11 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
      * @param e 鼠标点击事件
      */
     private addNewItem(e: React.MouseEvent<HTMLSpanElement>) {
-        e.stopPropagation();
+        e.stopPropagation()
+        this.props.addNewItemInList(this.state.inputValue, this.props.listName)
+        this.setState({
+            inputValue: ''
+        })
     }
 
     /**
@@ -129,8 +122,8 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
      * @param e 鼠标点击事件
      */
     private cancelInput(e: React.MouseEvent<HTMLSpanElement>) {
-        e.stopPropagation();
-        this.setState({ inputValue: '' });
+        e.stopPropagation()
+        this.setState({ inputValue: '' })
     }
 
     /**
@@ -139,26 +132,6 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
      * @param name 选中`TodoItem`的名称
      */
     private displayDetailView(e: React.MouseEvent<HTMLLIElement>, name: string) {
-        // this.setState({
-        //     detailItem: item
-        // });
-    }
-
-    /**
-     * 关闭detail view
-     * @param e 鼠标点击事件
-     */
-    private hideDetailView(e: React.MouseEvent<HTMLSpanElement>) {
-        this.setState({
-            detailItem: undefined
-        });
-    }
-
-    /**
-     * 删除detail view中显示的`TodoItem`
-     * @param e 鼠标点击事件
-     */
-    private deleteItem(e: React.MouseEvent<HTMLSpanElement>) {
-        if (!this.state.detailItem) { return; }
+        this.props.itemClicked(name, this.props.listName)
     }
 }

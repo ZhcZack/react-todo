@@ -19,7 +19,7 @@ export class DetailView extends React.Component<DetailViewProps, {}> {
         }
         const checkboxStatus = `custom-checkbox ${this.props.item.done ? 'checked' : ''}`;
         return (
-            <div id="detailview">
+            <div id="detailview" className={this.props.item ? '' : 'hide'}>
                 <div className="title-content">
                     <div className={checkboxStatus} onClick={this.props.onToggleClicked}>√</div>
                     <span className="title">{this.props.item.name}</span>
