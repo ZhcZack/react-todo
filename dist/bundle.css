@@ -58,8 +58,10 @@
     height: 200px;
     padding: 10px;
     border-bottom: 1px solid rgba(206, 197, 197, 0.5);
-    display: flex;
-    flex-direction: column-reverse; }
+    display: flex; }
+    #areaview #areaview-head > * {
+      align-self: flex-end;
+      padding: 10px 10px 0 0; }
     #areaview #areaview-head .name {
       font-size: 2rem; }
   #areaview #areaview-content {

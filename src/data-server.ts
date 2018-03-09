@@ -1,4 +1,4 @@
-import { TodoItem, TodoList } from '../interface'
+import { TodoItem, TodoList, ListInfo } from './interface'
 
 
 /**数据保存的格式 */
@@ -35,6 +35,25 @@ export class DataServer {
             }
         }
         return []
+    }
+
+    // numberOfItemsInList(listName: string): number {
+    //     const listIndex = this.listNameIndex(listName)
+    //     if (listIndex < 0) { return 0 }
+    //     return this.data.lists[listIndex].count
+    // }
+
+    get listInfos(): ListInfo[] {
+        let infos: ListInfo[] = []
+        const lists = this.data.lists
+
+        for (let i = 0; i < lists.length; i++) {
+            infos.push({
+                name: lists[i].name,
+                count: lists[i].count
+            })
+        }
+        return infos
     }
 
     itemInList(itemName: string, listName: string): TodoItem | undefined {
@@ -106,6 +125,7 @@ export class DataServer {
         }
 
         list.items.splice(itemIndex, 1)
+        list.count = list.items.length
         this.save()
     }
 
@@ -140,7 +160,7 @@ export class DataServer {
 
     private createTodoItem(name: string): TodoItem {
         return {
-            name,
+            name: name,
             done: false,
             time: new Date().toLocaleDateString()
         }

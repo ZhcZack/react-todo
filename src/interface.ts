@@ -17,3 +17,8 @@ export interface TodoList {
     /**项目数量 */
     count: number
 }
+
+export interface ListInfo {
+    name: string
+    count: number
+}

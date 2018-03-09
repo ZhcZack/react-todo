@@ -1,10 +1,12 @@
 import * as React from 'react'
+import { ListContent } from './list-content'
+import { ListInfo } from '../../interface'
 
 interface ListViewProps {
     /**当前进行处理的列表名称 */
     currentListName: string
     /**所有列表名称 */
-    listNames: string[]
+    listInfos: ListInfo[]
     /**添加新列表 */
     addNewList(name: string): void
     /**切换area view显示的列表 */
@@ -27,7 +29,8 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
         this.count = -1;
 
         // bind methods 
-        this.addNewList = this.addNewList.bind(this);
+        this.addNewList = this.addNewList.bind(this)
+        this.handleClick = this.handleClick.bind(this)
     }
 
     /**
@@ -60,12 +63,10 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
     render() {
         return (
             <div id="listview">
-                <ul>
-                    {this.props.listNames.map(name => <li className={this.props.currentListName === name ? 'list-item active' : 'list-item'} key={name} onClick={e => this.handleClick(e, name)}>
-                        <span className="item-name">{name}</span>
-                        <span className="number-of-items"></span>
-                    </li>)}
-                </ul>
+                <ListContent
+                    listInfos={this.props.listInfos}
+                    currentListName={this.props.currentListName}
+                    onClick={this.handleClick} />
                 <div id="add-new-list" onClick={this.addNewList}><span>+</span>新建清单</div>
             </div>
         );

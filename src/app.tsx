@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { ListView } from './components/list-view'
+import { ListView } from './components/listview/list-view'
 import { AreaView } from './components/areaview/area-view'
 import { DetailView } from './components/detail-view'
-import { DataServer } from './components/data-server'
-import { TodoItem } from './interface'
+import { DataServer } from './data-server'
+import { TodoItem, ListInfo } from './interface'
 
 
 interface AppProps {
@@ -14,7 +14,7 @@ interface AppState {
     /**最后处理todo事项的列表名称 */
     lastModifiedListName: string
     /**列表们的名称 */
-    listNames: string[]
+    listInfos: ListInfo[]
     /**一个列表中的所有todo事项 */
     itemsOfList: TodoItem[]
     /**detail view中显示/编辑的todo事项 */
@@ -33,7 +33,7 @@ export class App extends React.Component<AppProps, AppState> {
         this.server = new DataServer()
         this.state = {
             lastModifiedListName: this.server.lastModified,
-            listNames: this.server.lists,
+            listInfos: this.server.listInfos,
             itemsOfList: this.server.itemsOfList(this.server.lastModified),
             detailItem: undefined
         };
@@ -60,7 +60,7 @@ export class App extends React.Component<AppProps, AppState> {
         console.log(`oldName: ${oldName}, newName: ${newName}`)
         this.server.renameList(oldName, newName)
         this.setState({
-            listNames: this.server.lists,
+            listInfos: this.server.listInfos,
             lastModifiedListName: this.server.lastModified
         })
     }
@@ -72,7 +72,7 @@ export class App extends React.Component<AppProps, AppState> {
     private deleteList(name: string) {
         this.server.deleteList(name)
         this.setState({
-            listNames: this.server.lists,
+            listInfos: this.server.listInfos,
             lastModifiedListName: this.server.lastModified,
             itemsOfList: this.server.itemsOfList(this.server.lastModified)
         })
@@ -96,12 +96,19 @@ export class App extends React.Component<AppProps, AppState> {
      * @param listName 列表名称
      */
     private addNewList(listName: string) {
-        let names = this.state.listNames
-        if (names.indexOf(listName) !== -1) { return }
+        let infos = this.state.listInfos
+        let index = -1
+        for (let i = 0; i < infos.length; i++) {
+            if (infos[i].name === listName) {
+                index = i
+                break
+            }
+        }
+        if (index !== -1) { return }
         this.server.addNewList(listName)
         this.setState({
             lastModifiedListName: listName,
-            listNames: this.server.lists,
+            listInfos: this.server.listInfos,
             itemsOfList: this.server.itemsOfList(listName)
         })
     }
@@ -114,7 +121,8 @@ export class App extends React.Component<AppProps, AppState> {
     private addNewItemInList(itemName: string, listName: string) {
         this.server.addNewItemInList(itemName, listName)
         this.setState({
-            itemsOfList: this.server.itemsOfList(this.state.lastModifiedListName)
+            itemsOfList: this.server.itemsOfList(this.state.lastModifiedListName),
+            listInfos: this.server.listInfos
         })
     }
 
@@ -177,7 +185,8 @@ export class App extends React.Component<AppProps, AppState> {
         // 删除了todo之后，detailItem自然就没有了
         this.setState({
             detailItem: undefined,
-            itemsOfList: this.server.itemsOfList(listName)
+            itemsOfList: this.server.itemsOfList(listName),
+            listInfos: this.server.listInfos
         })
     }
 
@@ -199,7 +208,7 @@ export class App extends React.Component<AppProps, AppState> {
                     currentListName={this.state.lastModifiedListName}
                     switchList={this.switchList}
                     addNewList={this.addNewList}
-                    listNames={this.state.listNames} />
+                    listInfos={this.state.listInfos} />
                 <AreaView
                     shrink={this.state.detailItem !== undefined}
                     listName={this.state.lastModifiedListName}
