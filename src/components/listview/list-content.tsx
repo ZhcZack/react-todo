@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ListInfo } from '../../interface'
+import { ListInfo } from '../../model/interface'
 
 interface ListContentProps {
     listInfos: ListInfo[]

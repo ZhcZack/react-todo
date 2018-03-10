@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { TodoItem } from '../../interface'
+import { TodoItem } from '../../model/interface'
 
 interface AreaViewContentProps {
     /**要显示的todo事项 */

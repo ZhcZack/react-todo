@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { TodoItem, TodoList } from '../../interface';
-import { DetailView } from './../detail-view';
+import { TodoItem, TodoList } from '../../model/interface';
+import { DetailView } from './../detailview/detail-view';
 import { AddNewItem } from './add-new-item';
 import { AreaViewContent } from './area-view-content';
 import { EditableHead } from './editable-head';

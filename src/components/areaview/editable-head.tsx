@@ -42,7 +42,7 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
      * 开启重命名编辑状态
      * @param e 鼠标点击事件
      */
-    private editButtonClicked(e: React.MouseEvent<HTMLSpanElement>) {
+    private editButtonClicked(e: React.MouseEvent<HTMLButtonElement>) {
         this.setState(prev => ({
             isEdit: !prev.isEdit
         }))
@@ -62,7 +62,7 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
      * 取消重命名操作
      * @param e 鼠标点击事件
      */
-    private cancelClicked(e: React.MouseEvent<HTMLSpanElement>) {
+    private cancelClicked(e: React.MouseEvent<HTMLButtonElement>) {
         e.stopPropagation()
         this.setState({
             name: this.props.listName,
@@ -74,7 +74,7 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
      * 进行重命名工作，同时关闭编辑状态。
      * @param e 鼠标点击事件
      */
-    private renameClicked(e: React.MouseEvent<HTMLSpanElement>) {
+    private renameClicked(e: React.MouseEvent<HTMLButtonElement>) {
         e.stopPropagation()
         this.props.renameList(this.state.name)
         this.setState({
@@ -86,7 +86,7 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
      * 确认删除列表操作
      * @param e 鼠标点击事件
      */
-    private deleteClicked(e: React.MouseEvent<HTMLSpanElement>) {
+    private deleteClicked(e: React.MouseEvent<HTMLButtonElement>) {
         e.stopPropagation()
         const result = confirm('确定删除此列表吗？')
         if (result) {
@@ -95,16 +95,23 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
     }
 
     render() {
+        if (this.props.listName === '我的一天') {
+            return (
+                <div id="areaview-head">
+                    <div className="name">{this.props.listName}</div>
+                </div>
+            )
+        }
         return (
             <div id="areaview-head">
                 {!this.state.isEdit ?
                     <div className="name">{this.props.listName}</div>
                     :
                     <input type='text' value={this.state.name} onChange={this.inputChange} />}
-                {!this.state.isEdit && <span className="edit-button" onClick={this.editButtonClicked}>重命名</span>}
-                {!this.state.isEdit && <span className='delete-button' onClick={this.deleteClicked}>删除</span>}
+                {!this.state.isEdit && <button className="edit-button" onClick={this.editButtonClicked}>重命名</button>}
+                {!this.state.isEdit && <button className='delete-button' onClick={this.deleteClicked}>删除</button>}
                 {this.state.isEdit && <span>
-                    <span onClick={this.renameClicked}>确认</span><span onClick={this.cancelClicked}>取消</span>
+                    <button onClick={this.renameClicked}>确认</button><button onClick={this.cancelClicked}>取消</button>
                 </span>}
             </div>
         )

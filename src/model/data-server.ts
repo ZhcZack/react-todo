@@ -1,0 +1,243 @@
+import { TodoItem, TodoList, ListInfo } from './interface'
+import { TodoItemClass } from './todo-item'
+import { TodoListClass } from './todo-list'
+
+/**数据保存的格式 */
+interface Data {
+    lists: TodoList[]
+    lastModified: string
+}
+
+// interface JSONable {
+//     toJSON(): string
+// }
+
+export class DataServer {
+    // private data: Data
+    private todoLists: TodoListClass[]
+    /**最后操作的列表名称 */
+    private listName: string
+
+    constructor() {
+        // this.data = {} as Data
+        this.todoLists = []
+        this.listName = ''
+        this.load()
+    }
+
+    /**要保存到本地中的数据 */
+    get data(): { data: Data } {
+        return {
+            data: {
+                lists: this.todoLists,
+                lastModified: this.listName
+            }
+        }
+    }
+
+    /**
+     * 返回列表名称的数组集合
+     */
+    get lists(): string[] {
+        let result: string[] = []
+        for (let list of this.todoLists) {
+            result.push(list.name)
+        }
+        return result
+    }
+
+    /**
+     * 返回列表中所有的todo项目
+     * @param listName 列表名称
+     */
+    itemsOfList(listName: string): TodoItem[] {
+        const listIndex = this.listNameIndex(listName)
+        if (listIndex < 0) { return [] }
+        return this.todoLists[listIndex].items
+    }
+
+    /**
+     * 返回所有列表的一些信息，比如名称（`name`）和其中包含todo项目的个数(`count`)
+     */
+    get listInfos(): ListInfo[] {
+        let infos: ListInfo[] = []
+        this.todoLists.forEach(list => {
+            infos.push(list.listInfo)
+        })
+        return infos
+    }
+
+    /**
+     * 返回指定列表中的指定todo项目
+     * @param itemName 要得到的todo项目名称
+     * @param listName 该项目所在的列表名称
+     */
+    itemInList(itemName: string, listName: string): TodoItem | undefined {
+        // console.log(`itemName: ${itemName}`)
+        const listIndex = this.listNameIndex(listName)
+        if (listIndex < 0) { return }
+        const items = this.todoLists[listIndex].items
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].name === itemName) {
+                // console.log(`copy: ${items[i].copy}`)
+                return items[i].copy
+            }
+        }
+        return undefined
+    }
+
+    /**
+     * 最后进行操作的列表名称
+     */
+    get lastModified(): string {
+        const name = this.listName
+        return name === '' ? '我的一天' : name
+    }
+
+    set lastModified(name: string) {
+        this.listName = name
+        this.save()
+    }
+
+    /**
+     * 添加新列表
+     * @param name 新列表名称
+     */
+    addNewList(name: string) {
+        const listIndex = this.listNameIndex(name)
+        if (listIndex !== -1) { return }
+        const list = new TodoListClass(name)
+        this.todoLists.push(list)
+        this.listName = name
+        this.save()
+    }
+
+    /**
+     * 重命名列表
+     * @param oldName 旧列表名称
+     * @param newName 新列表名称
+     */
+    renameList(oldName: string, newName: string) {
+        if (oldName === newName) { return }
+        const index = this.listNameIndex(oldName)
+        if (index === -1) { return }
+        this.todoLists[index].rename(newName)
+        this.listName = newName
+        this.save()
+    }
+
+    /**
+     * 删除列表
+     * @param name 要删除的列表名称
+     */
+    deleteList(name: string) {
+        if (this.todoLists.length < 2) { return }
+        const index = this.listNameIndex(name)
+        if (index === -1) { return }
+        this.todoLists.splice(index, 1)
+        this.listName = this.todoLists[0].name
+        this.save()
+    }
+
+    /**
+     * 在指定列表中删除指定todo项目
+     * @param itemName 要删除的todo名称
+     * @param listName 该todo所在的列表名称
+     */
+    deleteItemInList(itemName: string, listName: string) {
+        const listIndex = this.listNameIndex(listName)
+        if (listIndex < 0) { return }
+        const list = this.todoLists[listIndex]
+
+        if (!list.containsItem(itemName)) { return }
+        list.removeItem(itemName)
+        this.save()
+    }
+
+    /**
+     * 在指定列表中添加新todo项目
+     * @param itemName 要添加的todo项目的名称
+     * @param listName 该项目要被加入的列表名称
+     */
+    addNewItemInList(itemName: string, listName: string) {
+        const listIndex = this.listNameIndex(listName)
+        if (listIndex < 0) { return }
+
+        const list = this.todoLists[listIndex]
+        if (list.containsItem(itemName)) { return }
+
+        list.addNewItem(itemName)
+        this.save()
+    }
+
+    /**
+     * 切换指定列表中指定项目的完成状态
+     * @param itemName 要切换完成状态的todo项目的名称
+     * @param listName 该项目所在的列表名称
+     */
+    toggleItemInList(itemName: string, listName: string) {
+        const listIndex = this.listNameIndex(listName)
+        if (listIndex < 0) { return }
+        const items = this.todoLists[listIndex].items
+        for (let item of items) {
+            if (item.name === itemName) {
+                item.toggle()
+            }
+        }
+        this.save()
+    }
+
+    /**
+     * 列表所在列表数组的索引值，用于判断是否存在该列表
+     * @param name 列表名称
+     */
+    private listNameIndex(name: string): number {
+        let index = -1
+        for (let i = 0; i < this.todoLists.length; i++) {
+            if (this.todoLists[i].name === name) {
+                index = i
+                break
+            }
+        }
+        return index
+    }
+
+    /**从本地加载数据，没有则初始化数据 */
+    private load() {
+        const result = localStorage.getItem('react-todo-app')
+        if (result === null) {
+            const lists = [
+                new TodoListClass('我的一天')
+            ]
+            this.todoLists = lists
+            this.lastModified = '我的一天'
+            this.save()
+        } else {
+            const dataFromLocal = JSON.parse(result).data
+            const listsFromLocal = dataFromLocal.lists
+            // 从本地获取数据并解析成对应的class
+            for (let i = 0; i < listsFromLocal.length; i++) {
+                const newList = new TodoListClass(listsFromLocal[i].name)
+                const localItems = listsFromLocal[i].items
+                for (let j = 0; j < localItems.length; j++) {
+                    const newItem = new TodoItemClass(localItems[j].name, localItems[j].done, localItems[j].time)
+                    newList.addNewItem(newItem.name, newItem.done, newItem.time)
+                }
+                this.todoLists.push(newList)
+            }
+            this.listName = dataFromLocal.lastModified
+        }
+    }
+
+    /**
+     * 将data中的数据保存到本地
+     */
+    private save() {
+        localStorage.setItem('react-todo-app', JSON.stringify(this.data))
+    }
+}
+
+// 更新：下面本来存在的代码已经被拆到其他文件里去，server保留server的代码就好。
+
+// 写下面这些的目的是将对数据的操作用一层对象“包起来”，不是通过直接的指令而是通过对象的方法进行操作
+// 这样做的好处应该是后面增添改动起来方便些，毕竟不用处理细节上的东西

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { ListContent } from './list-content'
-import { ListInfo } from '../../interface'
+import { ListInfo } from '../../model/interface'
 
 interface ListViewProps {
     /**当前进行处理的列表名称 */

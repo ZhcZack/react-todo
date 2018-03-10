@@ -61,7 +61,7 @@
     display: flex; }
     #areaview #areaview-head > * {
       align-self: flex-end;
-      padding: 10px 10px 0 0; }
+      margin-right: 10px; }
     #areaview #areaview-head .name {
       font-size: 2rem; }
   #areaview #areaview-content {

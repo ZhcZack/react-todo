@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { ListView } from './components/listview/list-view'
 import { AreaView } from './components/areaview/area-view'
-import { DetailView } from './components/detail-view'
-import { DataServer } from './data-server'
-import { TodoItem, ListInfo } from './interface'
+import { DetailView } from './components/detailview/detail-view'
+import { DataServer } from './model/data-server'
+import { TodoItem, ListInfo } from './model/interface'
 
 
 interface AppProps {
