@@ -8,11 +8,13 @@ export class TodoItemClass implements TodoItem {
         return {
             name: this.name,
             done: this.done,
-            time: this.time
+            time: this.time,
+            comments: this.comments
         }
     }
 
-    constructor(public name: string, public done = false, public time = '') {
+
+    constructor(public name: string, public done = false, public time = '', public comments?: string) {
     }
 
     /**切换项目的完成状态 */
@@ -26,6 +28,14 @@ export class TodoItemClass implements TodoItem {
      */
     rename(newName: string) {
         this.name = newName
+    }
+
+    /**
+     * 改变项目的备注
+     * @param newComments 新的备注
+     */
+    changeComments(newComments: string) {
+        this.comments = newComments
     }
 
     /**项目的复制 */

@@ -18,9 +18,14 @@
         }
     }
     .todo-item-content {
+        display: flex;
+        flex-direction: column;
         &.done {
             text-decoration: line-through;
             color: gray;
+        }
+        .todo-item-content-comments {
+            font-size: 0.6em;
         }
     }
     #areaview-head {

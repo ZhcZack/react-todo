@@ -51,9 +51,14 @@
     transition: background-color 0.3s; }
     #areaview .todo-item:hover {
       background-color: rgba(206, 197, 197, 0.5); }
-  #areaview .todo-item-content.done {
-    text-decoration: line-through;
-    color: gray; }
+  #areaview .todo-item-content {
+    display: flex;
+    flex-direction: column; }
+    #areaview .todo-item-content.done {
+      text-decoration: line-through;
+      color: gray; }
+    #areaview .todo-item-content .todo-item-content-comments {
+      font-size: 0.6em; }
   #areaview #areaview-head {
     height: 200px;
     padding: 10px;
@@ -89,6 +94,12 @@
     #detailview .title-content .title {
       flex: 4 1 calc(100% - 30px);
       font-weight: bold; }
+  #detailview .detailitem-comments {
+    width: 90%;
+    height: calc(30vh);
+    margin: 5%;
+    resize: none;
+    scroll-behavior: auto; }
   #detailview .actions {
     position: absolute;
     bottom: 0;

@@ -6,6 +6,8 @@ export interface TodoItem {
     done: boolean
     /**创建时间 */
     time: string
+    /**备注 */
+    comments?: string
 }
 
 /**列表格式，包含名称和保存的Todo项目 */

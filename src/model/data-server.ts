@@ -187,6 +187,20 @@ export class DataServer {
         this.save()
     }
 
+    changeItemCommentsInList(value: string, itemName: string, listName: string) {
+        const listIndex = this.listNameIndex(listName)
+        if (listIndex < 0) { return }
+        const list = this.todoLists[listIndex]
+        if (!list.containsItem(itemName)) { return }
+        const items = list.items
+        for (let item of items) {
+            if (item.name === itemName) {
+                item.changeComments(value)
+            }
+        }
+        this.save()
+    }
+
     /**
      * 列表所在列表数组的索引值，用于判断是否存在该列表
      * @param name 列表名称
@@ -220,8 +234,8 @@ export class DataServer {
                 const newList = new TodoListClass(listsFromLocal[i].name)
                 const localItems = listsFromLocal[i].items
                 for (let j = 0; j < localItems.length; j++) {
-                    const newItem = new TodoItemClass(localItems[j].name, localItems[j].done, localItems[j].time)
-                    newList.addNewItem(newItem.name, newItem.done, newItem.time)
+                    const newItem = new TodoItemClass(localItems[j].name, localItems[j].done, localItems[j].time, localItems[j].comments)
+                    newList.addNewItem(newItem.name, newItem.done, newItem.time, newItem.comments)
                 }
                 this.todoLists.push(newList)
             }

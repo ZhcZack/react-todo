@@ -21,7 +21,10 @@ export class AreaViewContent extends React.Component<AreaViewContentProps, AreaV
                 <ul>
                     {this.props.items.map(item => <li className="todo-item" key={item.name} onClick={e => this.props.itemClicked(e, item.name)}>
                         <div className={item.done ? "custom-checkbox checked" : 'custom-checkbox'} onClick={e => this.props.checkboxClicked(e, item.name)}>√</div>
-                        <span className={item.done ? "todo-item-content done" : 'todo-item-content'}>{item.name}</span>
+                        <div className={item.done ? "todo-item-content done" : 'todo-item-content'}>
+                            <span>{item.name}</span>
+                            {item.comments && <span className='todo-item-content-comments'>备注</span>}
+                        </div>
                     </li>)}
                 </ul>
             </div>

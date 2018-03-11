@@ -25,6 +25,13 @@
             font-weight: bold;
         }
     }
+    .detailitem-comments {
+        width: 90%;
+        height: calc(30vh);
+        margin: 5%;
+        resize: none;
+        scroll-behavior: auto;
+    }
     .actions {
         position: absolute;
         bottom: 0;

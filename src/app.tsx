@@ -49,6 +49,7 @@ export class App extends React.Component<AppProps, AppState> {
         this.handleToggleFromDetailView = this.handleToggleFromDetailView.bind(this)
         this.handleCloseFromDetailView = this.handleCloseFromDetailView.bind(this)
         this.handleDeleteFromDetailView = this.handleDeleteFromDetailView.bind(this)
+        this.handleCommentsChange = this.handleCommentsChange.bind(this)
     }
 
     /**
@@ -190,6 +191,15 @@ export class App extends React.Component<AppProps, AppState> {
         })
     }
 
+    private handleCommentsChange(value: string) {
+        if (!this.state.detailItem) { return }
+        this.server.changeItemCommentsInList(value, this.state.detailItem.name, this.state.lastModifiedListName)
+        this.setState(prevState => ({
+            detailItem: prevState.detailItem ? this.server.itemInList(prevState.detailItem.name, prevState.lastModifiedListName) : undefined,
+            itemsOfList: this.server.itemsOfList(prevState.lastModifiedListName)
+        }))
+    }
+
     /**
      * 详细显示鼠标点击的todo项目
      * @param itemName 要详细显示的todo名称
@@ -222,7 +232,8 @@ export class App extends React.Component<AppProps, AppState> {
                     item={this.state.detailItem}
                     onCloseClicked={this.handleCloseFromDetailView}
                     onDeleteClicked={this.handleDeleteFromDetailView}
-                    onToggleClicked={this.handleToggleFromDetailView} />
+                    onToggleClicked={this.handleToggleFromDetailView}
+                    onCommentsChange={this.handleCommentsChange} />
             </div>
         )
     }

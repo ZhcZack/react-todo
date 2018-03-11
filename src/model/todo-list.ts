@@ -55,11 +55,12 @@ export class TodoListClass implements TodoList {
      * @param itemName 名称
      * @param isDone 完成状态
      * @param createTime 创建时间
+     * @param comments 备注（可选项）
      */
-    addNewItem(itemName: string, isDone = false, createTime = new Date().toLocaleDateString()) {
+    addNewItem(itemName: string, isDone = false, createTime = new Date().toLocaleDateString(), comments?: string) {
         const inOrNot = this.itemInList(itemName)
         if (inOrNot) { return }
-        this.todoItems.push(new TodoItemClass(itemName, isDone, createTime))
+        this.todoItems.push(new TodoItemClass(itemName, isDone, createTime, comments))
     }
 
     /**
