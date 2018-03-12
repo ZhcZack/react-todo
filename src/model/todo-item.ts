@@ -14,7 +14,7 @@ export class TodoItemClass implements TodoItem {
     }
 
 
-    constructor(public name: string, public done = false, public time = '', public comments?: string) {
+    constructor(public name: string, public done = false, public time = new Date().toLocaleDateString(), public comments?: string) {
     }
 
     /**切换项目的完成状态 */

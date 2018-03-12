@@ -73,7 +73,8 @@ export class App extends React.Component<AppProps, AppState> {
 
         this.setState({
             listInfos: this.server.listInfos,
-            itemsOfList: this.server.itemsOfList(this.server.lastModified)
+            itemsOfList: this.server.itemsOfList(this.server.lastModified),
+            detailItem: undefined
         })
     }
 

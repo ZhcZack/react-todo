@@ -225,27 +225,60 @@ export class DataServer {
     private load() {
         const result = localStorage.getItem('react-todo-app')
         if (result === null) {
-            const lists = [
-                new TodoListClass('我的一天')
-            ]
-            this.todoLists = lists
-            this.lastModified = '我的一天'
-            this.save()
+            this.initLocalData()
         } else {
-            const dataFromLocal = JSON.parse(result).data
-            const listsFromLocal = dataFromLocal.lists
-            // 从本地获取数据并解析成对应的class
-            for (let i = 0; i < listsFromLocal.length; i++) {
-                const newList = new TodoListClass(listsFromLocal[i].name)
-                const localItems = listsFromLocal[i].items
-                for (let j = 0; j < localItems.length; j++) {
-                    const newItem = new TodoItemClass(localItems[j].name, localItems[j].done, localItems[j].time, localItems[j].comments)
-                    newList.addNewItem(newItem)
-                }
-                this.todoLists.push(newList)
+            try {
+                this.dataFromLocal()
+            } catch (e) {
+                this.initLocalData()
             }
-            this.listName = dataFromLocal.lastModified
         }
+    }
+
+    /**手动初始化本地数据 */
+    private initLocalData() {
+        const lists = [
+            new TodoListClass('我的一天')
+        ]
+        this.todoLists = lists
+        this.lastModified = '我的一天'
+        this.save()
+    }
+
+    /**从本地加载数据，如果本地格式不对就抛出异常等待处理 */
+    private dataFromLocal() {
+        const result = localStorage.getItem('react-todo-app')
+        if (!result) { return }
+        const data = JSON.parse(result)
+        if (!data.data) {
+            console.log('not have data')
+            throw Error('local data error')
+        }
+        const dataFromLocal = data.data
+        if (!dataFromLocal.lists) {
+            console.log('not have lists')
+            throw Error('local data error')
+        }
+        const listsFromLocal = dataFromLocal.lists
+        // 从本地获取数据并解析成对应的class
+        for (let i = 0; i < listsFromLocal.length; i++) {
+            if (!listsFromLocal[i].name) {
+                console.log('not have list name')
+                throw Error('local data error')
+            }
+            const newList = new TodoListClass(listsFromLocal[i].name)
+            const localItems = listsFromLocal[i].items
+            for (let j = 0; j < localItems.length; j++) {
+                if (!localItems[j].name || localItems[j].done === undefined || !localItems[j].time) {
+                    console.log('item format error')
+                    throw Error('local data error')
+                }
+                const newItem = new TodoItemClass(localItems[j].name, localItems[j].done, localItems[j].time, localItems[j].comments)
+                newList.addNewItem(newItem)
+            }
+            this.todoLists.push(newList)
+        }
+        this.listName = dataFromLocal.lastModified
     }
 
     /**

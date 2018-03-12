@@ -76,7 +76,9 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
      */
     private renameClicked(e: React.MouseEvent<HTMLButtonElement>) {
         e.stopPropagation()
-        this.props.renameList(this.state.name)
+        if (this.state.name !== '') {
+            this.props.renameList(this.state.name)
+        }
         this.setState({
             isEdit: false
         })
