@@ -53,7 +53,8 @@ export class DataServer {
     itemsOfList(listName: string): TodoItem[] {
         const listIndex = this.listNameIndex(listName)
         if (listIndex < 0) { return [] }
-        return this.todoLists[listIndex].items
+        const items = this.todoLists[listIndex].items
+        return JSON.parse(JSON.stringify(items))
     }
 
     /**
@@ -159,14 +160,12 @@ export class DataServer {
      * @param itemName 要添加的todo项目的名称
      * @param listName 该项目要被加入的列表名称
      */
-    addNewItemInList(itemName: string, listName: string) {
+    addNewItemInList(item: TodoItem | string, listName: string): void {
         const listIndex = this.listNameIndex(listName)
         if (listIndex < 0) { return }
 
         const list = this.todoLists[listIndex]
-        if (list.containsItem(itemName)) { return }
-
-        list.addNewItem(itemName)
+        list.addNewItem(item)
         this.save()
     }
 
@@ -187,7 +186,13 @@ export class DataServer {
         this.save()
     }
 
-    changeItemCommentsInList(value: string, itemName: string, listName: string) {
+    /**
+     * 更改指定列表中指定todo事项的备注信息
+     * @param newComments 新的备注
+     * @param itemName 要更改备注的todo事项
+     * @param listName 该todo事项所在的列表名称
+     */
+    changeItemCommentsInList(newComments: string, itemName: string, listName: string) {
         const listIndex = this.listNameIndex(listName)
         if (listIndex < 0) { return }
         const list = this.todoLists[listIndex]
@@ -195,7 +200,7 @@ export class DataServer {
         const items = list.items
         for (let item of items) {
             if (item.name === itemName) {
-                item.changeComments(value)
+                item.changeComments(newComments)
             }
         }
         this.save()
@@ -235,7 +240,7 @@ export class DataServer {
                 const localItems = listsFromLocal[i].items
                 for (let j = 0; j < localItems.length; j++) {
                     const newItem = new TodoItemClass(localItems[j].name, localItems[j].done, localItems[j].time, localItems[j].comments)
-                    newList.addNewItem(newItem.name, newItem.done, newItem.time, newItem.comments)
+                    newList.addNewItem(newItem)
                 }
                 this.todoLists.push(newList)
             }

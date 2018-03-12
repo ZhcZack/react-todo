@@ -51,16 +51,20 @@ export class TodoListClass implements TodoList {
     }
 
     /**
-     * 添加新项目
-     * @param itemName 名称
-     * @param isDone 完成状态
-     * @param createTime 创建时间
-     * @param comments 备注（可选项）
+     * 添加新todo项目
+     * @param item 要添加的todo项目（有两种表示方式，一个是todo的名称，另一个是todo本身）
      */
-    addNewItem(itemName: string, isDone = false, createTime = new Date().toLocaleDateString(), comments?: string) {
-        const inOrNot = this.itemInList(itemName)
-        if (inOrNot) { return }
-        this.todoItems.push(new TodoItemClass(itemName, isDone, createTime, comments))
+    addNewItem(item: TodoItem | string) {
+        if (typeof item === 'string') {
+            const inOrNot = this.containsItem(item)
+            if (inOrNot) { return }
+            this.todoItems.push(new TodoItemClass(item))
+        } else {
+            const inOrNot = this.containsItem(item.name)
+            if (inOrNot) { return }
+            // console.log(`item: ${item}`)
+            this.todoItems.push(new TodoItemClass(item.name, item.done, item.time, item.comments))
+        }
     }
 
     /**
@@ -68,7 +72,7 @@ export class TodoListClass implements TodoList {
      * @param itemName 要删除的todo名称
      */
     removeItem(itemName: string) {
-        const inOrNot = this.itemInList(itemName)
+        const inOrNot = this.containsItem(itemName)
         if (!inOrNot) { return }
         const index = this.itemIndex(itemName)
         this.todoItems.splice(index, 1)
@@ -81,7 +85,7 @@ export class TodoListClass implements TodoList {
      */
     renameItem(oldName: string, newName: string) {
         if (oldName === newName) { return }
-        const inOrNot = this.itemInList(oldName)
+        const inOrNot = this.containsItem(oldName)
         if (!inOrNot) { return }
         const index = this.itemIndex(oldName)
         this.todoItems[index].rename(oldName)
@@ -92,7 +96,7 @@ export class TodoListClass implements TodoList {
      * @param itemName 项目名称
      */
     itemInfo(itemName: string): TodoItem | undefined {
-        const inOrNot = this.itemInList(itemName)
+        const inOrNot = this.containsItem(itemName)
         if (!inOrNot) { return undefined }
         const index = this.itemIndex(itemName)
         const item = this.todoItems[index]
@@ -110,19 +114,6 @@ export class TodoListClass implements TodoList {
     rename(newName: string) {
         if (newName === this.name) { return }
         this.name = newName
-    }
-
-    /**
-     * 列表中是否包含指定项目
-     * @param name 项目名称
-     */
-    private itemInList(name: string): boolean {
-        for (let i = 0; i < this.todoItems.length; i++) {
-            if (this.items[i].name === name) {
-                return true
-            }
-        }
-        return false
     }
 
     /**

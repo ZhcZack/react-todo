@@ -1,10 +1,16 @@
 import * as React from 'react'
 import { ListInfo } from '../../model/interface'
+import { ListViewItem } from './list-view-item'
 
 interface ListContentProps {
+    /**所有列表的信息 */
     listInfos: ListInfo[]
+    /**当前编辑的列表名称 */
     currentListName: string
+    /**列表的点击事件，用于切换编辑的列表 */
     onClick(e: React.MouseEvent<HTMLLIElement>, name: string): void
+    /**拖拽事件处理方法，用于“放置”todo事项 */
+    onDrop(targetListName: string): void
 }
 
 interface ListContentState {
@@ -15,10 +21,13 @@ export class ListContent extends React.Component<ListContentProps, ListContentSt
     render() {
         return (
             <ul>
-                {this.props.listInfos.map(info => <li className={this.props.currentListName === info.name ? 'list-item active' : 'list-item'} key={info.name} onClick={e => this.props.onClick(e, info.name)}>
-                    <span className="item-name">{info.name}</span>
-                    <span className="number-of-items">{info.count > 0 ? info.count : ''}</span>
-                </li>)}
+                {this.props.listInfos.map(info =>
+                    <ListViewItem
+                        currentListName={this.props.currentListName}
+                        info={info}
+                        onClick={this.props.onClick}
+                        onDrop={this.props.onDrop} />)
+                }
             </ul>
         )
     }

@@ -11,6 +11,7 @@ interface ListViewProps {
     addNewList(name: string): void
     /**切换area view显示的列表 */
     switchList(listName: string): void
+    onDrop(targetListName: string): void
 }
 
 interface ListViewState {
@@ -66,7 +67,8 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
                 <ListContent
                     listInfos={this.props.listInfos}
                     currentListName={this.props.currentListName}
-                    onClick={this.handleClick} />
+                    onClick={this.handleClick}
+                    onDrop={this.props.onDrop} />
                 <div id="add-new-list" onClick={this.addNewList}><span>+</span>新建清单</div>
             </div>
         );

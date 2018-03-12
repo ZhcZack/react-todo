@@ -22,6 +22,10 @@ interface AreaViewProps {
     addNewItemInList(itemName: string, listName: string): void
     /**切换todo事项完成状态，处理方法 */
     toggleItemInList(itemName: string, listName: string): void
+    /**拖拽todo事项 */
+    onDragStart(data: string): void
+    /**拖拽结束/被取消 */
+    onDragEnd(): void
 }
 
 interface AreaViewState {
@@ -44,6 +48,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
         this.displayDetailView = this.displayDetailView.bind(this)
         this.addNewItem = this.addNewItem.bind(this)
         this.renameList = this.renameList.bind(this)
+        this.handleDragStart = this.handleDragStart.bind(this)
     }
 
     render() {
@@ -56,7 +61,9 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
                 <AreaViewContent
                     items={this.props.todoItems}
                     checkboxClicked={this.toggleItem}
-                    itemClicked={this.displayDetailView} />
+                    itemClicked={this.displayDetailView}
+                    onDragStart={this.handleDragStart}
+                    onDragEnd={this.props.onDragEnd} />
                 <AddNewItem
                     value={this.state.inputValue}
                     onValueChange={this.handleInput}
@@ -65,6 +72,17 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
                 />
             </div>
         )
+    }
+
+    /**
+     * 往数据中添加拖拽事项所在的列表名称
+     * @param data todo事项的原始数据
+     */
+    private handleDragStart(data: string) {
+        const obj = JSON.parse(data)
+        // console.log(`obj: ${obj}, type: ${typeof obj}`)
+        const newData = JSON.stringify({ listName: this.props.listName, data })
+        this.props.onDragStart(newData)
     }
 
     // componentDidMount() {

@@ -27,6 +27,8 @@ interface AppState {
 export class App extends React.Component<AppProps, AppState> {
     /**列表服务 */
     private server: DataServer
+    /**拖拽过程中的数据 */
+    private dragData?: string
 
     constructor(props: AppProps) {
         super(props);
@@ -36,7 +38,7 @@ export class App extends React.Component<AppProps, AppState> {
             listInfos: this.server.listInfos,
             itemsOfList: this.server.itemsOfList(this.server.lastModified),
             detailItem: undefined
-        };
+        }
 
         // bind methods
         this.switchList = this.switchList.bind(this)
@@ -50,6 +52,29 @@ export class App extends React.Component<AppProps, AppState> {
         this.handleCloseFromDetailView = this.handleCloseFromDetailView.bind(this)
         this.handleDeleteFromDetailView = this.handleDeleteFromDetailView.bind(this)
         this.handleCommentsChange = this.handleCommentsChange.bind(this)
+        this.handleDragStart = this.handleDragStart.bind(this)
+        this.handleDrop = this.handleDrop.bind(this)
+    }
+
+    /**
+     * 拖拽完成/结束时的处理方法，将一个todo移动到另一个列表中去。
+     * @param targetListName todo要被拖拽到的目标列表名称
+     */
+    private handleDrop(targetListName: string) {
+        if (!this.dragData) { return }
+        const data = JSON.parse(this.dragData)
+        const sourceListName = data.listName
+        const itemData = JSON.parse(data.data)
+
+        if (sourceListName === targetListName) { return }
+        this.server.deleteItemInList(itemData.name, sourceListName)
+        this.server.addNewItemInList(itemData, targetListName)
+        this.dragData = undefined
+
+        this.setState({
+            listInfos: this.server.listInfos,
+            itemsOfList: this.server.itemsOfList(this.server.lastModified)
+        })
     }
 
     /**
@@ -191,6 +216,10 @@ export class App extends React.Component<AppProps, AppState> {
         })
     }
 
+    /**
+     * 更改todo事项的备注
+     * @param value todo事项的新备注
+     */
     private handleCommentsChange(value: string) {
         if (!this.state.detailItem) { return }
         this.server.changeItemCommentsInList(value, this.state.detailItem.name, this.state.lastModifiedListName)
@@ -211,6 +240,20 @@ export class App extends React.Component<AppProps, AppState> {
         })
     }
 
+    /**
+     * 保存拖拽数据
+     * @param data 拖拽的todo事项数据
+     */
+    private handleDragStart(data: string) {
+        this.dragData = data
+        // console.log(`dragData: ${data.toString()}, type: ${typeof data}`)
+    }
+
+    /**拖拽结束/被取消时清除保存的拖拽数据 */
+    private handleDragEnd() {
+        this.dragData = undefined
+    }
+
     render() {
         return (
             <div id="app">
@@ -218,7 +261,8 @@ export class App extends React.Component<AppProps, AppState> {
                     currentListName={this.state.lastModifiedListName}
                     switchList={this.switchList}
                     addNewList={this.addNewList}
-                    listInfos={this.state.listInfos} />
+                    listInfos={this.state.listInfos}
+                    onDrop={this.handleDrop} />
                 <AreaView
                     shrink={this.state.detailItem !== undefined}
                     listName={this.state.lastModifiedListName}
@@ -227,7 +271,9 @@ export class App extends React.Component<AppProps, AppState> {
                     deleteList={this.deleteList}
                     addNewItemInList={this.addNewItemInList}
                     toggleItemInList={this.toggleItemInList}
-                    itemClicked={this.itemClicked} />
+                    itemClicked={this.itemClicked}
+                    onDragStart={this.handleDragStart}
+                    onDragEnd={this.handleDragEnd} />
                 <DetailView
                     item={this.state.detailItem}
                     onCloseClicked={this.handleCloseFromDetailView}

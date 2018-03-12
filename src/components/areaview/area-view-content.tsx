@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { TodoItem } from '../../model/interface'
+import { AreaViewItem } from './area-view-item'
 
 interface AreaViewContentProps {
     /**要显示的todo事项 */
@@ -8,6 +9,10 @@ interface AreaViewContentProps {
     checkboxClicked(e: React.MouseEvent<HTMLDivElement>, name: string): void
     /**在detail view里显示/编辑todo事项的详细内容，处理方法 */
     itemClicked(e: React.MouseEvent<HTMLLIElement>, name: string): void
+    /**拖拽todo事项 */
+    onDragStart(data: string): void
+    /**拖拽结束 */
+    onDragEnd(): void
 }
 
 interface AreaViewContentState {
@@ -19,13 +24,13 @@ export class AreaViewContent extends React.Component<AreaViewContentProps, AreaV
         return (
             <div id="areaview-content">
                 <ul>
-                    {this.props.items.map(item => <li className="todo-item" key={item.name} onClick={e => this.props.itemClicked(e, item.name)}>
-                        <div className={item.done ? "custom-checkbox checked" : 'custom-checkbox'} onClick={e => this.props.checkboxClicked(e, item.name)}>√</div>
-                        <div className={item.done ? "todo-item-content done" : 'todo-item-content'}>
-                            <span>{item.name}</span>
-                            {item.comments && <span className='todo-item-content-comments'>备注</span>}
-                        </div>
-                    </li>)}
+                    {this.props.items.map(item =>
+                        <AreaViewItem
+                            item={item}
+                            onItemClicked={this.props.itemClicked}
+                            onCheckboxClicked={this.props.checkboxClicked}
+                            onDragStart={this.props.onDragStart}
+                            onDragEnd={this.props.onDragEnd} />)}
                 </ul>
             </div>
         )
