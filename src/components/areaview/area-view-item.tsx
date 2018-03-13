@@ -20,6 +20,7 @@ export class AreaViewItem extends React.Component<AreaViewItemProps, {}> {
 
         // bind methods
         this.handleDrag = this.handleDrag.bind(this)
+        this.handleDragEnd = this.handleDragEnd.bind(this)
     }
 
     /**
@@ -28,7 +29,7 @@ export class AreaViewItem extends React.Component<AreaViewItemProps, {}> {
      */
     private handleDrag(e: React.DragEvent<HTMLLIElement>) {
         const data = JSON.stringify(this.props.item)
-        // e.dataTransfer.setData('text/plain', data)
+        e.dataTransfer.setData('text/plain', '')
         e.dataTransfer.dropEffect = 'move'
         this.props.onDragStart(data)
     }

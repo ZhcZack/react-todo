@@ -31,6 +31,10 @@
         animation-duration: 0.3s; }
     #listview .list-item:hover {
       background-color: rgba(206, 197, 197, 0.5); }
+    #listview .list-item.drag-enter {
+      border: 3px solid blue; }
+    #listview .list-item > * {
+      pointer-events: none; }
     #listview .list-item .item-name {
       flex: 9 1 100px; }
     #listview .list-item .number-of-items {

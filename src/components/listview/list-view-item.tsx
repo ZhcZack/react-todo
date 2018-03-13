@@ -23,6 +23,8 @@ export class ListViewItem extends React.Component<ListViewItemProps, {}> {
         // bind methods
         this.handleDragOver = this.handleDragOver.bind(this)
         this.handleDrop = this.handleDrop.bind(this)
+        this.handleDragEnter = this.handleDragEnter.bind(this)
+        this.handleDragLeave = this.handleDragLeave.bind(this)
     }
 
     /**
@@ -42,15 +44,39 @@ export class ListViewItem extends React.Component<ListViewItemProps, {}> {
      */
     private handleDrop(e: React.DragEvent<HTMLLIElement>) {
         e.preventDefault()
+        let target = e.target as HTMLElement
+        if (target.nodeName.toLowerCase() !== 'li') {
+            if (target.parentElement) {
+                target = target.parentElement
+            }
+        }
+        target.classList.remove('drag-enter')
         // const data = e.dataTransfer.getData('text')
         // console.log(`drop data: ${data}`)
         this.props.onDrop(this.props.info.name)
         // console.log('拖拽结束目标列表名称：' + this.props.info.name)
     }
 
+    private handleDragEnter(e: React.DragEvent<HTMLLIElement>) {
+        const target = e.target as HTMLElement
+        target.classList.add('drag-enter')
+    }
+
+    private handleDragLeave(e: React.DragEvent<HTMLLIElement>) {
+        const target = e.target as HTMLElement
+        target.classList.remove('drag-enter')
+    }
+
     render() {
         return (
-            <li onDragOver={this.handleDragOver} onDrop={this.handleDrop} className={this.props.currentListName === this.props.info.name ? 'list-item active' : 'list-item'} key={this.props.info.name} onClick={e => this.props.onClick(e, this.props.info.name)}>
+            <li
+                onDragOver={this.handleDragOver}
+                onDrop={this.handleDrop}
+                onDragEnter={this.handleDragEnter}
+                onDragLeave={this.handleDragLeave}
+                className={this.props.currentListName === this.props.info.name ? 'list-item active' : 'list-item'}
+                key={this.props.info.name}
+                onClick={e => this.props.onClick(e, this.props.info.name)}>
                 <span className="item-name">{this.props.info.name}</span>
                 <span className="number-of-items">{this.props.info.count > 0 ? this.props.info.count : ''}</span>
             </li>

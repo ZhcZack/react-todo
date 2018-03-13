@@ -30,6 +30,12 @@
         &:hover {
             background-color: $border-color;
         }
+        &.drag-enter {
+            border: 3px solid blue;
+        }
+        > * {
+            pointer-events: none;
+        }
         .item-name {
             flex: 9 1 100px;
         }

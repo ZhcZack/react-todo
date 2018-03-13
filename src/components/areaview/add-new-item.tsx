@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 
 interface AddNewItemPros {
     /**input的值，确保输入的内容与props的值保持一致 */
