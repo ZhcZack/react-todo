@@ -16,6 +16,7 @@
         justify-content: flex-start;
         align-items: center;
         cursor: pointer;
+        border: 3px solid transparent;
         &.active {
             font-weight: bold;
             background-color: $list-active-color;

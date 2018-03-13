@@ -20,7 +20,8 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    cursor: pointer; }
+    cursor: pointer;
+    border: 3px solid transparent; }
     #listview .list-item.active {
       font-weight: bold;
       background-color: #abddf1; }
