@@ -12,40 +12,41 @@ interface HeadProps {
 interface HeadState {
     /**是否处于编辑状态 */
     isEdit: boolean
+    actionsDisplay: boolean
     /**保存编辑后的名称，通过props的值初始化 */
     name: string
 }
 
 class AreaViewHead extends React.Component<HeadProps, HeadState> {
+    private actionsList: HTMLUListElement | null
+    private renameInput: HTMLInputElement | null
+
     constructor(props: HeadProps) {
         super(props)
+        this.actionsList = null
+        this.renameInput = null
+
         this.state = {
+            actionsDisplay: false,
             isEdit: false,
             name: this.props.listName
         }
 
-        this.editButtonClicked = this.editButtonClicked.bind(this)
-        this.cancelClicked = this.cancelClicked.bind(this)
         this.inputChange = this.inputChange.bind(this)
         this.renameClicked = this.renameClicked.bind(this)
         this.deleteClicked = this.deleteClicked.bind(this)
+        this.handleSwitch = this.handleSwitch.bind(this)
+        this.inputBlur = this.inputBlur.bind(this)
+        this.actionsListBlur = this.actionsListBlur.bind(this)
     }
 
     componentWillReceiveProps(nextProps: HeadProps) {
         // 传入新的listName之后，保存这个值作为编辑的预留名称
         this.setState({
-            name: nextProps.listName
+            name: nextProps.listName,
+            isEdit: false,
+            actionsDisplay: false
         })
-    }
-
-    /**
-     * 开启重命名编辑状态
-     * @param e 鼠标点击事件
-     */
-    private editButtonClicked(e: React.MouseEvent<HTMLButtonElement>) {
-        this.setState(prev => ({
-            isEdit: !prev.isEdit
-        }))
     }
 
     /**
@@ -58,29 +59,21 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
         })
     }
 
-    /**
-     * 取消重命名操作
-     * @param e 鼠标点击事件
-     */
-    private cancelClicked(e: React.MouseEvent<HTMLButtonElement>) {
-        e.stopPropagation()
-        this.setState({
-            name: this.props.listName,
-            isEdit: false
-        })
-    }
 
     /**
-     * 进行重命名工作，同时关闭编辑状态。
+     * 进行重命名工作
      * @param e 鼠标点击事件
      */
-    private renameClicked(e: React.MouseEvent<HTMLButtonElement>) {
-        e.stopPropagation()
-        if (this.state.name !== '') {
-            this.props.renameList(this.state.name)
-        }
+    private renameClicked(e: React.MouseEvent<HTMLLIElement>) {
+        // e.stopPropagation()
+
         this.setState({
-            isEdit: false
+            isEdit: true,
+            actionsDisplay: false
+        }, () => {
+            if (this.renameInput) {
+                this.renameInput.focus()
+            }
         })
     }
 
@@ -88,12 +81,58 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
      * 确认删除列表操作
      * @param e 鼠标点击事件
      */
-    private deleteClicked(e: React.MouseEvent<HTMLButtonElement>) {
+    private deleteClicked(e: React.MouseEvent<HTMLLIElement>) {
         e.stopPropagation()
         const result = confirm('确定删除此列表吗？')
         if (result) {
             this.props.deleteList(this.state.name)
         }
+        this.setState({
+            isEdit: false,
+            actionsDisplay: false
+        })
+    }
+
+    /**
+     * 显示/隐藏操作列表的视图
+     * @param e 鼠标点击事件
+     */
+    private handleSwitch(e: React.MouseEvent<HTMLButtonElement>) {
+        const prevState = this.state.actionsDisplay
+        this.setState({
+            actionsDisplay: !prevState
+        }, () => {
+            if (this.actionsList) {
+                this.actionsList.focus()
+            }
+        })
+    }
+
+    /**
+     * 当焦点从输入框移走时，进行列表的重命名工作
+     * @param e 焦点移走事件
+     */
+    private inputBlur(e: React.FocusEvent<HTMLInputElement>) {
+        e.stopPropagation()
+        this.props.renameList(this.state.name)
+        this.setState({
+            isEdit: false,
+            actionsDisplay: false
+        })
+    }
+
+    /**
+     * 当焦点从下拉列表中移走时，隐藏吊下拉菜单。
+     * 
+     * 不过我对浏览器的“焦点”这个东西理解的还不够好，要好好学习一个。
+     * @param e 焦点移走事件
+     */
+    private actionsListBlur(e: React.FocusEvent<HTMLUListElement>) {
+        e.stopPropagation()
+        this.setState({
+            actionsDisplay: false,
+            isEdit: false
+        })
     }
 
     render() {
@@ -106,15 +145,22 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
         }
         return (
             <div id="areaview-head">
-                {!this.state.isEdit ?
-                    <div className="name">{this.props.listName}</div>
-                    :
-                    <input type='text' value={this.state.name} onChange={this.inputChange} />}
-                {!this.state.isEdit && <button className="edit-button" onClick={this.editButtonClicked}>重命名</button>}
-                {!this.state.isEdit && <button className='delete-button' onClick={this.deleteClicked}>删除</button>}
-                {this.state.isEdit && <span>
-                    <button onClick={this.renameClicked}>确认</button><button onClick={this.cancelClicked}>取消</button>
-                </span>}
+                <div className={this.state.isEdit ? 'hide' : 'name'}>{this.props.listName}</div>
+                <input
+                    className={this.state.isEdit ? '' : 'hide'}
+                    type='text'
+                    value={this.state.name}
+                    onChange={this.inputChange}
+                    ref={input => this.renameInput = input}
+                    onBlur={this.inputBlur} />
+                <button className='actions-switcher' onClick={this.handleSwitch}>···</button>
+                <ul
+                    className={this.state.actionsDisplay ? 'actions actions-display' : 'actions'}
+                    ref={list => this.actionsList = list}
+                    onBlur={this.actionsListBlur} >
+                    <li className='action-edit' onClick={this.renameClicked}>重命名列表</li>
+                    <li className="action-delete" onClick={this.deleteClicked}>删除列表</li>
+                </ul>
             </div>
         )
     }

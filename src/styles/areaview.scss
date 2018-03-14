@@ -1,5 +1,6 @@
 // todo area view
 
+@import 'color';
 #areaview {
     width: calc(100% - 280px);
     &.shrink {
@@ -10,11 +11,11 @@
         display: flex;
         align-items: center;
         padding: 10px 0;
-        border-bottom: 1px solid rgba(206, 197, 197, 0.5);
+        border-bottom: 1px solid $border-color;
         background-color: transparent;
         transition: background-color 0.3s;
         &:hover {
-            background-color: rgba(206, 197, 197, 0.5);
+            background-color: $border-color;
         }
     }
     .todo-item-content {
@@ -31,14 +32,53 @@
     #areaview-head {
         height: 200px;
         padding: 10px;
-        border-bottom: 1px solid rgba(206, 197, 197, 0.5);
+        border-bottom: 1px solid $border-color;
         display: flex;
+        position: relative;
         & > * {
             align-self: flex-end;
             margin-right: 10px;
         }
         .name {
             font-size: 2rem;
+        }
+        .actions-switcher {
+            width: 30px;
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        .actions {
+            position: absolute;
+            top: calc(100% - 15px);
+            right: 10px;
+            visibility: hidden;
+            width: 200px;
+            list-style-type: none;
+            background-color: white;
+            border: 1px solid $border-color;
+            padding: 10px;
+            margin-right: 0;
+            transition: top 0.3s;
+            &.actions-display {
+                top: calc(100% + 5px);
+                visibility: visible;
+            }
+            & > li {
+                height: 40px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                &:hover {
+                    background-color: $background-color;
+                }
+            }
+            .action-delete {
+                color: red;
+            }
         }
     }
     #areaview-content {

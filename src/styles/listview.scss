@@ -18,12 +18,16 @@
         cursor: pointer;
         border: 3px solid transparent;
         &.active {
-            font-weight: bold;
             background-color: $list-active-color;
             &:hover {
                 background-color: $list-hover-color;
             }
             .item-name {
+                font-weight: bold;
+                animation: bounceInOut;
+                animation-duration: 0.3s;
+            }
+            .number-of-items {
                 animation: bounceInOut;
                 animation-duration: 0.3s;
             }

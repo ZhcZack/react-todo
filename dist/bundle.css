@@ -23,11 +23,14 @@
     cursor: pointer;
     border: 3px solid transparent; }
     #listview .list-item.active {
-      font-weight: bold;
       background-color: #abddf1; }
       #listview .list-item.active:hover {
         background-color: #87ceeb; }
       #listview .list-item.active .item-name {
+        font-weight: bold;
+        animation: bounceInOut;
+        animation-duration: 0.3s; }
+      #listview .list-item.active .number-of-items {
         animation: bounceInOut;
         animation-duration: 0.3s; }
     #listview .list-item:hover {
@@ -68,12 +71,45 @@
     height: 200px;
     padding: 10px;
     border-bottom: 1px solid rgba(206, 197, 197, 0.5);
-    display: flex; }
+    display: flex;
+    position: relative; }
     #areaview #areaview-head > * {
       align-self: flex-end;
       margin-right: 10px; }
     #areaview #areaview-head .name {
       font-size: 2rem; }
+    #areaview #areaview-head .actions-switcher {
+      width: 30px;
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      border: none;
+      cursor: pointer; }
+    #areaview #areaview-head .actions {
+      position: absolute;
+      top: calc(100% - 15px);
+      right: 10px;
+      visibility: hidden;
+      width: 200px;
+      list-style-type: none;
+      background-color: white;
+      border: 1px solid rgba(206, 197, 197, 0.5);
+      padding: 10px;
+      margin-right: 0;
+      transition: top 0.3s; }
+      #areaview #areaview-head .actions.actions-display {
+        top: calc(100% + 5px);
+        visibility: visible; }
+      #areaview #areaview-head .actions > li {
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer; }
+        #areaview #areaview-head .actions > li:hover {
+          background-color: rgba(206, 197, 197, 0.2); }
+      #areaview #areaview-head .actions .action-delete {
+        color: red; }
   #areaview #areaview-content {
     max-height: calc(100vh - 200px - 60px);
     overflow: auto; }
