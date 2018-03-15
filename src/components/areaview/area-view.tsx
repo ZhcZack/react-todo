@@ -12,6 +12,8 @@ interface AreaViewProps {
     todoItems: TodoItem[]
     /**列表是否要紧缩 */
     shrink: boolean
+    /**该列表是否为“基础列表” */
+    isPrimaryList: boolean
     /**todo事项点击，处理方法 */
     itemClicked(itemName: string, listName: string): void
     /**重命名列表，处理方法 */
@@ -31,6 +33,7 @@ interface AreaViewProps {
 interface AreaViewState {
     /**文本框输入的数据内容 */
     inputValue: string
+    showDoneItems: boolean
 }
 
 export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
@@ -38,7 +41,8 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
     constructor(props: AreaViewProps) {
         super(props)
         this.state = {
-            inputValue: ''
+            inputValue: '',
+            showDoneItems: false
         }
 
         // bind methods
@@ -49,21 +53,26 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
         this.addNewItem = this.addNewItem.bind(this)
         this.renameList = this.renameList.bind(this)
         this.handleDragStart = this.handleDragStart.bind(this)
+        this.switchDoneItems = this.switchDoneItems.bind(this)
     }
 
     render() {
         return (
             <div id="areaview" className={this.props.shrink ? 'shrink' : ''}>
                 <EditableHead
+                    isPrimaryList={this.props.isPrimaryList}
                     listName={this.props.listName}
                     renameList={this.renameList}
-                    deleteList={this.props.deleteList} />
+                    deleteList={this.props.deleteList}
+                    switchDoneItems={this.switchDoneItems}
+                    doneItemsDisplay={this.state.showDoneItems} />
                 <AreaViewContent
                     items={this.props.todoItems}
                     checkboxClicked={this.toggleItem}
                     itemClicked={this.displayDetailView}
                     onDragStart={this.handleDragStart}
-                    onDragEnd={this.props.onDragEnd} />
+                    onDragEnd={this.props.onDragEnd}
+                    showDoneItems={this.state.showDoneItems} />
                 <AddNewItem
                     value={this.state.inputValue}
                     onValueChange={this.handleInput}
@@ -72,6 +81,15 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
                 />
             </div>
         )
+    }
+
+    /**
+     * 显示/隐藏已完成的todo事项
+     */
+    private switchDoneItems() {
+        this.setState(prev => ({
+            showDoneItems: !prev.showDoneItems
+        }))
     }
 
     /**

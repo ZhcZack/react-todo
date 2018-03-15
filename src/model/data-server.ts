@@ -46,6 +46,10 @@ export class DataServer {
         return result
     }
 
+    isPrimaryList(listName: string): boolean {
+        return listName === '我的一天'
+    }
+
     /**
      * 返回列表中所有的todo项目
      * @param listName 列表名称
@@ -58,12 +62,23 @@ export class DataServer {
     }
 
     /**
-     * 返回所有列表的一些信息，比如名称（`name`）和其中包含todo项目的个数(`count`)
+     * 返回所有列表的一些信息，比如名称（`name`）和其中未完成todo项目的个数(`count`)
      */
     get listInfos(): ListInfo[] {
-        let infos: ListInfo[] = []
+        const infos: ListInfo[] = []
         this.todoLists.forEach(list => {
             infos.push(list.listInfo)
+        })
+        return infos
+    }
+
+    /**
+     * 返回列表的名称（`name`）以及所有todo项目的个数（`count`）
+     */
+    get listTotalInfos(): ListInfo[] {
+        const infos: ListInfo[] = []
+        this.todoLists.forEach(list => {
+            infos.push(list.listTotalInfo)
         })
         return infos
     }

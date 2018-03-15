@@ -13,6 +13,8 @@ interface AreaViewContentProps {
     onDragStart(data: string): void
     /**拖拽结束 */
     onDragEnd(): void
+    /**是否显示已标记为“完成”的项目 */
+    showDoneItems: boolean
 }
 
 interface AreaViewContentState {
@@ -21,16 +23,35 @@ interface AreaViewContentState {
 
 export class AreaViewContent extends React.Component<AreaViewContentProps, AreaViewContentState> {
     render() {
+
         return (
             <div id="areaview-content">
                 <ul>
-                    {this.props.items.map(item =>
-                        <AreaViewItem
-                            item={item}
-                            onItemClicked={this.props.itemClicked}
-                            onCheckboxClicked={this.props.checkboxClicked}
-                            onDragStart={this.props.onDragStart}
-                            onDragEnd={this.props.onDragEnd} />)}
+                    {
+                        this.props.items.map(item => {
+                            if (this.props.showDoneItems) {
+                                return (
+                                    <AreaViewItem
+                                        item={item}
+                                        onItemClicked={this.props.itemClicked}
+                                        onCheckboxClicked={this.props.checkboxClicked}
+                                        onDragStart={this.props.onDragStart}
+                                        onDragEnd={this.props.onDragEnd}
+                                        key={item.name} />
+                                )
+                            }
+                            if (item.done) { return null }
+                            return (
+                                <AreaViewItem
+                                    item={item}
+                                    onItemClicked={this.props.itemClicked}
+                                    onCheckboxClicked={this.props.checkboxClicked}
+                                    onDragStart={this.props.onDragStart}
+                                    onDragEnd={this.props.onDragEnd}
+                                    key={item.name} />
+                            )
+                        })
+                    }
                 </ul>
             </div>
         )

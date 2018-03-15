@@ -7,6 +7,7 @@ interface DetailViewProps {
     onDeleteClicked(e: React.MouseEvent<HTMLSpanElement>): void
     onToggleClicked(e: React.MouseEvent<HTMLSpanElement>): void
     onCommentsChange(value: string): void
+    listName: string
 }
 
 interface DetailViewState {

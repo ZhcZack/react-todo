@@ -44,7 +44,7 @@ export class AreaViewItem extends React.Component<AreaViewItemProps, {}> {
 
     render() {
         return (
-            <li draggable={true} className="todo-item" key={this.props.item.name} onClick={e => this.props.onItemClicked(e, this.props.item.name)} onDragStart={this.handleDrag} onDragEnd={this.handleDragEnd}>
+            <li draggable={true} className="todo-item" onClick={e => this.props.onItemClicked(e, this.props.item.name)} onDragStart={this.handleDrag} onDragEnd={this.handleDragEnd}>
                 <div className={this.props.item.done ? "custom-checkbox checked" : 'custom-checkbox'} onClick={e => this.props.onCheckboxClicked(e, this.props.item.name)}>√</div>
                 <div className={this.props.item.done ? "todo-item-content done" : 'todo-item-content'}>
                     <span>{this.props.item.name}</span>

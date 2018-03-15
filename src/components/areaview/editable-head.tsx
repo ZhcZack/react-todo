@@ -7,6 +7,16 @@ interface HeadProps {
     renameList(name: string): void
     /**删除列表，处理方法 */
     deleteList(name: string): void
+    /**
+     * 显示/隐藏已完成的todo事项
+     */
+    switchDoneItems(): void
+    /**
+     * 是否要显示已完成的todo项目
+     */
+    doneItemsDisplay: boolean
+    /**该列表是否为“基础列表” */
+    isPrimaryList: boolean
 }
 
 interface HeadState {
@@ -38,6 +48,7 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
         this.handleSwitch = this.handleSwitch.bind(this)
         this.inputBlur = this.inputBlur.bind(this)
         this.actionsListBlur = this.actionsListBlur.bind(this)
+        this.switchDoneItems = this.switchDoneItems.bind(this)
     }
 
     componentWillReceiveProps(nextProps: HeadProps) {
@@ -135,8 +146,16 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
         })
     }
 
+    private switchDoneItems(e: React.MouseEvent<HTMLLIElement>) {
+        e.stopPropagation()
+        this.props.switchDoneItems()
+        this.setState({
+            actionsDisplay: false
+        })
+    }
+
     render() {
-        if (this.props.listName === '我的一天') {
+        if (this.props.isPrimaryList) {
             return (
                 <div id="areaview-head">
                     <div className="name">{this.props.listName}</div>
@@ -158,6 +177,7 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
                     className={this.state.actionsDisplay ? 'actions actions-display' : 'actions'}
                     ref={list => this.actionsList = list}
                     onBlur={this.actionsListBlur} >
+                    <li className="action-showDoneItems" onClick={this.switchDoneItems}>{this.props.doneItemsDisplay ? '隐藏' : '显示'}已完成的项目</li>
                     <li className='action-edit' onClick={this.renameClicked}>重命名列表</li>
                     <li className="action-delete" onClick={this.deleteClicked}>删除列表</li>
                 </ul>

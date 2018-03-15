@@ -17,7 +17,23 @@ export class TodoListClass implements TodoList {
         return this.todoItems.length
     }
 
+    /**
+     * 返回列表的名称以及未完成todo的数量
+     */
     get listInfo(): ListInfo {
+        let count = 0
+        for (let item of this.todoItems) {
+            if (!item.done) {
+                count++
+            }
+        }
+        return {
+            name: this.name,
+            count
+        }
+    }
+
+    get listTotalInfo(): ListInfo {
         return {
             name: this.name,
             count: this.count

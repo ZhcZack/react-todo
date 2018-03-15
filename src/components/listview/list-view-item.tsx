@@ -75,7 +75,6 @@ export class ListViewItem extends React.Component<ListViewItemProps, {}> {
                 onDragEnter={this.handleDragEnter}
                 onDragLeave={this.handleDragLeave}
                 className={this.props.currentListName === this.props.info.name ? 'list-item active' : 'list-item'}
-                key={this.props.info.name}
                 onClick={e => this.props.onClick(e, this.props.info.name)}>
                 <span className="item-name">{this.props.info.name}</span>
                 <span className="number-of-items">{this.props.info.count > 0 ? this.props.info.count : ''}</span>

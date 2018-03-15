@@ -26,7 +26,8 @@ export class ListContent extends React.Component<ListContentProps, ListContentSt
                         currentListName={this.props.currentListName}
                         info={info}
                         onClick={this.props.onClick}
-                        onDrop={this.props.onDrop} />)
+                        onDrop={this.props.onDrop}
+                        key={info.name} />)
                 }
             </ul>
         )

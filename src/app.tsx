@@ -161,7 +161,8 @@ export class App extends React.Component<AppProps, AppState> {
     private toggleItemInList(itemName: string, listName: string) {
         this.server.toggleItemInList(itemName, listName)
         this.setState({
-            itemsOfList: this.server.itemsOfList(listName)
+            itemsOfList: this.server.itemsOfList(listName),
+            listInfos: this.server.listInfos
         })
         // 如果点击的就是要详细显示的TodoItem，则要更新detailItem的状态
         if (this.state.detailItem && this.state.detailItem.name === itemName) {
@@ -257,7 +258,7 @@ export class App extends React.Component<AppProps, AppState> {
 
     render() {
         return (
-            <div id="app">
+            <React.Fragment>
                 <ListView
                     currentListName={this.state.lastModifiedListName}
                     switchList={this.switchList}
@@ -267,6 +268,7 @@ export class App extends React.Component<AppProps, AppState> {
                 <AreaView
                     shrink={this.state.detailItem !== undefined}
                     listName={this.state.lastModifiedListName}
+                    isPrimaryList={this.server.isPrimaryList(this.state.lastModifiedListName)}
                     todoItems={this.state.itemsOfList}
                     renameList={this.renameList}
                     deleteList={this.deleteList}
@@ -276,12 +278,13 @@ export class App extends React.Component<AppProps, AppState> {
                     onDragStart={this.handleDragStart}
                     onDragEnd={this.handleDragEnd} />
                 <DetailView
+                    listName={this.state.lastModifiedListName}
                     item={this.state.detailItem}
                     onCloseClicked={this.handleCloseFromDetailView}
                     onDeleteClicked={this.handleDeleteFromDetailView}
                     onToggleClicked={this.handleToggleFromDetailView}
                     onCommentsChange={this.handleCommentsChange} />
-            </div>
+            </React.Fragment>
         )
     }
 }
