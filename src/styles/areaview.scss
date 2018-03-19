@@ -41,21 +41,25 @@
         }
         .name {
             font-size: 2rem;
+            color: white;
         }
         .actions-switcher {
-            width: 30px;
+            width: 40px;
+            height: 30px;
             position: absolute;
             right: 10px;
             bottom: 10px;
             border: none;
             cursor: pointer;
+            color: white;
+            font-weight: bold;
         }
         .actions {
             position: absolute;
             top: calc(100% - 15px);
             right: 10px;
             visibility: hidden;
-            width: 200px;
+            width: 322px;
             list-style-type: none;
             background-color: white;
             border: 1px solid $border-color;
@@ -66,7 +70,19 @@
                 top: calc(100% + 5px);
                 visibility: visible;
             }
-            & > li {
+            .color-picker {
+                list-style-type: none;
+                display: flex;
+                flex-wrap: wrap;
+                height: 50px;
+                justify-content: space-between;
+                li {
+                    width: 50px;
+                    height: 50px;
+                    cursor: pointer;
+                }
+            }
+            .actions-list li {
                 height: 40px;
                 display: flex;
                 justify-content: center;

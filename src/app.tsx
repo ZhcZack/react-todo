@@ -13,12 +13,14 @@ interface AppProps {
 interface AppState {
     /**最后处理todo事项的列表名称 */
     lastModifiedListName: string
-    /**列表们的名称 */
+    /**列表们的信息 */
     listInfos: ListInfo[]
     /**一个列表中的所有todo事项 */
     itemsOfList: TodoItem[]
     /**detail view中显示/编辑的todo事项 */
     detailItem?: TodoItem
+    /**area view的主题颜色 */
+    colorTheme: string;
 }
 
 /** 
@@ -37,7 +39,8 @@ export class App extends React.Component<AppProps, AppState> {
             lastModifiedListName: this.server.lastModified,
             listInfos: this.server.listInfos,
             itemsOfList: this.server.itemsOfList(this.server.lastModified),
-            detailItem: undefined
+            detailItem: undefined,
+            colorTheme: this.server.themeForList(this.server.lastModified)
         }
 
         // bind methods
@@ -54,6 +57,7 @@ export class App extends React.Component<AppProps, AppState> {
         this.handleCommentsChange = this.handleCommentsChange.bind(this)
         this.handleDragStart = this.handleDragStart.bind(this)
         this.handleDrop = this.handleDrop.bind(this)
+        this.handleColorPick = this.handleColorPick.bind(this);
     }
 
     /**
@@ -97,12 +101,13 @@ export class App extends React.Component<AppProps, AppState> {
      * @param name 要删除的列表名
      */
     private deleteList(name: string) {
-        this.server.deleteList(name)
+        this.server.deleteList(name);
         this.setState({
             listInfos: this.server.listInfos,
             lastModifiedListName: this.server.lastModified,
-            itemsOfList: this.server.itemsOfList(this.server.lastModified)
-        })
+            itemsOfList: this.server.itemsOfList(this.server.lastModified),
+            colorTheme: this.server.themeForList(this.server.lastModified)
+        });
     }
 
     /**
@@ -114,7 +119,8 @@ export class App extends React.Component<AppProps, AppState> {
         this.server.lastModified = listName
         this.setState({
             itemsOfList: this.server.itemsOfList(listName),
-            lastModifiedListName: listName
+            lastModifiedListName: listName,
+            colorTheme: this.server.themeForList(this.server.lastModified)
         })
     }
 
@@ -256,6 +262,17 @@ export class App extends React.Component<AppProps, AppState> {
         this.dragData = undefined
     }
 
+    /**
+     * 更改列表的主题色
+     * @param color 新的主题色
+     */
+    private handleColorPick(color: string) {
+        this.server.changeColorThemeForList(color, this.state.lastModifiedListName);
+        this.setState({
+            colorTheme: this.server.themeForList(this.state.lastModifiedListName)
+        });
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -268,6 +285,7 @@ export class App extends React.Component<AppProps, AppState> {
                 <AreaView
                     shrink={this.state.detailItem !== undefined}
                     listName={this.state.lastModifiedListName}
+                    colorTheme={this.state.colorTheme}
                     isPrimaryList={this.server.isPrimaryList(this.state.lastModifiedListName)}
                     todoItems={this.state.itemsOfList}
                     renameList={this.renameList}
@@ -276,7 +294,9 @@ export class App extends React.Component<AppProps, AppState> {
                     toggleItemInList={this.toggleItemInList}
                     itemClicked={this.itemClicked}
                     onDragStart={this.handleDragStart}
-                    onDragEnd={this.handleDragEnd} />
+                    onDragEnd={this.handleDragEnd}
+                    onColorPick={this.handleColorPick}
+                />
                 <DetailView
                     listName={this.state.lastModifiedListName}
                     item={this.state.detailItem}

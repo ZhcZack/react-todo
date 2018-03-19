@@ -62,7 +62,11 @@ export class DataServer {
     }
 
     /**
-     * 返回所有列表的一些信息，比如名称（`name`）和其中未完成todo项目的个数(`count`)
+     * 返回所有列表的一些信息
+     * 
+     * 名称（`name`）
+     * 
+     * 未完成todo项目的个数(`count`)
      */
     get listInfos(): ListInfo[] {
         const infos: ListInfo[] = []
@@ -81,6 +85,32 @@ export class DataServer {
             infos.push(list.listTotalInfo)
         })
         return infos
+    }
+
+    /**
+     * 返回列表的主题色
+     * @param listName 列表名称
+     */
+    themeForList(listName: string): string {
+        const listIndex = this.listNameIndex(listName);
+        if (listIndex < 0) {
+            return '#87ceeb';
+        }
+        const list = this.todoLists[listIndex];
+        return list.colorTheme;
+    }
+
+    /**
+     * 给指定列表更改主题色
+     * @param color 列表新的主题色
+     * @param listName 要更改的列表名称
+     */
+    changeColorThemeForList(color: string, listName: string) {
+        const listIndex = this.listNameIndex(listName);
+        if (listIndex < 0) { return; }
+        const list = this.todoLists[listIndex];
+        list.colorTheme = color;
+        this.save();
     }
 
     /**
@@ -290,6 +320,9 @@ export class DataServer {
                 }
                 const newItem = new TodoItemClass(localItems[j].name, localItems[j].done, localItems[j].time, localItems[j].comments)
                 newList.addNewItem(newItem)
+            }
+            if (listsFromLocal[i].theme) {
+                newList.colorTheme = listsFromLocal[i].theme;
             }
             this.todoLists.push(newList)
         }

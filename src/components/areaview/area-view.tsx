@@ -8,6 +8,8 @@ import { EditableHead } from './editable-head';
 interface AreaViewProps {
     /**列表名称 */
     listName: string
+    /**列表主题色 */
+    colorTheme: string;
     /**列表下的所有todo事项 */
     todoItems: TodoItem[]
     /**列表是否要紧缩 */
@@ -28,6 +30,11 @@ interface AreaViewProps {
     onDragStart(data: string): void
     /**拖拽结束/被取消 */
     onDragEnd(): void
+    /**
+     * 主题选择处理函数
+     * @param color 主题色
+     */
+    onColorPick(color: string): void;
 }
 
 interface AreaViewState {
@@ -62,10 +69,13 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
                 <EditableHead
                     isPrimaryList={this.props.isPrimaryList}
                     listName={this.props.listName}
+                    colorTheme={this.props.colorTheme}
                     renameList={this.renameList}
                     deleteList={this.props.deleteList}
                     switchDoneItems={this.switchDoneItems}
-                    doneItemsDisplay={this.state.showDoneItems} />
+                    doneItemsDisplay={this.state.showDoneItems}
+                    onColorPick={this.props.onColorPick}
+                />
                 <AreaViewContent
                     items={this.props.todoItems}
                     checkboxClicked={this.toggleItem}

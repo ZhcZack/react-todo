@@ -1,8 +1,11 @@
 import * as React from 'react'
+import { ColorThemePicker } from './colortheme-picker';
 
 interface HeadProps {
     /**列表名称 */
     listName: string
+    /**列表主题色 */
+    colorTheme: string;
     /**重命名列表，处理方法 */
     renameList(name: string): void
     /**删除列表，处理方法 */
@@ -17,6 +20,10 @@ interface HeadProps {
     doneItemsDisplay: boolean
     /**该列表是否为“基础列表” */
     isPrimaryList: boolean
+    /**
+     * 主题选择处理方法
+     */
+    onColorPick(color: string): void;
 }
 
 interface HeadState {
@@ -98,10 +105,10 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
         if (result) {
             this.props.deleteList(this.state.name)
         }
-        this.setState({
-            isEdit: false,
-            actionsDisplay: false
-        })
+        // this.setState({
+        //     isEdit: false,
+        //     actionsDisplay: false
+        // })
     }
 
     /**
@@ -155,15 +162,20 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
     }
 
     render() {
+        const color = this.props.colorTheme;
         if (this.props.isPrimaryList) {
             return (
-                <div id="areaview-head">
+                <div id="areaview-head" style={{
+                    background: `linear-gradient(to right, ${color}, ${color + 'b3'})`
+                }}>
                     <div className="name">{this.props.listName}</div>
                 </div>
             )
         }
         return (
-            <div id="areaview-head">
+            <div id="areaview-head" style={{
+                background: `linear-gradient(to right, ${color}, ${color + 'b3'})`
+            }}>
                 <div className={this.state.isEdit ? 'hide' : 'name'}>{this.props.listName}</div>
                 <input
                     className={this.state.isEdit ? '' : 'hide'}
@@ -172,15 +184,18 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
                     onChange={this.inputChange}
                     ref={input => this.renameInput = input}
                     onBlur={this.inputBlur} />
-                <button className='actions-switcher' onClick={this.handleSwitch}>···</button>
-                <ul
-                    className={this.state.actionsDisplay ? 'actions actions-display' : 'actions'}
-                    ref={list => this.actionsList = list}
-                    onBlur={this.actionsListBlur} >
-                    <li className="action-showDoneItems" onClick={this.switchDoneItems}>{this.props.doneItemsDisplay ? '隐藏' : '显示'}已完成的项目</li>
-                    <li className='action-edit' onClick={this.renameClicked}>重命名列表</li>
-                    <li className="action-delete" onClick={this.deleteClicked}>删除列表</li>
-                </ul>
+                <button className='actions-switcher' onClick={this.handleSwitch} style={{ backgroundColor: color }}>···</button>
+                <div className={this.state.actionsDisplay ? 'actions actions-display' : 'actions'}>
+                    <ColorThemePicker
+                        onColorPick={this.props.onColorPick} />
+                    <ul className='actions-list'
+                        ref={list => this.actionsList = list}
+                        onBlur={this.actionsListBlur} >
+                        <li className="action-showDoneItems" onClick={this.switchDoneItems}>{this.props.doneItemsDisplay ? '隐藏' : '显示'}已完成的项目</li>
+                        <li className='action-edit' onClick={this.renameClicked}>重命名列表</li>
+                        <li className="action-delete" onClick={this.deleteClicked}>删除列表</li>
+                    </ul>
+                </div>
             </div>
         )
     }

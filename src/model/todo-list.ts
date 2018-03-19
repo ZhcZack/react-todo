@@ -7,6 +7,15 @@ import { TodoItemClass } from './todo-item'
 export class TodoListClass implements TodoList {
     /**保存的todo项目 */
     private todoItems: TodoItemClass[]
+    private color = '#87CEEB';
+
+    get colorTheme(): string {
+        return this.color;
+    }
+
+    set colorTheme(color: string) {
+        this.color = color;
+    }
 
     get items(): TodoItemClass[] {
         return this.todoItems
@@ -29,15 +38,15 @@ export class TodoListClass implements TodoList {
         }
         return {
             name: this.name,
-            count
+            count,
         }
     }
 
     get listTotalInfo(): ListInfo {
         return {
             name: this.name,
-            count: this.count
-        }
+            count: this.count,
+        };
     }
 
     constructor(public name: string) {
@@ -49,7 +58,8 @@ export class TodoListClass implements TodoList {
         return {
             name: this.name,
             items: this.todoItems,
-            count: this.count
+            count: this.count,
+            theme: this.colorTheme
         }
     }
 

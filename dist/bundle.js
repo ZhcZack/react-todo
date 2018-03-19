@@ -17931,7 +17931,8 @@ var App = /** @class */ (function (_super) {
             lastModifiedListName: _this.server.lastModified,
             listInfos: _this.server.listInfos,
             itemsOfList: _this.server.itemsOfList(_this.server.lastModified),
-            detailItem: undefined
+            detailItem: undefined,
+            colorTheme: _this.server.themeForList(_this.server.lastModified)
         };
         // bind methods
         _this.switchList = _this.switchList.bind(_this);
@@ -17947,6 +17948,7 @@ var App = /** @class */ (function (_super) {
         _this.handleCommentsChange = _this.handleCommentsChange.bind(_this);
         _this.handleDragStart = _this.handleDragStart.bind(_this);
         _this.handleDrop = _this.handleDrop.bind(_this);
+        _this.handleColorPick = _this.handleColorPick.bind(_this);
         return _this;
     }
     /**
@@ -17994,7 +17996,8 @@ var App = /** @class */ (function (_super) {
         this.setState({
             listInfos: this.server.listInfos,
             lastModifiedListName: this.server.lastModified,
-            itemsOfList: this.server.itemsOfList(this.server.lastModified)
+            itemsOfList: this.server.itemsOfList(this.server.lastModified),
+            colorTheme: this.server.themeForList(this.server.lastModified)
         });
     };
     /**
@@ -18006,7 +18009,8 @@ var App = /** @class */ (function (_super) {
         this.server.lastModified = listName;
         this.setState({
             itemsOfList: this.server.itemsOfList(listName),
-            lastModifiedListName: listName
+            lastModifiedListName: listName,
+            colorTheme: this.server.themeForList(this.server.lastModified)
         });
     };
     /**
@@ -18144,10 +18148,20 @@ var App = /** @class */ (function (_super) {
     App.prototype.handleDragEnd = function () {
         this.dragData = undefined;
     };
+    /**
+     * 更改列表的主题色
+     * @param color 新的主题色
+     */
+    App.prototype.handleColorPick = function (color) {
+        this.server.changeColorThemeForList(color, this.state.lastModifiedListName);
+        this.setState({
+            colorTheme: this.server.themeForList(this.state.lastModifiedListName)
+        });
+    };
     App.prototype.render = function () {
         return (React.createElement(React.Fragment, null,
             React.createElement(list_view_1.ListView, { currentListName: this.state.lastModifiedListName, switchList: this.switchList, addNewList: this.addNewList, listInfos: this.state.listInfos, onDrop: this.handleDrop }),
-            React.createElement(area_view_1.AreaView, { shrink: this.state.detailItem !== undefined, listName: this.state.lastModifiedListName, isPrimaryList: this.server.isPrimaryList(this.state.lastModifiedListName), todoItems: this.state.itemsOfList, renameList: this.renameList, deleteList: this.deleteList, addNewItemInList: this.addNewItemInList, toggleItemInList: this.toggleItemInList, itemClicked: this.itemClicked, onDragStart: this.handleDragStart, onDragEnd: this.handleDragEnd }),
+            React.createElement(area_view_1.AreaView, { shrink: this.state.detailItem !== undefined, listName: this.state.lastModifiedListName, colorTheme: this.state.colorTheme, isPrimaryList: this.server.isPrimaryList(this.state.lastModifiedListName), todoItems: this.state.itemsOfList, renameList: this.renameList, deleteList: this.deleteList, addNewItemInList: this.addNewItemInList, toggleItemInList: this.toggleItemInList, itemClicked: this.itemClicked, onDragStart: this.handleDragStart, onDragEnd: this.handleDragEnd, onColorPick: this.handleColorPick }),
             React.createElement(detail_view_1.DetailView, { listName: this.state.lastModifiedListName, item: this.state.detailItem, onCloseClicked: this.handleCloseFromDetailView, onDeleteClicked: this.handleDeleteFromDetailView, onToggleClicked: this.handleToggleFromDetailView, onCommentsChange: this.handleCommentsChange })));
     };
     return App;
@@ -18352,7 +18366,7 @@ var AreaView = /** @class */ (function (_super) {
     }
     AreaView.prototype.render = function () {
         return (React.createElement("div", { id: "areaview", className: this.props.shrink ? 'shrink' : '' },
-            React.createElement(editable_head_1.EditableHead, { isPrimaryList: this.props.isPrimaryList, listName: this.props.listName, renameList: this.renameList, deleteList: this.props.deleteList, switchDoneItems: this.switchDoneItems, doneItemsDisplay: this.state.showDoneItems }),
+            React.createElement(editable_head_1.EditableHead, { isPrimaryList: this.props.isPrimaryList, listName: this.props.listName, colorTheme: this.props.colorTheme, renameList: this.renameList, deleteList: this.props.deleteList, switchDoneItems: this.switchDoneItems, doneItemsDisplay: this.state.showDoneItems, onColorPick: this.props.onColorPick }),
             React.createElement(area_view_content_1.AreaViewContent, { items: this.props.todoItems, checkboxClicked: this.toggleItem, itemClicked: this.displayDetailView, onDragStart: this.handleDragStart, onDragEnd: this.props.onDragEnd, showDoneItems: this.state.showDoneItems }),
             React.createElement(add_new_item_1.AddNewItem, { value: this.state.inputValue, onValueChange: this.handleInput, onAddClicked: this.addNewItem, onCancelClicked: this.cancelInput })));
     };
@@ -18441,6 +18455,51 @@ exports.AreaView = AreaView;
 
 /***/ }),
 
+/***/ "./src/components/areaview/colortheme-picker.tsx":
+/*!*******************************************************!*\
+  !*** ./src/components/areaview/colortheme-picker.tsx ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var ColorThemePicker = /** @class */ (function (_super) {
+    __extends(ColorThemePicker, _super);
+    function ColorThemePicker() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.colors = [
+            { name: 'purple', value: '#a525a5' },
+            { name: 'pink', value: '#FFC0CB' },
+            { name: 'green', value: '#34bc34' },
+            { name: 'orange', value: '#f29f08' },
+            { name: 'skyblue', value: '#87cefa' }
+        ];
+        return _this;
+    }
+    ColorThemePicker.prototype.render = function () {
+        var _this = this;
+        return (React.createElement("ul", { className: 'color-picker' }, this.colors.map(function (color) { return React.createElement("li", { style: { backgroundColor: color.value }, onClick: function (e) { return _this.props.onColorPick(color.value); }, key: color.name }); })));
+    };
+    return ColorThemePicker;
+}(React.Component));
+exports.ColorThemePicker = ColorThemePicker;
+
+
+/***/ }),
+
 /***/ "./src/components/areaview/editable-head.tsx":
 /*!***************************************************!*\
   !*** ./src/components/areaview/editable-head.tsx ***!
@@ -18462,6 +18521,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var colortheme_picker_1 = __webpack_require__(/*! ./colortheme-picker */ "./src/components/areaview/colortheme-picker.tsx");
 var AreaViewHead = /** @class */ (function (_super) {
     __extends(AreaViewHead, _super);
     function AreaViewHead(props) {
@@ -18525,10 +18585,10 @@ var AreaViewHead = /** @class */ (function (_super) {
         if (result) {
             this.props.deleteList(this.state.name);
         }
-        this.setState({
-            isEdit: false,
-            actionsDisplay: false
-        });
+        // this.setState({
+        //     isEdit: false,
+        //     actionsDisplay: false
+        // })
     };
     /**
      * 显示/隐藏操作列表的视图
@@ -18579,20 +18639,27 @@ var AreaViewHead = /** @class */ (function (_super) {
     };
     AreaViewHead.prototype.render = function () {
         var _this = this;
+        var color = this.props.colorTheme;
         if (this.props.isPrimaryList) {
-            return (React.createElement("div", { id: "areaview-head" },
+            return (React.createElement("div", { id: "areaview-head", style: {
+                    background: "linear-gradient(to right, " + color + ", " + (color + 'b3') + ")"
+                } },
                 React.createElement("div", { className: "name" }, this.props.listName)));
         }
-        return (React.createElement("div", { id: "areaview-head" },
+        return (React.createElement("div", { id: "areaview-head", style: {
+                background: "linear-gradient(to right, " + color + ", " + (color + 'b3') + ")"
+            } },
             React.createElement("div", { className: this.state.isEdit ? 'hide' : 'name' }, this.props.listName),
             React.createElement("input", { className: this.state.isEdit ? '' : 'hide', type: 'text', value: this.state.name, onChange: this.inputChange, ref: function (input) { return _this.renameInput = input; }, onBlur: this.inputBlur }),
-            React.createElement("button", { className: 'actions-switcher', onClick: this.handleSwitch }, "\u00B7\u00B7\u00B7"),
-            React.createElement("ul", { className: this.state.actionsDisplay ? 'actions actions-display' : 'actions', ref: function (list) { return _this.actionsList = list; }, onBlur: this.actionsListBlur },
-                React.createElement("li", { className: "action-showDoneItems", onClick: this.switchDoneItems },
-                    this.props.doneItemsDisplay ? '隐藏' : '显示',
-                    "\u5DF2\u5B8C\u6210\u7684\u9879\u76EE"),
-                React.createElement("li", { className: 'action-edit', onClick: this.renameClicked }, "\u91CD\u547D\u540D\u5217\u8868"),
-                React.createElement("li", { className: "action-delete", onClick: this.deleteClicked }, "\u5220\u9664\u5217\u8868"))));
+            React.createElement("button", { className: 'actions-switcher', onClick: this.handleSwitch, style: { backgroundColor: color } }, "\u00B7\u00B7\u00B7"),
+            React.createElement("div", { className: this.state.actionsDisplay ? 'actions actions-display' : 'actions' },
+                React.createElement(colortheme_picker_1.ColorThemePicker, { onColorPick: this.props.onColorPick }),
+                React.createElement("ul", { className: 'actions-list', ref: function (list) { return _this.actionsList = list; }, onBlur: this.actionsListBlur },
+                    React.createElement("li", { className: "action-showDoneItems", onClick: this.switchDoneItems },
+                        this.props.doneItemsDisplay ? '隐藏' : '显示',
+                        "\u5DF2\u5B8C\u6210\u7684\u9879\u76EE"),
+                    React.createElement("li", { className: 'action-edit', onClick: this.renameClicked }, "\u91CD\u547D\u540D\u5217\u8868"),
+                    React.createElement("li", { className: "action-delete", onClick: this.deleteClicked }, "\u5220\u9664\u5217\u8868")))));
     };
     return AreaViewHead;
 }(React.Component));
@@ -18941,7 +19008,11 @@ var DataServer = /** @class */ (function () {
     };
     Object.defineProperty(DataServer.prototype, "listInfos", {
         /**
-         * 返回所有列表的一些信息，比如名称（`name`）和其中未完成todo项目的个数(`count`)
+         * 返回所有列表的一些信息
+         *
+         * 名称（`name`）
+         *
+         * 未完成todo项目的个数(`count`)
          */
         get: function () {
             var infos = [];
@@ -18967,6 +19038,32 @@ var DataServer = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+     * 返回列表的主题色
+     * @param listName 列表名称
+     */
+    DataServer.prototype.themeForList = function (listName) {
+        var listIndex = this.listNameIndex(listName);
+        if (listIndex < 0) {
+            return '#87ceeb';
+        }
+        var list = this.todoLists[listIndex];
+        return list.colorTheme;
+    };
+    /**
+     * 给指定列表更改主题色
+     * @param color 列表新的主题色
+     * @param listName 要更改的列表名称
+     */
+    DataServer.prototype.changeColorThemeForList = function (color, listName) {
+        var listIndex = this.listNameIndex(listName);
+        if (listIndex < 0) {
+            return;
+        }
+        var list = this.todoLists[listIndex];
+        list.colorTheme = color;
+        this.save();
+    };
     /**
      * 返回指定列表中的指定todo项目
      * @param itemName 要得到的todo项目名称
@@ -19194,6 +19291,9 @@ var DataServer = /** @class */ (function () {
                 var newItem = new todo_item_1.TodoItemClass(localItems[j].name, localItems[j].done, localItems[j].time, localItems[j].comments);
                 newList.addNewItem(newItem);
             }
+            if (listsFromLocal[i].theme) {
+                newList.colorTheme = listsFromLocal[i].theme;
+            }
             this.todoLists.push(newList);
         }
         this.listName = dataFromLocal.lastModified;
@@ -19294,9 +19394,20 @@ var todo_item_1 = __webpack_require__(/*! ./todo-item */ "./src/model/todo-item.
 var TodoListClass = /** @class */ (function () {
     function TodoListClass(name) {
         this.name = name;
+        this.color = '#87CEEB';
         this.name = name;
         this.todoItems = [];
     }
+    Object.defineProperty(TodoListClass.prototype, "colorTheme", {
+        get: function () {
+            return this.color;
+        },
+        set: function (color) {
+            this.color = color;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(TodoListClass.prototype, "items", {
         get: function () {
             return this.todoItems;
@@ -19326,7 +19437,7 @@ var TodoListClass = /** @class */ (function () {
             }
             return {
                 name: this.name,
-                count: count
+                count: count,
             };
         },
         enumerable: true,
@@ -19336,7 +19447,7 @@ var TodoListClass = /** @class */ (function () {
         get: function () {
             return {
                 name: this.name,
-                count: this.count
+                count: this.count,
             };
         },
         enumerable: true,
@@ -19346,7 +19457,8 @@ var TodoListClass = /** @class */ (function () {
         return {
             name: this.name,
             items: this.todoItems,
-            count: this.count
+            count: this.count,
+            theme: this.colorTheme
         };
     };
     /**
