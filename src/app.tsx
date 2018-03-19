@@ -21,6 +21,10 @@ interface AppState {
     detailItem?: TodoItem
     /**area view的主题颜色 */
     colorTheme: string;
+    /**
+     * area view操作列表是否要显示
+     */
+    actionsDisplay: boolean;
 }
 
 /** 
@@ -40,7 +44,8 @@ export class App extends React.Component<AppProps, AppState> {
             listInfos: this.server.listInfos,
             itemsOfList: this.server.itemsOfList(this.server.lastModified),
             detailItem: undefined,
-            colorTheme: this.server.themeForList(this.server.lastModified)
+            colorTheme: this.server.themeForList(this.server.lastModified),
+            actionsDisplay: false
         }
 
         // bind methods
@@ -58,6 +63,13 @@ export class App extends React.Component<AppProps, AppState> {
         this.handleDragStart = this.handleDragStart.bind(this)
         this.handleDrop = this.handleDrop.bind(this)
         this.handleColorPick = this.handleColorPick.bind(this);
+        this.toggleActionsDisplay = this.toggleActionsDisplay.bind(this);
+    }
+
+    private toggleActionsDisplay() {
+        this.setState(prevState => ({
+            actionsDisplay: !prevState.actionsDisplay
+        }));
     }
 
     /**
@@ -88,7 +100,7 @@ export class App extends React.Component<AppProps, AppState> {
      * @param newName 新列表名
      */
     private renameList(oldName: string, newName: string) {
-        console.log(`oldName: ${oldName}, newName: ${newName}`)
+        // console.log(`oldName: ${oldName}, newName: ${newName}`)
         this.server.renameList(oldName, newName)
         this.setState({
             listInfos: this.server.listInfos,
@@ -120,8 +132,9 @@ export class App extends React.Component<AppProps, AppState> {
         this.setState({
             itemsOfList: this.server.itemsOfList(listName),
             lastModifiedListName: listName,
-            colorTheme: this.server.themeForList(this.server.lastModified)
-        })
+            colorTheme: this.server.themeForList(this.server.lastModified),
+            actionsDisplay: false
+        });
     }
 
     /**
@@ -281,7 +294,10 @@ export class App extends React.Component<AppProps, AppState> {
                     switchList={this.switchList}
                     addNewList={this.addNewList}
                     listInfos={this.state.listInfos}
-                    onDrop={this.handleDrop} />
+                    onDrop={this.handleDrop}
+                    actionsDisplay={this.state.actionsDisplay}
+                    onActionsDisplayClick={this.toggleActionsDisplay}
+                />
                 <AreaView
                     shrink={this.state.detailItem !== undefined}
                     listName={this.state.lastModifiedListName}
@@ -296,6 +312,8 @@ export class App extends React.Component<AppProps, AppState> {
                     onDragStart={this.handleDragStart}
                     onDragEnd={this.handleDragEnd}
                     onColorPick={this.handleColorPick}
+                    onActionsDisplayClick={this.toggleActionsDisplay}
+                    actionsDisplay={this.state.actionsDisplay}
                 />
                 <DetailView
                     listName={this.state.lastModifiedListName}

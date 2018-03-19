@@ -89,6 +89,8 @@
       cursor: pointer;
       color: white;
       font-weight: bold; }
+      #areaview #areaview-head .actions-switcher:focus {
+        outline: none; }
     #areaview #areaview-head .actions {
       position: absolute;
       top: calc(100% - 15px);

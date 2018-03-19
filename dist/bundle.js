@@ -17932,7 +17932,8 @@ var App = /** @class */ (function (_super) {
             listInfos: _this.server.listInfos,
             itemsOfList: _this.server.itemsOfList(_this.server.lastModified),
             detailItem: undefined,
-            colorTheme: _this.server.themeForList(_this.server.lastModified)
+            colorTheme: _this.server.themeForList(_this.server.lastModified),
+            actionsDisplay: false
         };
         // bind methods
         _this.switchList = _this.switchList.bind(_this);
@@ -17949,8 +17950,14 @@ var App = /** @class */ (function (_super) {
         _this.handleDragStart = _this.handleDragStart.bind(_this);
         _this.handleDrop = _this.handleDrop.bind(_this);
         _this.handleColorPick = _this.handleColorPick.bind(_this);
+        _this.toggleActionsDisplay = _this.toggleActionsDisplay.bind(_this);
         return _this;
     }
+    App.prototype.toggleActionsDisplay = function () {
+        this.setState(function (prevState) { return ({
+            actionsDisplay: !prevState.actionsDisplay
+        }); });
+    };
     /**
      * 拖拽完成/结束时的处理方法，将一个todo移动到另一个列表中去。
      * @param targetListName todo要被拖拽到的目标列表名称
@@ -17980,7 +17987,7 @@ var App = /** @class */ (function (_super) {
      * @param newName 新列表名
      */
     App.prototype.renameList = function (oldName, newName) {
-        console.log("oldName: " + oldName + ", newName: " + newName);
+        // console.log(`oldName: ${oldName}, newName: ${newName}`)
         this.server.renameList(oldName, newName);
         this.setState({
             listInfos: this.server.listInfos,
@@ -18010,7 +18017,8 @@ var App = /** @class */ (function (_super) {
         this.setState({
             itemsOfList: this.server.itemsOfList(listName),
             lastModifiedListName: listName,
-            colorTheme: this.server.themeForList(this.server.lastModified)
+            colorTheme: this.server.themeForList(this.server.lastModified),
+            actionsDisplay: false
         });
     };
     /**
@@ -18160,8 +18168,8 @@ var App = /** @class */ (function (_super) {
     };
     App.prototype.render = function () {
         return (React.createElement(React.Fragment, null,
-            React.createElement(list_view_1.ListView, { currentListName: this.state.lastModifiedListName, switchList: this.switchList, addNewList: this.addNewList, listInfos: this.state.listInfos, onDrop: this.handleDrop }),
-            React.createElement(area_view_1.AreaView, { shrink: this.state.detailItem !== undefined, listName: this.state.lastModifiedListName, colorTheme: this.state.colorTheme, isPrimaryList: this.server.isPrimaryList(this.state.lastModifiedListName), todoItems: this.state.itemsOfList, renameList: this.renameList, deleteList: this.deleteList, addNewItemInList: this.addNewItemInList, toggleItemInList: this.toggleItemInList, itemClicked: this.itemClicked, onDragStart: this.handleDragStart, onDragEnd: this.handleDragEnd, onColorPick: this.handleColorPick }),
+            React.createElement(list_view_1.ListView, { currentListName: this.state.lastModifiedListName, switchList: this.switchList, addNewList: this.addNewList, listInfos: this.state.listInfos, onDrop: this.handleDrop, actionsDisplay: this.state.actionsDisplay, onActionsDisplayClick: this.toggleActionsDisplay }),
+            React.createElement(area_view_1.AreaView, { shrink: this.state.detailItem !== undefined, listName: this.state.lastModifiedListName, colorTheme: this.state.colorTheme, isPrimaryList: this.server.isPrimaryList(this.state.lastModifiedListName), todoItems: this.state.itemsOfList, renameList: this.renameList, deleteList: this.deleteList, addNewItemInList: this.addNewItemInList, toggleItemInList: this.toggleItemInList, itemClicked: this.itemClicked, onDragStart: this.handleDragStart, onDragEnd: this.handleDragEnd, onColorPick: this.handleColorPick, onActionsDisplayClick: this.toggleActionsDisplay, actionsDisplay: this.state.actionsDisplay }),
             React.createElement(detail_view_1.DetailView, { listName: this.state.lastModifiedListName, item: this.state.detailItem, onCloseClicked: this.handleCloseFromDetailView, onDeleteClicked: this.handleDeleteFromDetailView, onToggleClicked: this.handleToggleFromDetailView, onCommentsChange: this.handleCommentsChange })));
     };
     return App;
@@ -18365,8 +18373,9 @@ var AreaView = /** @class */ (function (_super) {
         return _this;
     }
     AreaView.prototype.render = function () {
-        return (React.createElement("div", { id: "areaview", className: this.props.shrink ? 'shrink' : '' },
-            React.createElement(editable_head_1.EditableHead, { isPrimaryList: this.props.isPrimaryList, listName: this.props.listName, colorTheme: this.props.colorTheme, renameList: this.renameList, deleteList: this.props.deleteList, switchDoneItems: this.switchDoneItems, doneItemsDisplay: this.state.showDoneItems, onColorPick: this.props.onColorPick }),
+        var _this = this;
+        return (React.createElement("div", { id: "areaview", className: this.props.shrink ? 'shrink' : '', onClick: function (e) { e.stopPropagation(); _this.props.actionsDisplay && _this.props.onActionsDisplayClick(); } },
+            React.createElement(editable_head_1.EditableHead, { isPrimaryList: this.props.isPrimaryList, listName: this.props.listName, colorTheme: this.props.colorTheme, renameList: this.renameList, deleteList: this.props.deleteList, switchDoneItems: this.switchDoneItems, doneItemsDisplay: this.state.showDoneItems, onColorPick: this.props.onColorPick, onActionsDisplayClick: this.props.onActionsDisplayClick, actionsDisplay: this.props.actionsDisplay }),
             React.createElement(area_view_content_1.AreaViewContent, { items: this.props.todoItems, checkboxClicked: this.toggleItem, itemClicked: this.displayDetailView, onDragStart: this.handleDragStart, onDragEnd: this.props.onDragEnd, showDoneItems: this.state.showDoneItems }),
             React.createElement(add_new_item_1.AddNewItem, { value: this.state.inputValue, onValueChange: this.handleInput, onAddClicked: this.addNewItem, onCancelClicked: this.cancelInput })));
     };
@@ -18526,10 +18535,8 @@ var AreaViewHead = /** @class */ (function (_super) {
     __extends(AreaViewHead, _super);
     function AreaViewHead(props) {
         var _this = _super.call(this, props) || this;
-        _this.actionsList = null;
         _this.renameInput = null;
         _this.state = {
-            actionsDisplay: false,
             isEdit: false,
             name: _this.props.listName
         };
@@ -18538,7 +18545,6 @@ var AreaViewHead = /** @class */ (function (_super) {
         _this.deleteClicked = _this.deleteClicked.bind(_this);
         _this.handleSwitch = _this.handleSwitch.bind(_this);
         _this.inputBlur = _this.inputBlur.bind(_this);
-        _this.actionsListBlur = _this.actionsListBlur.bind(_this);
         _this.switchDoneItems = _this.switchDoneItems.bind(_this);
         return _this;
     }
@@ -18547,7 +18553,6 @@ var AreaViewHead = /** @class */ (function (_super) {
         this.setState({
             name: nextProps.listName,
             isEdit: false,
-            actionsDisplay: false
         });
     };
     /**
@@ -18568,12 +18573,12 @@ var AreaViewHead = /** @class */ (function (_super) {
         var _this = this;
         this.setState({
             isEdit: true,
-            actionsDisplay: false
         }, function () {
             if (_this.renameInput) {
                 _this.renameInput.focus();
             }
         });
+        this.props.onActionsDisplayClick();
     };
     /**
      * 确认删除列表操作
@@ -18585,25 +18590,14 @@ var AreaViewHead = /** @class */ (function (_super) {
         if (result) {
             this.props.deleteList(this.state.name);
         }
-        // this.setState({
-        //     isEdit: false,
-        //     actionsDisplay: false
-        // })
     };
     /**
      * 显示/隐藏操作列表的视图
      * @param e 鼠标点击事件
      */
     AreaViewHead.prototype.handleSwitch = function (e) {
-        var _this = this;
-        var prevState = this.state.actionsDisplay;
-        this.setState({
-            actionsDisplay: !prevState
-        }, function () {
-            if (_this.actionsList) {
-                _this.actionsList.focus();
-            }
-        });
+        e.stopPropagation();
+        this.props.onActionsDisplayClick();
     };
     /**
      * 当焦点从输入框移走时，进行列表的重命名工作
@@ -18614,28 +18608,13 @@ var AreaViewHead = /** @class */ (function (_super) {
         this.props.renameList(this.state.name);
         this.setState({
             isEdit: false,
-            actionsDisplay: false
         });
-    };
-    /**
-     * 当焦点从下拉列表中移走时，隐藏吊下拉菜单。
-     *
-     * 不过我对浏览器的“焦点”这个东西理解的还不够好，要好好学习一个。
-     * @param e 焦点移走事件
-     */
-    AreaViewHead.prototype.actionsListBlur = function (e) {
-        e.stopPropagation();
-        this.setState({
-            actionsDisplay: false,
-            isEdit: false
-        });
+        this.props.onActionsDisplayClick();
     };
     AreaViewHead.prototype.switchDoneItems = function (e) {
         e.stopPropagation();
         this.props.switchDoneItems();
-        this.setState({
-            actionsDisplay: false
-        });
+        this.props.onActionsDisplayClick();
     };
     AreaViewHead.prototype.render = function () {
         var _this = this;
@@ -18652,9 +18631,9 @@ var AreaViewHead = /** @class */ (function (_super) {
             React.createElement("div", { className: this.state.isEdit ? 'hide' : 'name' }, this.props.listName),
             React.createElement("input", { className: this.state.isEdit ? '' : 'hide', type: 'text', value: this.state.name, onChange: this.inputChange, ref: function (input) { return _this.renameInput = input; }, onBlur: this.inputBlur }),
             React.createElement("button", { className: 'actions-switcher', onClick: this.handleSwitch, style: { backgroundColor: color } }, "\u00B7\u00B7\u00B7"),
-            React.createElement("div", { className: this.state.actionsDisplay ? 'actions actions-display' : 'actions' },
+            React.createElement("div", { className: this.props.actionsDisplay ? 'actions actions-display' : 'actions' },
                 React.createElement(colortheme_picker_1.ColorThemePicker, { onColorPick: this.props.onColorPick }),
-                React.createElement("ul", { className: 'actions-list', ref: function (list) { return _this.actionsList = list; }, onBlur: this.actionsListBlur },
+                React.createElement("ul", { className: 'actions-list' },
                     React.createElement("li", { className: "action-showDoneItems", onClick: this.switchDoneItems },
                         this.props.doneItemsDisplay ? '隐藏' : '显示',
                         "\u5DF2\u5B8C\u6210\u7684\u9879\u76EE"),
@@ -18909,7 +18888,8 @@ var ListView = /** @class */ (function (_super) {
         return "\u65E0\u547D\u540D\u6E05\u5355" + (this.count > 0 ? this.count : '');
     };
     ListView.prototype.render = function () {
-        return (React.createElement("div", { id: "listview" },
+        var _this = this;
+        return (React.createElement("div", { id: "listview", onClick: function (e) { e.stopPropagation(); _this.props.actionsDisplay && _this.props.onActionsDisplayClick(); } },
             React.createElement(list_content_1.ListContent, { listInfos: this.props.listInfos, currentListName: this.props.currentListName, onClick: this.handleClick, onDrop: this.props.onDrop }),
             React.createElement("div", { id: "add-new-list", onClick: this.addNewList },
                 React.createElement("span", null, "+"),

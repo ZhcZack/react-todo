@@ -12,6 +12,8 @@ interface ListViewProps {
     /**切换area view显示的列表 */
     switchList(listName: string): void
     onDrop(targetListName: string): void
+    actionsDisplay: boolean;
+    onActionsDisplayClick(): void;
 }
 
 interface ListViewState {
@@ -63,7 +65,7 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
 
     render() {
         return (
-            <div id="listview">
+            <div id="listview" onClick={e => { e.stopPropagation(); this.props.actionsDisplay && this.props.onActionsDisplayClick() }}>
                 <ListContent
                     listInfos={this.props.listInfos}
                     currentListName={this.props.currentListName}

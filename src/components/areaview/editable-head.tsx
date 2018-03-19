@@ -24,27 +24,25 @@ interface HeadProps {
      * 主题选择处理方法
      */
     onColorPick(color: string): void;
+    actionsDisplay: boolean;
+    onActionsDisplayClick(): void;
 }
 
 interface HeadState {
     /**是否处于编辑状态 */
     isEdit: boolean
-    actionsDisplay: boolean
     /**保存编辑后的名称，通过props的值初始化 */
     name: string
 }
 
 class AreaViewHead extends React.Component<HeadProps, HeadState> {
-    private actionsList: HTMLUListElement | null
-    private renameInput: HTMLInputElement | null
+    private renameInput: HTMLInputElement | null;
 
     constructor(props: HeadProps) {
         super(props)
-        this.actionsList = null
         this.renameInput = null
 
         this.state = {
-            actionsDisplay: false,
             isEdit: false,
             name: this.props.listName
         }
@@ -54,7 +52,6 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
         this.deleteClicked = this.deleteClicked.bind(this)
         this.handleSwitch = this.handleSwitch.bind(this)
         this.inputBlur = this.inputBlur.bind(this)
-        this.actionsListBlur = this.actionsListBlur.bind(this)
         this.switchDoneItems = this.switchDoneItems.bind(this)
     }
 
@@ -63,8 +60,7 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
         this.setState({
             name: nextProps.listName,
             isEdit: false,
-            actionsDisplay: false
-        })
+        });
     }
 
     /**
@@ -87,12 +83,12 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
 
         this.setState({
             isEdit: true,
-            actionsDisplay: false
         }, () => {
             if (this.renameInput) {
                 this.renameInput.focus()
             }
-        })
+        });
+        this.props.onActionsDisplayClick();
     }
 
     /**
@@ -105,10 +101,6 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
         if (result) {
             this.props.deleteList(this.state.name)
         }
-        // this.setState({
-        //     isEdit: false,
-        //     actionsDisplay: false
-        // })
     }
 
     /**
@@ -116,14 +108,8 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
      * @param e 鼠标点击事件
      */
     private handleSwitch(e: React.MouseEvent<HTMLButtonElement>) {
-        const prevState = this.state.actionsDisplay
-        this.setState({
-            actionsDisplay: !prevState
-        }, () => {
-            if (this.actionsList) {
-                this.actionsList.focus()
-            }
-        })
+        e.stopPropagation();
+        this.props.onActionsDisplayClick();
     }
 
     /**
@@ -131,34 +117,18 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
      * @param e 焦点移走事件
      */
     private inputBlur(e: React.FocusEvent<HTMLInputElement>) {
-        e.stopPropagation()
-        this.props.renameList(this.state.name)
+        e.stopPropagation();
+        this.props.renameList(this.state.name);
         this.setState({
             isEdit: false,
-            actionsDisplay: false
-        })
-    }
-
-    /**
-     * 当焦点从下拉列表中移走时，隐藏吊下拉菜单。
-     * 
-     * 不过我对浏览器的“焦点”这个东西理解的还不够好，要好好学习一个。
-     * @param e 焦点移走事件
-     */
-    private actionsListBlur(e: React.FocusEvent<HTMLUListElement>) {
-        e.stopPropagation()
-        this.setState({
-            actionsDisplay: false,
-            isEdit: false
-        })
+        });
+        this.props.onActionsDisplayClick();
     }
 
     private switchDoneItems(e: React.MouseEvent<HTMLLIElement>) {
         e.stopPropagation()
         this.props.switchDoneItems()
-        this.setState({
-            actionsDisplay: false
-        })
+        this.props.onActionsDisplayClick();
     }
 
     render() {
@@ -184,13 +154,15 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
                     onChange={this.inputChange}
                     ref={input => this.renameInput = input}
                     onBlur={this.inputBlur} />
-                <button className='actions-switcher' onClick={this.handleSwitch} style={{ backgroundColor: color }}>···</button>
-                <div className={this.state.actionsDisplay ? 'actions actions-display' : 'actions'}>
+                <button
+                    className='actions-switcher'
+                    onClick={this.handleSwitch}
+                    style={{ backgroundColor: color }}
+                >···</button>
+                <div className={this.props.actionsDisplay ? 'actions actions-display' : 'actions'}>
                     <ColorThemePicker
                         onColorPick={this.props.onColorPick} />
-                    <ul className='actions-list'
-                        ref={list => this.actionsList = list}
-                        onBlur={this.actionsListBlur} >
+                    <ul className='actions-list'>
                         <li className="action-showDoneItems" onClick={this.switchDoneItems}>{this.props.doneItemsDisplay ? '隐藏' : '显示'}已完成的项目</li>
                         <li className='action-edit' onClick={this.renameClicked}>重命名列表</li>
                         <li className="action-delete" onClick={this.deleteClicked}>删除列表</li>

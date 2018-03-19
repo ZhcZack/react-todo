@@ -53,6 +53,9 @@
             cursor: pointer;
             color: white;
             font-weight: bold;
+            &:focus {
+                outline: none;
+            }
         }
         .actions {
             position: absolute;

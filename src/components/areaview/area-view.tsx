@@ -35,6 +35,8 @@ interface AreaViewProps {
      * @param color 主题色
      */
     onColorPick(color: string): void;
+    onActionsDisplayClick(): void;
+    actionsDisplay: boolean;
 }
 
 interface AreaViewState {
@@ -65,7 +67,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
 
     render() {
         return (
-            <div id="areaview" className={this.props.shrink ? 'shrink' : ''}>
+            <div id="areaview" className={this.props.shrink ? 'shrink' : ''} onClick={e => { e.stopPropagation(); this.props.actionsDisplay && this.props.onActionsDisplayClick() }}>
                 <EditableHead
                     isPrimaryList={this.props.isPrimaryList}
                     listName={this.props.listName}
@@ -75,6 +77,8 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
                     switchDoneItems={this.switchDoneItems}
                     doneItemsDisplay={this.state.showDoneItems}
                     onColorPick={this.props.onColorPick}
+                    onActionsDisplayClick={this.props.onActionsDisplayClick}
+                    actionsDisplay={this.props.actionsDisplay}
                 />
                 <AreaViewContent
                     items={this.props.todoItems}
