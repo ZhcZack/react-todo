@@ -7,7 +7,7 @@ import { TodoItemClass } from './todo-item'
 export class TodoListClass implements TodoList {
     /**保存的todo项目 */
     private todoItems: TodoItemClass[]
-    private color = '#87CEEB';
+    private color = '#87cefa';
 
     get colorTheme(): string {
         return this.color;

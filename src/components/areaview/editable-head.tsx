@@ -24,7 +24,7 @@ interface HeadProps {
      * 主题选择处理方法
      */
     onColorPick(color: string): void;
-    actionsDisplay: boolean;
+    actionsShouldDisplay: boolean;
     onActionsDisplayClick(): void;
 }
 
@@ -59,7 +59,7 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
         // 传入新的listName之后，保存这个值作为编辑的预留名称
         this.setState({
             name: nextProps.listName,
-            isEdit: false,
+            // isEdit: false,
         });
     }
 
@@ -79,7 +79,8 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
      * @param e 鼠标点击事件
      */
     private renameClicked(e: React.MouseEvent<HTMLLIElement>) {
-        // e.stopPropagation()
+        e.stopPropagation();
+        this.props.onActionsDisplayClick();
 
         this.setState({
             isEdit: true,
@@ -88,7 +89,6 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
                 this.renameInput.focus()
             }
         });
-        this.props.onActionsDisplayClick();
     }
 
     /**
@@ -122,7 +122,6 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
         this.setState({
             isEdit: false,
         });
-        this.props.onActionsDisplayClick();
     }
 
     private switchDoneItems(e: React.MouseEvent<HTMLLIElement>) {
@@ -159,7 +158,7 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
                     onClick={this.handleSwitch}
                     style={{ backgroundColor: color }}
                 >···</button>
-                <div className={this.props.actionsDisplay ? 'actions actions-display' : 'actions'}>
+                <div className={this.props.actionsShouldDisplay ? 'actions animated fadeIn actions-display' : 'actions animated'}>
                     <ColorThemePicker
                         onColorPick={this.props.onColorPick} />
                     <ul className='actions-list'>

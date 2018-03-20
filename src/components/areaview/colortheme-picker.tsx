@@ -15,11 +15,14 @@ export class ColorThemePicker extends React.Component<ColorThemePickerProps, {}>
 
     render() {
         return (
-            <ul className='color-picker'>
-                {
-                    this.colors.map(color => <li style={{ backgroundColor: color.value }} onClick={e => this.props.onColorPick(color.value)} key={color.name}></li>)
-                }
-            </ul>
+            <div className="color-picker">
+                <p>主题</p>
+                <ul>
+                    {
+                        this.colors.map(color => <li style={{ backgroundColor: color.value }} onClick={e => this.props.onColorPick(color.value)} key={color.name}></li>)
+                    }
+                </ul>
+            </div>
         );
     }
 }

@@ -29,8 +29,11 @@
         width: 90%;
         height: calc(30vh);
         margin: 5%;
+        padding: 10px;
         resize: none;
         scroll-behavior: auto;
+        border-color: $border-color;
+        outline: none;
     }
     .actions {
         position: absolute;

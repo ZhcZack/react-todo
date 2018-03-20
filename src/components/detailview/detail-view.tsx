@@ -39,7 +39,13 @@ export class DetailView extends React.Component<DetailViewProps, DetailViewState
                     <div className={checkboxStatus} onClick={this.props.onToggleClicked}>√</div>
                     <span className="title">{this.props.item.name}</span>
                 </div>
-                <textarea className='detailitem-comments' value={this.state.comments} onChange={e => { e.stopPropagation(); this.setState({ comments: e.target.value }); }} onBlur={e => { e.stopPropagation(); this.props.onCommentsChange(this.state.comments) }}></textarea>
+                <textarea
+                    className='detailitem-comments'
+                    value={this.state.comments}
+                    onChange={e => { e.stopPropagation(); this.setState({ comments: e.target.value }); }}
+                    onBlur={e => { e.stopPropagation(); this.props.onCommentsChange(this.state.comments) }}
+                    placeholder='添加备注'
+                ></textarea>
                 <div className="actions">
                     <span className="disappear" onClick={this.props.onCloseClicked}>&gt;</span>
                     <span className="create-time">创建于{this.props.item.time}</span>

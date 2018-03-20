@@ -20,7 +20,7 @@ module.exports = {
             loader: 'ts-loader',
             exclude: /node_modules/,
         }, {
-            test: /\.scss$/,
+            test: /(\.scss)|(\.css)$/,
             use: extractSass.extract({
                 use: [{
                     loader: "css-loader"

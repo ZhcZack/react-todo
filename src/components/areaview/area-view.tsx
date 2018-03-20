@@ -35,8 +35,14 @@ interface AreaViewProps {
      * @param color 主题色
      */
     onColorPick(color: string): void;
+    /**
+     * 显示/隐藏操作区域
+     */
     onActionsDisplayClick(): void;
-    actionsDisplay: boolean;
+    /**
+     * 操作区域是否要显示在屏幕上
+     */
+    actionsShouldDisplay: boolean;
 }
 
 interface AreaViewState {
@@ -67,7 +73,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
 
     render() {
         return (
-            <div id="areaview" className={this.props.shrink ? 'shrink' : ''} onClick={e => { e.stopPropagation(); this.props.actionsDisplay && this.props.onActionsDisplayClick() }}>
+            <div id="areaview" className={this.props.shrink ? 'shrink' : ''} onClick={e => { e.stopPropagation(); this.props.actionsShouldDisplay && this.props.onActionsDisplayClick() }}>
                 <EditableHead
                     isPrimaryList={this.props.isPrimaryList}
                     listName={this.props.listName}
@@ -78,7 +84,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
                     doneItemsDisplay={this.state.showDoneItems}
                     onColorPick={this.props.onColorPick}
                     onActionsDisplayClick={this.props.onActionsDisplayClick}
-                    actionsDisplay={this.props.actionsDisplay}
+                    actionsShouldDisplay={this.props.actionsShouldDisplay}
                 />
                 <AreaViewContent
                     items={this.props.todoItems}
@@ -95,6 +101,15 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
                 />
             </div>
         )
+    }
+
+    componentWillReceiveProps(nextProps: AreaViewProps) {
+        // 切换列表的时候将输入框中的内容清空
+        if (nextProps.listName !== this.props.listName) {
+            this.setState({
+                inputValue: ''
+            });
+        }
     }
 
     /**
@@ -115,13 +130,6 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
         // console.log(`obj: ${obj}, type: ${typeof obj}`)
         const newData = JSON.stringify({ listName: this.props.listName, data })
         this.props.onDragStart(newData)
-    }
-
-    // componentDidMount() {
-    //     this.server.listName = this.props.listName;
-    // }
-
-    componentWillReceiveProps(nextProps: AreaViewProps) {
     }
 
     /**

@@ -24,7 +24,7 @@ interface AppState {
     /**
      * area view操作列表是否要显示
      */
-    actionsDisplay: boolean;
+    actionsShouldDisplay: boolean;
 }
 
 /** 
@@ -45,7 +45,7 @@ export class App extends React.Component<AppProps, AppState> {
             itemsOfList: this.server.itemsOfList(this.server.lastModified),
             detailItem: undefined,
             colorTheme: this.server.themeForList(this.server.lastModified),
-            actionsDisplay: false
+            actionsShouldDisplay: false
         }
 
         // bind methods
@@ -68,7 +68,7 @@ export class App extends React.Component<AppProps, AppState> {
 
     private toggleActionsDisplay() {
         this.setState(prevState => ({
-            actionsDisplay: !prevState.actionsDisplay
+            actionsShouldDisplay: !prevState.actionsShouldDisplay
         }));
     }
 
@@ -133,7 +133,7 @@ export class App extends React.Component<AppProps, AppState> {
             itemsOfList: this.server.itemsOfList(listName),
             lastModifiedListName: listName,
             colorTheme: this.server.themeForList(this.server.lastModified),
-            actionsDisplay: false
+            actionsShouldDisplay: false
         });
     }
 
@@ -295,7 +295,7 @@ export class App extends React.Component<AppProps, AppState> {
                     addNewList={this.addNewList}
                     listInfos={this.state.listInfos}
                     onDrop={this.handleDrop}
-                    actionsDisplay={this.state.actionsDisplay}
+                    actionsDisplay={this.state.actionsShouldDisplay}
                     onActionsDisplayClick={this.toggleActionsDisplay}
                 />
                 <AreaView
@@ -313,7 +313,7 @@ export class App extends React.Component<AppProps, AppState> {
                     onDragEnd={this.handleDragEnd}
                     onColorPick={this.handleColorPick}
                     onActionsDisplayClick={this.toggleActionsDisplay}
-                    actionsDisplay={this.state.actionsDisplay}
+                    actionsShouldDisplay={this.state.actionsShouldDisplay}
                 />
                 <DetailView
                     listName={this.state.lastModifiedListName}

@@ -68,15 +68,16 @@ export class ListViewItem extends React.Component<ListViewItemProps, {}> {
     }
 
     render() {
+        const isActive = this.props.currentListName === this.props.info.name;
         return (
             <li
                 onDragOver={this.handleDragOver}
                 onDrop={this.handleDrop}
                 onDragEnter={this.handleDragEnter}
                 onDragLeave={this.handleDragLeave}
-                className={this.props.currentListName === this.props.info.name ? 'list-item active' : 'list-item'}
+                className={isActive ? 'list-item active' : 'list-item'}
                 onClick={e => this.props.onClick(e, this.props.info.name)}>
-                <span className="item-name">{this.props.info.name}</span>
+                <span className={isActive ? 'item-name animated fadeIn' : 'item-name animated'}>{this.props.info.name}</span>
                 <span className="number-of-items">{this.props.info.count > 0 ? this.props.info.count : ''}</span>
             </li>
         )
