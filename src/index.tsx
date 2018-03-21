@@ -7,5 +7,5 @@ import './styles/index.scss';
 
 ReactDOM.render(
     <App />,
-    document.getElementById('app') as HTMLElement,
+    document.getElementById('app') as HTMLElement
 )

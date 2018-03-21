@@ -16,6 +16,7 @@
     "animate.css": "^3.6.1",
     "css-loader": "^0.28.10",
     "extract-text-webpack-plugin": "^4.0.0-alpha.0",
+    "han-css": "^3.3.0",
     "node-sass": "^4.7.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
