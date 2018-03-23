@@ -1,11 +1,11 @@
-import { TodoItem, TodoList, ListInfo } from './interface'
-import { TodoItemClass } from './todo-item'
-import { TodoListClass } from './todo-list'
+import { TodoItem, TodoList, ListInfo } from "./interface";
+import { TodoItemClass } from "./todo-item";
+import { TodoListClass } from "./todo-list";
 
 /**数据保存的格式 */
 interface Data {
-    lists: TodoList[]
-    lastModified: string
+    lists: TodoList[];
+    lastModified: string;
 }
 
 // interface JSONable {
@@ -14,15 +14,24 @@ interface Data {
 
 export class DataServer {
     // private data: Data
-    private todoLists: TodoListClass[]
+    private todoLists: TodoListClass[];
     /**最后操作的列表名称 */
-    private listName: string
+    private listName: string;
+    /**
+     * 初始化数据出错时的错误信息
+     */
+    private loadDataError: string;
 
     constructor() {
         // this.data = {} as Data
-        this.todoLists = []
-        this.listName = ''
-        this.load()
+        this.todoLists = [];
+        this.listName = "";
+        this.loadDataError = "";
+        this.load();
+    }
+
+    get loadError(): string | undefined {
+        return this.loadDataError.length > 0 ? "初始化数据出错，已重新载入。" : undefined;
     }
 
     /**要保存到本地中的数据 */
@@ -30,24 +39,24 @@ export class DataServer {
         return {
             data: {
                 lists: this.todoLists,
-                lastModified: this.listName
-            }
-        }
+                lastModified: this.listName,
+            },
+        };
     }
 
     /**
      * 返回列表名称的数组集合
      */
     get lists(): string[] {
-        let result: string[] = []
+        let result: string[] = [];
         for (let list of this.todoLists) {
-            result.push(list.name)
+            result.push(list.name);
         }
-        return result
+        return result;
     }
 
     isPrimaryList(listName: string): boolean {
-        return listName === '我的一天'
+        return listName === "我的一天";
     }
 
     /**
@@ -55,36 +64,38 @@ export class DataServer {
      * @param listName 列表名称
      */
     itemsOfList(listName: string): TodoItem[] {
-        const listIndex = this.listNameIndex(listName)
-        if (listIndex < 0) { return [] }
-        const items = this.todoLists[listIndex].items
-        return JSON.parse(JSON.stringify(items))
+        const listIndex = this.listNameIndex(listName);
+        if (listIndex < 0) {
+            return [];
+        }
+        const items = this.todoLists[listIndex].items;
+        return JSON.parse(JSON.stringify(items));
     }
 
     /**
      * 返回所有列表的一些信息
-     * 
+     *
      * 名称（`name`）
-     * 
+     *
      * 未完成todo项目的个数(`count`)
      */
     get listInfos(): ListInfo[] {
-        const infos: ListInfo[] = []
+        const infos: ListInfo[] = [];
         this.todoLists.forEach(list => {
-            infos.push(list.listInfo)
-        })
-        return infos
+            infos.push(list.listInfo);
+        });
+        return infos;
     }
 
     /**
      * 返回列表的名称（`name`）以及所有todo项目的个数（`count`）
      */
     get listTotalInfos(): ListInfo[] {
-        const infos: ListInfo[] = []
+        const infos: ListInfo[] = [];
         this.todoLists.forEach(list => {
-            infos.push(list.listTotalInfo)
-        })
-        return infos
+            infos.push(list.listTotalInfo);
+        });
+        return infos;
     }
 
     /**
@@ -94,7 +105,7 @@ export class DataServer {
     themeForList(listName: string): string {
         const listIndex = this.listNameIndex(listName);
         if (listIndex < 0) {
-            return '#87ceeb';
+            return "#87ceeb";
         }
         const list = this.todoLists[listIndex];
         return list.colorTheme;
@@ -107,7 +118,9 @@ export class DataServer {
      */
     changeColorThemeForList(color: string, listName: string) {
         const listIndex = this.listNameIndex(listName);
-        if (listIndex < 0) { return; }
+        if (listIndex < 0) {
+            return;
+        }
         const list = this.todoLists[listIndex];
         list.colorTheme = color;
         this.save();
@@ -120,29 +133,31 @@ export class DataServer {
      */
     itemInList(itemName: string, listName: string): TodoItem | undefined {
         // console.log(`itemName: ${itemName}`)
-        const listIndex = this.listNameIndex(listName)
-        if (listIndex < 0) { return }
-        const items = this.todoLists[listIndex].items
+        const listIndex = this.listNameIndex(listName);
+        if (listIndex < 0) {
+            return;
+        }
+        const items = this.todoLists[listIndex].items;
         for (let i = 0; i < items.length; i++) {
             if (items[i].name === itemName) {
                 // console.log(`copy: ${items[i].copy}`)
-                return items[i].copy
+                return items[i].copy;
             }
         }
-        return undefined
+        return undefined;
     }
 
     /**
      * 最后进行操作的列表名称
      */
     get lastModified(): string {
-        const name = this.listName
-        return name === '' ? '我的一天' : name
+        const name = this.listName;
+        return name === "" ? "我的一天" : name;
     }
 
     set lastModified(name: string) {
-        this.listName = name
-        this.save()
+        this.listName = name;
+        this.save();
     }
 
     /**
@@ -150,12 +165,14 @@ export class DataServer {
      * @param name 新列表名称
      */
     addNewList(name: string) {
-        const listIndex = this.listNameIndex(name)
-        if (listIndex !== -1) { return }
-        const list = new TodoListClass(name)
-        this.todoLists.push(list)
-        this.listName = name
-        this.save()
+        const listIndex = this.listNameIndex(name);
+        if (listIndex !== -1) {
+            return;
+        }
+        const list = new TodoListClass(name);
+        this.todoLists.push(list);
+        this.listName = name;
+        this.save();
     }
 
     /**
@@ -164,12 +181,16 @@ export class DataServer {
      * @param newName 新列表名称
      */
     renameList(oldName: string, newName: string) {
-        if (oldName === newName) { return }
-        const index = this.listNameIndex(oldName)
-        if (index === -1) { return }
-        this.todoLists[index].rename(newName)
-        this.listName = newName
-        this.save()
+        if (oldName === newName) {
+            return;
+        }
+        const index = this.listNameIndex(oldName);
+        if (index === -1) {
+            return;
+        }
+        this.todoLists[index].rename(newName);
+        this.listName = newName;
+        this.save();
     }
 
     /**
@@ -177,12 +198,16 @@ export class DataServer {
      * @param name 要删除的列表名称
      */
     deleteList(name: string) {
-        if (this.todoLists.length < 2) { return }
-        const index = this.listNameIndex(name)
-        if (index === -1) { return }
-        this.todoLists.splice(index, 1)
-        this.listName = this.todoLists[0].name
-        this.save()
+        if (this.todoLists.length < 2) {
+            return;
+        }
+        const index = this.listNameIndex(name);
+        if (index === -1) {
+            return;
+        }
+        this.todoLists.splice(index, 1);
+        this.listName = this.todoLists[0].name;
+        this.save();
     }
 
     /**
@@ -191,13 +216,17 @@ export class DataServer {
      * @param listName 该todo所在的列表名称
      */
     deleteItemInList(itemName: string, listName: string) {
-        const listIndex = this.listNameIndex(listName)
-        if (listIndex < 0) { return }
-        const list = this.todoLists[listIndex]
+        const listIndex = this.listNameIndex(listName);
+        if (listIndex < 0) {
+            return;
+        }
+        const list = this.todoLists[listIndex];
 
-        if (!list.containsItem(itemName)) { return }
-        list.removeItem(itemName)
-        this.save()
+        if (!list.containsItem(itemName)) {
+            return;
+        }
+        list.removeItem(itemName);
+        this.save();
     }
 
     /**
@@ -206,12 +235,14 @@ export class DataServer {
      * @param listName 该项目要被加入的列表名称
      */
     addNewItemInList(item: TodoItem | string, listName: string): void {
-        const listIndex = this.listNameIndex(listName)
-        if (listIndex < 0) { return }
+        const listIndex = this.listNameIndex(listName);
+        if (listIndex < 0) {
+            return;
+        }
 
-        const list = this.todoLists[listIndex]
-        list.addNewItem(item)
-        this.save()
+        const list = this.todoLists[listIndex];
+        list.addNewItem(item);
+        this.save();
     }
 
     /**
@@ -220,15 +251,17 @@ export class DataServer {
      * @param listName 该项目所在的列表名称
      */
     toggleItemInList(itemName: string, listName: string) {
-        const listIndex = this.listNameIndex(listName)
-        if (listIndex < 0) { return }
-        const items = this.todoLists[listIndex].items
+        const listIndex = this.listNameIndex(listName);
+        if (listIndex < 0) {
+            return;
+        }
+        const items = this.todoLists[listIndex].items;
         for (let item of items) {
             if (item.name === itemName) {
-                item.toggle()
+                item.toggle();
             }
         }
-        this.save()
+        this.save();
     }
 
     /**
@@ -238,17 +271,21 @@ export class DataServer {
      * @param listName 该todo事项所在的列表名称
      */
     changeItemCommentsInList(newComments: string, itemName: string, listName: string) {
-        const listIndex = this.listNameIndex(listName)
-        if (listIndex < 0) { return }
-        const list = this.todoLists[listIndex]
-        if (!list.containsItem(itemName)) { return }
-        const items = list.items
+        const listIndex = this.listNameIndex(listName);
+        if (listIndex < 0) {
+            return;
+        }
+        const list = this.todoLists[listIndex];
+        if (!list.containsItem(itemName)) {
+            return;
+        }
+        const items = list.items;
         for (let item of items) {
             if (item.name === itemName) {
-                item.changeComments(newComments)
+                item.changeComments(newComments);
             }
         }
-        this.save()
+        this.save();
     }
 
     /**
@@ -256,84 +293,94 @@ export class DataServer {
      * @param name 列表名称
      */
     private listNameIndex(name: string): number {
-        let index = -1
+        let index = -1;
         for (let i = 0; i < this.todoLists.length; i++) {
             if (this.todoLists[i].name === name) {
-                index = i
-                break
+                index = i;
+                break;
             }
         }
-        return index
+        return index;
     }
 
     /**从本地加载数据，没有则初始化数据 */
     private load() {
-        const result = localStorage.getItem('react-todo-app')
+        const result = localStorage.getItem("react-todo-app");
         if (result === null) {
-            this.initLocalData()
+            this.initLocalData();
         } else {
             try {
-                this.dataFromLocal()
+                this.dataFromLocal();
             } catch (e) {
-                this.initLocalData()
+                this.loadDataError = "load data error";
+                this.initLocalData();
             }
         }
     }
 
     /**手动初始化本地数据 */
     private initLocalData() {
-        const lists = [
-            new TodoListClass('我的一天')
-        ]
-        this.todoLists = lists
-        this.lastModified = '我的一天'
-        this.save()
+        const lists = [new TodoListClass("我的一天")];
+        this.todoLists = lists;
+        this.lastModified = "我的一天";
+        this.save();
     }
 
     /**从本地加载数据，如果本地格式不对就抛出异常等待处理 */
     private dataFromLocal() {
-        const result = localStorage.getItem('react-todo-app')
-        if (!result) { return }
-        const data = JSON.parse(result)
+        const result = localStorage.getItem("react-todo-app");
+        if (!result) {
+            return;
+        }
+        const data = JSON.parse(result);
         if (!data.data) {
-            console.log('not have data')
-            throw Error('local data error')
+            console.log("not have data");
+            throw Error("local data error");
         }
-        const dataFromLocal = data.data
+        const dataFromLocal = data.data;
         if (!dataFromLocal.lists) {
-            console.log('not have lists')
-            throw Error('local data error')
+            console.log("not have lists");
+            throw Error("local data error");
         }
-        const listsFromLocal = dataFromLocal.lists
+        const listsFromLocal = dataFromLocal.lists;
         // 从本地获取数据并解析成对应的class
         for (let i = 0; i < listsFromLocal.length; i++) {
             if (!listsFromLocal[i].name) {
-                console.log('not have list name')
-                throw Error('local data error')
+                console.log("not have list name");
+                throw Error("local data error");
             }
-            const newList = new TodoListClass(listsFromLocal[i].name)
-            const localItems = listsFromLocal[i].items
+            const newList = new TodoListClass(listsFromLocal[i].name);
+            const localItems = listsFromLocal[i].items;
             for (let j = 0; j < localItems.length; j++) {
-                if (!localItems[j].name || localItems[j].done === undefined || !localItems[j].time) {
-                    console.log('item format error')
-                    throw Error('local data error')
+                if (
+                    !localItems[j].name ||
+                    localItems[j].done === undefined ||
+                    !localItems[j].time
+                ) {
+                    console.log("item format error");
+                    throw Error("local data error");
                 }
-                const newItem = new TodoItemClass(localItems[j].name, localItems[j].done, localItems[j].time, localItems[j].comments)
-                newList.addNewItem(newItem)
+                const newItem = new TodoItemClass(
+                    localItems[j].name,
+                    localItems[j].done,
+                    localItems[j].time,
+                    localItems[j].comments,
+                );
+                newList.addNewItem(newItem);
             }
             if (listsFromLocal[i].theme) {
                 newList.colorTheme = listsFromLocal[i].theme;
             }
-            this.todoLists.push(newList)
+            this.todoLists.push(newList);
         }
-        this.listName = dataFromLocal.lastModified
+        this.listName = dataFromLocal.lastModified;
     }
 
     /**
      * 将data中的数据保存到本地
      */
     private save() {
-        localStorage.setItem('react-todo-app', JSON.stringify(this.data))
+        localStorage.setItem("react-todo-app", JSON.stringify(this.data));
     }
 }
 

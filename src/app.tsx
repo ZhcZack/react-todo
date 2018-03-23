@@ -1,74 +1,130 @@
-import * as React from 'react'
-import { ListView } from './components/listview/list-view'
-import { AreaView } from './components/areaview/area-view'
-import { DetailView } from './components/detailview/detail-view'
-import { DataServer } from './model/data-server'
-import { TodoItem, ListInfo } from './model/interface'
+import * as React from "react";
+import { ListView } from "./components/listview/list-view";
+import { AreaView } from "./components/areaview/area-view";
+import { DetailView } from "./components/detailview/detail-view";
+import { DataServer } from "./model/data-server";
+import { TodoItem, ListInfo } from "./model/interface";
+import { Alert } from "./components/util/global-alert";
 
-
-interface AppProps {
-
-}
+interface AppProps {}
 
 interface AppState {
     /**最后处理todo事项的列表名称 */
-    lastModifiedListName: string
+    lastModifiedListName: string;
     /**列表们的信息 */
-    listInfos: ListInfo[]
+    listInfos: ListInfo[];
     /**一个列表中的所有todo事项 */
-    itemsOfList: TodoItem[]
+    itemsOfList: TodoItem[];
     /**detail view中显示/编辑的todo事项 */
-    detailItem?: TodoItem
+    detailItem?: TodoItem;
     /**area view的主题颜色 */
     colorTheme: string;
     /**
      * area view操作列表是否要显示
      */
     actionsShouldDisplay: boolean;
+    /**
+     * 提示框是否要显示
+     */
+    alertShouldDisplay: boolean;
+    /**
+     * 提示框内容
+     */
+    alertMessage: string;
 }
 
-/** 
+/**
  * App主内容区域
  */
 export class App extends React.Component<AppProps, AppState> {
     /**列表服务 */
-    private server: DataServer
+    private server: DataServer;
     /**拖拽过程中的数据 */
-    private dragData?: string
+    private dragData?: string;
 
     constructor(props: AppProps) {
         super(props);
-        this.server = new DataServer()
+        this.server = new DataServer();
         this.state = {
             lastModifiedListName: this.server.lastModified,
             listInfos: this.server.listInfos,
-            itemsOfList: this.server.itemsOfList(this.server.lastModified),
+            itemsOfList: [],
             detailItem: undefined,
             colorTheme: this.server.themeForList(this.server.lastModified),
-            actionsShouldDisplay: false
-        }
+            actionsShouldDisplay: false,
+            alertShouldDisplay: false,
+            alertMessage: "",
+        };
 
         // bind methods
-        this.switchList = this.switchList.bind(this)
-        this.itemClicked = this.itemClicked.bind(this)
-        this.addNewList = this.addNewList.bind(this)
-        this.renameList = this.renameList.bind(this)
-        this.deleteList = this.deleteList.bind(this)
-        this.addNewItemInList = this.addNewItemInList.bind(this)
-        this.toggleItemInList = this.toggleItemInList.bind(this)
-        this.handleToggleFromDetailView = this.handleToggleFromDetailView.bind(this)
-        this.handleCloseFromDetailView = this.handleCloseFromDetailView.bind(this)
-        this.handleDeleteFromDetailView = this.handleDeleteFromDetailView.bind(this)
-        this.handleCommentsChange = this.handleCommentsChange.bind(this)
-        this.handleDragStart = this.handleDragStart.bind(this)
-        this.handleDrop = this.handleDrop.bind(this)
+        this.switchList = this.switchList.bind(this);
+        this.itemClicked = this.itemClicked.bind(this);
+        this.addNewList = this.addNewList.bind(this);
+        this.renameList = this.renameList.bind(this);
+        this.deleteList = this.deleteList.bind(this);
+        this.addNewItemInList = this.addNewItemInList.bind(this);
+        this.toggleItemInList = this.toggleItemInList.bind(this);
+        this.handleToggleFromDetailView = this.handleToggleFromDetailView.bind(this);
+        this.handleCloseFromDetailView = this.handleCloseFromDetailView.bind(this);
+        this.handleDeleteFromDetailView = this.handleDeleteFromDetailView.bind(this);
+        this.handleCommentsChange = this.handleCommentsChange.bind(this);
+        this.handleDragStart = this.handleDragStart.bind(this);
+        this.handleDrop = this.handleDrop.bind(this);
         this.handleColorPick = this.handleColorPick.bind(this);
         this.toggleActionsDisplay = this.toggleActionsDisplay.bind(this);
+        this.handleConfirmClicked = this.handleConfirmClicked.bind(this);
+
+        this.fetchErrorMessage();
+    }
+
+    private fetchItems() {
+        let p: Promise<TodoItem[]> = new Promise((res, rej) => {
+            const listName = this.server.lastModified;
+            const items = this.server.itemsOfList(listName);
+            res(items);
+        });
+        p.then(items => {
+            this.setState({
+                itemsOfList: items,
+            });
+        });
+    }
+
+    private fetchErrorMessage() {
+        let p: Promise<string | undefined> = new Promise((res, rej) => {
+            let message = this.server.loadError;
+            res(message);
+        });
+        p.then(message => {
+            this.setState({
+                alertShouldDisplay: message !== undefined,
+                alertMessage: message ? message : "",
+            });
+        });
+    }
+
+    componentDidMount() {
+        this.fetchItems();
+        // this.fetchErrorMessage()
+        // const alertMessage = this.server.loadError
+        // if (alertMessage !== undefined) {
+        // 	this.setState({
+        // 		alertShouldDisplay: true,
+        // 		alertMessage,
+        // 	})
+        // }
+    }
+
+    private handleConfirmClicked(e: React.MouseEvent<HTMLButtonElement>) {
+        e.stopPropagation();
+        this.setState(prevState => ({
+            alertShouldDisplay: !prevState.alertShouldDisplay,
+        }));
     }
 
     private toggleActionsDisplay() {
         this.setState(prevState => ({
-            actionsShouldDisplay: !prevState.actionsShouldDisplay
+            actionsShouldDisplay: !prevState.actionsShouldDisplay,
         }));
     }
 
@@ -77,21 +133,26 @@ export class App extends React.Component<AppProps, AppState> {
      * @param targetListName todo要被拖拽到的目标列表名称
      */
     private handleDrop(targetListName: string) {
-        if (!this.dragData) { return }
-        const data = JSON.parse(this.dragData)
-        const sourceListName = data.listName
-        const itemData = JSON.parse(data.data)
+        if (!this.dragData) {
+            return;
+        }
+        const data = JSON.parse(this.dragData);
+        const sourceListName = data.listName;
+        const itemData = JSON.parse(data.data);
 
-        if (sourceListName === targetListName) { return }
-        this.server.deleteItemInList(itemData.name, sourceListName)
-        this.server.addNewItemInList(itemData, targetListName)
-        this.dragData = undefined
+        if (sourceListName === targetListName) {
+            return;
+        }
+        this.server.deleteItemInList(itemData.name, sourceListName);
+        this.server.addNewItemInList(itemData, targetListName);
+        this.dragData = undefined;
+
+        this.fetchItems();
 
         this.setState({
             listInfos: this.server.listInfos,
-            itemsOfList: this.server.itemsOfList(this.server.lastModified),
-            detailItem: undefined
-        })
+            detailItem: undefined,
+        });
     }
 
     /**
@@ -101,11 +162,11 @@ export class App extends React.Component<AppProps, AppState> {
      */
     private renameList(oldName: string, newName: string) {
         // console.log(`oldName: ${oldName}, newName: ${newName}`)
-        this.server.renameList(oldName, newName)
+        this.server.renameList(oldName, newName);
         this.setState({
             listInfos: this.server.listInfos,
-            lastModifiedListName: this.server.lastModified
-        })
+            lastModifiedListName: this.server.lastModified,
+        });
     }
 
     /**
@@ -117,9 +178,10 @@ export class App extends React.Component<AppProps, AppState> {
         this.setState({
             listInfos: this.server.listInfos,
             lastModifiedListName: this.server.lastModified,
-            itemsOfList: this.server.itemsOfList(this.server.lastModified),
-            colorTheme: this.server.themeForList(this.server.lastModified)
+            colorTheme: this.server.themeForList(this.server.lastModified),
+            // itemsOfList: this.server.itemsOfList(listName),
         });
+        this.fetchItems();
     }
 
     /**
@@ -128,13 +190,14 @@ export class App extends React.Component<AppProps, AppState> {
      */
     private switchList(listName: string) {
         // console.log('switchList: name is ' + listName);
-        this.server.lastModified = listName
+        this.server.lastModified = listName;
         this.setState({
-            itemsOfList: this.server.itemsOfList(listName),
             lastModifiedListName: listName,
             colorTheme: this.server.themeForList(this.server.lastModified),
-            actionsShouldDisplay: false
+            actionsShouldDisplay: false,
+            // itemsOfList: this.server.itemsOfList(listName),
         });
+        this.fetchItems();
     }
 
     /**
@@ -142,21 +205,24 @@ export class App extends React.Component<AppProps, AppState> {
      * @param listName 列表名称
      */
     private addNewList(listName: string) {
-        let infos = this.state.listInfos
-        let index = -1
+        let infos = this.state.listInfos;
+        let index = -1;
         for (let i = 0; i < infos.length; i++) {
             if (infos[i].name === listName) {
-                index = i
-                break
+                index = i;
+                break;
             }
         }
-        if (index !== -1) { return }
-        this.server.addNewList(listName)
+        if (index !== -1) {
+            return;
+        }
+        this.server.addNewList(listName);
         this.setState({
             lastModifiedListName: listName,
             listInfos: this.server.listInfos,
-            itemsOfList: this.server.itemsOfList(listName)
-        })
+            // itemsOfList: this.server.itemsOfList(listName),
+        });
+        this.fetchItems();
     }
 
     /**
@@ -165,11 +231,12 @@ export class App extends React.Component<AppProps, AppState> {
      * @param listName item所在的列表名称
      */
     private addNewItemInList(itemName: string, listName: string) {
-        this.server.addNewItemInList(itemName, listName)
+        this.server.addNewItemInList(itemName, listName);
         this.setState({
-            itemsOfList: this.server.itemsOfList(this.state.lastModifiedListName),
-            listInfos: this.server.listInfos
-        })
+            // itemsOfList: this.server.itemsOfList(this.state.lastModifiedListName),
+            listInfos: this.server.listInfos,
+        });
+        this.fetchItems();
     }
 
     /**
@@ -178,16 +245,17 @@ export class App extends React.Component<AppProps, AppState> {
      * @param listName 该todo所在的列表名
      */
     private toggleItemInList(itemName: string, listName: string) {
-        this.server.toggleItemInList(itemName, listName)
+        this.server.toggleItemInList(itemName, listName);
         this.setState({
-            itemsOfList: this.server.itemsOfList(listName),
-            listInfos: this.server.listInfos
-        })
+            // itemsOfList: this.server.itemsOfList(listName),
+            listInfos: this.server.listInfos,
+        });
+        this.fetchItems();
         // 如果点击的就是要详细显示的TodoItem，则要更新detailItem的状态
         if (this.state.detailItem && this.state.detailItem.name === itemName) {
             this.setState({
-                detailItem: this.server.itemInList(itemName, listName)
-            })
+                detailItem: this.server.itemInList(itemName, listName),
+            });
         }
     }
 
@@ -196,15 +264,17 @@ export class App extends React.Component<AppProps, AppState> {
      * @param e 鼠标点击事件
      */
     private handleToggleFromDetailView(e: React.MouseEvent<HTMLSpanElement>) {
-        e.stopPropagation()
-        if (!this.state.detailItem) { return }
-        const itemName = this.state.detailItem.name
-        const listName = this.state.lastModifiedListName
+        e.stopPropagation();
+        if (!this.state.detailItem) {
+            return;
+        }
+        const itemName = this.state.detailItem.name;
+        const listName = this.state.lastModifiedListName;
 
-        this.toggleItemInList(itemName, listName)
+        this.toggleItemInList(itemName, listName);
         this.setState({
-            detailItem: this.server.itemInList(itemName, listName)
-        })
+            detailItem: this.server.itemInList(itemName, listName),
+        });
     }
 
     /**
@@ -212,10 +282,10 @@ export class App extends React.Component<AppProps, AppState> {
      * @param e 鼠标点击事件
      */
     private handleCloseFromDetailView(e: React.MouseEvent<HTMLSpanElement>) {
-        e.stopPropagation()
+        e.stopPropagation();
         this.setState({
-            detailItem: undefined
-        })
+            detailItem: undefined,
+        });
     }
 
     /**
@@ -223,18 +293,21 @@ export class App extends React.Component<AppProps, AppState> {
      * @param e 鼠标点击事件
      */
     private handleDeleteFromDetailView(e: React.MouseEvent<HTMLSpanElement>) {
-        e.stopPropagation()
-        if (!this.state.detailItem) { return }
+        e.stopPropagation();
+        if (!this.state.detailItem) {
+            return;
+        }
 
-        const itemName = this.state.detailItem.name
-        const listName = this.state.lastModifiedListName
-        this.server.deleteItemInList(itemName, listName)
+        const itemName = this.state.detailItem.name;
+        const listName = this.state.lastModifiedListName;
+        this.server.deleteItemInList(itemName, listName);
         // 删除了todo之后，detailItem自然就没有了
         this.setState({
             detailItem: undefined,
-            itemsOfList: this.server.itemsOfList(listName),
-            listInfos: this.server.listInfos
-        })
+            // itemsOfList: this.server.itemsOfList(listName),
+            listInfos: this.server.listInfos,
+        });
+        this.fetchItems();
     }
 
     /**
@@ -242,12 +315,21 @@ export class App extends React.Component<AppProps, AppState> {
      * @param value todo事项的新备注
      */
     private handleCommentsChange(value: string) {
-        if (!this.state.detailItem) { return }
-        this.server.changeItemCommentsInList(value, this.state.detailItem.name, this.state.lastModifiedListName)
+        if (!this.state.detailItem) {
+            return;
+        }
+        this.server.changeItemCommentsInList(
+            value,
+            this.state.detailItem.name,
+            this.state.lastModifiedListName,
+        );
         this.setState(prevState => ({
-            detailItem: prevState.detailItem ? this.server.itemInList(prevState.detailItem.name, prevState.lastModifiedListName) : undefined,
-            itemsOfList: this.server.itemsOfList(prevState.lastModifiedListName)
-        }))
+            detailItem: prevState.detailItem
+                ? this.server.itemInList(prevState.detailItem.name, prevState.lastModifiedListName)
+                : undefined,
+            // itemsOfList: this.server.itemsOfList(prevState.lastModifiedListName),
+        }));
+        this.fetchItems();
     }
 
     /**
@@ -257,8 +339,8 @@ export class App extends React.Component<AppProps, AppState> {
      */
     private itemClicked(itemName: string, listName: string) {
         this.setState({
-            detailItem: this.server.itemInList(itemName, listName)
-        })
+            detailItem: this.server.itemInList(itemName, listName),
+        });
     }
 
     /**
@@ -266,13 +348,13 @@ export class App extends React.Component<AppProps, AppState> {
      * @param data 拖拽的todo事项数据
      */
     private handleDragStart(data: string) {
-        this.dragData = data
+        this.dragData = data;
         // console.log(`dragData: ${data.toString()}, type: ${typeof data}`)
     }
 
     /**拖拽结束/被取消时清除保存的拖拽数据 */
     private handleDragEnd() {
-        this.dragData = undefined
+        this.dragData = undefined;
     }
 
     /**
@@ -282,7 +364,7 @@ export class App extends React.Component<AppProps, AppState> {
     private handleColorPick(color: string) {
         this.server.changeColorThemeForList(color, this.state.lastModifiedListName);
         this.setState({
-            colorTheme: this.server.themeForList(this.state.lastModifiedListName)
+            colorTheme: this.server.themeForList(this.state.lastModifiedListName),
         });
     }
 
@@ -321,8 +403,16 @@ export class App extends React.Component<AppProps, AppState> {
                     onCloseClicked={this.handleCloseFromDetailView}
                     onDeleteClicked={this.handleDeleteFromDetailView}
                     onToggleClicked={this.handleToggleFromDetailView}
-                    onCommentsChange={this.handleCommentsChange} />
+                    onCommentsChange={this.handleCommentsChange}
+                />
+                {this.state.alertShouldDisplay && (
+                    <Alert
+                        display={this.state.alertShouldDisplay}
+                        message={this.state.alertMessage}
+                        onConfirmClicked={this.handleConfirmClicked}
+                    />
+                )}
             </React.Fragment>
-        )
+        );
     }
 }
