@@ -74,9 +74,12 @@ export class App extends React.Component<AppProps, AppState> {
         this.toggleActionsDisplay = this.toggleActionsDisplay.bind(this);
         this.handleConfirmClicked = this.handleConfirmClicked.bind(this);
 
-        this.fetchErrorMessage();
+        // this.fetchErrorMessage();
     }
 
+    /**
+     * 从server获取todo项目列表并更新视图
+     */
     private fetchItems() {
         let p: Promise<TodoItem[]> = new Promise((res, rej) => {
             const listName = this.server.lastModified;
@@ -90,6 +93,9 @@ export class App extends React.Component<AppProps, AppState> {
         });
     }
 
+    /**
+     * 从server处得知初始化数据是否错误，如果错误则显示错误信息。
+     */
     private fetchErrorMessage() {
         let p: Promise<string | undefined> = new Promise((res, rej) => {
             let message = this.server.loadError;
@@ -105,7 +111,7 @@ export class App extends React.Component<AppProps, AppState> {
 
     componentDidMount() {
         this.fetchItems();
-        // this.fetchErrorMessage()
+        this.fetchErrorMessage();
         // const alertMessage = this.server.loadError
         // if (alertMessage !== undefined) {
         // 	this.setState({
@@ -115,6 +121,10 @@ export class App extends React.Component<AppProps, AppState> {
         // }
     }
 
+    /**
+     * 弹窗中”确认“按钮的点击处理函数
+     * @param e 鼠标事件
+     */
     private handleConfirmClicked(e: React.MouseEvent<HTMLButtonElement>) {
         e.stopPropagation();
         this.setState(prevState => ({
@@ -122,6 +132,9 @@ export class App extends React.Component<AppProps, AppState> {
         }));
     }
 
+    /**
+     * 显示/隐藏area view的操作窗口
+     */
     private toggleActionsDisplay() {
         this.setState(prevState => ({
             actionsShouldDisplay: !prevState.actionsShouldDisplay,

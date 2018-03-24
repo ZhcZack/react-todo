@@ -17966,8 +17966,8 @@ var App = /** @class */ (function (_super) {
         _this.handleColorPick = _this.handleColorPick.bind(_this);
         _this.toggleActionsDisplay = _this.toggleActionsDisplay.bind(_this);
         _this.handleConfirmClicked = _this.handleConfirmClicked.bind(_this);
-        _this.fetchErrorMessage();
         return _this;
+        // this.fetchErrorMessage();
     }
     App.prototype.fetchItems = function () {
         var _this = this;
@@ -17997,7 +17997,7 @@ var App = /** @class */ (function (_super) {
     };
     App.prototype.componentDidMount = function () {
         this.fetchItems();
-        // this.fetchErrorMessage()
+        this.fetchErrorMessage();
         // const alertMessage = this.server.loadError
         // if (alertMessage !== undefined) {
         // 	this.setState({
