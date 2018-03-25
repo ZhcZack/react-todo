@@ -17939,8 +17939,6 @@ var App = /** @class */ (function (_super) {
     function App(props) {
         var _this = _super.call(this, props) || this;
         _this.server = new data_server_1.DataServer();
-        // let info: ListInfo[] = [];
-        // this.fetchListInfo().then(data => (info = data));
         _this.state = {
             lastModifiedListName: '',
             listInfos: [],
@@ -17969,7 +17967,6 @@ var App = /** @class */ (function (_super) {
         _this.toggleActionsDisplay = _this.toggleActionsDisplay.bind(_this);
         _this.handleConfirmClicked = _this.handleConfirmClicked.bind(_this);
         return _this;
-        // this.fetchErrorMessage();
     }
     /**
      * 一开始载入界面时从“远端”获取必要数据的函数
@@ -18038,6 +18035,9 @@ var App = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * 从“远端”获取列表们的信息
+     */
     App.prototype.fetchListInfo = function () {
         var _this = this;
         var p = new Promise(function (res, rej) {
@@ -18053,6 +18053,9 @@ var App = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * 从“远端”获取当前列表中todo事项的信息
+     */
     App.prototype.fetchItems = function () {
         var _this = this;
         var p = new Promise(function (res, rej) {
@@ -18068,6 +18071,9 @@ var App = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * 从“远端”获取加载错误的信息
+     */
     App.prototype.fetchErrorMessage = function () {
         var _this = this;
         var p = new Promise(function (res, rej) {
@@ -18082,29 +18088,23 @@ var App = /** @class */ (function (_super) {
         });
     };
     App.prototype.componentDidMount = function () {
-<<<<<<< HEAD
-        this.fetchItems();
-        this.fetchErrorMessage();
-=======
         // this.fetchItems()
         // this.fetchListInfo()
         this.initFetch();
-        // this.fetchErrorMessage()
->>>>>>> new-design
-        // const alertMessage = this.server.loadError
-        // if (alertMessage !== undefined) {
-        // 	this.setState({
-        // 		alertShouldDisplay: true,
-        // 		alertMessage,
-        // 	})
-        // }
     };
+    /**
+     * 弹窗中”确认“按钮的点击处理函数
+     * @param e 鼠标事件
+     */
     App.prototype.handleConfirmClicked = function (e) {
         e.stopPropagation();
         this.setState(function (prevState) { return ({
             alertShouldDisplay: !prevState.alertShouldDisplay,
         }); });
     };
+    /**
+     * 显示/隐藏area view的操作窗口
+     */
     App.prototype.toggleActionsDisplay = function () {
         this.setState(function (prevState) { return ({
             actionsShouldDisplay: !prevState.actionsShouldDisplay,
