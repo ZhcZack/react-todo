@@ -1,59 +1,59 @@
-import * as React from "react";
-import { ColorThemePicker } from "./colortheme-picker";
-import { AreaActions } from "../util/area-actions";
+import * as React from 'react'
+import { ColorThemePicker } from './colortheme-picker'
+import { AreaActions } from '../util/area-actions'
 
 interface HeadProps {
     /**列表名称 */
-    listName: string;
+    listName: string
     /**列表主题色 */
-    colorTheme: string;
+    colorTheme: string
     /**重命名列表，处理方法 */
-    renameList(name: string): void;
+    renameList(name: string): void
     /**删除列表，处理方法 */
-    deleteList(name: string): void;
+    deleteList(name: string): void
     /**
      * 显示/隐藏已完成的todo事项
      */
-    switchDoneItems(): void;
+    switchDoneItems(): void
     /**
      * 是否要显示已完成的todo项目
      */
-    doneItemsDisplay: boolean;
+    doneItemsDisplay: boolean
     /**该列表是否为“基础列表” */
-    isPrimaryList: boolean;
+    isPrimaryList: boolean
     /**
      * 主题选择处理方法
      */
-    onColorPick(color: string): void;
-    actionsShouldDisplay: boolean;
-    onActionsDisplayClick(): void;
+    onColorPick(color: string): void
+    actionsShouldDisplay: boolean
+    onActionsDisplayClick(): void
 }
 
 interface HeadState {
     /**是否处于编辑状态 */
-    isEdit: boolean;
+    isEdit: boolean
     /**保存编辑后的名称，通过props的值初始化 */
-    name: string;
+    name: string
 }
 
 class AreaViewHead extends React.Component<HeadProps, HeadState> {
-    private renameInput: HTMLInputElement | null;
+    private renameInput: HTMLInputElement | null
 
     constructor(props: HeadProps) {
-        super(props);
-        this.renameInput = null;
+        super(props)
+        this.renameInput = null
 
         this.state = {
             isEdit: false,
             name: this.props.listName,
-        };
+        }
 
-        this.inputChange = this.inputChange.bind(this);
-        this.renameClicked = this.renameClicked.bind(this);
-        this.deleteClicked = this.deleteClicked.bind(this);
-        this.handleSwitch = this.handleSwitch.bind(this);
-        this.inputBlur = this.inputBlur.bind(this);
-        this.switchDoneItems = this.switchDoneItems.bind(this);
+        this.inputChange = this.inputChange.bind(this)
+        this.renameClicked = this.renameClicked.bind(this)
+        this.deleteClicked = this.deleteClicked.bind(this)
+        this.handleSwitch = this.handleSwitch.bind(this)
+        this.inputBlur = this.inputBlur.bind(this)
+        this.switchDoneItems = this.switchDoneItems.bind(this)
     }
 
     componentWillReceiveProps(nextProps: HeadProps) {
@@ -61,7 +61,7 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
         this.setState({
             name: nextProps.listName,
             // isEdit: false,
-        });
+        })
     }
 
     /**
@@ -71,7 +71,7 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
     private inputChange(e: React.ChangeEvent<HTMLInputElement>) {
         this.setState({
             name: e.target.value,
-        });
+        })
     }
 
     /**
@@ -79,8 +79,8 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
      * @param e 鼠标点击事件
      */
     private renameClicked(e: React.MouseEvent<HTMLLIElement>) {
-        e.stopPropagation();
-        this.props.onActionsDisplayClick();
+        e.stopPropagation()
+        this.props.onActionsDisplayClick()
 
         this.setState(
             {
@@ -88,10 +88,11 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
             },
             () => {
                 if (this.renameInput) {
-                    this.renameInput.focus();
+                    this.renameInput.focus()
+                    this.renameInput.value = this.props.listName
                 }
             },
-        );
+        )
     }
 
     /**
@@ -99,10 +100,10 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
      * @param e 鼠标点击事件
      */
     private deleteClicked(e: React.MouseEvent<HTMLLIElement>) {
-        e.stopPropagation();
-        const result = confirm("确定删除此列表吗？");
+        e.stopPropagation()
+        const result = confirm('确定删除此列表吗？')
         if (result) {
-            this.props.deleteList(this.state.name);
+            this.props.deleteList(this.state.name)
         }
     }
 
@@ -111,8 +112,8 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
      * @param e 鼠标点击事件
      */
     private handleSwitch(e: React.MouseEvent<HTMLButtonElement>) {
-        e.stopPropagation();
-        this.props.onActionsDisplayClick();
+        e.stopPropagation()
+        this.props.onActionsDisplayClick()
     }
 
     /**
@@ -120,48 +121,50 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
      * @param e 焦点移走事件
      */
     private inputBlur(e: React.FocusEvent<HTMLInputElement>) {
-        e.stopPropagation();
-        this.props.renameList(this.state.name);
+        e.stopPropagation()
+        this.props.renameList(this.state.name)
         this.setState({
             isEdit: false,
-        });
+        })
     }
 
     private switchDoneItems(e: React.MouseEvent<HTMLLIElement>) {
-        e.stopPropagation();
-        this.props.switchDoneItems();
-        this.props.onActionsDisplayClick();
+        e.stopPropagation()
+        this.props.switchDoneItems()
+        this.props.onActionsDisplayClick()
     }
 
     render() {
-        const color = this.props.colorTheme;
+        const color = this.props.colorTheme
         if (this.props.isPrimaryList) {
             return (
                 <div
                     id="areaview-head"
                     style={{
-                        background: `linear-gradient(to right, ${color}, ${color + "b3"})`,
+                        background: `linear-gradient(to right, ${color}, ${color + 'b3'})`,
                     }}>
                     <div className="name">{this.props.listName}</div>
                 </div>
-            );
+            )
         }
         return (
             <div
                 id="areaview-head"
                 style={{
-                    background: `linear-gradient(to right, ${color}, ${color + "b3"})`,
+                    background: `linear-gradient(to right, ${color}, ${color + 'b3'})`,
                 }}>
-                <div className={this.state.isEdit ? "hide" : "name"}>{this.props.listName}</div>
+                <div className={this.state.isEdit ? 'hide' : 'name'}>{this.props.listName}</div>
                 <input
-                    className={this.state.isEdit ? "" : "hide"}
+                    className={this.state.isEdit ? '' : 'hide'}
                     type="text"
-                    value={this.state.name}
                     onChange={this.inputChange}
                     ref={input => (this.renameInput = input)}
                     onBlur={this.inputBlur}
                 />
-                <button className="actions-switcher" onClick={this.handleSwitch} style={{ backgroundColor: color }}>
+                <button
+                    className="actions-switcher"
+                    onClick={this.handleSwitch}
+                    style={{ backgroundColor: color }}>
                     ···
                 </button>
                 <AreaActions
@@ -173,8 +176,8 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
                     deleteClicked={this.deleteClicked}
                 />
             </div>
-        );
+        )
     }
 }
 
-export { AreaViewHead as EditableHead };
+export { AreaViewHead as EditableHead }
