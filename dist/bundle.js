@@ -17939,15 +17939,17 @@ var App = /** @class */ (function (_super) {
     function App(props) {
         var _this = _super.call(this, props) || this;
         _this.server = new data_server_1.DataServer();
+        // let info: ListInfo[] = [];
+        // this.fetchListInfo().then(data => (info = data));
         _this.state = {
-            lastModifiedListName: _this.server.lastModified,
-            listInfos: _this.server.listInfos,
+            lastModifiedListName: '',
+            listInfos: [],
             itemsOfList: [],
             detailItem: undefined,
-            colorTheme: _this.server.themeForList(_this.server.lastModified),
+            // colorTheme: this.server.themeForList(this.server.lastModified),
             actionsShouldDisplay: false,
             alertShouldDisplay: false,
-            alertMessage: "",
+            alertMessage: '',
         };
         // bind methods
         _this.switchList = _this.switchList.bind(_this);
@@ -17969,12 +17971,96 @@ var App = /** @class */ (function (_super) {
         return _this;
         // this.fetchErrorMessage();
     }
+    /**
+     * 一开始载入界面时从“远端”获取必要数据的函数
+     *
+     *
+     */
+    App.prototype.initFetch = function () {
+        var _this = this;
+        new Promise(function (resolve, reject) {
+            var infos = JSON.parse(_this.server.listInfos);
+            if (Array.isArray(infos)) {
+                resolve(infos);
+            }
+        })
+            .then(function (infos) {
+            _this.setState({
+                listInfos: infos,
+            });
+            var info = infos.filter(function (info) { return info.name === _this.state.lastModifiedListName; });
+            // return info[0].name
+            return new Promise(function (res, rej) {
+                var name = _this.server.lastModified;
+                _this.setState({
+                    lastModifiedListName: name,
+                });
+                res(name);
+            });
+        })
+            .then(function (listName) {
+            return new Promise(function (res, rej) {
+                var items = JSON.parse(_this.server.itemsOfList(listName));
+                var message = _this.server.loadError;
+                if (message) {
+                    rej('local data error');
+                }
+                if (Array.isArray(items)) {
+                    res(items);
+                }
+                else {
+                    rej('local data error');
+                }
+                items.forEach(function (item) {
+                    if (item.name === undefined ||
+                        item.done === undefined ||
+                        item.time === undefined) {
+                        rej('local data error');
+                    }
+                });
+            });
+        })
+            .then(function (items) {
+            _this.setState({
+                itemsOfList: items,
+            });
+        }, function (error) {
+            // console.log('error')
+            new Promise(function (res, rej) {
+                var message = _this.server.loadError;
+                res(message);
+            }).then(function (message) {
+                // console.log('error')
+                _this.setState({
+                    alertShouldDisplay: message !== undefined,
+                    alertMessage: message ? message : '',
+                });
+            });
+        });
+    };
+    App.prototype.fetchListInfo = function () {
+        var _this = this;
+        var p = new Promise(function (res, rej) {
+            var infos = JSON.parse(_this.server.listInfos);
+            if (Array.isArray(infos)) {
+                res(infos);
+            }
+        });
+        p.then(function (infos) {
+            // console.log(infos);
+            _this.setState({
+                listInfos: infos,
+            });
+        });
+    };
     App.prototype.fetchItems = function () {
         var _this = this;
         var p = new Promise(function (res, rej) {
             var listName = _this.server.lastModified;
-            var items = _this.server.itemsOfList(listName);
-            res(items);
+            var items = JSON.parse(_this.server.itemsOfList(listName));
+            if (Array.isArray(items)) {
+                res(items);
+            }
         });
         p.then(function (items) {
             _this.setState({
@@ -17991,13 +18077,20 @@ var App = /** @class */ (function (_super) {
         p.then(function (message) {
             _this.setState({
                 alertShouldDisplay: message !== undefined,
-                alertMessage: message ? message : "",
+                alertMessage: message ? message : '',
             });
         });
     };
     App.prototype.componentDidMount = function () {
+<<<<<<< HEAD
         this.fetchItems();
         this.fetchErrorMessage();
+=======
+        // this.fetchItems()
+        // this.fetchListInfo()
+        this.initFetch();
+        // this.fetchErrorMessage()
+>>>>>>> new-design
         // const alertMessage = this.server.loadError
         // if (alertMessage !== undefined) {
         // 	this.setState({
@@ -18034,9 +18127,29 @@ var App = /** @class */ (function (_super) {
         this.server.deleteItemInList(itemData.name, sourceListName);
         this.server.addNewItemInList(itemData, targetListName);
         this.dragData = undefined;
-        this.fetchItems();
+        // this.fetchItems()
+        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
+        var itemIndex = 0;
+        for (var i = 0; i < todos.length; i++) {
+            if (todos[i].name === itemData.name) {
+                itemIndex = i;
+                break;
+            }
+        }
+        todos.splice(itemIndex, 1);
+        var infos = this.state.listInfos.slice();
+        for (var _i = 0, infos_1 = infos; _i < infos_1.length; _i++) {
+            var info = infos_1[_i];
+            if (info.name === sourceListName) {
+                info.count--;
+            }
+            if (info.name === targetListName) {
+                info.count++;
+            }
+        }
         this.setState({
-            listInfos: this.server.listInfos,
+            listInfos: infos,
+            itemsOfList: todos,
             detailItem: undefined,
         });
     };
@@ -18048,8 +18161,16 @@ var App = /** @class */ (function (_super) {
     App.prototype.renameList = function (oldName, newName) {
         // console.log(`oldName: ${oldName}, newName: ${newName}`)
         this.server.renameList(oldName, newName);
+        var infos = this.state.listInfos.slice();
+        for (var _i = 0, infos_2 = infos; _i < infos_2.length; _i++) {
+            var info = infos_2[_i];
+            if (info.name === oldName) {
+                info.name = newName;
+                break;
+            }
+        }
         this.setState({
-            listInfos: this.server.listInfos,
+            listInfos: infos,
             lastModifiedListName: this.server.lastModified,
         });
     };
@@ -18059,11 +18180,22 @@ var App = /** @class */ (function (_super) {
      */
     App.prototype.deleteList = function (name) {
         this.server.deleteList(name);
+        var infos = this.state.listInfos.slice();
+        var index = 0;
+        for (var i = 0; i < infos.length; i++) {
+            if (infos[i].name === name) {
+                index = i;
+                break;
+            }
+        }
+        infos[0].isActive = true;
+        infos.splice(index, 1);
         this.setState({
-            listInfos: this.server.listInfos,
+            listInfos: infos,
             lastModifiedListName: this.server.lastModified,
-            colorTheme: this.server.themeForList(this.server.lastModified),
+            actionsShouldDisplay: false,
         });
+        // 这里要继续使用这个方法，因为之前的todos要被清空换新
         this.fetchItems();
     };
     /**
@@ -18073,11 +18205,20 @@ var App = /** @class */ (function (_super) {
     App.prototype.switchList = function (listName) {
         // console.log('switchList: name is ' + listName);
         this.server.lastModified = listName;
+        var infos = this.state.listInfos.slice();
+        infos.forEach(function (info) {
+            info.isActive = false;
+            if (info.name === listName) {
+                info.isActive = true;
+            }
+        });
         this.setState({
+            listInfos: infos,
             lastModifiedListName: listName,
-            colorTheme: this.server.themeForList(this.server.lastModified),
+            // colorTheme: this.server.themeForList(this.server.lastModified),
             actionsShouldDisplay: false,
         });
+        // 这里也要使用这个方法，因为切换列表也要清空换新。
         this.fetchItems();
     };
     /**
@@ -18085,7 +18226,7 @@ var App = /** @class */ (function (_super) {
      * @param listName 列表名称
      */
     App.prototype.addNewList = function (listName) {
-        var infos = this.state.listInfos;
+        var infos = this.state.listInfos.slice();
         var index = -1;
         for (var i = 0; i < infos.length; i++) {
             if (infos[i].name === listName) {
@@ -18097,11 +18238,22 @@ var App = /** @class */ (function (_super) {
             return;
         }
         this.server.addNewList(listName);
+        infos.forEach(function (info) {
+            info.isActive = false;
+        });
+        infos.push({
+            name: listName,
+            count: 0,
+            isActive: true,
+            theme: '#87cefa',
+            isPrimary: false,
+        });
         this.setState({
             lastModifiedListName: listName,
-            listInfos: this.server.listInfos,
+            listInfos: infos,
+            itemsOfList: [],
         });
-        this.fetchItems();
+        // this.fetchItems()
     };
     /**
      * 添加新的TodoItem到指定列表
@@ -18109,12 +18261,31 @@ var App = /** @class */ (function (_super) {
      * @param listName item所在的列表名称
      */
     App.prototype.addNewItemInList = function (itemName, listName) {
+        var items = JSON.parse(JSON.stringify(this.state.itemsOfList));
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].name === itemName) {
+                return;
+            }
+        }
         this.server.addNewItemInList(itemName, listName);
+        var infos = JSON.parse(JSON.stringify(this.state.listInfos));
+        infos.forEach(function (info) {
+            if (info.name === listName) {
+                info.count++;
+            }
+        });
+        // 额，这样做对吗？
+        items.push({
+            name: itemName,
+            done: false,
+            time: new Date().toLocaleDateString().split(' ')[0],
+        });
         this.setState({
             // itemsOfList: this.server.itemsOfList(this.state.lastModifiedListName),
-            listInfos: this.server.listInfos,
+            listInfos: infos,
+            itemsOfList: items,
         });
-        this.fetchItems();
+        // this.fetchItems()
     };
     /**
      * 切换todo的完成状态
@@ -18123,11 +18294,34 @@ var App = /** @class */ (function (_super) {
      */
     App.prototype.toggleItemInList = function (itemName, listName) {
         this.server.toggleItemInList(itemName, listName);
-        this.setState({
-            // itemsOfList: this.server.itemsOfList(listName),
-            listInfos: this.server.listInfos,
+        // TODO: 这里要改一下其他API的形式以配合listInfos进行更改
+        // this.setState({
+        //     // itemsOfList: this.server.itemsOfList(listName),
+        //     listInfos: this.server.listInfos,
+        // });
+        // this.fetchItems()
+        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
+        todos.forEach(function (todo) {
+            if (todo.name === itemName) {
+                todo.done = !todo.done;
+            }
         });
-        this.fetchItems();
+        var infos = JSON.parse(JSON.stringify(this.state.listInfos));
+        var count = 0;
+        todos.forEach(function (todo) {
+            if (!todo.done) {
+                count += 1;
+            }
+        });
+        infos.forEach(function (info) {
+            if (info.name === listName) {
+                info.count = count;
+            }
+        });
+        this.setState({
+            itemsOfList: todos,
+            listInfos: infos,
+        });
         // 如果点击的就是要详细显示的TodoItem，则要更新detailItem的状态
         if (this.state.detailItem && this.state.detailItem.name === itemName) {
             this.setState({
@@ -18173,13 +18367,29 @@ var App = /** @class */ (function (_super) {
         var itemName = this.state.detailItem.name;
         var listName = this.state.lastModifiedListName;
         this.server.deleteItemInList(itemName, listName);
+        var infos = JSON.parse(JSON.stringify(this.state.listInfos));
+        infos.forEach(function (info) {
+            if (info.name === listName) {
+                info.count--;
+            }
+        });
+        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
+        var itemIndex = 0;
+        for (var i = 0; i < todos.length; i++) {
+            if (todos[i].name === itemName) {
+                itemIndex = i;
+                break;
+            }
+        }
+        todos.splice(itemIndex, 1);
         // 删除了todo之后，detailItem自然就没有了
         this.setState({
             detailItem: undefined,
             // itemsOfList: this.server.itemsOfList(listName),
-            listInfos: this.server.listInfos,
+            listInfos: infos,
+            itemsOfList: todos,
         });
-        this.fetchItems();
+        // this.fetchItems()
     };
     /**
      * 更改todo事项的备注
@@ -18191,12 +18401,22 @@ var App = /** @class */ (function (_super) {
             return;
         }
         this.server.changeItemCommentsInList(value, this.state.detailItem.name, this.state.lastModifiedListName);
+        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
+        var index = 0;
+        for (var i = 0; i < todos.length; i++) {
+            if (todos[i].name === this.state.detailItem.name) {
+                index = i;
+                break;
+            }
+        }
+        todos[index].comments = value;
         this.setState(function (prevState) { return ({
             detailItem: prevState.detailItem
                 ? _this.server.itemInList(prevState.detailItem.name, prevState.lastModifiedListName)
                 : undefined,
+            itemsOfList: todos,
         }); });
-        this.fetchItems();
+        // this.fetchItems()
     };
     /**
      * 详细显示鼠标点击的todo项目
@@ -18225,15 +18445,35 @@ var App = /** @class */ (function (_super) {
      * @param color 新的主题色
      */
     App.prototype.handleColorPick = function (color) {
+        var _this = this;
         this.server.changeColorThemeForList(color, this.state.lastModifiedListName);
+        var infos = JSON.parse(JSON.stringify(this.state.listInfos));
+        infos.forEach(function (info) {
+            if (info.name === _this.state.lastModifiedListName) {
+                info.theme = color;
+            }
+        });
         this.setState({
-            colorTheme: this.server.themeForList(this.state.lastModifiedListName),
+            listInfos: infos,
         });
     };
     App.prototype.render = function () {
+        var _this = this;
+        var listInfo = {};
+        this.state.listInfos.slice().forEach(function (info) {
+            if (info.name === _this.state.lastModifiedListName) {
+                listInfo = info;
+            }
+        });
+        // const infos = this.state.listInfos.splice(0)
+        // console.log(`infos: ${infos}`)
         return (React.createElement(React.Fragment, null,
-            React.createElement(list_view_1.ListView, { currentListName: this.state.lastModifiedListName, switchList: this.switchList, addNewList: this.addNewList, listInfos: this.state.listInfos, onDrop: this.handleDrop, actionsDisplay: this.state.actionsShouldDisplay, onActionsDisplayClick: this.toggleActionsDisplay }),
-            React.createElement(area_view_1.AreaView, { shrink: this.state.detailItem !== undefined, listName: this.state.lastModifiedListName, colorTheme: this.state.colorTheme, isPrimaryList: this.server.isPrimaryList(this.state.lastModifiedListName), todoItems: this.state.itemsOfList, renameList: this.renameList, deleteList: this.deleteList, addNewItemInList: this.addNewItemInList, toggleItemInList: this.toggleItemInList, itemClicked: this.itemClicked, onDragStart: this.handleDragStart, onDragEnd: this.handleDragEnd, onColorPick: this.handleColorPick, onActionsDisplayClick: this.toggleActionsDisplay, actionsShouldDisplay: this.state.actionsShouldDisplay }),
+            React.createElement(list_view_1.ListView
+            // currentListName={this.state.lastModifiedListName}
+            , { 
+                // currentListName={this.state.lastModifiedListName}
+                switchList: this.switchList, addNewList: this.addNewList, listInfos: this.state.listInfos, onDrop: this.handleDrop, actionsDisplay: this.state.actionsShouldDisplay, onActionsDisplayClick: this.toggleActionsDisplay }),
+            React.createElement(area_view_1.AreaView, { shrink: this.state.detailItem !== undefined, listInfo: listInfo, todoItems: this.state.itemsOfList, renameList: this.renameList, deleteList: this.deleteList, addNewItemInList: this.addNewItemInList, toggleItemInList: this.toggleItemInList, itemClicked: this.itemClicked, onDragStart: this.handleDragStart, onDragEnd: this.handleDragEnd, onColorPick: this.handleColorPick, onActionsDisplayClick: this.toggleActionsDisplay, actionsShouldDisplay: this.state.actionsShouldDisplay }),
             React.createElement(detail_view_1.DetailView, { listName: this.state.lastModifiedListName, item: this.state.detailItem, onCloseClicked: this.handleCloseFromDetailView, onDeleteClicked: this.handleDeleteFromDetailView, onToggleClicked: this.handleToggleFromDetailView, onCommentsChange: this.handleCommentsChange }),
             this.state.alertShouldDisplay && (React.createElement(global_alert_1.Alert, { display: this.state.alertShouldDisplay, message: this.state.alertMessage, onConfirmClicked: this.handleConfirmClicked }))));
     };
@@ -18424,7 +18664,7 @@ var AreaView = /** @class */ (function (_super) {
         var _this = _super.call(this, props) || this;
         _this.state = {
             inputValue: '',
-            showDoneItems: false
+            showDoneItems: false,
         };
         // bind methods
         _this.handleInput = _this.handleInput.bind(_this);
@@ -18439,16 +18679,20 @@ var AreaView = /** @class */ (function (_super) {
     }
     AreaView.prototype.render = function () {
         var _this = this;
-        return (React.createElement("div", { id: "areaview", className: this.props.shrink ? 'shrink' : '', onClick: function (e) { e.stopPropagation(); _this.props.actionsShouldDisplay && _this.props.onActionsDisplayClick(); } },
-            React.createElement(editable_head_1.EditableHead, { isPrimaryList: this.props.isPrimaryList, listName: this.props.listName, colorTheme: this.props.colorTheme, renameList: this.renameList, deleteList: this.props.deleteList, switchDoneItems: this.switchDoneItems, doneItemsDisplay: this.state.showDoneItems, onColorPick: this.props.onColorPick, onActionsDisplayClick: this.props.onActionsDisplayClick, actionsShouldDisplay: this.props.actionsShouldDisplay }),
+        var listInfo = this.props.listInfo;
+        return (React.createElement("div", { id: "areaview", className: this.props.shrink ? 'shrink' : '', onClick: function (e) {
+                e.stopPropagation();
+                _this.props.actionsShouldDisplay && _this.props.onActionsDisplayClick();
+            } },
+            React.createElement(editable_head_1.EditableHead, { isPrimaryList: listInfo.isPrimary, listName: listInfo.name, colorTheme: listInfo.theme, renameList: this.renameList, deleteList: this.props.deleteList, switchDoneItems: this.switchDoneItems, doneItemsDisplay: this.state.showDoneItems, onColorPick: this.props.onColorPick, onActionsDisplayClick: this.props.onActionsDisplayClick, actionsShouldDisplay: this.props.actionsShouldDisplay }),
             React.createElement(area_view_content_1.AreaViewContent, { items: this.props.todoItems, checkboxClicked: this.toggleItem, itemClicked: this.displayDetailView, onDragStart: this.handleDragStart, onDragEnd: this.props.onDragEnd, showDoneItems: this.state.showDoneItems }),
             React.createElement(add_new_item_1.AddNewItem, { value: this.state.inputValue, onValueChange: this.handleInput, onAddClicked: this.addNewItem, onCancelClicked: this.cancelInput })));
     };
     AreaView.prototype.componentWillReceiveProps = function (nextProps) {
         // 切换列表的时候将输入框中的内容清空
-        if (nextProps.listName !== this.props.listName) {
+        if (nextProps.listInfo.name !== this.props.listInfo.name) {
             this.setState({
-                inputValue: ''
+                inputValue: '',
             });
         }
     };
@@ -18457,7 +18701,7 @@ var AreaView = /** @class */ (function (_super) {
      */
     AreaView.prototype.switchDoneItems = function () {
         this.setState(function (prev) { return ({
-            showDoneItems: !prev.showDoneItems
+            showDoneItems: !prev.showDoneItems,
         }); });
     };
     /**
@@ -18467,7 +18711,7 @@ var AreaView = /** @class */ (function (_super) {
     AreaView.prototype.handleDragStart = function (data) {
         var obj = JSON.parse(data);
         // console.log(`obj: ${obj}, type: ${typeof obj}`)
-        var newData = JSON.stringify({ listName: this.props.listName, data: data });
+        var newData = JSON.stringify({ listName: this.props.listInfo.name, data: data });
         this.props.onDragStart(newData);
     };
     /**
@@ -18475,7 +18719,7 @@ var AreaView = /** @class */ (function (_super) {
      * @param name 新的列表名称
      */
     AreaView.prototype.renameList = function (name) {
-        this.props.renameList(this.props.listName, name);
+        this.props.renameList(this.props.listInfo.name, name);
     };
     /**
      * 处理文本框的输入内容
@@ -18485,7 +18729,7 @@ var AreaView = /** @class */ (function (_super) {
         // console.log(e.target)
         var value = e.target.value;
         this.setState({
-            inputValue: value
+            inputValue: value,
         });
     };
     /**
@@ -18496,7 +18740,7 @@ var AreaView = /** @class */ (function (_super) {
     AreaView.prototype.toggleItem = function (e, name) {
         e.stopPropagation();
         // 切换完成状态
-        this.props.toggleItemInList(name, this.props.listName);
+        this.props.toggleItemInList(name, this.props.listInfo.name);
     };
     /**
      * 添加新的`TodoItem`
@@ -18504,9 +18748,9 @@ var AreaView = /** @class */ (function (_super) {
      */
     AreaView.prototype.addNewItem = function (e) {
         e.stopPropagation();
-        this.props.addNewItemInList(this.state.inputValue, this.props.listName);
+        this.props.addNewItemInList(this.state.inputValue, this.props.listInfo.name);
         this.setState({
-            inputValue: ''
+            inputValue: '',
         });
     };
     /**
@@ -18523,7 +18767,7 @@ var AreaView = /** @class */ (function (_super) {
      * @param name 选中`TodoItem`的名称
      */
     AreaView.prototype.displayDetailView = function (e, name) {
-        this.props.itemClicked(name, this.props.listName);
+        this.props.itemClicked(name, this.props.listInfo.name);
     };
     return AreaView;
 }(React.Component));
@@ -18646,6 +18890,7 @@ var AreaViewHead = /** @class */ (function (_super) {
         }, function () {
             if (_this.renameInput) {
                 _this.renameInput.focus();
+                _this.renameInput.value = _this.props.listName;
             }
         });
     };
@@ -18655,7 +18900,7 @@ var AreaViewHead = /** @class */ (function (_super) {
      */
     AreaViewHead.prototype.deleteClicked = function (e) {
         e.stopPropagation();
-        var result = confirm("确定删除此列表吗？");
+        var result = confirm('确定删除此列表吗？');
         if (result) {
             this.props.deleteList(this.state.name);
         }
@@ -18689,15 +18934,15 @@ var AreaViewHead = /** @class */ (function (_super) {
         var color = this.props.colorTheme;
         if (this.props.isPrimaryList) {
             return (React.createElement("div", { id: "areaview-head", style: {
-                    background: "linear-gradient(to right, " + color + ", " + (color + "b3") + ")",
+                    background: "linear-gradient(to right, " + color + ", " + (color + 'b3') + ")",
                 } },
                 React.createElement("div", { className: "name" }, this.props.listName)));
         }
         return (React.createElement("div", { id: "areaview-head", style: {
-                background: "linear-gradient(to right, " + color + ", " + (color + "b3") + ")",
+                background: "linear-gradient(to right, " + color + ", " + (color + 'b3') + ")",
             } },
-            React.createElement("div", { className: this.state.isEdit ? "hide" : "name" }, this.props.listName),
-            React.createElement("input", { className: this.state.isEdit ? "" : "hide", type: "text", value: this.state.name, onChange: this.inputChange, ref: function (input) { return (_this.renameInput = input); }, onBlur: this.inputBlur }),
+            React.createElement("div", { className: this.state.isEdit ? 'hide' : 'name' }, this.props.listName),
+            React.createElement("input", { className: this.state.isEdit ? '' : 'hide', type: "text", onChange: this.inputChange, ref: function (input) { return (_this.renameInput = input); }, onBlur: this.inputBlur }),
             React.createElement("button", { className: "actions-switcher", onClick: this.handleSwitch, style: { backgroundColor: color } }, "\u00B7\u00B7\u00B7"),
             React.createElement(area_actions_1.AreaActions, { actionsShouldDisplay: this.props.actionsShouldDisplay, doneItemsDisplay: this.props.doneItemsDisplay, onColorPick: this.props.onColorPick, switchDoneItems: this.switchDoneItems, renameClicked: this.renameClicked, deleteClicked: this.deleteClicked })));
     };
@@ -18797,9 +19042,11 @@ var ListContent = /** @class */ (function (_super) {
     }
     ListContent.prototype.render = function () {
         var _this = this;
-        return (React.createElement("ul", null, this.props.listInfos.map(function (info) {
-            return React.createElement(list_view_item_1.ListViewItem, { currentListName: _this.props.currentListName, info: info, onClick: _this.props.onClick, onDrop: _this.props.onDrop, key: info.name });
-        })));
+        return (React.createElement("ul", null, this.props.listInfos.map(function (info) { return (React.createElement(list_view_item_1.ListViewItem
+        // currentListName={this.props.currentListName}
+        , { 
+            // currentListName={this.props.currentListName}
+            info: info, onClick: _this.props.onClick, onDrop: _this.props.onDrop, key: info.name })); })));
     };
     return ListContent;
 }(React.Component));
@@ -18846,7 +19093,7 @@ var ListViewItem = /** @class */ (function (_super) {
      */
     ListViewItem.prototype.handleDragOver = function (e) {
         e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
+        e.dataTransfer.dropEffect = "move";
     };
     /**
      * 元素“放”在这里的时候，触发这个方法。
@@ -18857,12 +19104,12 @@ var ListViewItem = /** @class */ (function (_super) {
     ListViewItem.prototype.handleDrop = function (e) {
         e.preventDefault();
         var target = e.target;
-        if (target.nodeName.toLowerCase() !== 'li') {
+        if (target.nodeName.toLowerCase() !== "li") {
             if (target.parentElement) {
                 target = target.parentElement;
             }
         }
-        target.classList.remove('drag-enter');
+        target.classList.remove("drag-enter");
         // const data = e.dataTransfer.getData('text')
         // console.log(`drop data: ${data}`)
         this.props.onDrop(this.props.info.name);
@@ -18870,18 +19117,18 @@ var ListViewItem = /** @class */ (function (_super) {
     };
     ListViewItem.prototype.handleDragEnter = function (e) {
         var target = e.target;
-        target.classList.add('drag-enter');
+        target.classList.add("drag-enter");
     };
     ListViewItem.prototype.handleDragLeave = function (e) {
         var target = e.target;
-        target.classList.remove('drag-enter');
+        target.classList.remove("drag-enter");
     };
     ListViewItem.prototype.render = function () {
         var _this = this;
-        var isActive = this.props.currentListName === this.props.info.name;
-        return (React.createElement("li", { onDragOver: this.handleDragOver, onDrop: this.handleDrop, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, className: isActive ? 'list-item active' : 'list-item', onClick: function (e) { return _this.props.onClick(e, _this.props.info.name); } },
-            React.createElement("span", { className: isActive ? 'item-name animated fadeIn' : 'item-name animated' }, this.props.info.name),
-            React.createElement("span", { className: "number-of-items" }, this.props.info.count > 0 ? this.props.info.count : '')));
+        var isActive = this.props.info.isActive;
+        return (React.createElement("li", { onDragOver: this.handleDragOver, onDrop: this.handleDrop, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, className: isActive ? "list-item active" : "list-item", onClick: function (e) { return _this.props.onClick(e, _this.props.info.name); } },
+            React.createElement("span", { className: isActive ? "item-name animated fadeIn" : "item-name animated" }, this.props.info.name),
+            React.createElement("span", { className: "number-of-items" }, this.props.info.count > 0 ? this.props.info.count : "")));
     };
     return ListViewItem;
 }(React.Component));
@@ -18920,7 +19167,7 @@ var ListView = /** @class */ (function (_super) {
     function ListView(props) {
         var _this = _super.call(this, props) || this;
         _this.count = -1;
-        // bind methods 
+        // bind methods
         _this.addNewList = _this.addNewList.bind(_this);
         _this.handleClick = _this.handleClick.bind(_this);
         return _this;
@@ -18947,12 +19194,19 @@ var ListView = /** @class */ (function (_super) {
      */
     ListView.prototype.getListName = function () {
         this.count++;
-        return "\u65E0\u547D\u540D\u6E05\u5355" + (this.count > 0 ? this.count : '');
+        return "\u65E0\u547D\u540D\u6E05\u5355" + (this.count > 0 ? this.count : "");
     };
     ListView.prototype.render = function () {
         var _this = this;
-        return (React.createElement("div", { id: "listview", onClick: function (e) { e.stopPropagation(); _this.props.actionsDisplay && _this.props.onActionsDisplayClick(); } },
-            React.createElement(list_content_1.ListContent, { listInfos: this.props.listInfos, currentListName: this.props.currentListName, onClick: this.handleClick, onDrop: this.props.onDrop }),
+        return (React.createElement("div", { id: "listview", onClick: function (e) {
+                e.stopPropagation();
+                _this.props.actionsDisplay && _this.props.onActionsDisplayClick();
+            } },
+            React.createElement(list_content_1.ListContent
+            // currentListName={this.props.currentListName}
+            , { 
+                // currentListName={this.props.currentListName}
+                listInfos: this.props.listInfos, onClick: this.handleClick, onDrop: this.props.onDrop }),
             React.createElement("div", { id: "add-new-list", onClick: this.addNewList },
                 React.createElement("span", null, "+"),
                 "\u65B0\u5EFA\u6E05\u5355")));
@@ -19087,13 +19341,13 @@ var DataServer = /** @class */ (function () {
     function DataServer() {
         // this.data = {} as Data
         this.todoLists = [];
-        this.listName = "";
-        this.loadDataError = "";
+        this.listName = '';
+        this.loadDataError = '';
         this.load();
     }
     Object.defineProperty(DataServer.prototype, "loadError", {
         get: function () {
-            return this.loadDataError.length > 0 ? "初始化数据出错，已重新载入。" : undefined;
+            return this.loadDataError.length > 0 ? '初始化数据出错，已重新载入。' : undefined;
         },
         enumerable: true,
         configurable: true
@@ -19127,7 +19381,7 @@ var DataServer = /** @class */ (function () {
         configurable: true
     });
     DataServer.prototype.isPrimaryList = function (listName) {
-        return listName === "我的一天";
+        return listName === '我的一天';
     };
     /**
      * 返回列表中所有的todo项目
@@ -19136,10 +19390,10 @@ var DataServer = /** @class */ (function () {
     DataServer.prototype.itemsOfList = function (listName) {
         var listIndex = this.listNameIndex(listName);
         if (listIndex < 0) {
-            return [];
+            return '';
         }
         var items = this.todoLists[listIndex].items;
-        return JSON.parse(JSON.stringify(items));
+        return JSON.stringify(items);
     };
     Object.defineProperty(DataServer.prototype, "listInfos", {
         /**
@@ -19150,11 +19404,17 @@ var DataServer = /** @class */ (function () {
          * 未完成todo项目的个数(`count`)
          */
         get: function () {
+            var _this = this;
             var infos = [];
             this.todoLists.forEach(function (list) {
-                infos.push(list.listInfo);
+                var info = list.listInfo;
+                if (info.name === _this.lastModified) {
+                    // console.log(`info name: ${info.name}, list name: ${this.lastModified}`);
+                    info.isActive = true;
+                }
+                infos.push(info);
             });
-            return infos;
+            return JSON.stringify(infos);
         },
         enumerable: true,
         configurable: true
@@ -19164,11 +19424,16 @@ var DataServer = /** @class */ (function () {
          * 返回列表的名称（`name`）以及所有todo项目的个数（`count`）
          */
         get: function () {
+            var _this = this;
             var infos = [];
             this.todoLists.forEach(function (list) {
+                var info = list.listInfo;
+                if (info.name === _this.lastModified) {
+                    info.isActive = true;
+                }
                 infos.push(list.listTotalInfo);
             });
-            return infos;
+            return JSON.stringify(infos);
         },
         enumerable: true,
         configurable: true
@@ -19180,7 +19445,7 @@ var DataServer = /** @class */ (function () {
     DataServer.prototype.themeForList = function (listName) {
         var listIndex = this.listNameIndex(listName);
         if (listIndex < 0) {
-            return "#87ceeb";
+            return '#87ceeb';
         }
         var list = this.todoLists[listIndex];
         return list.colorTheme;
@@ -19225,7 +19490,7 @@ var DataServer = /** @class */ (function () {
          */
         get: function () {
             var name = this.listName;
-            return name === "" ? "我的一天" : name;
+            return name === '' ? '我的一天' : name;
         },
         set: function (name) {
             this.listName = name;
@@ -19371,7 +19636,7 @@ var DataServer = /** @class */ (function () {
     };
     /**从本地加载数据，没有则初始化数据 */
     DataServer.prototype.load = function () {
-        var result = localStorage.getItem("react-todo-app");
+        var result = localStorage.getItem('react-todo-app');
         if (result === null) {
             this.initLocalData();
         }
@@ -19380,40 +19645,40 @@ var DataServer = /** @class */ (function () {
                 this.dataFromLocal();
             }
             catch (e) {
-                this.loadDataError = "load data error";
+                this.loadDataError = 'load data error';
                 this.initLocalData();
             }
         }
     };
     /**手动初始化本地数据 */
     DataServer.prototype.initLocalData = function () {
-        var lists = [new todo_list_1.TodoListClass("我的一天")];
+        var lists = [new todo_list_1.TodoListClass('我的一天')];
         this.todoLists = lists;
-        this.lastModified = "我的一天";
+        this.lastModified = '我的一天';
         this.save();
     };
     /**从本地加载数据，如果本地格式不对就抛出异常等待处理 */
     DataServer.prototype.dataFromLocal = function () {
-        var result = localStorage.getItem("react-todo-app");
+        var result = localStorage.getItem('react-todo-app');
         if (!result) {
             return;
         }
         var data = JSON.parse(result);
         if (!data.data) {
-            console.log("not have data");
-            throw Error("local data error");
+            console.log('not have data');
+            throw Error('local data error');
         }
         var dataFromLocal = data.data;
         if (!dataFromLocal.lists) {
-            console.log("not have lists");
-            throw Error("local data error");
+            console.log('not have lists');
+            throw Error('local data error');
         }
         var listsFromLocal = dataFromLocal.lists;
         // 从本地获取数据并解析成对应的class
         for (var i = 0; i < listsFromLocal.length; i++) {
             if (!listsFromLocal[i].name) {
-                console.log("not have list name");
-                throw Error("local data error");
+                console.log('not have list name');
+                throw Error('local data error');
             }
             var newList = new todo_list_1.TodoListClass(listsFromLocal[i].name);
             var localItems = listsFromLocal[i].items;
@@ -19421,8 +19686,8 @@ var DataServer = /** @class */ (function () {
                 if (!localItems[j].name ||
                     localItems[j].done === undefined ||
                     !localItems[j].time) {
-                    console.log("item format error");
-                    throw Error("local data error");
+                    console.log('item format error');
+                    throw Error('local data error');
                 }
                 var newItem = new todo_item_1.TodoItemClass(localItems[j].name, localItems[j].done, localItems[j].time, localItems[j].comments);
                 newList.addNewItem(newItem);
@@ -19438,7 +19703,7 @@ var DataServer = /** @class */ (function () {
      * 将data中的数据保存到本地
      */
     DataServer.prototype.save = function () {
-        localStorage.setItem("react-todo-app", JSON.stringify(this.data));
+        localStorage.setItem('react-todo-app', JSON.stringify(this.data));
     };
     return DataServer;
 }());
@@ -19477,7 +19742,7 @@ var TodoItemClass = /** @class */ (function () {
             name: this.name,
             done: this.done,
             time: this.time,
-            comments: this.comments
+            comments: this.comments,
         };
     };
     /**切换项目的完成状态 */
@@ -19530,7 +19795,7 @@ var todo_item_1 = __webpack_require__(/*! ./todo-item */ "./src/model/todo-item.
 var TodoListClass = /** @class */ (function () {
     function TodoListClass(name) {
         this.name = name;
-        this.color = '#87cefa';
+        this.color = "#87cefa";
         this.name = name;
         this.todoItems = [];
     }
@@ -19574,6 +19839,9 @@ var TodoListClass = /** @class */ (function () {
             return {
                 name: this.name,
                 count: count,
+                isActive: false,
+                isPrimary: this.name === "我的一天",
+                theme: this.colorTheme,
             };
         },
         enumerable: true,
@@ -19584,6 +19852,9 @@ var TodoListClass = /** @class */ (function () {
             return {
                 name: this.name,
                 count: this.count,
+                isActive: false,
+                theme: this.colorTheme,
+                isPrimary: this.name === "我的一天",
             };
         },
         enumerable: true,
@@ -19594,7 +19865,7 @@ var TodoListClass = /** @class */ (function () {
             name: this.name,
             items: this.todoItems,
             count: this.count,
-            theme: this.colorTheme
+            theme: this.colorTheme,
         };
     };
     /**
@@ -19614,7 +19885,7 @@ var TodoListClass = /** @class */ (function () {
      * @param item 要添加的todo项目（有两种表示方式，一个是todo的名称，另一个是todo本身）
      */
     TodoListClass.prototype.addNewItem = function (item) {
-        if (typeof item === 'string') {
+        if (typeof item === "string") {
             var inOrNot = this.containsItem(item);
             if (inOrNot) {
                 return;
@@ -19672,7 +19943,7 @@ var TodoListClass = /** @class */ (function () {
         return {
             name: item.name,
             done: item.done,
-            time: item.time
+            time: item.time,
         };
     };
     /**

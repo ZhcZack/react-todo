@@ -9,13 +9,16 @@ export class TodoItemClass implements TodoItem {
             name: this.name,
             done: this.done,
             time: this.time,
-            comments: this.comments
+            comments: this.comments,
         }
     }
 
-
-    constructor(public name: string, public done = false, public time = new Date().toLocaleDateString(), public comments?: string) {
-    }
+    constructor(
+        public name: string,
+        public done = false,
+        public time = new Date().toLocaleDateString(),
+        public comments?: string,
+    ) {}
 
     /**切换项目的完成状态 */
     toggle() {

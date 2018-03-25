@@ -1,24 +1,22 @@
-import * as React from 'react'
-import { ListContent } from './list-content'
-import { ListInfo } from '../../model/interface'
+import * as React from "react";
+import { ListContent } from "./list-content";
+import { ListInfo } from "../../model/interface";
 
 interface ListViewProps {
     /**当前进行处理的列表名称 */
-    currentListName: string
+    // currentListName: string
     /**所有列表名称 */
-    listInfos: ListInfo[]
+    listInfos: ListInfo[];
     /**添加新列表 */
-    addNewList(name: string): void
+    addNewList(name: string): void;
     /**切换area view显示的列表 */
-    switchList(listName: string): void
-    onDrop(targetListName: string): void
+    switchList(listName: string): void;
+    onDrop(targetListName: string): void;
     actionsDisplay: boolean;
     onActionsDisplayClick(): void;
 }
 
-interface ListViewState {
-
-}
+interface ListViewState {}
 
 /**
  * 列表目录
@@ -31,9 +29,9 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
         super(props);
         this.count = -1;
 
-        // bind methods 
-        this.addNewList = this.addNewList.bind(this)
-        this.handleClick = this.handleClick.bind(this)
+        // bind methods
+        this.addNewList = this.addNewList.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
     /**
@@ -47,12 +45,12 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
     }
 
     /**
-     * 添加新列表 
+     * 添加新列表
      */
     private addNewList(e: React.MouseEvent<HTMLDivElement>) {
-        e.stopPropagation()
-        let name = this.getListName()
-        this.props.addNewList(name)
+        e.stopPropagation();
+        let name = this.getListName();
+        this.props.addNewList(name);
     }
 
     /**
@@ -60,18 +58,26 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
      */
     private getListName(): string {
         this.count++;
-        return `无命名清单${this.count > 0 ? this.count : ''}`;
+        return `无命名清单${this.count > 0 ? this.count : ""}`;
     }
 
     render() {
         return (
-            <div id="listview" onClick={e => { e.stopPropagation(); this.props.actionsDisplay && this.props.onActionsDisplayClick() }}>
+            <div
+                id="listview"
+                onClick={e => {
+                    e.stopPropagation();
+                    this.props.actionsDisplay && this.props.onActionsDisplayClick();
+                }}>
                 <ListContent
+                    // currentListName={this.props.currentListName}
                     listInfos={this.props.listInfos}
-                    currentListName={this.props.currentListName}
                     onClick={this.handleClick}
-                    onDrop={this.props.onDrop} />
-                <div id="add-new-list" onClick={this.addNewList}><span>+</span>新建清单</div>
+                    onDrop={this.props.onDrop}
+                />
+                <div id="add-new-list" onClick={this.addNewList}>
+                    <span>+</span>新建清单
+                </div>
             </div>
         );
     }

@@ -1,13 +1,13 @@
-import { TodoItem, TodoList, ListInfo } from './interface'
-import { TodoItemClass } from './todo-item'
+import { TodoItem, TodoList, ListInfo } from "./interface";
+import { TodoItemClass } from "./todo-item";
 
 /**
  * 保存todo项目的列表类
  */
 export class TodoListClass implements TodoList {
     /**保存的todo项目 */
-    private todoItems: TodoItemClass[]
-    private color = '#87cefa';
+    private todoItems: TodoItemClass[];
+    private color = "#87cefa";
 
     get colorTheme(): string {
         return this.color;
@@ -18,40 +18,46 @@ export class TodoListClass implements TodoList {
     }
 
     get items(): TodoItemClass[] {
-        return this.todoItems
+        return this.todoItems;
     }
 
     /**保存项目的数量 */
     get count(): number {
-        return this.todoItems.length
+        return this.todoItems.length;
     }
 
     /**
      * 返回列表的名称以及未完成todo的数量
      */
     get listInfo(): ListInfo {
-        let count = 0
+        let count = 0;
         for (let item of this.todoItems) {
             if (!item.done) {
-                count++
+                count++;
             }
         }
         return {
             name: this.name,
             count,
-        }
+            isActive: false,
+            isPrimary: this.name === "我的一天",
+            theme: this.colorTheme,
+        };
     }
 
     get listTotalInfo(): ListInfo {
         return {
             name: this.name,
             count: this.count,
+            isActive: false,
+            theme: this.colorTheme,
+            isPrimary: this.name === "我的一天",
         };
     }
 
     constructor(public name: string) {
-        this.name = name
-        this.todoItems = []
+        this.name = name;
+        this.todoItems = [];
     }
 
     private toJSON() {
@@ -59,8 +65,8 @@ export class TodoListClass implements TodoList {
             name: this.name,
             items: this.todoItems,
             count: this.count,
-            theme: this.colorTheme
-        }
+            theme: this.colorTheme,
+        };
     }
 
     /**
@@ -70,10 +76,10 @@ export class TodoListClass implements TodoList {
     containsItem(itemName: string): boolean {
         for (let i = 0; i < this.todoItems.length; i++) {
             if (this.todoItems[i].name === itemName) {
-                return true
+                return true;
             }
         }
-        return false
+        return false;
     }
 
     /**
@@ -81,15 +87,19 @@ export class TodoListClass implements TodoList {
      * @param item 要添加的todo项目（有两种表示方式，一个是todo的名称，另一个是todo本身）
      */
     addNewItem(item: TodoItem | string) {
-        if (typeof item === 'string') {
-            const inOrNot = this.containsItem(item)
-            if (inOrNot) { return }
-            this.todoItems.push(new TodoItemClass(item))
+        if (typeof item === "string") {
+            const inOrNot = this.containsItem(item);
+            if (inOrNot) {
+                return;
+            }
+            this.todoItems.push(new TodoItemClass(item));
         } else {
-            const inOrNot = this.containsItem(item.name)
-            if (inOrNot) { return }
+            const inOrNot = this.containsItem(item.name);
+            if (inOrNot) {
+                return;
+            }
             // console.log(`item: ${item}`)
-            this.todoItems.push(new TodoItemClass(item.name, item.done, item.time, item.comments))
+            this.todoItems.push(new TodoItemClass(item.name, item.done, item.time, item.comments));
         }
     }
 
@@ -98,10 +108,12 @@ export class TodoListClass implements TodoList {
      * @param itemName 要删除的todo名称
      */
     removeItem(itemName: string) {
-        const inOrNot = this.containsItem(itemName)
-        if (!inOrNot) { return }
-        const index = this.itemIndex(itemName)
-        this.todoItems.splice(index, 1)
+        const inOrNot = this.containsItem(itemName);
+        if (!inOrNot) {
+            return;
+        }
+        const index = this.itemIndex(itemName);
+        this.todoItems.splice(index, 1);
     }
 
     /**
@@ -110,11 +122,15 @@ export class TodoListClass implements TodoList {
      * @param newName 新项目名称
      */
     renameItem(oldName: string, newName: string) {
-        if (oldName === newName) { return }
-        const inOrNot = this.containsItem(oldName)
-        if (!inOrNot) { return }
-        const index = this.itemIndex(oldName)
-        this.todoItems[index].rename(oldName)
+        if (oldName === newName) {
+            return;
+        }
+        const inOrNot = this.containsItem(oldName);
+        if (!inOrNot) {
+            return;
+        }
+        const index = this.itemIndex(oldName);
+        this.todoItems[index].rename(oldName);
     }
 
     /**
@@ -122,15 +138,17 @@ export class TodoListClass implements TodoList {
      * @param itemName 项目名称
      */
     itemInfo(itemName: string): TodoItem | undefined {
-        const inOrNot = this.containsItem(itemName)
-        if (!inOrNot) { return undefined }
-        const index = this.itemIndex(itemName)
-        const item = this.todoItems[index]
+        const inOrNot = this.containsItem(itemName);
+        if (!inOrNot) {
+            return undefined;
+        }
+        const index = this.itemIndex(itemName);
+        const item = this.todoItems[index];
         return {
             name: item.name,
             done: item.done,
-            time: item.time
-        }
+            time: item.time,
+        };
     }
 
     /**
@@ -138,8 +156,10 @@ export class TodoListClass implements TodoList {
      * @param newName 新的列表名称
      */
     rename(newName: string) {
-        if (newName === this.name) { return }
-        this.name = newName
+        if (newName === this.name) {
+            return;
+        }
+        this.name = newName;
     }
 
     /**
@@ -149,9 +169,9 @@ export class TodoListClass implements TodoList {
     private itemIndex(name: string): number {
         for (let i = 0; i < this.todoItems.length; i++) {
             if (this.items[i].name === name) {
-                return i
+                return i;
             }
         }
-        return -1
+        return -1;
     }
 }

@@ -1,21 +1,19 @@
-import * as React from 'react';
-import { TodoItem, TodoList } from '../../model/interface';
-import { DetailView } from './../detailview/detail-view';
-import { AddNewItem } from './add-new-item';
-import { AreaViewContent } from './area-view-content';
-import { EditableHead } from './editable-head';
+import * as React from 'react'
+import { TodoItem, TodoList, ListInfo } from '../../model/interface'
+import { DetailView } from './../detailview/detail-view'
+import { AddNewItem } from './add-new-item'
+import { AreaViewContent } from './area-view-content'
+import { EditableHead } from './editable-head'
 
 interface AreaViewProps {
-    /**列表名称 */
-    listName: string
-    /**列表主题色 */
-    colorTheme: string;
+    /**
+     * 列表的信息
+     */
+    listInfo: ListInfo
     /**列表下的所有todo事项 */
     todoItems: TodoItem[]
     /**列表是否要紧缩 */
     shrink: boolean
-    /**该列表是否为“基础列表” */
-    isPrimaryList: boolean
     /**todo事项点击，处理方法 */
     itemClicked(itemName: string, listName: string): void
     /**重命名列表，处理方法 */
@@ -34,15 +32,15 @@ interface AreaViewProps {
      * 主题选择处理函数
      * @param color 主题色
      */
-    onColorPick(color: string): void;
+    onColorPick(color: string): void
     /**
      * 显示/隐藏操作区域
      */
-    onActionsDisplayClick(): void;
+    onActionsDisplayClick(): void
     /**
      * 操作区域是否要显示在屏幕上
      */
-    actionsShouldDisplay: boolean;
+    actionsShouldDisplay: boolean
 }
 
 interface AreaViewState {
@@ -52,12 +50,11 @@ interface AreaViewState {
 }
 
 export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
-
     constructor(props: AreaViewProps) {
         super(props)
         this.state = {
             inputValue: '',
-            showDoneItems: false
+            showDoneItems: false,
         }
 
         // bind methods
@@ -72,12 +69,20 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
     }
 
     render() {
+        const listInfo = this.props.listInfo
+
         return (
-            <div id="areaview" className={this.props.shrink ? 'shrink' : ''} onClick={e => { e.stopPropagation(); this.props.actionsShouldDisplay && this.props.onActionsDisplayClick() }}>
+            <div
+                id="areaview"
+                className={this.props.shrink ? 'shrink' : ''}
+                onClick={e => {
+                    e.stopPropagation()
+                    this.props.actionsShouldDisplay && this.props.onActionsDisplayClick()
+                }}>
                 <EditableHead
-                    isPrimaryList={this.props.isPrimaryList}
-                    listName={this.props.listName}
-                    colorTheme={this.props.colorTheme}
+                    isPrimaryList={listInfo.isPrimary}
+                    listName={listInfo.name}
+                    colorTheme={listInfo.theme}
                     renameList={this.renameList}
                     deleteList={this.props.deleteList}
                     switchDoneItems={this.switchDoneItems}
@@ -92,7 +97,8 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
                     itemClicked={this.displayDetailView}
                     onDragStart={this.handleDragStart}
                     onDragEnd={this.props.onDragEnd}
-                    showDoneItems={this.state.showDoneItems} />
+                    showDoneItems={this.state.showDoneItems}
+                />
                 <AddNewItem
                     value={this.state.inputValue}
                     onValueChange={this.handleInput}
@@ -105,10 +111,10 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
 
     componentWillReceiveProps(nextProps: AreaViewProps) {
         // 切换列表的时候将输入框中的内容清空
-        if (nextProps.listName !== this.props.listName) {
+        if (nextProps.listInfo.name !== this.props.listInfo.name) {
             this.setState({
-                inputValue: ''
-            });
+                inputValue: '',
+            })
         }
     }
 
@@ -117,7 +123,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
      */
     private switchDoneItems() {
         this.setState(prev => ({
-            showDoneItems: !prev.showDoneItems
+            showDoneItems: !prev.showDoneItems,
         }))
     }
 
@@ -128,7 +134,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
     private handleDragStart(data: string) {
         const obj = JSON.parse(data)
         // console.log(`obj: ${obj}, type: ${typeof obj}`)
-        const newData = JSON.stringify({ listName: this.props.listName, data })
+        const newData = JSON.stringify({ listName: this.props.listInfo.name, data })
         this.props.onDragStart(newData)
     }
 
@@ -137,7 +143,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
      * @param name 新的列表名称
      */
     private renameList(name: string) {
-        this.props.renameList(this.props.listName, name)
+        this.props.renameList(this.props.listInfo.name, name)
     }
 
     /**
@@ -148,7 +154,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
         // console.log(e.target)
         const value = e.target.value
         this.setState({
-            inputValue: value
+            inputValue: value,
         })
     }
 
@@ -160,7 +166,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
     private toggleItem(e: React.MouseEvent<HTMLDivElement>, name: string) {
         e.stopPropagation()
         // 切换完成状态
-        this.props.toggleItemInList(name, this.props.listName)
+        this.props.toggleItemInList(name, this.props.listInfo.name)
     }
 
     /**
@@ -169,9 +175,9 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
      */
     private addNewItem(e: React.MouseEvent<HTMLSpanElement>) {
         e.stopPropagation()
-        this.props.addNewItemInList(this.state.inputValue, this.props.listName)
+        this.props.addNewItemInList(this.state.inputValue, this.props.listInfo.name)
         this.setState({
-            inputValue: ''
+            inputValue: '',
         })
     }
 
@@ -190,6 +196,6 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
      * @param name 选中`TodoItem`的名称
      */
     private displayDetailView(e: React.MouseEvent<HTMLLIElement>, name: string) {
-        this.props.itemClicked(name, this.props.listName)
+        this.props.itemClicked(name, this.props.listInfo.name)
     }
 }
