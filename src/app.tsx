@@ -45,6 +45,7 @@ export class App extends React.Component<AppProps, AppState> {
   private server: DataServer
   /**拖拽过程中的数据 */
   private dragData?: string
+  private primaryListName = '我的一天'
 
   constructor(props: AppProps) {
     super(props)
@@ -75,6 +76,7 @@ export class App extends React.Component<AppProps, AppState> {
     this.handleCommentsChange = this.handleCommentsChange.bind(this)
     this.handleDragStart = this.handleDragStart.bind(this)
     this.handleDrop = this.handleDrop.bind(this)
+    this.handleDragEnd = this.handleDragEnd.bind(this)
     this.handleColorPick = this.handleColorPick.bind(this)
     this.toggleActionsDisplay = this.toggleActionsDisplay.bind(this)
     this.handleConfirmClicked = this.handleConfirmClicked.bind(this)
@@ -96,9 +98,9 @@ export class App extends React.Component<AppProps, AppState> {
         this.setState({
           listInfos: infos,
         })
-        let info = infos.filter(
-          info => info.name === this.state.lastModifiedListName,
-        )
+        // let info = infos.filter(
+        //   info => info.name === this.state.lastModifiedListName,
+        // )
         // return info[0].name
         return new Promise((res: (name: string) => void, rej) => {
           const name = this.server.lastModified
@@ -127,7 +129,9 @@ export class App extends React.Component<AppProps, AppState> {
               if (
                 item.name === undefined ||
                 item.done === undefined ||
-                item.time === undefined
+                item.time === undefined ||
+                item.inPrimaryList === undefined ||
+                item.source === undefined
               ) {
                 rej('local data error')
               }
@@ -250,14 +254,17 @@ export class App extends React.Component<AppProps, AppState> {
     if (sourceListName === targetListName) {
       return
     }
-    this.server.deleteItemInList(itemData.name, sourceListName)
-    this.server.addNewItemInList(itemData, targetListName)
+
     this.dragData = undefined
 
-    // this.fetchItems()
     const todos = JSON.parse(
       JSON.stringify(this.state.itemsOfList),
     ) as TodoItem[]
+    const infos = JSON.parse(JSON.stringify(this.state.listInfos)) as ListInfo[]
+
+    this.server.deleteItemInList(itemData.name, sourceListName)
+    this.server.addNewItemInList(itemData, targetListName)
+
     let itemIndex = 0
     for (let i = 0; i < todos.length; i++) {
       if (todos[i].name === itemData.name) {
@@ -265,17 +272,16 @@ export class App extends React.Component<AppProps, AppState> {
         break
       }
     }
-    todos.splice(itemIndex, 1)
 
-    const infos = this.state.listInfos.slice()
     for (let info of infos) {
-      if (info.name === sourceListName) {
+      if (info.name === sourceListName && !todos[itemIndex].done) {
         info.count--
       }
-      if (info.name === targetListName) {
+      if (info.name === targetListName && !todos[itemIndex].done) {
         info.count++
       }
     }
+    todos.splice(itemIndex, 1)
 
     this.setState({
       listInfos: infos,
@@ -293,16 +299,25 @@ export class App extends React.Component<AppProps, AppState> {
     // console.log(`oldName: ${oldName}, newName: ${newName}`)
     this.server.renameList(oldName, newName)
 
-    const infos = this.state.listInfos.slice()
+    const infos = JSON.parse(JSON.stringify(this.state.listInfos)) as ListInfo[]
     for (let info of infos) {
       if (info.name === oldName) {
         info.name = newName
         break
       }
     }
+
+    const todos = JSON.parse(
+      JSON.stringify(this.state.itemsOfList),
+    ) as TodoItem[]
+    todos.forEach(todo => {
+      todo.source = newName
+    })
+
     this.setState({
       listInfos: infos,
-      lastModifiedListName: this.server.lastModified,
+      lastModifiedListName: newName,
+      itemsOfList: todos,
     })
   }
 
@@ -326,7 +341,7 @@ export class App extends React.Component<AppProps, AppState> {
 
     this.setState({
       listInfos: infos,
-      lastModifiedListName: this.server.lastModified,
+      lastModifiedListName: infos[0].name,
       actionsShouldDisplay: false,
       // colorTheme: this.server.themeForList(this.server.lastModified),
       // itemsOfList: this.server.itemsOfList(listName),
@@ -428,6 +443,9 @@ export class App extends React.Component<AppProps, AppState> {
       name: itemName,
       done: false,
       time: new Date().toLocaleDateString().split(' ')[0],
+      comments: undefined,
+      source: listName,
+      inPrimaryList: listName === this.primaryListName,
     })
 
     this.setState({
@@ -481,8 +499,15 @@ export class App extends React.Component<AppProps, AppState> {
     })
     // 如果点击的就是要详细显示的TodoItem，则要更新detailItem的状态
     if (this.state.detailItem && this.state.detailItem.name === itemName) {
+      let index = 0
+      for (let i = 0; i < todos.length; i++) {
+        if (todos[i].name === itemName) {
+          index = i
+          break
+        }
+      }
       this.setState({
-        detailItem: this.server.itemInList(itemName, listName),
+        detailItem: JSON.parse(JSON.stringify(todos[index])) as TodoItem,
       })
     }
   }
@@ -500,8 +525,20 @@ export class App extends React.Component<AppProps, AppState> {
     const listName = this.state.lastModifiedListName
 
     this.toggleItemInList(itemName, listName)
+
+    const todos = JSON.parse(
+      JSON.stringify(this.state.itemsOfList),
+    ) as TodoItem[]
+    let index = 0
+    for (let i = 0; i < todos.length; i++) {
+      if (todos[i].name === itemName) {
+        index = i
+        break
+      }
+    }
+    todos[index].done = !todos[index].done
     this.setState({
-      detailItem: this.server.itemInList(itemName, listName),
+      detailItem: todos[index],
     })
   }
 
@@ -587,10 +624,7 @@ export class App extends React.Component<AppProps, AppState> {
 
     this.setState(prevState => ({
       detailItem: prevState.detailItem
-        ? this.server.itemInList(
-            prevState.detailItem.name,
-            prevState.lastModifiedListName,
-          )
+        ? (JSON.parse(JSON.stringify(todos[index])) as TodoItem)
         : undefined,
       itemsOfList: todos,
     }))
@@ -603,8 +637,10 @@ export class App extends React.Component<AppProps, AppState> {
    * @param listName 该todo所在的列表名称
    */
   private itemClicked(itemName: string, listName: string) {
+    let todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[]
+    todos = todos.filter(todo => todo.name === itemName)
     this.setState({
-      detailItem: this.server.itemInList(itemName, listName),
+      detailItem: todos[0],
     })
   }
 

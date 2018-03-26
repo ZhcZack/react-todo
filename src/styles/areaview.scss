@@ -1,118 +1,122 @@
 // todo area view
 
-@import "color";
+@import 'color';
 #areaview {
-    width: calc(100% - 280px);
-    &.shrink {
-        width: calc(100% - 280px - 280px);
+  width: calc(100% - 280px);
+  &.shrink {
+    width: calc(100% - 280px - 280px);
+  }
+  .todo-item {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid $border-color;
+    background-color: transparent;
+    transition: background-color 0.3s;
+    &:hover {
+      background-color: $border-color;
     }
-    .todo-item {
-        height: 60px;
-        display: flex;
-        align-items: center;
-        padding: 10px 0;
-        border-bottom: 1px solid $border-color;
-        background-color: transparent;
-        transition: background-color 0.3s;
-        &:hover {
-            background-color: $border-color;
-        }
+  }
+  .todo-item-content {
+    display: flex;
+    flex-direction: column;
+    &.done span:first-child {
+      text-decoration: line-through;
+      color: gray;
     }
-    .todo-item-content {
-        display: flex;
-        flex-direction: column;
-        &.done span:first-child {
-            text-decoration: line-through;
-            color: gray;
-        }
-        .todo-item-content-comments {
-            font-size: 0.6em;
-            color: gray;
-        }
+    .todo-item-content-extra {
+      display: flex;
+      & > * {
+        font-size: 0.6em;
+        color: gray;
+        margin-right: 10px;
+      }
     }
-    #areaview-head {
-        height: 200px;
-        padding: 10px;
-        border-bottom: 1px solid $border-color;
-        display: flex;
-        position: relative;
-        & > * {
-            align-self: flex-end;
-            margin-right: 10px;
-        }
-        .name {
-            font-size: 2rem;
-            color: white;
-        }
-        .actions-switcher {
-            width: 40px;
-            height: 30px;
-            position: absolute;
-            right: 10px;
-            bottom: 10px;
-            border: none;
-            cursor: pointer;
-            color: white;
-            font-weight: bold;
-            &:focus {
-                outline: none;
-            }
-        }
-        .actions {
-            position: absolute;
-            top: calc(100% + 5px);
-            right: 10px;
-            visibility: hidden;
-            width: 322px;
-            list-style-type: none;
-            background-color: white;
-            border: 1px solid $border-color;
-            padding: 10px;
-            margin-right: 0;
-            &.actions-display {
-                visibility: visible;
-            }
-            &.fadeIn {
-                animation-duration: 0.5s;
-            }
-            .color-picker {
-                margin-bottom: 10px;
-                p {
-                    margin-bottom: 10px;
-                }
-                ul {
-                    list-style-type: none;
-                    display: flex;
-                    flex-wrap: wrap;
-                    height: 50px;
-                    justify-content: space-between;
-                }
-                li {
-                    width: 50px;
-                    height: 50px;
-                    cursor: pointer;
-                }
-            }
-            .actions-list li {
-                height: 40px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-                &:hover {
-                    background-color: $background-color;
-                }
-            }
-            .action-delete {
-                color: red;
-            }
-        }
+  }
+  #areaview-head {
+    height: 200px;
+    padding: 10px;
+    border-bottom: 1px solid $border-color;
+    display: flex;
+    position: relative;
+    & > * {
+      align-self: flex-end;
+      margin-right: 10px;
     }
-    #areaview-content {
-        max-height: calc(100vh - 200px - 60px);
-        overflow: auto;
+    .name {
+      font-size: 2rem;
+      color: white;
+    }
+    .actions-switcher {
+      width: 40px;
+      height: 30px;
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      border: none;
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
+      &:focus {
+        outline: none;
+      }
+    }
+    .actions {
+      position: absolute;
+      top: calc(100% + 5px);
+      right: 10px;
+      visibility: hidden;
+      width: 322px;
+      list-style-type: none;
+      background-color: white;
+      border: 1px solid $border-color;
+      padding: 10px;
+      margin-right: 0;
+      &.actions-display {
+        visibility: visible;
+      }
+      &.fadeIn {
+        animation-duration: 0.5s;
+      }
+      .color-picker {
+        margin-bottom: 10px;
+        p {
+          margin-bottom: 10px;
+        }
         ul {
-            margin: 0 20px;
+          list-style-type: none;
+          display: flex;
+          flex-wrap: wrap;
+          height: 50px;
+          justify-content: space-between;
         }
+        li {
+          width: 50px;
+          height: 50px;
+          cursor: pointer;
+        }
+      }
+      .actions-list li {
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        &:hover {
+          background-color: $background-color;
+        }
+      }
+      .action-delete {
+        color: red;
+      }
     }
+  }
+  #areaview-content {
+    max-height: calc(100vh - 200px - 60px);
+    overflow: auto;
+    ul {
+      margin: 0 20px;
+    }
+  }
 }

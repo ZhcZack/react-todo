@@ -17938,6 +17938,7 @@ var App = /** @class */ (function (_super) {
     __extends(App, _super);
     function App(props) {
         var _this = _super.call(this, props) || this;
+        _this.primaryListName = '我的一天';
         _this.server = new data_server_1.DataServer();
         _this.state = {
             lastModifiedListName: '',
@@ -17963,6 +17964,7 @@ var App = /** @class */ (function (_super) {
         _this.handleCommentsChange = _this.handleCommentsChange.bind(_this);
         _this.handleDragStart = _this.handleDragStart.bind(_this);
         _this.handleDrop = _this.handleDrop.bind(_this);
+        _this.handleDragEnd = _this.handleDragEnd.bind(_this);
         _this.handleColorPick = _this.handleColorPick.bind(_this);
         _this.toggleActionsDisplay = _this.toggleActionsDisplay.bind(_this);
         _this.handleConfirmClicked = _this.handleConfirmClicked.bind(_this);
@@ -17985,7 +17987,9 @@ var App = /** @class */ (function (_super) {
             _this.setState({
                 listInfos: infos,
             });
-            var info = infos.filter(function (info) { return info.name === _this.state.lastModifiedListName; });
+            // let info = infos.filter(
+            //   info => info.name === this.state.lastModifiedListName,
+            // )
             // return info[0].name
             return new Promise(function (res, rej) {
                 var name = _this.server.lastModified;
@@ -18011,7 +18015,9 @@ var App = /** @class */ (function (_super) {
                 items.forEach(function (item) {
                     if (item.name === undefined ||
                         item.done === undefined ||
-                        item.time === undefined) {
+                        item.time === undefined ||
+                        item.inPrimaryList === undefined ||
+                        item.source === undefined) {
                         rej('local data error');
                     }
                 });
@@ -18124,11 +18130,11 @@ var App = /** @class */ (function (_super) {
         if (sourceListName === targetListName) {
             return;
         }
+        this.dragData = undefined;
+        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
+        var infos = JSON.parse(JSON.stringify(this.state.listInfos));
         this.server.deleteItemInList(itemData.name, sourceListName);
         this.server.addNewItemInList(itemData, targetListName);
-        this.dragData = undefined;
-        // this.fetchItems()
-        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
         var itemIndex = 0;
         for (var i = 0; i < todos.length; i++) {
             if (todos[i].name === itemData.name) {
@@ -18136,17 +18142,16 @@ var App = /** @class */ (function (_super) {
                 break;
             }
         }
-        todos.splice(itemIndex, 1);
-        var infos = this.state.listInfos.slice();
         for (var _i = 0, infos_1 = infos; _i < infos_1.length; _i++) {
             var info = infos_1[_i];
-            if (info.name === sourceListName) {
+            if (info.name === sourceListName && !todos[itemIndex].done) {
                 info.count--;
             }
-            if (info.name === targetListName) {
+            if (info.name === targetListName && !todos[itemIndex].done) {
                 info.count++;
             }
         }
+        todos.splice(itemIndex, 1);
         this.setState({
             listInfos: infos,
             itemsOfList: todos,
@@ -18161,7 +18166,7 @@ var App = /** @class */ (function (_super) {
     App.prototype.renameList = function (oldName, newName) {
         // console.log(`oldName: ${oldName}, newName: ${newName}`)
         this.server.renameList(oldName, newName);
-        var infos = this.state.listInfos.slice();
+        var infos = JSON.parse(JSON.stringify(this.state.listInfos));
         for (var _i = 0, infos_2 = infos; _i < infos_2.length; _i++) {
             var info = infos_2[_i];
             if (info.name === oldName) {
@@ -18169,9 +18174,14 @@ var App = /** @class */ (function (_super) {
                 break;
             }
         }
+        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
+        todos.forEach(function (todo) {
+            todo.source = newName;
+        });
         this.setState({
             listInfos: infos,
-            lastModifiedListName: this.server.lastModified,
+            lastModifiedListName: newName,
+            itemsOfList: todos,
         });
     };
     /**
@@ -18192,7 +18202,7 @@ var App = /** @class */ (function (_super) {
         infos.splice(index, 1);
         this.setState({
             listInfos: infos,
-            lastModifiedListName: this.server.lastModified,
+            lastModifiedListName: infos[0].name,
             actionsShouldDisplay: false,
         });
         // 这里要继续使用这个方法，因为之前的todos要被清空换新
@@ -18279,6 +18289,9 @@ var App = /** @class */ (function (_super) {
             name: itemName,
             done: false,
             time: new Date().toLocaleDateString().split(' ')[0],
+            comments: undefined,
+            source: listName,
+            inPrimaryList: listName === this.primaryListName,
         });
         this.setState({
             // itemsOfList: this.server.itemsOfList(this.state.lastModifiedListName),
@@ -18324,8 +18337,15 @@ var App = /** @class */ (function (_super) {
         });
         // 如果点击的就是要详细显示的TodoItem，则要更新detailItem的状态
         if (this.state.detailItem && this.state.detailItem.name === itemName) {
+            var index = 0;
+            for (var i = 0; i < todos.length; i++) {
+                if (todos[i].name === itemName) {
+                    index = i;
+                    break;
+                }
+            }
             this.setState({
-                detailItem: this.server.itemInList(itemName, listName),
+                detailItem: JSON.parse(JSON.stringify(todos[index])),
             });
         }
     };
@@ -18341,8 +18361,17 @@ var App = /** @class */ (function (_super) {
         var itemName = this.state.detailItem.name;
         var listName = this.state.lastModifiedListName;
         this.toggleItemInList(itemName, listName);
+        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
+        var index = 0;
+        for (var i = 0; i < todos.length; i++) {
+            if (todos[i].name === itemName) {
+                index = i;
+                break;
+            }
+        }
+        todos[index].done = !todos[index].done;
         this.setState({
-            detailItem: this.server.itemInList(itemName, listName),
+            detailItem: todos[index],
         });
     };
     /**
@@ -18396,7 +18425,6 @@ var App = /** @class */ (function (_super) {
      * @param value todo事项的新备注
      */
     App.prototype.handleCommentsChange = function (value) {
-        var _this = this;
         if (!this.state.detailItem) {
             return;
         }
@@ -18412,7 +18440,7 @@ var App = /** @class */ (function (_super) {
         todos[index].comments = value;
         this.setState(function (prevState) { return ({
             detailItem: prevState.detailItem
-                ? _this.server.itemInList(prevState.detailItem.name, prevState.lastModifiedListName)
+                ? JSON.parse(JSON.stringify(todos[index]))
                 : undefined,
             itemsOfList: todos,
         }); });
@@ -18424,8 +18452,10 @@ var App = /** @class */ (function (_super) {
      * @param listName 该todo所在的列表名称
      */
     App.prototype.itemClicked = function (itemName, listName) {
+        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
+        todos = todos.filter(function (todo) { return todo.name === itemName; });
         this.setState({
-            detailItem: this.server.itemInList(itemName, listName),
+            detailItem: todos[0],
         });
     };
     /**
@@ -18557,12 +18587,12 @@ var AreaViewContent = /** @class */ (function (_super) {
         return (React.createElement("div", { id: "areaview-content" },
             React.createElement("ul", null, this.props.items.map(function (item) {
                 if (_this.props.showDoneItems) {
-                    return (React.createElement(area_view_item_1.AreaViewItem, { item: item, onItemClicked: _this.props.itemClicked, onCheckboxClicked: _this.props.checkboxClicked, onDragStart: _this.props.onDragStart, onDragEnd: _this.props.onDragEnd, key: item.name }));
+                    return (React.createElement(area_view_item_1.AreaViewItem, { isPrimary: _this.props.isPrimary, item: item, onItemClicked: _this.props.itemClicked, onCheckboxClicked: _this.props.checkboxClicked, onDragStart: _this.props.onDragStart, onDragEnd: _this.props.onDragEnd, key: item.name }));
                 }
-                if (item.done) {
+                if (item.done && !_this.props.isPrimary) {
                     return null;
                 }
-                return (React.createElement(area_view_item_1.AreaViewItem, { item: item, onItemClicked: _this.props.itemClicked, onCheckboxClicked: _this.props.checkboxClicked, onDragStart: _this.props.onDragStart, onDragEnd: _this.props.onDragEnd, key: item.name }));
+                return (React.createElement(area_view_item_1.AreaViewItem, { isPrimary: _this.props.isPrimary, item: item, onItemClicked: _this.props.itemClicked, onCheckboxClicked: _this.props.checkboxClicked, onDragStart: _this.props.onDragStart, onDragEnd: _this.props.onDragEnd, key: item.name }));
             }))));
     };
     return AreaViewContent;
@@ -18619,13 +18649,26 @@ var AreaViewItem = /** @class */ (function (_super) {
     AreaViewItem.prototype.handleDragEnd = function (e) {
         this.props.onDragEnd();
     };
+    AreaViewItem.prototype.itemTemplate = function (item) {
+        if (this.props.isPrimary) {
+            return (React.createElement("div", { className: "todo-item-content-extra" },
+                React.createElement("span", { className: "todo-item-content-source" }, item.source),
+                item.comments && (React.createElement("span", { className: "todo-item-content-comments" }, "\u5907\u6CE8"))));
+        }
+        else {
+            return (React.createElement("div", { className: "todo-item-content-extra" },
+                item.inPrimaryList && (React.createElement("span", { className: "todo-item-content-source" }, "\u6211\u7684\u4E00\u5929")),
+                item.comments && (React.createElement("span", { className: "todo-item-content-comments" }, "\u5907\u6CE8"))));
+        }
+    };
     AreaViewItem.prototype.render = function () {
         var _this = this;
-        return (React.createElement("li", { draggable: true, className: "todo-item", onClick: function (e) { return _this.props.onItemClicked(e, _this.props.item.name); }, onDragStart: this.handleDrag, onDragEnd: this.handleDragEnd },
-            React.createElement("div", { className: this.props.item.done ? "custom-checkbox checked" : 'custom-checkbox', onClick: function (e) { return _this.props.onCheckboxClicked(e, _this.props.item.name); } }, "\u221A"),
-            React.createElement("div", { className: this.props.item.done ? "todo-item-content done" : 'todo-item-content' },
-                React.createElement("span", null, this.props.item.name),
-                this.props.item.comments && React.createElement("span", { className: 'todo-item-content-comments' }, "\u5907\u6CE8"))));
+        var item = this.props.item;
+        return (React.createElement("li", { draggable: true, className: "todo-item", onClick: function (e) { return _this.props.onItemClicked(e, item.name); }, onDragStart: this.handleDrag, onDragEnd: this.handleDragEnd },
+            React.createElement("div", { className: item.done ? 'custom-checkbox checked' : 'custom-checkbox', onClick: function (e) { return _this.props.onCheckboxClicked(e, item.name); } }, "\u221A"),
+            React.createElement("div", { className: item.done ? 'todo-item-content done' : 'todo-item-content' },
+                React.createElement("span", null, item.name),
+                this.itemTemplate(item))));
     };
     return AreaViewItem;
 }(React.Component));
@@ -18685,7 +18728,7 @@ var AreaView = /** @class */ (function (_super) {
                 _this.props.actionsShouldDisplay && _this.props.onActionsDisplayClick();
             } },
             React.createElement(editable_head_1.EditableHead, { isPrimaryList: listInfo.isPrimary, listName: listInfo.name, colorTheme: listInfo.theme, renameList: this.renameList, deleteList: this.props.deleteList, switchDoneItems: this.switchDoneItems, doneItemsDisplay: this.state.showDoneItems, onColorPick: this.props.onColorPick, onActionsDisplayClick: this.props.onActionsDisplayClick, actionsShouldDisplay: this.props.actionsShouldDisplay }),
-            React.createElement(area_view_content_1.AreaViewContent, { items: this.props.todoItems, checkboxClicked: this.toggleItem, itemClicked: this.displayDetailView, onDragStart: this.handleDragStart, onDragEnd: this.props.onDragEnd, showDoneItems: this.state.showDoneItems }),
+            React.createElement(area_view_content_1.AreaViewContent, { isPrimary: listInfo.isPrimary, items: this.props.todoItems, checkboxClicked: this.toggleItem, itemClicked: this.displayDetailView, onDragStart: this.handleDragStart, onDragEnd: this.props.onDragEnd, showDoneItems: this.state.showDoneItems }),
             React.createElement(add_new_item_1.AddNewItem, { value: this.state.inputValue, onValueChange: this.handleInput, onAddClicked: this.addNewItem, onCancelClicked: this.cancelInput })));
     };
     AreaView.prototype.componentWillReceiveProps = function (nextProps) {
@@ -19347,7 +19390,9 @@ var DataServer = /** @class */ (function () {
     }
     Object.defineProperty(DataServer.prototype, "loadError", {
         get: function () {
-            return this.loadDataError.length > 0 ? '初始化数据出错，已重新载入。' : undefined;
+            return this.loadDataError.length > 0
+                ? '初始化数据出错，已重新载入。'
+                : undefined;
         },
         enumerable: true,
         configurable: true
@@ -19615,7 +19660,7 @@ var DataServer = /** @class */ (function () {
         for (var _i = 0, items_2 = items; _i < items_2.length; _i++) {
             var item = items_2[_i];
             if (item.name === itemName) {
-                item.changeComments(newComments);
+                item.comments = newComments;
             }
         }
         this.save();
@@ -19685,11 +19730,13 @@ var DataServer = /** @class */ (function () {
             for (var j = 0; j < localItems.length; j++) {
                 if (!localItems[j].name ||
                     localItems[j].done === undefined ||
-                    !localItems[j].time) {
+                    !localItems[j].time ||
+                    localItems[j].inPrimaryList === undefined ||
+                    !localItems[j].source) {
                     console.log('item format error');
                     throw Error('local data error');
                 }
-                var newItem = new todo_item_1.TodoItemClass(localItems[j].name, localItems[j].done, localItems[j].time, localItems[j].comments);
+                var newItem = new todo_item_1.TodoItemClass(localItems[j].name, localItems[j].done, localItems[j].time, localItems[j].inPrimaryList, localItems[j].comments, localItems[j].source);
                 newList.addNewItem(newItem);
             }
             if (listsFromLocal[i].theme) {
@@ -19729,39 +19776,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * 用于生成todo项目的类
  */
 var TodoItemClass = /** @class */ (function () {
-    function TodoItemClass(name, done, time, comments) {
+    function TodoItemClass(name, done, time, inPrimaryList, comments, source) {
         if (done === void 0) { done = false; }
         if (time === void 0) { time = new Date().toLocaleDateString(); }
+        if (inPrimaryList === void 0) { inPrimaryList = false; }
         this.name = name;
         this.done = done;
         this.time = time;
+        this.inPrimaryList = inPrimaryList;
         this.comments = comments;
+        this.source = source;
     }
     TodoItemClass.prototype.toJSON = function () {
         return {
             name: this.name,
             done: this.done,
             time: this.time,
+            inPrimaryList: this.inPrimaryList,
             comments: this.comments,
+            source: this.source,
         };
     };
     /**切换项目的完成状态 */
     TodoItemClass.prototype.toggle = function () {
         this.done = !this.done;
-    };
-    /**
-     * 重命名项目
-     * @param newName 项目的新名称
-     */
-    TodoItemClass.prototype.rename = function (newName) {
-        this.name = newName;
-    };
-    /**
-     * 改变项目的备注
-     * @param newComments 新的备注
-     */
-    TodoItemClass.prototype.changeComments = function (newComments) {
-        this.comments = newComments;
     };
     Object.defineProperty(TodoItemClass.prototype, "copy", {
         /**项目的复制 */
@@ -19795,7 +19833,7 @@ var todo_item_1 = __webpack_require__(/*! ./todo-item */ "./src/model/todo-item.
 var TodoListClass = /** @class */ (function () {
     function TodoListClass(name) {
         this.name = name;
-        this.color = "#87cefa";
+        this.color = '#87cefa';
         this.name = name;
         this.todoItems = [];
     }
@@ -19840,7 +19878,7 @@ var TodoListClass = /** @class */ (function () {
                 name: this.name,
                 count: count,
                 isActive: false,
-                isPrimary: this.name === "我的一天",
+                isPrimary: this.name === '我的一天',
                 theme: this.colorTheme,
             };
         },
@@ -19854,7 +19892,7 @@ var TodoListClass = /** @class */ (function () {
                 count: this.count,
                 isActive: false,
                 theme: this.colorTheme,
-                isPrimary: this.name === "我的一天",
+                isPrimary: this.name === '我的一天',
             };
         },
         enumerable: true,
@@ -19884,13 +19922,15 @@ var TodoListClass = /** @class */ (function () {
      * 添加新todo项目
      * @param item 要添加的todo项目（有两种表示方式，一个是todo的名称，另一个是todo本身）
      */
-    TodoListClass.prototype.addNewItem = function (item) {
-        if (typeof item === "string") {
+    TodoListClass.prototype.addNewItem = function (item, source) {
+        if (typeof item === 'string') {
             var inOrNot = this.containsItem(item);
             if (inOrNot) {
                 return;
             }
-            this.todoItems.push(new todo_item_1.TodoItemClass(item));
+            var newItem = new todo_item_1.TodoItemClass(item);
+            newItem.source = source ? source : this.name;
+            this.todoItems.push(newItem);
         }
         else {
             var inOrNot = this.containsItem(item.name);
@@ -19898,7 +19938,7 @@ var TodoListClass = /** @class */ (function () {
                 return;
             }
             // console.log(`item: ${item}`)
-            this.todoItems.push(new todo_item_1.TodoItemClass(item.name, item.done, item.time, item.comments));
+            this.todoItems.push(new todo_item_1.TodoItemClass(item.name, item.done, item.time, item.inPrimaryList, item.comments, source ? source : item.source));
         }
     };
     /**
@@ -19927,7 +19967,7 @@ var TodoListClass = /** @class */ (function () {
             return;
         }
         var index = this.itemIndex(oldName);
-        this.todoItems[index].rename(oldName);
+        this.todoItems[index].name = newName;
     };
     /**
      * 返回列表中保存的项目的内容，若没有该项目返回`undefined`。
@@ -19944,6 +19984,9 @@ var TodoListClass = /** @class */ (function () {
             name: item.name,
             done: item.done,
             time: item.time,
+            inPrimaryList: item.inPrimaryList,
+            comments: item.comments,
+            source: item.source,
         };
     };
     /**
@@ -19955,6 +19998,9 @@ var TodoListClass = /** @class */ (function () {
             return;
         }
         this.name = newName;
+        this.todoItems.forEach(function (item) {
+            item.source = newName;
+        });
     };
     /**
      * 指定项目在列表中的索引值，用于列表增/删之类的操作

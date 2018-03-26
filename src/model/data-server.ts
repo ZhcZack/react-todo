@@ -297,7 +297,7 @@ export class DataServer {
     const items = list.items
     for (let item of items) {
       if (item.name === itemName) {
-        item.changeComments(newComments)
+        item.comments = newComments
       }
     }
     this.save()
@@ -365,12 +365,14 @@ export class DataServer {
         throw Error('local data error')
       }
       const newList = new TodoListClass(listsFromLocal[i].name)
-      const localItems = listsFromLocal[i].items
+      const localItems = listsFromLocal[i].items as TodoItemClass[]
       for (let j = 0; j < localItems.length; j++) {
         if (
           !localItems[j].name ||
           localItems[j].done === undefined ||
-          !localItems[j].time
+          !localItems[j].time ||
+          localItems[j].inPrimaryList === undefined ||
+          !localItems[j].source
         ) {
           console.log('item format error')
           throw Error('local data error')
@@ -379,7 +381,9 @@ export class DataServer {
           localItems[j].name,
           localItems[j].done,
           localItems[j].time,
+          localItems[j].inPrimaryList,
           localItems[j].comments,
+          localItems[j].source,
         )
         newList.addNewItem(newItem)
       }
