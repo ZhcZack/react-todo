@@ -93,6 +93,7 @@ export class TodoListClass implements TodoList {
                 return
             }
             const newItem = new TodoItemClass(item)
+            newItem.source = this.name
             this.todoItems.push(newItem)
         } else {
             const inOrNot = this.containsItem(item.name)

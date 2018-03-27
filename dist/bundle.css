@@ -156,6 +156,38 @@
     #detailview .title-content .title {
       flex: 4 1 calc(100% - 30px);
       font-weight: bold; }
+  #detailview .primary-copy-area {
+    width: 90%;
+    height: 40px;
+    margin: 5%;
+    display: flex;
+    border: 1px solid rgba(206, 197, 197, 0.5);
+    background-color: white; }
+    #detailview .primary-copy-area > * {
+      width: 100%;
+      display: flex; }
+    #detailview .primary-copy-area > div p {
+      color: blue;
+      flex: 1 0 100px;
+      display: flex;
+      align-items: center;
+      padding: 10px; }
+    #detailview .primary-copy-area .cancel-button {
+      flex: 0 0 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.8em;
+      color: gray;
+      cursor: pointer; }
+      #detailview .primary-copy-area .cancel-button:hover {
+        background-color: rgba(206, 197, 197, 0.2); }
+    #detailview .primary-copy-area .copy-button {
+      padding: 10px;
+      align-items: center;
+      cursor: pointer; }
+      #detailview .primary-copy-area .copy-button:hover {
+        background-color: rgba(206, 197, 197, 0.2); }
   #detailview .detailitem-comments {
     width: 90%;
     height: calc(30vh);
@@ -173,9 +205,11 @@
     height: 40px;
     display: flex;
     background-color: white; }
-    #detailview .actions .disappear:hover, #detailview .actions .delete:hover {
+    #detailview .actions .disappear:hover,
+    #detailview .actions .delete:hover {
       background-color: rgba(206, 197, 197, 0.5); }
-  #detailview .disappear, #detailview .delete {
+  #detailview .disappear,
+  #detailview .delete {
     flex: 1 1 30px;
     display: flex;
     justify-content: center;
@@ -758,8 +792,8 @@
     -webkit-transform: skewX(-0.78125deg) skewY(-0.78125deg);
     transform: skewX(-0.78125deg) skewY(-0.78125deg); }
   77.7% {
-    -webkit-transform: skewX(0.39062deg) skewY(0.39062deg);
-    transform: skewX(0.39062deg) skewY(0.39062deg); }
+    -webkit-transform: skewX(0.39063deg) skewY(0.39063deg);
+    transform: skewX(0.39063deg) skewY(0.39063deg); }
   88.8% {
     -webkit-transform: skewX(-0.19531deg) skewY(-0.19531deg);
     transform: skewX(-0.19531deg) skewY(-0.19531deg); } }
@@ -786,8 +820,8 @@
     -webkit-transform: skewX(-0.78125deg) skewY(-0.78125deg);
     transform: skewX(-0.78125deg) skewY(-0.78125deg); }
   77.7% {
-    -webkit-transform: skewX(0.39062deg) skewY(0.39062deg);
-    transform: skewX(0.39062deg) skewY(0.39062deg); }
+    -webkit-transform: skewX(0.39063deg) skewY(0.39063deg);
+    transform: skewX(0.39063deg) skewY(0.39063deg); }
   88.8% {
     -webkit-transform: skewX(-0.19531deg) skewY(-0.19531deg);
     transform: skewX(-0.19531deg) skewY(-0.19531deg); } }

@@ -1,4 +1,4 @@
-@import 'color';
+@import "color";
 
 // todo detail view
 
@@ -25,6 +25,45 @@
             font-weight: bold;
         }
     }
+    .primary-copy-area {
+        width: 90%;
+        height: 40px;
+        margin: 5%;
+        display: flex;
+        border: 1px solid $border-color;
+        background-color: white;
+        & > * {
+            width: 100%;
+            display: flex;
+        }
+        & > div p {
+            color: blue;
+            flex: 1 0 100px;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+        .cancel-button {
+            flex: 0 0 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8em;
+            color: gray;
+            cursor: pointer;
+            &:hover {
+                background-color: $background-color;
+            }
+        }
+        .copy-button {
+            padding: 10px;
+            align-items: center;
+            cursor: pointer;
+            &:hover {
+                background-color: $background-color;
+            }
+        }
+    }
     .detailitem-comments {
         width: 90%;
         height: calc(30vh);
@@ -43,11 +82,13 @@
         height: 40px;
         display: flex;
         background-color: white;
-        .disappear:hover, .delete:hover {
+        .disappear:hover,
+        .delete:hover {
             background-color: $border-color;
         }
     }
-    .disappear, .delete {
+    .disappear,
+    .delete {
         flex: 1 1 30px;
         display: flex;
         justify-content: center;
