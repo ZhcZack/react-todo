@@ -18127,36 +18127,53 @@ var App = /** @class */ (function (_super) {
         var data = JSON.parse(this.dragData);
         var sourceListName = data.listName;
         var itemData = JSON.parse(data.data);
+        // 开始和结束的列表不能是同一个，不然拖拽没有意义
         if (sourceListName === targetListName) {
             return;
         }
         this.dragData = undefined;
         var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
         var infos = JSON.parse(JSON.stringify(this.state.listInfos));
-        this.server.deleteItemInList(itemData.name, sourceListName);
-        this.server.addNewItemInList(itemData, targetListName);
-        var itemIndex = 0;
-        for (var i = 0; i < todos.length; i++) {
-            if (todos[i].name === itemData.name) {
-                itemIndex = i;
-                break;
+        // 从其他列表拉到“我的一天“
+        if (targetListName === this.primaryListName) {
+            // todo的source为来源列表，并且primary标记为true
+            itemData.source = sourceListName;
+            itemData.inPrimaryList = true;
+            this.server.addNewItemInList(itemData, targetListName);
+            this.server.markItemPrimary(itemData.name, sourceListName);
+            for (var _i = 0, todos_1 = todos; _i < todos_1.length; _i++) {
+                var todo = todos_1[_i];
+                if (todo.name === itemData.name) {
+                    todo.inPrimaryList = true;
+                }
             }
+            this.fetchListInfo();
+            this.setState({
+                itemsOfList: todos,
+                detailItem: undefined,
+            });
         }
-        for (var _i = 0, infos_1 = infos; _i < infos_1.length; _i++) {
-            var info = infos_1[_i];
-            if (info.name === sourceListName && !todos[itemIndex].done) {
-                info.count--;
+        else {
+            // 拉进哪个列表，source就是哪个列表，同时primary为false
+            this.server.deleteItemInList(itemData.name, sourceListName);
+            itemData.source = targetListName;
+            itemData.inPrimaryList = false;
+            this.server.addNewItemInList(itemData, targetListName);
+            var itemIndex = 0;
+            for (var i = 0; i < todos.length; i++) {
+                if (todos[i].name === itemData.name) {
+                    itemIndex = i;
+                    break;
+                }
             }
-            if (info.name === targetListName && !todos[itemIndex].done) {
-                info.count++;
-            }
+            todos.splice(itemIndex, 1);
+            this.fetchListInfo();
+            this.setState({
+                listInfos: infos,
+                itemsOfList: todos,
+                detailItem: undefined,
+            });
         }
-        todos.splice(itemIndex, 1);
-        this.setState({
-            listInfos: infos,
-            itemsOfList: todos,
-            detailItem: undefined,
-        });
     };
     /**
      * 重命名列表
@@ -18167,8 +18184,8 @@ var App = /** @class */ (function (_super) {
         // console.log(`oldName: ${oldName}, newName: ${newName}`)
         this.server.renameList(oldName, newName);
         var infos = JSON.parse(JSON.stringify(this.state.listInfos));
-        for (var _i = 0, infos_2 = infos; _i < infos_2.length; _i++) {
-            var info = infos_2[_i];
+        for (var _i = 0, infos_1 = infos; _i < infos_1.length; _i++) {
+            var info = infos_1[_i];
             if (info.name === oldName) {
                 info.name = newName;
                 break;
@@ -18303,34 +18320,50 @@ var App = /** @class */ (function (_super) {
     /**
      * 切换todo的完成状态
      * @param itemName 要切换完成状态的todo名称
-     * @param listName 该todo所在的列表名
+     * @param listName 保存该todo的列表名称
      */
     App.prototype.toggleItemInList = function (itemName, listName) {
+        /** 是否在primary list中进行的操作 */
+        var actionInPrimary = listName === this.primaryListName;
+        /** 是否将todo切换为完成状态 */
+        var switchDone = false;
+        /** item所在的其他列表名称 */
+        var sourceListName = '';
         this.server.toggleItemInList(itemName, listName);
-        // TODO: 这里要改一下其他API的形式以配合listInfos进行更改
-        // this.setState({
-        //     // itemsOfList: this.server.itemsOfList(listName),
-        //     listInfos: this.server.listInfos,
-        // });
-        // this.fetchItems()
         var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
-        todos.forEach(function (todo) {
+        for (var _i = 0, todos_2 = todos; _i < todos_2.length; _i++) {
+            var todo = todos_2[_i];
             if (todo.name === itemName) {
                 todo.done = !todo.done;
+                sourceListName = todo.source ? todo.source : '';
+                break;
             }
-        });
+        }
         var infos = JSON.parse(JSON.stringify(this.state.listInfos));
+        // 从todos中得知状态为“已完成”的todo的数量
         var count = 0;
         todos.forEach(function (todo) {
             if (!todo.done) {
                 count += 1;
             }
         });
-        infos.forEach(function (info) {
+        for (var _a = 0, infos_2 = infos; _a < infos_2.length; _a++) {
+            var info = infos_2[_a];
             if (info.name === listName) {
+                switchDone = count < info.count;
                 info.count = count;
+                break;
             }
-        });
+        }
+        // 同时也要更新todo所在的所有列表中的完成状态
+        for (var _b = 0, infos_3 = infos; _b < infos_3.length; _b++) {
+            var info = infos_3[_b];
+            if (info.name === sourceListName) {
+                this.server.toggleItemInList(itemName, sourceListName);
+                info.count += switchDone ? -1 : 1;
+                break;
+            }
+        }
         this.setState({
             itemsOfList: todos,
             listInfos: infos,
@@ -18649,26 +18682,22 @@ var AreaViewItem = /** @class */ (function (_super) {
     AreaViewItem.prototype.handleDragEnd = function (e) {
         this.props.onDragEnd();
     };
-    AreaViewItem.prototype.itemTemplate = function (item) {
-        if (this.props.isPrimary) {
-            return (React.createElement("div", { className: "todo-item-content-extra" },
-                React.createElement("span", { className: "todo-item-content-source" }, item.source),
-                item.comments && (React.createElement("span", { className: "todo-item-content-comments" }, "\u5907\u6CE8"))));
-        }
-        else {
-            return (React.createElement("div", { className: "todo-item-content-extra" },
-                item.inPrimaryList && (React.createElement("span", { className: "todo-item-content-source" }, "\u6211\u7684\u4E00\u5929")),
-                item.comments && (React.createElement("span", { className: "todo-item-content-comments" }, "\u5907\u6CE8"))));
-        }
-    };
     AreaViewItem.prototype.render = function () {
         var _this = this;
         var item = this.props.item;
         return (React.createElement("li", { draggable: true, className: "todo-item", onClick: function (e) { return _this.props.onItemClicked(e, item.name); }, onDragStart: this.handleDrag, onDragEnd: this.handleDragEnd },
-            React.createElement("div", { className: item.done ? 'custom-checkbox checked' : 'custom-checkbox', onClick: function (e) { return _this.props.onCheckboxClicked(e, item.name); } }, "\u221A"),
-            React.createElement("div", { className: item.done ? 'todo-item-content done' : 'todo-item-content' },
+            React.createElement("div", { className: item.done
+                    ? 'custom-checkbox checked'
+                    : 'custom-checkbox', onClick: function (e) { return _this.props.onCheckboxClicked(e, item.name); } }, "\u221A"),
+            React.createElement("div", { className: item.done
+                    ? 'todo-item-content done'
+                    : 'todo-item-content' },
                 React.createElement("span", null, item.name),
-                this.itemTemplate(item))));
+                React.createElement("div", { className: "todo-item-content-extra" },
+                    item.inPrimaryList && (React.createElement("span", { className: "todo-item-content-source" }, this.props.isPrimary
+                        ? item.source
+                        : '我的一天')),
+                    item.comments && (React.createElement("span", { className: "todo-item-content-comments" }, "\u5907\u6CE8"))))));
     };
     return AreaViewItem;
 }(React.Component));
@@ -19400,12 +19429,7 @@ var DataServer = /** @class */ (function () {
     Object.defineProperty(DataServer.prototype, "data", {
         /**要保存到本地中的数据 */
         get: function () {
-            return {
-                data: {
-                    lists: this.todoLists,
-                    lastModified: this.listName,
-                },
-            };
+            return { data: { lists: this.todoLists, lastModified: this.listName } };
         },
         enumerable: true,
         configurable: true
@@ -19589,6 +19613,32 @@ var DataServer = /** @class */ (function () {
         }
         this.todoLists.splice(index, 1);
         this.listName = this.todoLists[0].name;
+        this.save();
+    };
+    /**
+     * 将todo标记在primary list中
+     * @param item todo的名称
+     * @param listName todo所在的列表名称
+     */
+    DataServer.prototype.markItemPrimary = function (item, listName) {
+        var index = this.listNameIndex(listName);
+        if (index < 0) {
+            return;
+        }
+        var todos = this.todoLists[index].items;
+        for (var _i = 0, todos_1 = todos; _i < todos_1.length; _i++) {
+            var todo = todos_1[_i];
+            if (typeof item === 'string') {
+                if (todo.name === item) {
+                    todo.inPrimaryList = true;
+                }
+            }
+            else {
+                if (todo.name === item.name) {
+                    todo.inPrimaryList = true;
+                }
+            }
+        }
         this.save();
     };
     /**
@@ -19922,14 +19972,13 @@ var TodoListClass = /** @class */ (function () {
      * 添加新todo项目
      * @param item 要添加的todo项目（有两种表示方式，一个是todo的名称，另一个是todo本身）
      */
-    TodoListClass.prototype.addNewItem = function (item, source) {
+    TodoListClass.prototype.addNewItem = function (item) {
         if (typeof item === 'string') {
             var inOrNot = this.containsItem(item);
             if (inOrNot) {
                 return;
             }
             var newItem = new todo_item_1.TodoItemClass(item);
-            newItem.source = source ? source : this.name;
             this.todoItems.push(newItem);
         }
         else {
@@ -19938,7 +19987,7 @@ var TodoListClass = /** @class */ (function () {
                 return;
             }
             // console.log(`item: ${item}`)
-            this.todoItems.push(new todo_item_1.TodoItemClass(item.name, item.done, item.time, item.inPrimaryList, item.comments, source ? source : item.source));
+            this.todoItems.push(new todo_item_1.TodoItemClass(item.name, item.done, item.time, item.inPrimaryList, item.comments, item.source));
         }
     };
     /**
