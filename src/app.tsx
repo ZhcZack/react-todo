@@ -383,9 +383,18 @@ export class App extends React.Component<AppProps, AppState> {
             })
         }
         this.fetchListInfo()
+
+        // 根据todos的信息来更新detailItem的内容
+        for (let todo of todos) {
+            if (this.state.detailItem && todo.name == this.state.detailItem.name) {
+                this.setState({
+                    detailItem: todo,
+                })
+            }
+        }
         this.setState({
             itemsOfList: todos,
-            detailItem: undefined,
+            // detailItem: undefined,
         })
     }
 
@@ -400,6 +409,11 @@ export class App extends React.Component<AppProps, AppState> {
         }
         const item = JSON.parse(JSON.stringify(this.state.detailItem)) as TodoItem
         this.copyItemToPrimaryList(item, this.state.lastModifiedListName)
+        // 对detail view的直接更改肯定要更新detailItem的内容
+        item.inPrimaryList = true
+        this.setState({
+            detailItem: item,
+        })
     }
 
     /**
