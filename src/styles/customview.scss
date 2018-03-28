@@ -1,112 +1,112 @@
-@import "color";
+@import 'color';
 
 // custom views
 #add-new-list {
-	height: 40px;
-	// display: flex;
-	// align-items: center;
-	padding: 0 10px;
-	cursor: pointer;
-	color: blue;
-	&:hover {
-		background-color: $border-color;
-	}
-	> span {
-		font-size: 1.5em;
-		margin-right: 10px;
-	}
+    height: 40px;
+    // display: flex;
+    // align-items: center;
+    padding: 0 10px;
+    cursor: pointer;
+    color: blue;
+    &:hover {
+        background-color: $border-color;
+    }
+    > span {
+        font-size: 1.5em;
+        margin-right: 10px;
+    }
 }
 
 #add-new-item {
-	margin: 0 20px;
-	padding: 10px 0;
-	height: 60px;
-	display: flex;
-	border-bottom: 1px solid $border-color;
-	> * {
-		height: 30px;
-	}
-	.symbol {
-		font-weight: bold;
-		font-size: 1.5em;
-		color: blue;
-		flex: 0 1 30px;
-		margin-right: 10px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-	#input-area {
-		border: none;
-		flex: 10 1 100px;
-		outline: none;
-	}
-	#close-button {
-		flex: 0 1 30px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		cursor: pointer;
-		&:hover {
-			background-color: $background-color;
-		}
-	}
-	#add-button {
-		flex: 0 1 60px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		cursor: pointer;
-		&:hover {
-			background-color: $background-color;
-		}
-	}
+    margin: 0 20px;
+    padding: 10px 0;
+    height: 60px;
+    display: flex;
+    border-bottom: 1px solid $border-color;
+    > * {
+        height: 30px;
+    }
+    .symbol {
+        font-weight: bold;
+        font-size: 1.5em;
+        color: blue;
+        flex: 0 1 30px;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #input-area {
+        border: none;
+        flex: 10 1 100px;
+        outline: none;
+    }
+    #close-button {
+        flex: 0 1 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        &:hover {
+            background-color: $background-color;
+        }
+    }
+    #add-button {
+        flex: 0 1 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        &:hover {
+            background-color: $background-color;
+        }
+    }
 }
 
 .custom-checkbox {
-	font-size: 1.5rem;
-	width: 30px;
-	height: 30px;
-	margin: 0 10px;
-	border-radius: 50%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border: 1px solid gray;
-	color: transparent;
-	background-color: transparent;
-	cursor: pointer;
-	transition: color 0.3s, background-color 0.3s;
-	&:hover {
-		color: white;
-		background-color: gray;
-	}
-	&.checked {
-		color: white;
-		background-color: green;
-	}
+    font-size: 1.5rem;
+    width: 30px;
+    height: 30px;
+    margin: 0 10px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid gray;
+    color: transparent;
+    background-color: transparent;
+    cursor: pointer;
+    transition: color 0.3s, background-color 0.3s;
+    &:hover {
+        color: white;
+        background-color: gray;
+    }
+    &.checked {
+        color: white;
+        background-color: green;
+    }
 }
 
 #rightmenu {
-	position: absolute;
-	height: auto;
-	width: 90%;
-	margin: 0 5%;
-	border: 1px solid $border-color;
-	display: none;
-	&.appear {
-		display: block;
-	}
-	#rightmenu-delete {
-		border-top: 1px solid $border-color;
-		height: 40px;
-		display: flex;
-		align-items: center;
-		cursor: pointer;
-		color: red;
-		&:hover {
-			background-color: red;
-			color: white;
-		}
-	}
+    position: absolute;
+    height: auto;
+    width: 90%;
+    margin: 0 5%;
+    border: 1px solid $border-color;
+    display: none;
+    &.appear {
+        display: block;
+    }
+    #rightmenu-delete {
+        border-top: 1px solid $border-color;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        color: red;
+        &:hover {
+            background-color: red;
+            color: white;
+        }
+    }
 }

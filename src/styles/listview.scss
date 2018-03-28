@@ -1,46 +1,46 @@
-@import "color";
+@import 'color';
 
 // todo list view
 #listview {
-	width: 280px;
-	position: relative;
-	overflow: hidden;
-	border-right: 1px solid $border-color;
-	ul {
-		list-style-type: none;
-		padding: 10px;
-	}
-	.list-item {
-		height: 40px;
-		display: flex;
-		justify-content: flex-start;
-		align-items: center;
-		cursor: pointer;
-		border: 3px solid transparent;
-		&.active {
-			background-color: $list-active-color;
-			&:hover {
-				background-color: $list-hover-color;
-			}
-			.item-name {
-				font-weight: bold;
-			}
-		}
-		&:hover {
-			background-color: $border-color;
-		}
-		&.drag-enter {
-			border: 3px solid blue;
-		}
-		> * {
-			pointer-events: none;
-		}
-		.item-name {
-			flex: 9 1 100px;
-		}
-		.number-of-items {
-			flex: 1 1 20px;
-			text-align: center;
-		}
-	}
+    width: 280px;
+    position: relative;
+    overflow: hidden;
+    border-right: 1px solid $border-color;
+    ul {
+        list-style-type: none;
+        padding: 10px;
+    }
+    .list-item {
+        height: 40px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        cursor: pointer;
+        border: 3px solid transparent;
+        &.active {
+            background-color: $list-active-color;
+            &:hover {
+                background-color: $list-hover-color;
+            }
+            .item-name {
+                font-weight: bold;
+            }
+        }
+        &:hover {
+            background-color: $border-color;
+        }
+        &.drag-enter {
+            border: 3px solid blue;
+        }
+        > * {
+            pointer-events: none;
+        }
+        .item-name {
+            flex: 9 1 100px;
+        }
+        .number-of-items {
+            flex: 1 1 20px;
+            text-align: center;
+        }
+    }
 }
