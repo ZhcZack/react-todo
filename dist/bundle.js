@@ -18197,6 +18197,22 @@ var App = /** @class */ (function (_super) {
                 break;
             }
         }
+        // 同样的问题，要区分detail item是来自于primary list还是其他列表，又得分情况处理。
+        var itemIndex = -1;
+        for (var i = 0; i < todos.length; i++) {
+            if (todos[i].name === item.name) {
+                // 如果来自于primary list则需要删掉这个todo
+                if (this.state.lastModifiedListName === this.primaryListName) {
+                    itemIndex = i;
+                }
+                todos[i].inPrimaryList = false;
+                detailItem = todos[i];
+                break;
+            }
+        }
+        if (itemIndex > -1) {
+            todos.splice(itemIndex, 1);
+        }
         this.setState({
             listInfos: infos,
             itemsOfList: todos,
@@ -18218,9 +18234,19 @@ var App = /** @class */ (function (_super) {
         this.server.markItemPrimaryStatus(itemData.name, sourceListName, true);
         for (var _i = 0, todos_2 = todos; _i < todos_2.length; _i++) {
             var todo = todos_2[_i];
-            if (todo.name === itemData.name) {
+            if (todo.name == itemData.name) {
                 todo.inPrimaryList = true;
             }
+        }
+        if (sourceListName == this.primaryListName) {
+            todos.push({
+                name: itemData.name,
+                done: itemData.done,
+                time: itemData.time,
+                inPrimaryList: true,
+                comments: itemData.comments,
+                source: this.primaryListName,
+            });
         }
         this.fetchListInfo();
         this.setState({
@@ -18394,17 +18420,22 @@ var App = /** @class */ (function (_super) {
         var switchDone = false;
         /** item所在的其他列表名称 */
         var sourceListName = "";
-        this.server.toggleItemInList(itemName, listName);
+        var item = undefined;
         var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
+        var infos = JSON.parse(JSON.stringify(this.state.listInfos));
         for (var _i = 0, todos_3 = todos; _i < todos_3.length; _i++) {
             var todo = todos_3[_i];
             if (todo.name === itemName) {
+                item = Object.assign({}, todo);
                 todo.done = !todo.done;
                 sourceListName = todo.source ? todo.source : "";
                 break;
             }
         }
-        var infos = JSON.parse(JSON.stringify(this.state.listInfos));
+        if (!item) {
+            console.log("item: " + item);
+            return;
+        }
         // 从todos中得知状态为“已完成”的todo的数量
         var count = 0;
         todos.forEach(function (todo) {
@@ -18416,17 +18447,47 @@ var App = /** @class */ (function (_super) {
             var info = infos_3[_a];
             if (info.name === listName) {
                 switchDone = count < info.count;
-                info.count = count;
                 break;
             }
         }
-        // 同时也要更新todo所在的所有列表中的完成状态
-        for (var _b = 0, infos_4 = infos; _b < infos_4.length; _b++) {
-            var info = infos_4[_b];
-            if (info.name === sourceListName) {
-                this.server.toggleItemInList(itemName, sourceListName);
-                info.count += switchDone ? -1 : 1;
-                break;
+        /**
+         * 三种情况：
+         * 1：点击的todo在primary list中：
+         *  1.1：在primary list中点击
+         *  1.2：在其他列表中点击
+         * 2:点击的todo在其他列表中
+         * 三种情况分别处理
+         * （我貌似把这个东西搞得挺麻烦，这才一种特殊情况啊，要是后面多起来了不是要死人的节奏？）
+         */
+        if (item.inPrimaryList) {
+            if (actionInPrimary) {
+                this.server.toggleItemInList(item.name, this.primaryListName);
+                this.server.toggleItemInList(item.name, sourceListName);
+                for (var _b = 0, infos_4 = infos; _b < infos_4.length; _b++) {
+                    var info = infos_4[_b];
+                    if (info.name === this.primaryListName || info.name === sourceListName) {
+                        info.count += switchDone ? -1 : 1;
+                    }
+                }
+            }
+            else {
+                this.server.toggleItemInList(item.name, this.primaryListName);
+                this.server.toggleItemInList(item.name, listName);
+                for (var _c = 0, infos_5 = infos; _c < infos_5.length; _c++) {
+                    var info = infos_5[_c];
+                    if (info.name === this.primaryListName || info.name === sourceListName) {
+                        info.count += switchDone ? -1 : 1;
+                    }
+                }
+            }
+        }
+        else {
+            this.server.toggleItemInList(item.name, listName);
+            for (var _d = 0, infos_6 = infos; _d < infos_6.length; _d++) {
+                var info = infos_6[_d];
+                if (info.name === listName) {
+                    info.count = count;
+                }
             }
         }
         this.setState({
