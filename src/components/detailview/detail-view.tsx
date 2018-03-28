@@ -1,45 +1,45 @@
-import * as React from "react";
-import { TodoItem } from "../../model/interface";
+import * as React from 'react'
+import { TodoItem } from '../../model/interface'
 
 interface DetailViewProps {
-    item?: TodoItem;
-    onCloseClicked(e: React.MouseEvent<HTMLSpanElement>): void;
-    onDeleteClicked(e: React.MouseEvent<HTMLSpanElement>): void;
-    onToggleClicked(e: React.MouseEvent<HTMLSpanElement>): void;
-    onCommentsChange(value: string): void;
-    onCopyToPrimary(e: React.MouseEvent<HTMLParagraphElement>): void;
-    onCancelCopyToPrimary(e: React.MouseEvent<HTMLParagraphElement>): void;
-    listName: string;
+    item?: TodoItem
+    onCloseClicked(e: React.MouseEvent<HTMLSpanElement>): void
+    onDeleteClicked(e: React.MouseEvent<HTMLSpanElement>): void
+    onToggleClicked(e: React.MouseEvent<HTMLSpanElement>): void
+    onCommentsChange(value: string): void
+    onCopyToPrimary(e: React.MouseEvent<HTMLParagraphElement>): void
+    onCancelCopyToPrimary(e: React.MouseEvent<HTMLParagraphElement>): void
+    listName: string
 }
 
 interface DetailViewState {
-    comments: string;
+    comments: string
 }
 
 export class DetailView extends React.Component<DetailViewProps, DetailViewState> {
     constructor(props: DetailViewProps) {
-        super(props);
+        super(props)
         this.state = {
             comments: this.props.item
-                ? this.props.item.comments ? this.props.item.comments : ""
-                : "",
-        };
+                ? this.props.item.comments ? this.props.item.comments : ''
+                : '',
+        }
     }
 
     componentWillReceiveProps(newProps: DetailViewProps) {
         this.setState({
-            comments: newProps.item ? (newProps.item.comments ? newProps.item.comments : "") : "",
-        });
+            comments: newProps.item ? (newProps.item.comments ? newProps.item.comments : '') : '',
+        })
     }
 
     render() {
-        const item = this.props.item;
+        const item = this.props.item
         if (!item) {
-            return null;
+            return null
         }
-        const checkboxStatus = `custom-checkbox ${item.done ? "checked" : ""}`;
+        const checkboxStatus = `custom-checkbox ${item.done ? 'checked' : ''}`
         return (
-            <div id="detailview" className={item ? "" : "hide"}>
+            <div id="detailview" className={item ? '' : 'hide'}>
                 <div className="title-content">
                     <div className={checkboxStatus} onClick={this.props.onToggleClicked}>
                         √
@@ -66,12 +66,12 @@ export class DetailView extends React.Component<DetailViewProps, DetailViewState
                     className="detailitem-comments"
                     value={this.state.comments}
                     onChange={e => {
-                        e.stopPropagation();
-                        this.setState({ comments: e.target.value });
+                        e.stopPropagation()
+                        this.setState({ comments: e.target.value })
                     }}
                     onBlur={e => {
-                        e.stopPropagation();
-                        this.props.onCommentsChange(this.state.comments);
+                        e.stopPropagation()
+                        this.props.onCommentsChange(this.state.comments)
                     }}
                     placeholder="添加备注"
                 />
@@ -85,6 +85,6 @@ export class DetailView extends React.Component<DetailViewProps, DetailViewState
                     </span>
                 </div>
             </div>
-        );
+        )
     }
 }

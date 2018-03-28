@@ -23,10 +23,7 @@ interface AreaViewContentProps {
 
 interface AreaViewContentState {}
 
-export class AreaViewContent extends React.Component<
-    AreaViewContentProps,
-    AreaViewContentState
-> {
+export class AreaViewContent extends React.Component<AreaViewContentProps, AreaViewContentState> {
     private createList(): (JSX.Element | null)[] {
         return this.props.items.map(item => {
             if (this.props.showDoneItems) {

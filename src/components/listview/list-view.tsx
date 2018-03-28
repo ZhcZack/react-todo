@@ -1,19 +1,19 @@
-import * as React from "react";
-import { ListContent } from "./list-content";
-import { ListInfo } from "../../model/interface";
+import * as React from 'react'
+import { ListContent } from './list-content'
+import { ListInfo } from '../../model/interface'
 
 interface ListViewProps {
     /**当前进行处理的列表名称 */
     // currentListName: string
     /**所有列表名称 */
-    listInfos: ListInfo[];
+    listInfos: ListInfo[]
     /**添加新列表 */
-    addNewList(name: string): void;
+    addNewList(name: string): void
     /**切换area view显示的列表 */
-    switchList(listName: string): void;
-    onDrop(targetListName: string): void;
-    actionsDisplay: boolean;
-    onActionsDisplayClick(): void;
+    switchList(listName: string): void
+    onDrop(targetListName: string): void
+    actionsDisplay: boolean
+    onActionsDisplayClick(): void
 }
 
 interface ListViewState {}
@@ -23,15 +23,15 @@ interface ListViewState {}
  */
 export class ListView extends React.Component<ListViewProps, ListViewState> {
     /**用于命名新列表的计数器 */
-    private count: number;
+    private count: number
 
     constructor(props: ListViewProps) {
-        super(props);
-        this.count = -1;
+        super(props)
+        this.count = -1
 
         // bind methods
-        this.addNewList = this.addNewList.bind(this);
-        this.handleClick = this.handleClick.bind(this);
+        this.addNewList = this.addNewList.bind(this)
+        this.handleClick = this.handleClick.bind(this)
     }
 
     /**
@@ -39,26 +39,26 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
      * @param e `click`事件
      */
     private handleClick(e: React.MouseEvent<HTMLLIElement>, name: string) {
-        e.stopPropagation();
+        e.stopPropagation()
         // console.log('handleClick: name is ' + name);
-        this.props.switchList(name);
+        this.props.switchList(name)
     }
 
     /**
      * 添加新列表
      */
     private addNewList(e: React.MouseEvent<HTMLDivElement>) {
-        e.stopPropagation();
-        let name = this.getListName();
-        this.props.addNewList(name);
+        e.stopPropagation()
+        let name = this.getListName()
+        this.props.addNewList(name)
     }
 
     /**
      * 返回添加的新列表的名称
      */
     private getListName(): string {
-        this.count++;
-        return `无命名清单${this.count > 0 ? this.count : ""}`;
+        this.count++
+        return `无命名清单${this.count > 0 ? this.count : ''}`
     }
 
     render() {
@@ -66,8 +66,8 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
             <div
                 id="listview"
                 onClick={e => {
-                    e.stopPropagation();
-                    this.props.actionsDisplay && this.props.onActionsDisplayClick();
+                    e.stopPropagation()
+                    this.props.actionsDisplay && this.props.onActionsDisplayClick()
                 }}>
                 <ListContent
                     // currentListName={this.props.currentListName}
@@ -79,6 +79,6 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
                     <span>+</span>新建清单
                 </div>
             </div>
-        );
+        )
     }
 }

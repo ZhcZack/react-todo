@@ -77,8 +77,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
                 className={this.props.shrink ? 'shrink' : ''}
                 onClick={e => {
                     e.stopPropagation()
-                    this.props.actionsShouldDisplay &&
-                        this.props.onActionsDisplayClick()
+                    this.props.actionsShouldDisplay && this.props.onActionsDisplayClick()
                 }}>
                 <EditableHead
                     isPrimaryList={listInfo.isPrimary}
@@ -180,10 +179,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
      */
     private addNewItem(e: React.MouseEvent<HTMLSpanElement>) {
         e.stopPropagation()
-        this.props.addNewItemInList(
-            this.state.inputValue,
-            this.props.listInfo.name,
-        )
+        this.props.addNewItemInList(this.state.inputValue, this.props.listInfo.name)
         this.setState({
             inputValue: '',
         })
@@ -203,10 +199,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
      * @param e 鼠标点击事件
      * @param name 选中`TodoItem`的名称
      */
-    private displayDetailView(
-        e: React.MouseEvent<HTMLLIElement>,
-        name: string,
-    ) {
+    private displayDetailView(e: React.MouseEvent<HTMLLIElement>, name: string) {
         this.props.itemClicked(name, this.props.listInfo.name)
     }
 }

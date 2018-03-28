@@ -8,10 +8,7 @@ interface AreaViewItemProps {
     /**todo点击事件，用于显示详细信息 */
     onItemClicked(e: React.MouseEvent<HTMLLIElement>, itemName: string): void
     /**checkbox点击事件，用于切换todo的完成状态 */
-    onCheckboxClicked(
-        e: React.MouseEvent<HTMLDivElement>,
-        itemName: string,
-    ): void
+    onCheckboxClicked(e: React.MouseEvent<HTMLDivElement>, itemName: string): void
     /**拖拽开始事件的处理方法 */
     onDragStart(data: string): void
     /**拖拽结束事件的处理方法 */
@@ -56,34 +53,21 @@ export class AreaViewItem extends React.Component<AreaViewItemProps, {}> {
                 onDragStart={this.handleDrag}
                 onDragEnd={this.handleDragEnd}>
                 <div
-                    className={
-                        item.done
-                            ? 'custom-checkbox checked'
-                            : 'custom-checkbox'
-                    }
+                    className={item.done ? 'custom-checkbox checked' : 'custom-checkbox'}
                     onClick={e => this.props.onCheckboxClicked(e, item.name)}>
                     √
                 </div>
-                <div
-                    className={
-                        item.done
-                            ? 'todo-item-content done'
-                            : 'todo-item-content'
-                    }>
+                <div className={item.done ? 'todo-item-content done' : 'todo-item-content'}>
                     <span>{item.name}</span>
                     {
                         <div className="todo-item-content-extra">
                             {item.inPrimaryList && (
                                 <span className="todo-item-content-source">
-                                    {this.props.isPrimary
-                                        ? item.source
-                                        : '我的一天'}
+                                    {this.props.isPrimary ? item.source : '我的一天'}
                                 </span>
                             )}
                             {item.comments && (
-                                <span className="todo-item-content-comments">
-                                    备注
-                                </span>
+                                <span className="todo-item-content-comments">备注</span>
                             )}
                         </div>
                     }
