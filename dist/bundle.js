@@ -17938,17 +17938,17 @@ var App = /** @class */ (function (_super) {
     __extends(App, _super);
     function App(props) {
         var _this = _super.call(this, props) || this;
-        _this.primaryListName = '我的一天';
+        _this.primaryListName = "我的一天";
         _this.server = new data_server_1.DataServer();
         _this.state = {
-            lastModifiedListName: '',
+            lastModifiedListName: "",
             listInfos: [],
             itemsOfList: [],
             detailItem: undefined,
             // colorTheme: this.server.themeForList(this.server.lastModified),
             actionsShouldDisplay: false,
             alertShouldDisplay: false,
-            alertMessage: '',
+            alertMessage: "",
         };
         // bind methods
         _this.switchList = _this.switchList.bind(_this);
@@ -18006,13 +18006,13 @@ var App = /** @class */ (function (_super) {
                 var items = JSON.parse(_this.server.itemsOfList(listName));
                 var message = _this.server.loadError;
                 if (message) {
-                    rej('local data error');
+                    rej("local data error");
                 }
                 if (Array.isArray(items)) {
                     res(items);
                 }
                 else {
-                    rej('local data error');
+                    rej("local data error");
                 }
                 items.forEach(function (item) {
                     if (item.name === undefined ||
@@ -18020,7 +18020,7 @@ var App = /** @class */ (function (_super) {
                         item.time === undefined ||
                         item.inPrimaryList === undefined ||
                         item.source === undefined) {
-                        rej('local data error');
+                        rej("local data error");
                     }
                 });
             });
@@ -18038,7 +18038,7 @@ var App = /** @class */ (function (_super) {
                 // console.log('error')
                 _this.setState({
                     alertShouldDisplay: message !== undefined,
-                    alertMessage: message ? message : '',
+                    alertMessage: message ? message : "",
                 });
             });
         });
@@ -18091,7 +18091,7 @@ var App = /** @class */ (function (_super) {
         p.then(function (message) {
             _this.setState({
                 alertShouldDisplay: message !== undefined,
-                alertMessage: message ? message : '',
+                alertMessage: message ? message : "",
             });
         });
     };
@@ -18166,15 +18166,14 @@ var App = /** @class */ (function (_super) {
      * 将todo项目移出primary list
      * @param e 鼠标点击事件
      */
-    App.prototype.cancelCopyToPrimaryList = function (e) {
-        e.stopPropagation();
+    App.prototype.cancelCopyToPrimaryList = function () {
         if (!this.state.detailItem) {
             return;
         }
         var item = JSON.parse(JSON.stringify(this.state.detailItem));
         var infos = JSON.parse(JSON.stringify(this.state.listInfos));
         var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
-        var currentList = '';
+        var currentList = "";
         var detailItem = undefined;
         for (var _i = 0, infos_1 = infos; _i < infos_1.length; _i++) {
             var info = infos_1[_i];
@@ -18266,8 +18265,7 @@ var App = /** @class */ (function (_super) {
      * 从detail view中将todo复制到primary list中
      * @param e 鼠标点击事件
      */
-    App.prototype.copyItemToPrimaryListFromDetailView = function (e) {
-        e.stopPropagation();
+    App.prototype.copyItemToPrimaryListFromDetailView = function () {
         if (!this.state.detailItem) {
             return;
         }
@@ -18376,7 +18374,7 @@ var App = /** @class */ (function (_super) {
             name: listName,
             count: 0,
             isActive: true,
-            theme: '#87cefa',
+            theme: "#87cefa",
             isPrimary: false,
         });
         this.setState({
@@ -18409,7 +18407,7 @@ var App = /** @class */ (function (_super) {
         items.push({
             name: itemName,
             done: false,
-            time: new Date().toLocaleDateString().split(' ')[0],
+            time: new Date().toLocaleDateString().split(" ")[0],
             comments: undefined,
             source: listName,
             inPrimaryList: listName === this.primaryListName,
@@ -18432,7 +18430,7 @@ var App = /** @class */ (function (_super) {
         /** 是否将todo切换为完成状态 */
         var switchDone = false;
         /** item所在的其他列表名称 */
-        var sourceListName = '';
+        var sourceListName = "";
         var item = undefined;
         var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
         var infos = JSON.parse(JSON.stringify(this.state.listInfos));
@@ -18441,7 +18439,7 @@ var App = /** @class */ (function (_super) {
             if (todo.name === itemName) {
                 item = Object.assign({}, todo);
                 todo.done = !todo.done;
-                sourceListName = todo.source ? todo.source : '';
+                sourceListName = todo.source ? todo.source : "";
                 break;
             }
         }
@@ -18550,8 +18548,7 @@ var App = /** @class */ (function (_super) {
      * 处理detail view里的“关闭detail view”请求
      * @param e 鼠标点击事件
      */
-    App.prototype.handleCloseFromDetailView = function (e) {
-        e.stopPropagation();
+    App.prototype.handleCloseFromDetailView = function () {
         this.setState({
             detailItem: undefined,
         });
@@ -18560,8 +18557,7 @@ var App = /** @class */ (function (_super) {
      * 处理detail view里的“删除todo事项”请求
      * @param e 鼠标点击事件
      */
-    App.prototype.handleDeleteFromDetailView = function (e) {
-        e.stopPropagation();
+    App.prototype.handleDeleteFromDetailView = function () {
         if (!this.state.detailItem) {
             return;
         }
@@ -19185,53 +19181,476 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var detailActions_1 = __webpack_require__(/*! ./detailActions */ "./src/components/detailview/detailActions.tsx");
+var detailComments_1 = __webpack_require__(/*! ./detailComments */ "./src/components/detailview/detailComments.tsx");
+var detailPrimaryCopy_1 = __webpack_require__(/*! ./detailPrimaryCopy */ "./src/components/detailview/detailPrimaryCopy.tsx");
+/**
+ * detail view的样式
+ */
+var detailViewStyles = {
+    width: 280,
+    position: "relative",
+    overflow: "hidden",
+    borderLeft: "1px solid rgba(206, 197, 197, 0.5)",
+    backgroundColor: "rgba(206, 197, 197, 0.2)",
+};
+var detailViewDisappear = {
+    width: 0,
+};
 var DetailView = /** @class */ (function (_super) {
     __extends(DetailView, _super);
-    function DetailView(props) {
-        var _this = _super.call(this, props) || this;
-        _this.state = {
-            comments: _this.props.item
-                ? _this.props.item.comments ? _this.props.item.comments : ''
-                : '',
-        };
-        return _this;
+    function DetailView() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    DetailView.prototype.componentWillReceiveProps = function (newProps) {
-        this.setState({
-            comments: newProps.item ? (newProps.item.comments ? newProps.item.comments : '') : '',
-        });
-    };
     DetailView.prototype.render = function () {
-        var _this = this;
         var item = this.props.item;
         if (!item) {
             return null;
         }
-        var checkboxStatus = "custom-checkbox " + (item.done ? 'checked' : '');
-        return (React.createElement("div", { id: "detailview", className: item ? '' : 'hide' },
+        var checkboxStatus = "custom-checkbox " + (item.done ? "checked" : "");
+        return (React.createElement("div", { id: "detailview", style: detailViewStyles },
             React.createElement("div", { className: "title-content" },
                 React.createElement("div", { className: checkboxStatus, onClick: this.props.onToggleClicked }, "\u221A"),
                 React.createElement("span", { className: "title" }, item.name)),
-            React.createElement("div", { className: "primary-copy-area" }, item.inPrimaryList ? (React.createElement("div", null,
-                React.createElement("p", null, "\u5DF2\u6DFB\u52A0\u5230\u201C\u6211\u7684\u4E00\u5929\u201D"),
-                React.createElement("span", { className: "cancel-button", onClick: this.props.onCancelCopyToPrimary }, "X"))) : (React.createElement("p", { className: "copy-button", onClick: this.props.onCopyToPrimary }, "\u6DFB\u52A0\u5230\u201C\u6211\u7684\u4E00\u5929\u201D"))),
-            React.createElement("textarea", { className: "detailitem-comments", value: this.state.comments, onChange: function (e) {
-                    e.stopPropagation();
-                    _this.setState({ comments: e.target.value });
-                }, onBlur: function (e) {
-                    e.stopPropagation();
-                    _this.props.onCommentsChange(_this.state.comments);
-                }, placeholder: "\u6DFB\u52A0\u5907\u6CE8" }),
-            React.createElement("div", { className: "actions" },
-                React.createElement("span", { className: "disappear", onClick: this.props.onCloseClicked }, ">"),
-                React.createElement("span", { className: "create-time" },
-                    "\u521B\u5EFA\u4E8E",
-                    item.time),
-                React.createElement("span", { className: "delete", onClick: this.props.onDeleteClicked }, "\u5220\u9664"))));
+            React.createElement(detailPrimaryCopy_1.default, { item: item, onCancelCopyToPrimary: this.props.onCancelCopyToPrimary, onCopyToPrimary: this.props.onCopyToPrimary }),
+            React.createElement(detailComments_1.default, { onCommentsChange: this.props.onCommentsChange, initComments: this.props.item ? (this.props.item.comments ? this.props.item.comments : "") : "" }),
+            React.createElement(detailActions_1.default, { onCloseClicked: this.props.onCloseClicked, onDeleteClicked: this.props.onDeleteClicked, item: item })));
     };
     return DetailView;
 }(React.Component));
 exports.DetailView = DetailView;
+
+
+/***/ }),
+
+/***/ "./src/components/detailview/detailActions.tsx":
+/*!*****************************************************!*\
+  !*** ./src/components/detailview/detailActions.tsx ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+/**
+ * 整个actions bar的样式
+ */
+var actionStyles = {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    width: "100%",
+    height: 40,
+    display: "flex",
+    backgroundColor: "white",
+};
+/**
+ * 两侧按钮的样式
+ */
+var sideButtonStyles = {
+    flex: "1 1 30px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    cursor: "pointer",
+};
+/**
+ * 两侧按钮hover样式
+ */
+var sideButtonHover = {
+    backgroundColor: "rgba(206, 197, 197, 0.5)",
+};
+/**
+ * 中间展示创建时间的标签的样式
+ */
+var timeLabelStyles = {
+    flex: "8 1 auto",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+};
+var DetailActions = /** @class */ (function (_super) {
+    __extends(DetailActions, _super);
+    function DetailActions(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            disappearHover: false,
+            deleteHover: false,
+        };
+        // bind methods
+        _this.handleCloseMouseEnter = _this.handleCloseMouseEnter.bind(_this);
+        _this.handleCloseMouseLeave = _this.handleCloseMouseLeave.bind(_this);
+        _this.handleDeleteMouseEnter = _this.handleDeleteMouseEnter.bind(_this);
+        _this.handleDeleteMouseLeave = _this.handleDeleteMouseLeave.bind(_this);
+        _this.handleCloseClicked = _this.handleCloseClicked.bind(_this);
+        _this.handleDeleteClicked = _this.handleDeleteClicked.bind(_this);
+        return _this;
+    }
+    DetailActions.prototype.handleCloseMouseEnter = function (e) {
+        e.stopPropagation();
+        this.setState({
+            disappearHover: true,
+        });
+    };
+    DetailActions.prototype.handleCloseMouseLeave = function (e) {
+        e.stopPropagation();
+        this.setState({
+            disappearHover: false,
+        });
+    };
+    DetailActions.prototype.handleDeleteMouseEnter = function (e) {
+        e.stopPropagation();
+        this.setState({
+            deleteHover: true,
+        });
+    };
+    DetailActions.prototype.handleDeleteMouseLeave = function (e) {
+        e.stopPropagation();
+        this.setState({
+            deleteHover: false,
+        });
+    };
+    /**
+     * 关闭detail view
+     * @param e 鼠标点击事件
+     */
+    DetailActions.prototype.handleCloseClicked = function (e) {
+        e.stopPropagation();
+        this.props.onCloseClicked();
+    };
+    /**
+     * 删除对应的todo
+     * @param e 鼠标点击事件
+     */
+    DetailActions.prototype.handleDeleteClicked = function (e) {
+        e.stopPropagation();
+        this.props.onDeleteClicked();
+    };
+    DetailActions.prototype.render = function () {
+        var disappearStyle = lib_1.mix(sideButtonStyles);
+        var deleteStyle = lib_1.mix(sideButtonStyles);
+        if (this.state.disappearHover) {
+            disappearStyle = lib_1.mix(disappearStyle, sideButtonHover);
+        }
+        if (this.state.deleteHover) {
+            deleteStyle = lib_1.mix(deleteStyle, sideButtonHover);
+        }
+        return (React.createElement("div", { style: actionStyles },
+            React.createElement("span", { style: disappearStyle, onClick: this.handleCloseClicked, onMouseEnter: this.handleCloseMouseEnter, onMouseLeave: this.handleCloseMouseLeave }, ">"),
+            React.createElement("span", { style: timeLabelStyles },
+                "\u521B\u5EFA\u4E8E",
+                this.props.item.time),
+            React.createElement("span", { style: deleteStyle, onClick: this.handleDeleteClicked, onMouseEnter: this.handleDeleteMouseEnter, onMouseLeave: this.handleDeleteMouseLeave }, "\u5220\u9664")));
+    };
+    return DetailActions;
+}(React.Component));
+exports.default = DetailActions;
+
+
+/***/ }),
+
+/***/ "./src/components/detailview/detailComments.tsx":
+/*!******************************************************!*\
+  !*** ./src/components/detailview/detailComments.tsx ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/**
+ * 备注区域的样式
+ */
+var commentStyles = {
+    width: "90%",
+    height: "calc(30vh)",
+    margin: "5%",
+    padding: 10,
+    resize: "none",
+    scrollBehavior: "auto",
+    borderColor: "rgba(206, 197, 197, 0.5)",
+    outline: "none",
+};
+var DetailComments = /** @class */ (function (_super) {
+    __extends(DetailComments, _super);
+    function DetailComments(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            comments: _this.props.initComments,
+        };
+        // bind methods
+        _this.handleCommentsChange = _this.handleCommentsChange.bind(_this);
+        _this.handleCommentsOnBlur = _this.handleCommentsOnBlur.bind(_this);
+        return _this;
+    }
+    DetailComments.prototype.componentWillReceiveProps = function (newProps) {
+        this.setState({
+            comments: newProps.initComments,
+        });
+    };
+    /**
+     * 更新comments的值
+     * @param e 键盘输入事件
+     */
+    DetailComments.prototype.handleCommentsChange = function (e) {
+        e.stopPropagation();
+        this.setState({ comments: e.target.value });
+    };
+    /**
+     * textarea失去标点的时候更新todo的备注
+     * @param e 光标移出事件
+     */
+    DetailComments.prototype.handleCommentsOnBlur = function (e) {
+        e.stopPropagation();
+        this.props.onCommentsChange(this.state.comments);
+    };
+    DetailComments.prototype.render = function () {
+        return (React.createElement("textarea", { style: commentStyles, value: this.state.comments, onChange: this.handleCommentsChange, onBlur: this.handleCommentsOnBlur, placeholder: "\u6DFB\u52A0\u5907\u6CE8" }));
+    };
+    return DetailComments;
+}(React.Component));
+exports.default = DetailComments;
+
+
+/***/ }),
+
+/***/ "./src/components/detailview/detailPrimaryCopy.tsx":
+/*!*********************************************************!*\
+  !*** ./src/components/detailview/detailPrimaryCopy.tsx ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+var primaryStyles = {
+    width: "90%",
+    height: 40,
+    margin: "5%",
+    display: "flex",
+    border: "1px solid ,rgba(206, 197, 197, 0.5)",
+    backgroundColor: "white",
+};
+/**
+ * copy area直接子元素基本样式
+ */
+var directChildStyles = {
+    width: "100%",
+    display: "flex",
+};
+/**
+ * 添加到primary list后文字的样式
+ */
+var textLabelStyles = {
+    color: "blue",
+    flex: "1 0 100px",
+    display: "flex",
+    alignItems: "center",
+    padding: 10,
+};
+/**
+ * “取消添加到primary list”按钮的样式
+ */
+var cancelButtonStyles = {
+    flex: "0 0 40px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: "0.8em",
+    cursor: "pointer",
+};
+/**
+ * “添加到primary list”按钮的样式
+ */
+var copyButtonStyles = {
+    padding: 10,
+    alignItems: "center",
+    cursor: "pointer",
+};
+var hoverStyles = {
+    backgroundColor: "rgba(206, 197, 197, 0.2)",
+};
+var DetailPrimaryCopy = /** @class */ (function (_super) {
+    __extends(DetailPrimaryCopy, _super);
+    function DetailPrimaryCopy(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            cancelButtonHover: false,
+            copyButtonHover: false,
+        };
+        // bind methods
+        _this.handleCancelCopyToPrimary = _this.handleCancelCopyToPrimary.bind(_this);
+        _this.handleCopyToPrimary = _this.handleCopyToPrimary.bind(_this);
+        _this.handleCancelButtonMouseEnter = _this.handleCancelButtonMouseEnter.bind(_this);
+        _this.handleCancelButtonMouseLeave = _this.handleCancelButtonMouseLeave.bind(_this);
+        _this.handleCopyButtonMouseEnter = _this.handleCopyButtonMouseEnter.bind(_this);
+        _this.handleCopyButtonMouseLeave = _this.handleCopyButtonMouseLeave.bind(_this);
+        return _this;
+    }
+    /**
+     * 从primary list中移除todo
+     * @param e 鼠标事件
+     */
+    DetailPrimaryCopy.prototype.handleCancelCopyToPrimary = function (e) {
+        e.stopPropagation();
+        this.props.onCancelCopyToPrimary();
+    };
+    /**
+     * 复制copy到primary list中
+     * @param e 鼠标事件
+     */
+    DetailPrimaryCopy.prototype.handleCopyToPrimary = function (e) {
+        e.stopPropagation();
+        this.props.onCopyToPrimary();
+    };
+    DetailPrimaryCopy.prototype.handleCopyButtonMouseEnter = function (e) {
+        e.stopPropagation();
+        this.setState({
+            copyButtonHover: true,
+        });
+    };
+    DetailPrimaryCopy.prototype.handleCopyButtonMouseLeave = function (e) {
+        e.stopPropagation();
+        this.setState({
+            copyButtonHover: false,
+        });
+    };
+    DetailPrimaryCopy.prototype.handleCancelButtonMouseEnter = function (e) {
+        e.stopPropagation();
+        this.setState({
+            cancelButtonHover: true,
+        });
+    };
+    DetailPrimaryCopy.prototype.handleCancelButtonMouseLeave = function (e) {
+        e.stopPropagation();
+        this.setState({
+            cancelButtonHover: false,
+        });
+    };
+    DetailPrimaryCopy.prototype.render = function () {
+        var cancelStyle = lib_1.mix(cancelButtonStyles);
+        var copyStyle = lib_1.mix(copyButtonStyles, directChildStyles);
+        if (this.state.cancelButtonHover) {
+            cancelStyle = lib_1.mix(cancelStyle, hoverStyles);
+        }
+        if (this.state.copyButtonHover) {
+            copyStyle = lib_1.mix(copyStyle, hoverStyles);
+        }
+        return (React.createElement("div", { style: primaryStyles }, this.props.item.inPrimaryList ? (React.createElement("div", { style: directChildStyles },
+            React.createElement("p", { style: textLabelStyles }, "\u5DF2\u6DFB\u52A0\u5230\u201C\u6211\u7684\u4E00\u5929\u201D"),
+            React.createElement("span", { style: cancelStyle, onClick: this.handleCancelCopyToPrimary, onMouseEnter: this.handleCancelButtonMouseEnter, onMouseLeave: this.handleCancelButtonMouseLeave }, "X"))) : (React.createElement("p", { style: copyStyle, onClick: this.handleCopyToPrimary, onMouseEnter: this.handleCopyButtonMouseEnter, onMouseLeave: this.handleCopyButtonMouseLeave }, "\u6DFB\u52A0\u5230\u201C\u6211\u7684\u4E00\u5929\u201D"))));
+    };
+    return DetailPrimaryCopy;
+}(React.Component));
+exports.default = DetailPrimaryCopy;
+
+
+/***/ }),
+
+/***/ "./src/components/listview/addListButton.tsx":
+/*!***************************************************!*\
+  !*** ./src/components/listview/addListButton.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+var styles = {
+    height: 40,
+    padding: "0 10px",
+    cursor: "pointer",
+    color: "blue",
+};
+var hoverStyles = {
+    backgroundColor: "rgba(206, 197, 197, 0.5)",
+};
+var spanStyles = {
+    fontSize: "1.5em",
+    marginRight: 10,
+};
+var AddListButton = /** @class */ (function (_super) {
+    __extends(AddListButton, _super);
+    function AddListButton(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            hover: false,
+        };
+        _this.handleClick = _this.handleClick.bind(_this);
+        return _this;
+    }
+    AddListButton.prototype.handleClick = function (e) {
+        e.stopPropagation();
+        this.props.onClick();
+    };
+    AddListButton.prototype.render = function () {
+        var _this = this;
+        var s = this.state.hover ? lib_1.mix(styles, hoverStyles) : styles;
+        // log(s);
+        return (React.createElement("div", { style: s, onClick: this.props.onClick, onMouseEnter: function (e) {
+                e.stopPropagation();
+                _this.setState({ hover: true });
+            }, onMouseLeave: function (e) {
+                e.stopPropagation();
+                _this.setState({ hover: false });
+            } },
+            React.createElement("span", { style: spanStyles }, "+"),
+            "\u65B0\u5EFA\u6E05\u5355"));
+    };
+    return AddListButton;
+}(React.Component));
+exports.default = AddListButton;
 
 
 /***/ }),
@@ -19258,6 +19677,10 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var list_view_item_1 = __webpack_require__(/*! ./list-view-item */ "./src/components/listview/list-view-item.tsx");
+var styles = {
+    listStyleType: "none",
+    padding: 10,
+};
 var ListContent = /** @class */ (function (_super) {
     __extends(ListContent, _super);
     function ListContent() {
@@ -19265,7 +19688,7 @@ var ListContent = /** @class */ (function (_super) {
     }
     ListContent.prototype.render = function () {
         var _this = this;
-        return (React.createElement("ul", null, this.props.listInfos.map(function (info) { return (React.createElement(list_view_item_1.ListViewItem
+        return (React.createElement("ul", { style: styles }, this.props.listInfos.map(function (info) { return (React.createElement(list_view_item_1.ListViewItem
         // currentListName={this.props.currentListName}
         , { 
             // currentListName={this.props.currentListName}
@@ -19299,10 +19722,65 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+/**
+ * 列表名称的样式
+ */
+var itemNameStyles = {
+    flex: "9 1 100px",
+    pointerEvents: "none",
+};
+var itemNameStylesWithActive = {
+    fontWeight: "bold",
+};
+/**
+ * 表示列表还有多少未完成todo事项数字的样式
+ */
+var itemNumberStyles = {
+    flex: "1 1 20px",
+    textAlign: "center",
+    pointerEvents: "none",
+};
+/**
+ * 列表样式
+ */
+var listItemStyles = {
+    height: 40,
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    cursor: "pointer",
+    border: "3px solid transparent",
+};
+/**
+ * 正常情况下列表hover样式
+ */
+var listItemHover = {
+    backgroundColor: "rgba(206, 197, 197, 0.5)",
+};
+/**
+ * active时列表hover样式
+ */
+var listItemActiveHover = {
+    backgroundColor: "#87ceeb",
+};
+/**
+ * active时列表的背景色样式
+ */
+var listItemStylesWithActive = {
+    backgroundColor: "#abddf1",
+};
+var listItemDragEnter = {
+    border: "3px solid blue",
+};
 var ListViewItem = /** @class */ (function (_super) {
     __extends(ListViewItem, _super);
     function ListViewItem(props) {
         var _this = _super.call(this, props) || this;
+        _this.state = {
+            hover: false,
+            dragEnter: false,
+        };
         // bind methods
         _this.handleDragOver = _this.handleDragOver.bind(_this);
         _this.handleDrop = _this.handleDrop.bind(_this);
@@ -19316,7 +19794,7 @@ var ListViewItem = /** @class */ (function (_super) {
      */
     ListViewItem.prototype.handleDragOver = function (e) {
         e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
+        e.dataTransfer.dropEffect = "move";
     };
     /**
      * 元素“放”在这里的时候，触发这个方法。
@@ -19327,31 +19805,63 @@ var ListViewItem = /** @class */ (function (_super) {
     ListViewItem.prototype.handleDrop = function (e) {
         e.preventDefault();
         var target = e.target;
-        if (target.nodeName.toLowerCase() !== 'li') {
+        if (target.nodeName.toLowerCase() !== "li") {
             if (target.parentElement) {
                 target = target.parentElement;
             }
         }
-        target.classList.remove('drag-enter');
         // const data = e.dataTransfer.getData('text')
         // console.log(`drop data: ${data}`)
         this.props.onDrop(this.props.info.name);
         // console.log('拖拽结束目标列表名称：' + this.props.info.name)
+        this.setState({
+            dragEnter: false,
+        });
     };
     ListViewItem.prototype.handleDragEnter = function (e) {
         var target = e.target;
-        target.classList.add('drag-enter');
+        this.setState({
+            dragEnter: true,
+        });
     };
     ListViewItem.prototype.handleDragLeave = function (e) {
         var target = e.target;
-        target.classList.remove('drag-enter');
+        this.setState({
+            dragEnter: false,
+        });
     };
     ListViewItem.prototype.render = function () {
         var _this = this;
         var isActive = this.props.info.isActive;
-        return (React.createElement("li", { onDragOver: this.handleDragOver, onDrop: this.handleDrop, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, className: isActive ? 'list-item active' : 'list-item', onClick: function (e) { return _this.props.onClick(e, _this.props.info.name); } },
-            React.createElement("span", { className: isActive ? 'item-name animated fadeIn' : 'item-name animated' }, this.props.info.name),
-            React.createElement("span", { className: "number-of-items" }, this.props.info.count > 0 ? this.props.info.count : '')));
+        var isHover = this.state.hover;
+        var listS = listItemStyles;
+        var itemS = itemNameStyles;
+        if (isActive) {
+            if (isHover) {
+                listS = lib_1.mix(listS, listItemActiveHover);
+            }
+            else {
+                listS = lib_1.mix(listS, listItemStylesWithActive);
+            }
+            itemS = lib_1.mix(itemS, itemNameStylesWithActive);
+        }
+        else {
+            if (isHover) {
+                listS = lib_1.mix(listS, listItemHover);
+            }
+        }
+        if (this.state.dragEnter) {
+            listS = lib_1.mix(listS, listItemDragEnter);
+        }
+        return (React.createElement("li", { style: listS, onDragOver: this.handleDragOver, onDrop: this.handleDrop, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onClick: function (e) { return _this.props.onClick(e, _this.props.info.name); }, onMouseEnter: function (e) {
+                e.stopPropagation();
+                _this.setState({ hover: true });
+            }, onMouseLeave: function (e) {
+                e.stopPropagation();
+                _this.setState({ hover: false });
+            } },
+            React.createElement("span", { className: isActive ? "animated fadeIn" : "animated", style: itemS }, this.props.info.name),
+            React.createElement("span", { style: itemNumberStyles }, this.props.info.count > 0 ? this.props.info.count : "")));
     };
     return ListViewItem;
 }(React.Component));
@@ -19382,6 +19892,13 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var list_content_1 = __webpack_require__(/*! ./list-content */ "./src/components/listview/list-content.tsx");
+var addListButton_1 = __webpack_require__(/*! ./addListButton */ "./src/components/listview/addListButton.tsx");
+var AddButtonStyles = {
+    height: 40,
+    padding: "0 10px",
+    cursor: "pointer",
+    color: "blue",
+};
 /**
  * 列表目录
  */
@@ -19407,8 +19924,7 @@ var ListView = /** @class */ (function (_super) {
     /**
      * 添加新列表
      */
-    ListView.prototype.addNewList = function (e) {
-        e.stopPropagation();
+    ListView.prototype.addNewList = function () {
         var name = this.getListName();
         this.props.addNewList(name);
     };
@@ -19417,7 +19933,7 @@ var ListView = /** @class */ (function (_super) {
      */
     ListView.prototype.getListName = function () {
         this.count++;
-        return "\u65E0\u547D\u540D\u6E05\u5355" + (this.count > 0 ? this.count : '');
+        return "\u65E0\u547D\u540D\u6E05\u5355" + (this.count > 0 ? this.count : "");
     };
     ListView.prototype.render = function () {
         var _this = this;
@@ -19430,9 +19946,7 @@ var ListView = /** @class */ (function (_super) {
             , { 
                 // currentListName={this.props.currentListName}
                 listInfos: this.props.listInfos, onClick: this.handleClick, onDrop: this.props.onDrop }),
-            React.createElement("div", { id: "add-new-list", onClick: this.addNewList },
-                React.createElement("span", null, "+"),
-                "\u65B0\u5EFA\u6E05\u5355")));
+            React.createElement(addListButton_1.default, { onClick: this.addNewList })));
     };
     return ListView;
 }(React.Component));
@@ -19543,6 +20057,28 @@ var app_1 = __webpack_require__(/*! ./app */ "./src/app.tsx");
 __webpack_require__(/*! animate.css */ "./node_modules/animate.css/animate.css");
 __webpack_require__(/*! ./styles/index.scss */ "./src/styles/index.scss");
 ReactDOM.render(React.createElement(app_1.App, null), document.getElementById('app'));
+
+
+/***/ }),
+
+/***/ "./src/lib.ts":
+/*!********************!*\
+  !*** ./src/lib.ts ***!
+  \********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.log = console.log.bind(console);
+exports.mix = function () {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    return Object.assign.apply(Object, [{}].concat(args));
+};
 
 
 /***/ }),
