@@ -3,12 +3,13 @@ import { TodoItem } from "../../model/interface";
 import DetailActions from "./detailActions";
 import DetailComments from "./detailComments";
 import DetailPrimaryCopy from "./detailPrimaryCopy";
+import DetailTitleContent from "./detailTitleContent";
 
 interface DetailViewProps {
   item?: TodoItem;
   onCloseClicked(): void;
   onDeleteClicked(): void;
-  onToggleClicked(e: React.MouseEvent<HTMLSpanElement>): void;
+  onToggleClicked(): void;
   onCommentsChange(value: string): void;
   onCopyToPrimary(): void;
   onCancelCopyToPrimary(): void;
@@ -37,15 +38,9 @@ export class DetailView extends React.Component<DetailViewProps, DetailViewState
     if (!item) {
       return null;
     }
-    const checkboxStatus = `custom-checkbox ${item.done ? "checked" : ""}`;
     return (
       <div id="detailview" style={detailViewStyles}>
-        <div className="title-content">
-          <div className={checkboxStatus} onClick={this.props.onToggleClicked}>
-            √
-          </div>
-          <span className="title">{item.name}</span>
-        </div>
+        <DetailTitleContent item={item} onToggleClicked={this.props.onToggleClicked} />
         <DetailPrimaryCopy
           item={item}
           onCancelCopyToPrimary={this.props.onCancelCopyToPrimary}

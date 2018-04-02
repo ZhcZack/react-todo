@@ -221,8 +221,7 @@ export class App extends React.Component<AppProps, AppState> {
    * 弹窗中”确认“按钮的点击处理函数
    * @param e 鼠标事件
    */
-  private handleConfirmClicked(e: React.MouseEvent<HTMLButtonElement>) {
-    e.stopPropagation();
+  private handleConfirmClicked() {
     this.setState(prevState => ({
       alertShouldDisplay: !prevState.alertShouldDisplay,
     }));
@@ -675,8 +674,7 @@ export class App extends React.Component<AppProps, AppState> {
    * 处理detail view里的“切换状态”请求
    * @param e 鼠标点击事件
    */
-  private handleToggleFromDetailView(e: React.MouseEvent<HTMLSpanElement>) {
-    e.stopPropagation();
+  private handleToggleFromDetailView() {
     if (!this.state.detailItem) {
       return;
     }

@@ -18104,8 +18104,7 @@ var App = /** @class */ (function (_super) {
      * 弹窗中”确认“按钮的点击处理函数
      * @param e 鼠标事件
      */
-    App.prototype.handleConfirmClicked = function (e) {
-        e.stopPropagation();
+    App.prototype.handleConfirmClicked = function () {
         this.setState(function (prevState) { return ({
             alertShouldDisplay: !prevState.alertShouldDisplay,
         }); });
@@ -18523,8 +18522,7 @@ var App = /** @class */ (function (_super) {
      * 处理detail view里的“切换状态”请求
      * @param e 鼠标点击事件
      */
-    App.prototype.handleToggleFromDetailView = function (e) {
-        e.stopPropagation();
+    App.prototype.handleToggleFromDetailView = function () {
         if (!this.state.detailItem) {
             return;
         }
@@ -18703,18 +18701,137 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+var containerStyles = {
+    margin: "0 20px",
+    padding: "10px 0",
+    height: 60,
+    display: "flex",
+    borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
+};
+/**
+ * “添加新todo”标志的样式
+ */
+var addSymbolStyles = {
+    fontWeight: "bold",
+    fontSize: "1.5em",
+    color: "blue",
+    flex: "0 1 30px",
+    marginRight: 10,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+};
+/**
+ * 自定义checkbox的样式
+ */
+var checkboxStyles = {
+    fontSize: "1.5rem",
+    width: 30,
+    height: 30,
+    margin: "0 10px",
+    borderRadius: "50%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    border: "1px solid gray",
+    color: "transparent",
+    backgroundColor: "transparent",
+    cursor: "pointer",
+    transition: "color 0.3s, background-color 0.3s",
+};
+/**
+ * 输入框的样式
+ */
+var inputStyles = {
+    border: "none",
+    flex: "10 1 100px",
+    outline: "none",
+};
+/**
+ * "X"按钮的样式
+ */
+var closeButtonStyles = {
+    flex: "0 1 30px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    cursor: "pointer",
+};
+/**
+ * “添加”按钮的样式
+ */
+var addButtonStyles = lib_1.mix(closeButtonStyles, { flex: "0 1 60px" });
+/**
+ * 按钮hover状态的样式
+ */
+var buttonHover = {
+    backgroundColor: "rgba(206, 197, 197, 0.2)",
+};
 var AddNewItem = /** @class */ (function (_super) {
     __extends(AddNewItem, _super);
-    function AddNewItem() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function AddNewItem(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            cancelButtonHover: false,
+            addButtonHover: false,
+        };
+        // bind methods
+        _this.handleAddClicked = _this.handleAddClicked.bind(_this);
+        _this.handleCancelClicked = _this.handleCancelClicked.bind(_this);
+        _this.handleAddButtonMouseEnter = _this.handleAddButtonMouseEnter.bind(_this);
+        _this.handleAddButtonMouseLeave = _this.handleAddButtonMouseLeave.bind(_this);
+        _this.handleCloseButtonMouseEnter = _this.handleCloseButtonMouseEnter.bind(_this);
+        _this.handleCloseButtonMouseLeave = _this.handleCloseButtonMouseLeave.bind(_this);
+        return _this;
     }
+    AddNewItem.prototype.handleCancelClicked = function (e) {
+        e.stopPropagation();
+        this.props.onCancelClicked();
+    };
+    AddNewItem.prototype.handleAddClicked = function (e) {
+        e.stopPropagation();
+        this.props.onAddClicked();
+    };
+    AddNewItem.prototype.handleCloseButtonMouseEnter = function (e) {
+        e.stopPropagation();
+        this.setState({ cancelButtonHover: true });
+    };
+    AddNewItem.prototype.handleCloseButtonMouseLeave = function (e) {
+        e.stopPropagation();
+        this.setState({ cancelButtonHover: false });
+    };
+    AddNewItem.prototype.handleAddButtonMouseEnter = function (e) {
+        e.stopPropagation();
+        this.setState({ addButtonHover: true });
+    };
+    AddNewItem.prototype.handleAddButtonMouseLeave = function (e) {
+        e.stopPropagation();
+        this.setState({ addButtonHover: false });
+    };
     AddNewItem.prototype.render = function () {
-        var emptyValue = this.props.value === '';
-        return (React.createElement("div", { id: "add-new-item" },
-            React.createElement("span", { className: emptyValue ? 'symbol' : 'custom-checkbox' }, emptyValue ? '+' : ''),
-            React.createElement("input", { type: "text", id: "input-area", placeholder: "\u6DFB\u52A0\u4EE3\u529E\u4E8B\u9879", value: this.props.value, onChange: this.props.onValueChange }),
-            React.createElement("span", { id: "close-button", className: emptyValue ? 'hide' : '', onClick: this.props.onCancelClicked }, "X"),
-            React.createElement("span", { id: "add-button", className: emptyValue ? 'hide' : '', onClick: this.props.onAddClicked }, "\u6DFB\u52A0")));
+        var emptyValue = this.props.value === "";
+        var symbolS = emptyValue ? addSymbolStyles : checkboxStyles;
+        var addButtonS = addButtonStyles;
+        var closeButtonS = closeButtonStyles;
+        // 输入框内容为空的时候add和close都不显示
+        if (emptyValue) {
+            addButtonS = lib_1.mix(addButtonS, { display: "none" });
+            closeButtonS = lib_1.mix(closeButtonS, { display: "none" });
+        }
+        // add和close各自hover的情况
+        if (this.state.cancelButtonHover) {
+            closeButtonS = lib_1.mix(closeButtonS, buttonHover);
+        }
+        if (this.state.addButtonHover) {
+            addButtonS = lib_1.mix(addButtonS, buttonHover);
+        }
+        return (React.createElement("div", { style: containerStyles },
+            React.createElement("span", { style: symbolS }, emptyValue ? "+" : ""),
+            React.createElement("input", { type: "text", style: inputStyles, placeholder: "\u6DFB\u52A0\u4EE3\u529E\u4E8B\u9879", value: this.props.value, onChange: this.props.onValueChange }),
+            React.createElement("span", { style: closeButtonS, onClick: this.handleCancelClicked, onMouseEnter: this.handleCloseButtonMouseEnter, onMouseLeave: this.handleCloseButtonMouseLeave }, "X"),
+            React.createElement("span", { style: addButtonS, onClick: this.handleAddClicked, onMouseEnter: this.handleAddButtonMouseEnter, onMouseLeave: this.handleAddButtonMouseLeave }, "\u6DFB\u52A0")));
     };
     return AddNewItem;
 }(React.Component));
@@ -18745,6 +18862,13 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var area_view_item_1 = __webpack_require__(/*! ./area-view-item */ "./src/components/areaview/area-view-item.tsx");
+var viewStyles = {
+    maxHeight: "calc(100vh - 200px -60px)",
+    overflow: "auto",
+};
+var viewListStyles = {
+    margin: "0 20px",
+};
 var AreaViewContent = /** @class */ (function (_super) {
     __extends(AreaViewContent, _super);
     function AreaViewContent() {
@@ -18763,8 +18887,8 @@ var AreaViewContent = /** @class */ (function (_super) {
         });
     };
     AreaViewContent.prototype.render = function () {
-        return (React.createElement("div", { id: "areaview-content" },
-            React.createElement("ul", null, this.createList())));
+        return (React.createElement("div", { style: viewStyles },
+            React.createElement("ul", { style: viewListStyles }, this.createList())));
     };
     return AreaViewContent;
 }(React.Component));
@@ -18794,13 +18918,86 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+var todoStyles = {
+    height: 60,
+    display: "flex",
+    alignItems: "center",
+    padding: "10px 0",
+    borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
+    backgroundColor: "transparent",
+    transition: "background-color 0.3s",
+};
+var todoHover = {
+    backgroundColor: "rgba(206, 197, 197, 0.5)",
+};
+/**
+ * 自定义checkbox的样式
+ */
+var checkboxStyles = {
+    fontSize: "1.5rem",
+    width: 30,
+    height: 30,
+    margin: "0 10px",
+    borderRadius: "50%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    border: "1px solid gray",
+    color: "transparent",
+    backgroundColor: "transparent",
+    cursor: "pointer",
+    transition: "color 0.3s, background-color 0.3s",
+};
+var checkboxHover = {
+    color: "white",
+    backgroundColor: "gray",
+};
+var checkedBox = {
+    color: "white",
+    backgroundColor: "green",
+};
+/**
+ * todo文字部分的样式
+ */
+var itemStyles = {
+    display: "flex",
+    flexDirection: "column",
+};
+/**
+ * todo完成时文字部分的样式
+ */
+var itemDoneStyles = {
+    textDecoration: "line-through",
+    color: "gray",
+};
+/**
+ * 备注等信息文字部分的样式
+ */
+var itemExtraStyles = {
+    display: "flex",
+};
+var extraDirectChild = {
+    fontSize: "0.6em",
+    color: "gray",
+    marginRight: 10,
+};
 var AreaViewItem = /** @class */ (function (_super) {
     __extends(AreaViewItem, _super);
     function AreaViewItem(props) {
         var _this = _super.call(this, props) || this;
+        _this.state = {
+            todoHover: false,
+            checkboxHover: false,
+        };
         // bind methods
         _this.handleDrag = _this.handleDrag.bind(_this);
         _this.handleDragEnd = _this.handleDragEnd.bind(_this);
+        _this.handleTodoMouseEnter = _this.handleTodoMouseEnter.bind(_this);
+        _this.handleTodoMouseLeave = _this.handleTodoMouseLeave.bind(_this);
+        _this.handleCheckboxMouseEnter = _this.handleCheckboxMouseEnter.bind(_this);
+        _this.handleCheckboxMouseLeave = _this.handleCheckboxMouseLeave.bind(_this);
         return _this;
     }
     /**
@@ -18809,8 +19006,8 @@ var AreaViewItem = /** @class */ (function (_super) {
      */
     AreaViewItem.prototype.handleDrag = function (e) {
         var data = JSON.stringify(this.props.item);
-        e.dataTransfer.setData('text/plain', '');
-        e.dataTransfer.dropEffect = 'move';
+        e.dataTransfer.setData("text/plain", "");
+        e.dataTransfer.dropEffect = "move";
         this.props.onDragStart(data);
     };
     /**
@@ -18818,18 +19015,50 @@ var AreaViewItem = /** @class */ (function (_super) {
      * @param e 拖拽结束/被取消的处理方法
      */
     AreaViewItem.prototype.handleDragEnd = function (e) {
+        e.stopPropagation();
         this.props.onDragEnd();
+    };
+    AreaViewItem.prototype.handleTodoMouseEnter = function (e) {
+        e.stopPropagation();
+        this.setState({
+            todoHover: true,
+        });
+    };
+    AreaViewItem.prototype.handleTodoMouseLeave = function (e) {
+        e.stopPropagation();
+        this.setState({
+            todoHover: false,
+        });
     };
     AreaViewItem.prototype.render = function () {
         var _this = this;
         var item = this.props.item;
-        return (React.createElement("li", { draggable: true, className: "todo-item", onClick: function (e) { return _this.props.onItemClicked(e, item.name); }, onDragStart: this.handleDrag, onDragEnd: this.handleDragEnd },
-            React.createElement("div", { className: item.done ? 'custom-checkbox checked' : 'custom-checkbox', onClick: function (e) { return _this.props.onCheckboxClicked(e, item.name); } }, "\u221A"),
-            React.createElement("div", { className: item.done ? 'todo-item-content done' : 'todo-item-content' },
-                React.createElement("span", null, item.name),
-                React.createElement("div", { className: "todo-item-content-extra" },
-                    item.inPrimaryList && (React.createElement("span", { className: "todo-item-content-source" }, this.props.isPrimary ? item.source : '我的一天')),
-                    item.comments && (React.createElement("span", { className: "todo-item-content-comments" }, "\u5907\u6CE8"))))));
+        var todoS = todoStyles;
+        if (this.state.todoHover) {
+            todoS = lib_1.mix(todoS, todoHover);
+        }
+        var checkboxS = checkboxStyles;
+        if (item.done) {
+            checkboxS = lib_1.mix(checkboxS, checkedBox);
+        }
+        if (this.state.checkboxHover) {
+            checkboxS = lib_1.mix(checkboxS, checkboxHover);
+        }
+        return (React.createElement("li", { draggable: true, style: todoS, onClick: function (e) { return _this.props.onItemClicked(e, item.name); }, onDragStart: this.handleDrag, onDragEnd: this.handleDragEnd, onMouseEnter: this.handleTodoMouseEnter, onMouseLeave: this.handleTodoMouseLeave },
+            React.createElement("div", { style: checkboxS, onClick: function (e) { return _this.props.onCheckboxClicked(e, item.name); }, onMouseEnter: this.handleCheckboxMouseEnter, onMouseLeave: this.handleCheckboxMouseLeave }, "\u221A"),
+            React.createElement("div", { style: itemStyles },
+                React.createElement("span", { style: item.done ? itemDoneStyles : {} }, item.name),
+                React.createElement("div", { style: itemExtraStyles },
+                    item.inPrimaryList && (React.createElement("span", { style: lib_1.mix(extraDirectChild, { color: "blue" }) }, this.props.isPrimary ? item.source : "我的一天")),
+                    item.comments && React.createElement("span", { style: extraDirectChild }, "\u5907\u6CE8")))));
+    };
+    AreaViewItem.prototype.handleCheckboxMouseLeave = function (e) {
+        e.stopPropagation();
+        this.setState({ checkboxHover: false });
+    };
+    AreaViewItem.prototype.handleCheckboxMouseEnter = function (e) {
+        e.stopPropagation();
+        this.setState({ checkboxHover: true });
     };
     return AreaViewItem;
 }(React.Component));
@@ -18867,7 +19096,7 @@ var AreaView = /** @class */ (function (_super) {
     function AreaView(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {
-            inputValue: '',
+            inputValue: "",
             showDoneItems: false,
         };
         // bind methods
@@ -18884,7 +19113,7 @@ var AreaView = /** @class */ (function (_super) {
     AreaView.prototype.render = function () {
         var _this = this;
         var listInfo = this.props.listInfo;
-        return (React.createElement("div", { id: "areaview", className: this.props.shrink ? 'shrink' : '', onClick: function (e) {
+        return (React.createElement("div", { id: "areaview", className: this.props.shrink ? "shrink" : "", onClick: function (e) {
                 e.stopPropagation();
                 _this.props.actionsShouldDisplay && _this.props.onActionsDisplayClick();
             } },
@@ -18896,7 +19125,7 @@ var AreaView = /** @class */ (function (_super) {
         // 切换列表的时候将输入框中的内容清空
         if (nextProps.listInfo.name !== this.props.listInfo.name) {
             this.setState({
-                inputValue: '',
+                inputValue: "",
             });
         }
     };
@@ -18953,20 +19182,18 @@ var AreaView = /** @class */ (function (_super) {
      * 添加新的`TodoItem`
      * @param e 鼠标点击事件
      */
-    AreaView.prototype.addNewItem = function (e) {
-        e.stopPropagation();
+    AreaView.prototype.addNewItem = function () {
         this.props.addNewItemInList(this.state.inputValue, this.props.listInfo.name);
         this.setState({
-            inputValue: '',
+            inputValue: "",
         });
     };
     /**
      * 中止文本框输入
      * @param e 鼠标点击事件
      */
-    AreaView.prototype.cancelInput = function (e) {
-        e.stopPropagation();
-        this.setState({ inputValue: '' });
+    AreaView.prototype.cancelInput = function () {
+        this.setState({ inputValue: "" });
     };
     /**
      * 在detail view显示选中`TodoItem`的详细内容
@@ -19004,24 +19231,55 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+/**
+ * 组件最外层样式
+ */
+var colorPickerStyles = {
+    marginBottom: 10,
+};
+/**
+ * 文字部分样式
+ */
+var themeTextStyles = {
+    marginBottom: 10,
+};
+/**
+ * 颜色列表的样式
+ */
+var pickerListStyles = {
+    listStyleType: "none",
+    display: "flex",
+    flexWrap: "wrap",
+    height: 50,
+    justifyContent: "space-between",
+};
+/**
+ * 每个颜色项目的样式
+ */
+var listElementStyles = {
+    width: 50,
+    height: 50,
+    cursor: "pointer",
+};
 var ColorThemePicker = /** @class */ (function (_super) {
     __extends(ColorThemePicker, _super);
     function ColorThemePicker() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.colors = [
-            { name: 'purple', value: '#a525a5' },
-            { name: 'pink', value: '#FFC0CB' },
-            { name: 'green', value: '#34bc34' },
-            { name: 'orange', value: '#f29f08' },
-            { name: 'skyblue', value: '#87cefa' },
+            { name: "purple", value: "#a525a5" },
+            { name: "pink", value: "#FFC0CB" },
+            { name: "green", value: "#34bc34" },
+            { name: "orange", value: "#f29f08" },
+            { name: "skyblue", value: "#87cefa" },
         ];
         return _this;
     }
     ColorThemePicker.prototype.render = function () {
         var _this = this;
-        return (React.createElement("div", { className: "color-picker" },
-            React.createElement("p", null, "\u4E3B\u9898"),
-            React.createElement("ul", null, this.colors.map(function (color) { return (React.createElement("li", { style: { backgroundColor: color.value }, onClick: function (e) { return _this.props.onColorPick(color.value); }, key: color.name })); }))));
+        return (React.createElement("div", { style: colorPickerStyles },
+            React.createElement("p", { style: themeTextStyles }, "\u4E3B\u9898"),
+            React.createElement("ul", { style: pickerListStyles }, this.colors.map(function (color) { return (React.createElement("li", { style: lib_1.mix(listElementStyles, { backgroundColor: color.value }), onClick: function (e) { return _this.props.onColorPick(color.value); }, key: color.name })); }))));
     };
     return ColorThemePicker;
 }(React.Component));
@@ -19052,6 +19310,41 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var area_actions_1 = __webpack_require__(/*! ../util/area-actions */ "./src/components/util/area-actions.tsx");
+var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+/**
+ * 最外层样式
+ */
+var headStyles = {
+    height: 200,
+    padding: 10,
+    borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
+    display: "flex",
+    position: "relative",
+};
+var headDirectChild = {
+    alignSelf: "flex-end",
+};
+/**
+ * 列表名称文字的样式
+ */
+var nameLabelStyles = {
+    fontSize: "2rem",
+    color: "white",
+};
+/**
+ * 显示操作菜单按钮的样式
+ */
+var switcherStyles = {
+    width: 40,
+    height: 30,
+    position: "absolute",
+    right: 10,
+    bottom: 10,
+    border: "none",
+    cursor: "pointer",
+    color: "white",
+    fontWeight: "bold",
+};
 var AreaViewHead = /** @class */ (function (_super) {
     __extends(AreaViewHead, _super);
     function AreaViewHead(props) {
@@ -19088,9 +19381,8 @@ var AreaViewHead = /** @class */ (function (_super) {
      * 进行重命名工作
      * @param e 鼠标点击事件
      */
-    AreaViewHead.prototype.renameClicked = function (e) {
+    AreaViewHead.prototype.renameClicked = function () {
         var _this = this;
-        e.stopPropagation();
         this.props.onActionsDisplayClick();
         this.setState({
             isEdit: true,
@@ -19105,9 +19397,8 @@ var AreaViewHead = /** @class */ (function (_super) {
      * 确认删除列表操作
      * @param e 鼠标点击事件
      */
-    AreaViewHead.prototype.deleteClicked = function (e) {
-        e.stopPropagation();
-        var result = confirm('确定删除此列表吗？');
+    AreaViewHead.prototype.deleteClicked = function () {
+        var result = confirm("确定删除此列表吗？");
         if (result) {
             this.props.deleteList(this.state.name);
         }
@@ -19131,26 +19422,26 @@ var AreaViewHead = /** @class */ (function (_super) {
             isEdit: false,
         });
     };
-    AreaViewHead.prototype.switchDoneItems = function (e) {
-        e.stopPropagation();
+    AreaViewHead.prototype.switchDoneItems = function () {
         this.props.switchDoneItems();
         this.props.onActionsDisplayClick();
     };
     AreaViewHead.prototype.render = function () {
         var _this = this;
         var color = this.props.colorTheme;
+        var hideS = this.state.isEdit ? { display: "none" } : {};
         if (this.props.isPrimaryList) {
-            return (React.createElement("div", { id: "areaview-head", style: {
-                    background: "linear-gradient(to right, " + color + ", " + (color + 'b3') + ")",
-                } },
-                React.createElement("div", { className: "name" }, this.props.listName)));
+            return (React.createElement("div", { style: lib_1.mix(headStyles, {
+                    background: "linear-gradient(to right, " + color + ", " + (color + "b3") + ")",
+                }) },
+                React.createElement("div", { style: lib_1.mix(nameLabelStyles, headDirectChild) }, this.props.listName)));
         }
-        return (React.createElement("div", { id: "areaview-head", style: {
-                background: "linear-gradient(to right, " + color + ", " + (color + 'b3') + ")",
-            } },
-            React.createElement("div", { className: this.state.isEdit ? 'hide' : 'name' }, this.props.listName),
-            React.createElement("input", { className: this.state.isEdit ? '' : 'hide', type: "text", onChange: this.inputChange, ref: function (input) { return (_this.renameInput = input); }, onBlur: this.inputBlur }),
-            React.createElement("button", { className: "actions-switcher", onClick: this.handleSwitch, style: { backgroundColor: color } }, "\u00B7\u00B7\u00B7"),
+        return (React.createElement("div", { style: lib_1.mix(headStyles, {
+                background: "linear-gradient(to right, " + color + ", " + (color + "b3") + ")",
+            }) },
+            React.createElement("div", { style: lib_1.mix(nameLabelStyles, headDirectChild, hideS) }, this.props.listName),
+            React.createElement("input", { style: lib_1.mix(headDirectChild, this.state.isEdit ? {} : { display: "none" }), type: "text", onChange: this.inputChange, ref: function (input) { return (_this.renameInput = input); }, onBlur: this.inputBlur }),
+            React.createElement("button", { style: lib_1.mix(switcherStyles, { backgroundColor: color }), onClick: this.handleSwitch }, "\u00B7\u00B7\u00B7"),
             React.createElement(area_actions_1.AreaActions, { actionsShouldDisplay: this.props.actionsShouldDisplay, doneItemsDisplay: this.props.doneItemsDisplay, onColorPick: this.props.onColorPick, switchDoneItems: this.switchDoneItems, renameClicked: this.renameClicked, deleteClicked: this.deleteClicked })));
     };
     return AreaViewHead;
@@ -19184,6 +19475,7 @@ var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var detailActions_1 = __webpack_require__(/*! ./detailActions */ "./src/components/detailview/detailActions.tsx");
 var detailComments_1 = __webpack_require__(/*! ./detailComments */ "./src/components/detailview/detailComments.tsx");
 var detailPrimaryCopy_1 = __webpack_require__(/*! ./detailPrimaryCopy */ "./src/components/detailview/detailPrimaryCopy.tsx");
+var detailTitleContent_1 = __webpack_require__(/*! ./detailTitleContent */ "./src/components/detailview/detailTitleContent.tsx");
 /**
  * detail view的样式
  */
@@ -19207,11 +19499,8 @@ var DetailView = /** @class */ (function (_super) {
         if (!item) {
             return null;
         }
-        var checkboxStatus = "custom-checkbox " + (item.done ? "checked" : "");
         return (React.createElement("div", { id: "detailview", style: detailViewStyles },
-            React.createElement("div", { className: "title-content" },
-                React.createElement("div", { className: checkboxStatus, onClick: this.props.onToggleClicked }, "\u221A"),
-                React.createElement("span", { className: "title" }, item.name)),
+            React.createElement(detailTitleContent_1.default, { item: item, onToggleClicked: this.props.onToggleClicked }),
             React.createElement(detailPrimaryCopy_1.default, { item: item, onCancelCopyToPrimary: this.props.onCancelCopyToPrimary, onCopyToPrimary: this.props.onCopyToPrimary }),
             React.createElement(detailComments_1.default, { onCommentsChange: this.props.onCommentsChange, initComments: this.props.item ? (this.props.item.comments ? this.props.item.comments : "") : "" }),
             React.createElement(detailActions_1.default, { onCloseClicked: this.props.onCloseClicked, onDeleteClicked: this.props.onDeleteClicked, item: item })));
@@ -19581,6 +19870,127 @@ var DetailPrimaryCopy = /** @class */ (function (_super) {
     return DetailPrimaryCopy;
 }(React.Component));
 exports.default = DetailPrimaryCopy;
+
+
+/***/ }),
+
+/***/ "./src/components/detailview/detailTitleContent.tsx":
+/*!**********************************************************!*\
+  !*** ./src/components/detailview/detailTitleContent.tsx ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+/**
+ * 名称部分的样式
+ */
+var contentStyles = {
+    minHeight: 80,
+    padding: "10px 10px 20px 10px",
+    borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
+    backgroundColor: "white",
+    display: "flex",
+};
+/**
+ * 自定义checkbox的样式
+ */
+var checkboxStyles = {
+    flex: "1 0 30px",
+    fontSize: "1.5rem",
+    width: 30,
+    height: 30,
+    margin: "0 10px",
+    borderRadius: "50%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    border: "1px solid gray",
+    color: "transparent",
+    backgroundColor: "transparent",
+    cursor: "pointer",
+    transition: "color 0.3s, background-color 0.3s",
+};
+/**
+ * checkbox的hover状态
+ */
+var checkboxHoverStyles = {
+    color: "white",
+    backgroundColor: "gray",
+};
+/**
+ * checkbox的checked状态
+ */
+var checkedBoxStyle = {
+    color: "white",
+    backgroundColor: "green",
+};
+/**
+ * todo名称label的样式
+ */
+var titleLabelStyles = {
+    flex: "4 0 calc(100% - 50px)",
+    fontWeight: "bold",
+    wordBreak: "break-all",
+};
+var DetailTitleContent = /** @class */ (function (_super) {
+    __extends(DetailTitleContent, _super);
+    function DetailTitleContent(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            checkboxHover: false,
+        };
+        // bind methods
+        _this.handleToggleClicked = _this.handleToggleClicked.bind(_this);
+        _this.handleCheckboxMouseEnter = _this.handleCheckboxMouseEnter.bind(_this);
+        _this.handleCheckboxMouseLeave = _this.handleCheckboxMouseLeave.bind(_this);
+        return _this;
+    }
+    DetailTitleContent.prototype.handleCheckboxMouseEnter = function (e) {
+        e.stopPropagation();
+        this.setState({
+            checkboxHover: true,
+        });
+    };
+    DetailTitleContent.prototype.handleCheckboxMouseLeave = function (e) {
+        e.stopPropagation();
+        this.setState({
+            checkboxHover: false,
+        });
+    };
+    DetailTitleContent.prototype.handleToggleClicked = function (e) {
+        e.stopPropagation();
+        this.props.onToggleClicked();
+    };
+    DetailTitleContent.prototype.render = function () {
+        var checkStyle = lib_1.mix(checkboxStyles);
+        if (this.props.item.done) {
+            checkStyle = lib_1.mix(checkStyle, checkedBoxStyle);
+        }
+        if (this.state.checkboxHover) {
+            checkStyle = lib_1.mix(checkStyle, checkboxHoverStyles);
+        }
+        return (React.createElement("div", { style: contentStyles },
+            React.createElement("div", { style: checkStyle, onClick: this.handleToggleClicked, onMouseEnter: this.handleCheckboxMouseEnter, onMouseLeave: this.handleCheckboxMouseLeave }, "\u221A"),
+            React.createElement("span", { style: titleLabelStyles }, this.props.item.name)));
+    };
+    return DetailTitleContent;
+}(React.Component));
+exports.default = DetailTitleContent;
 
 
 /***/ }),
@@ -19977,22 +20387,99 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var colortheme_picker_1 = __webpack_require__(/*! ../areaview/colortheme-picker */ "./src/components/areaview/colortheme-picker.tsx");
+var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+/**
+ * 操作菜单的样式
+ */
+var actionStyles = {
+    position: "absolute",
+    top: "calc(100% + 5px)",
+    right: 10,
+    visibility: "hidden",
+    width: 322,
+    listStyleType: "none",
+    backgroundColor: "white",
+    border: "1px solid rgba(206, 197, 197, 0.5)",
+    padding: 10,
+    marginRight: 0,
+};
+var actionDisplay = {
+    visibility: "visible",
+};
+/**
+ * 操作菜单按钮的样式
+ */
+var actionButtonStyles = {
+    height: 40,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    cursor: "pointer",
+};
+var actionButtonHover = {
+    backgroundColor: "rgba(206, 197, 197, 0.2)",
+};
 var AreaActions = /** @class */ (function (_super) {
     __extends(AreaActions, _super);
-    function AreaActions() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function AreaActions(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            showDoneItemsHover: false,
+            renameHover: false,
+            deleteHover: false,
+        };
+        return _this;
     }
     AreaActions.prototype.render = function () {
-        return (React.createElement("div", { className: this.props.actionsShouldDisplay
-                ? 'actions animated fadeIn actions-display'
-                : 'actions animated' },
+        var _this = this;
+        var actionShouldDisplay = this.props.actionsShouldDisplay;
+        var showDoneS = lib_1.mix(actionButtonStyles);
+        var renameS = lib_1.mix(actionButtonStyles);
+        var deleteS = lib_1.mix(actionButtonStyles, { color: "red" });
+        if (this.state.showDoneItemsHover) {
+            showDoneS = lib_1.mix(showDoneS, actionButtonHover);
+        }
+        if (this.state.renameHover) {
+            renameS = lib_1.mix(renameS, actionButtonHover);
+        }
+        if (this.state.deleteHover) {
+            deleteS = lib_1.mix(deleteS, actionButtonHover);
+        }
+        return (React.createElement("div", { className: actionShouldDisplay ? "animated fadeIn" : "animated", style: actionShouldDisplay ? lib_1.mix(actionStyles, actionDisplay) : actionStyles },
             React.createElement(colortheme_picker_1.ColorThemePicker, { onColorPick: this.props.onColorPick }),
-            React.createElement("ul", { className: "actions-list" },
-                React.createElement("li", { className: "action-showDoneItems", onClick: this.props.switchDoneItems },
-                    this.props.doneItemsDisplay ? '隐藏' : '显示',
+            React.createElement("ul", null,
+                React.createElement("li", { style: showDoneS, onClick: function (e) {
+                        e.stopPropagation();
+                        _this.props.switchDoneItems();
+                    }, onMouseEnter: function (e) {
+                        e.stopPropagation();
+                        _this.setState({ showDoneItemsHover: true });
+                    }, onMouseLeave: function (e) {
+                        e.stopPropagation();
+                        _this.setState({ showDoneItemsHover: false });
+                    } },
+                    this.props.doneItemsDisplay ? "隐藏" : "显示",
                     "\u5DF2\u5B8C\u6210\u7684\u9879\u76EE"),
-                React.createElement("li", { className: "action-edit", onClick: this.props.renameClicked }, "\u91CD\u547D\u540D\u5217\u8868"),
-                React.createElement("li", { className: "action-delete", onClick: this.props.deleteClicked }, "\u5220\u9664\u5217\u8868"))));
+                React.createElement("li", { style: renameS, onClick: function (e) {
+                        e.stopPropagation();
+                        _this.props.renameClicked();
+                    }, onMouseEnter: function (e) {
+                        e.stopPropagation();
+                        _this.setState({ renameHover: true });
+                    }, onMouseLeave: function (e) {
+                        e.stopPropagation();
+                        _this.setState({ renameHover: false });
+                    } }, "\u91CD\u547D\u540D\u5217\u8868"),
+                React.createElement("li", { style: deleteS, onClick: function (e) {
+                        e.stopPropagation();
+                        _this.props.deleteClicked();
+                    }, onMouseEnter: function (e) {
+                        e.stopPropagation();
+                        _this.setState({ deleteHover: true });
+                    }, onMouseLeave: function (e) {
+                        e.stopPropagation();
+                        _this.setState({ deleteHover: false });
+                    } }, "\u5220\u9664\u5217\u8868"))));
     };
     return AreaActions;
 }(React.Component));
@@ -20022,17 +20509,108 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+/**
+ * 提示框后的全屏背景遮罩层样式
+ */
+var backgroundStyles = {
+    left: 0,
+    top: 0,
+    width: "100vw",
+    height: "100vh",
+    position: "fixed",
+    zIndex: 2,
+    visibility: "hidden",
+    backgroundColor: "rgba(90, 85, 85, 0.37)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+};
+var backgroundDisplay = {
+    visibility: "visible",
+};
+/**
+ * 提示框的样式
+ */
+var alertStyles = {
+    width: "30vw",
+    height: "30vh",
+    backgroundColor: "white",
+    borderRadius: 8,
+    borderColor: "rgba(206, 197, 197, 0.5)",
+    padding: 10,
+    display: "flex",
+    flexWrap: "wrap",
+};
+/**
+ * alert的直接子元素样式
+ */
+var alertDirectStyles = {
+    width: "100%",
+};
+/**
+ * 提示框操作部分的样式
+ */
+var alertActionStyles = {
+    display: "flex",
+    flexDirection: "column-reverse",
+    width: "100%",
+};
+/**
+ * “确认”按钮样式
+ */
+var confirmButtonStyles = {
+    height: 30,
+    border: "none",
+    backgroundColor: "transparent",
+    cursor: "pointer",
+    transition: "backgroud-color 0.3s",
+};
+var confirmButtonHover = {
+    backgroundColor: "rgba(206, 197, 197, 0.5)",
+};
 var Alert = /** @class */ (function (_super) {
     __extends(Alert, _super);
-    function Alert() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function Alert(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            confirmButtonHover: false,
+        };
+        // bind methods
+        _this.handleConfirmClicked = _this.handleConfirmClicked.bind(_this);
+        _this.handleConfirmMouseEnter = _this.handleConfirmMouseEnter.bind(_this);
+        _this.handleConfirmMouseLeave = _this.handleConfirmMouseLeave.bind(_this);
+        return _this;
     }
+    Alert.prototype.handleConfirmClicked = function (e) {
+        e.stopPropagation();
+        this.props.onConfirmClicked();
+    };
+    Alert.prototype.handleConfirmMouseEnter = function (e) {
+        e.stopPropagation();
+        this.setState({
+            confirmButtonHover: true,
+        });
+    };
+    Alert.prototype.handleConfirmMouseLeave = function (e) {
+        e.stopPropagation();
+        this.setState({
+            confirmButtonHover: false,
+        });
+    };
     Alert.prototype.render = function () {
-        return (React.createElement("div", { id: "global-alert-background", className: this.props.display ? 'display' : '' },
-            React.createElement("div", { id: "global-alert" },
-                React.createElement("p", { className: "alert-message" }, this.props.message),
-                React.createElement("p", { className: "alert-actions single-action" },
-                    React.createElement("button", { className: "confirm", onClick: this.props.onConfirmClicked }, "\u597D\u7684")))));
+        var backgroundS = lib_1.mix(backgroundStyles);
+        if (this.props.display) {
+            backgroundS = lib_1.mix(backgroundS, backgroundDisplay);
+        }
+        var confirmS = this.state.confirmButtonHover
+            ? lib_1.mix(confirmButtonStyles, confirmButtonHover)
+            : confirmButtonStyles;
+        return (React.createElement("div", { style: backgroundS },
+            React.createElement("div", { style: alertStyles },
+                React.createElement("p", { style: alertDirectStyles }, this.props.message),
+                React.createElement("p", { style: alertActionStyles },
+                    React.createElement("button", { style: confirmS, onClick: this.handleConfirmClicked, onMouseEnter: this.handleConfirmMouseEnter, onMouseLeave: this.handleConfirmMouseLeave }, "\u597D\u7684")))));
     };
     return Alert;
 }(React.Component));

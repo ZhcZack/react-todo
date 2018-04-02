@@ -1,24 +1,131 @@
-import * as React from 'react'
+import * as React from "react";
+import { mix } from "../../lib";
 
 interface AlertProps {
-    display: boolean
-    message: string
-    onConfirmClicked(e: React.MouseEvent<HTMLButtonElement>): void
+  display: boolean;
+  message: string;
+  onConfirmClicked(): void;
 }
 
-export class Alert extends React.Component<AlertProps, {}> {
-    render() {
-        return (
-            <div id="global-alert-background" className={this.props.display ? 'display' : ''}>
-                <div id="global-alert">
-                    <p className="alert-message">{this.props.message}</p>
-                    <p className="alert-actions single-action">
-                        <button className="confirm" onClick={this.props.onConfirmClicked}>
-                            好的
-                        </button>
-                    </p>
-                </div>
-            </div>
-        )
+interface AlertState {
+  confirmButtonHover: boolean;
+}
+
+/**
+ * 提示框后的全屏背景遮罩层样式
+ */
+const backgroundStyles = {
+  left: 0,
+  top: 0,
+  width: "100vw",
+  height: "100vh",
+  position: "fixed",
+  zIndex: 2,
+  visibility: "hidden",
+  backgroundColor: "rgba(90, 85, 85, 0.37)",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+} as React.CSSProperties;
+const backgroundDisplay = {
+  visibility: "visible",
+};
+/**
+ * 提示框的样式
+ */
+const alertStyles = {
+  width: "30vw",
+  height: "30vh",
+  backgroundColor: "white",
+  borderRadius: 8,
+  borderColor: "rgba(206, 197, 197, 0.5)",
+  padding: 10,
+  display: "flex",
+  flexWrap: "wrap",
+} as React.CSSProperties;
+/**
+ * alert的直接子元素样式
+ */
+const alertDirectStyles = {
+  width: "100%",
+};
+/**
+ * 提示框操作部分的样式
+ */
+const alertActionStyles = {
+  display: "flex",
+  flexDirection: "column-reverse",
+  width: "100%",
+} as React.CSSProperties;
+/**
+ * “确认”按钮样式
+ */
+const confirmButtonStyles = {
+  height: 30,
+  border: "none",
+  backgroundColor: "transparent",
+  cursor: "pointer",
+  transition: "backgroud-color 0.3s",
+};
+const confirmButtonHover = {
+  backgroundColor: "rgba(206, 197, 197, 0.5)",
+};
+
+export class Alert extends React.Component<AlertProps, AlertState> {
+  constructor(props: AlertProps) {
+    super(props);
+    this.state = {
+      confirmButtonHover: false,
+    };
+
+    // bind methods
+    this.handleConfirmClicked = this.handleConfirmClicked.bind(this);
+    this.handleConfirmMouseEnter = this.handleConfirmMouseEnter.bind(this);
+    this.handleConfirmMouseLeave = this.handleConfirmMouseLeave.bind(this);
+  }
+
+  private handleConfirmClicked(e: React.MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
+    this.props.onConfirmClicked();
+  }
+
+  private handleConfirmMouseEnter(e: React.MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
+    this.setState({
+      confirmButtonHover: true,
+    });
+  }
+
+  private handleConfirmMouseLeave(e: React.MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
+    this.setState({
+      confirmButtonHover: false,
+    });
+  }
+
+  render() {
+    let backgroundS = mix(backgroundStyles);
+    if (this.props.display) {
+      backgroundS = mix(backgroundS, backgroundDisplay);
     }
+    let confirmS = this.state.confirmButtonHover
+      ? mix(confirmButtonStyles, confirmButtonHover)
+      : confirmButtonStyles;
+    return (
+      <div style={backgroundS}>
+        <div style={alertStyles}>
+          <p style={alertDirectStyles}>{this.props.message}</p>
+          <p style={alertActionStyles}>
+            <button
+              style={confirmS}
+              onClick={this.handleConfirmClicked}
+              onMouseEnter={this.handleConfirmMouseEnter}
+              onMouseLeave={this.handleConfirmMouseLeave}>
+              好的
+            </button>
+          </p>
+        </div>
+      </div>
+    );
+  }
 }

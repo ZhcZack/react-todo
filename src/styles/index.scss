@@ -1,35 +1,12 @@
-@import 'app';
-@import 'listview';
-@import 'areaview';
-@import 'detailview';
-@import 'color';
-@import 'customview';
-@import 'util';
-
+/**
+ * 这里本应该将这些全局的设置放进每一个组件里去的，不过在我弄完之后才看到这个要改动好累。
+ * 意思我明白就好，就放着不改了。
+ */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-size: 16px;
-    font-family: -apple-system, Source Han Sans CN, Segoe UI, Helvetica Neue, Helvetica, 微软雅黑,
-        sans-serif;
-}
-
-.hide {
-    display: none !important;
-}
-
-@keyframes bounceInOut {
-    0% {
-        transform: scale(1);
-        opaticy: 1;
-    }
-    50% {
-        transform: scale(0.95);
-        opacity: 0.5;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 16px;
+  font-family: -apple-system, Source Han Sans CN, Segoe UI, Helvetica Neue, Helvetica, 微软雅黑,
+    sans-serif;
 }
