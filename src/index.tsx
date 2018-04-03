@@ -5,4 +5,4 @@ import { App } from "./app";
 import "animate.css";
 import "./styles/index.scss";
 
-ReactDOM.render(<App />, document.getElementById("app") as HTMLElement);
+ReactDOM.render(<App />, document.getElementById("root") as HTMLElement);

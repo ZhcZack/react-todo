@@ -37,6 +37,17 @@ interface AppState {
   alertMessage: string;
 }
 
+const appStyles = {
+  width: "100vw",
+  height: "100vh",
+  display: "flex",
+  flexDirection: "row",
+  flexWrap: "nowrap",
+  justifyContent: "flex-start",
+  position: "relative",
+  zIndex: 1,
+} as React.CSSProperties;
+
 /**
  * App主内容区域
  */
@@ -834,7 +845,7 @@ export class App extends React.Component<AppProps, AppState> {
     // const infos = this.state.listInfos.splice(0)
     // console.log(`infos: ${infos}`)
     return (
-      <React.Fragment>
+      <div style={appStyles}>
         <ListView
           // currentListName={this.state.lastModifiedListName}
           switchList={this.switchList}
@@ -876,7 +887,7 @@ export class App extends React.Component<AppProps, AppState> {
             onConfirmClicked={this.handleConfirmClicked}
           />
         )}
-      </React.Fragment>
+      </div>
     );
   }
 }

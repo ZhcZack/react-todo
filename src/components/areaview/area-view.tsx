@@ -4,6 +4,7 @@ import { DetailView } from "./../detailview/detail-view";
 import { AddNewItem } from "./add-new-item";
 import { AreaViewContent } from "./area-view-content";
 import { EditableHead } from "./editable-head";
+import { mix } from "../../lib";
 
 interface AreaViewProps {
   /**
@@ -49,6 +50,13 @@ interface AreaViewState {
   showDoneItems: boolean;
 }
 
+const viewStyles = {
+  width: "calc(100% - 280px)",
+};
+const viewShrinkStyles = {
+  width: "calc(100% - 280px - 280px)",
+};
+
 export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
   constructor(props: AreaViewProps) {
     super(props);
@@ -73,8 +81,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
 
     return (
       <div
-        id="areaview"
-        className={this.props.shrink ? "shrink" : ""}
+        style={this.props.shrink ? mix(viewStyles, viewShrinkStyles) : viewStyles}
         onClick={e => {
           e.stopPropagation();
           this.props.actionsShouldDisplay && this.props.onActionsDisplayClick();

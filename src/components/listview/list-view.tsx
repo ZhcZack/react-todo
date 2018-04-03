@@ -19,12 +19,22 @@ interface ListViewProps {
 
 interface ListViewState {}
 
+/**
+ * “新建清单”按钮的样式
+ */
 const AddButtonStyles = {
   height: 40,
   padding: "0 10px",
   cursor: "pointer",
   color: "blue",
 };
+
+const viewStyles = {
+  width: 280,
+  position: "relative",
+  overflow: "hidden",
+  borderRight: "1px solid rgba(206, 197, 197, 0.5)",
+} as React.CSSProperties;
 
 /**
  * 列表目录
@@ -71,7 +81,7 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
   render() {
     return (
       <div
-        id="listview"
+        style={viewStyles}
         onClick={e => {
           e.stopPropagation();
           this.props.actionsDisplay && this.props.onActionsDisplayClick();
