@@ -20165,17 +20165,18 @@ var area_view_content_1 = __webpack_require__(/*! ./area-view-content */ "./src/
 var editable_head_1 = __webpack_require__(/*! ./editable-head */ "./src/components/areaview/editable-head.tsx");
 var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
 var viewStyles = {
-    width: "calc(100% - 280px)",
+    width: 'calc(100% - 280px)',
+    overflow: 'hidden',
 };
 var viewShrinkStyles = {
-    width: "calc(100% - 280px - 280px)",
+    width: 'calc(100% - 280px - 280px)',
 };
 var AreaView = /** @class */ (function (_super) {
     __extends(AreaView, _super);
     function AreaView(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {
-            inputValue: "",
+            inputValue: '',
             showDoneItems: false,
         };
         // bind methods
@@ -20204,7 +20205,7 @@ var AreaView = /** @class */ (function (_super) {
         // 切换列表的时候将输入框中的内容清空
         if (nextProps.listInfo.name !== this.props.listInfo.name) {
             this.setState({
-                inputValue: "",
+                inputValue: '',
             });
         }
     };
@@ -20264,7 +20265,7 @@ var AreaView = /** @class */ (function (_super) {
     AreaView.prototype.addNewItem = function () {
         this.props.addNewItemInList(this.state.inputValue, this.props.listInfo.name);
         this.setState({
-            inputValue: "",
+            inputValue: '',
         });
     };
     /**
@@ -20272,7 +20273,7 @@ var AreaView = /** @class */ (function (_super) {
      * @param e 鼠标点击事件
      */
     AreaView.prototype.cancelInput = function () {
-        this.setState({ inputValue: "" });
+        this.setState({ inputValue: '' });
     };
     /**
      * 在detail view显示选中`TodoItem`的详细内容
@@ -20396,19 +20397,19 @@ var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
 var headStyles = {
     height: 200,
     padding: 10,
-    borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
-    display: "flex",
-    position: "relative",
+    borderBottom: '1px solid rgba(206, 197, 197, 0.5)',
+    display: 'flex',
+    position: 'relative',
 };
 var headDirectChild = {
-    alignSelf: "flex-end",
+    alignSelf: 'flex-end',
 };
 /**
  * 列表名称文字的样式
  */
 var nameLabelStyles = {
-    fontSize: "2rem",
-    color: "white",
+    fontSize: '2rem',
+    color: 'white',
 };
 /**
  * 显示操作菜单按钮的样式
@@ -20416,13 +20417,13 @@ var nameLabelStyles = {
 var switcherStyles = {
     width: 40,
     height: 30,
-    position: "absolute",
+    position: 'absolute',
     right: 10,
     bottom: 10,
-    border: "none",
-    cursor: "pointer",
-    color: "white",
-    fontWeight: "bold",
+    border: 'none',
+    cursor: 'pointer',
+    color: 'white',
+    fontWeight: 'bold',
 };
 var AreaViewHead = /** @class */ (function (_super) {
     __extends(AreaViewHead, _super);
@@ -20463,9 +20464,7 @@ var AreaViewHead = /** @class */ (function (_super) {
     AreaViewHead.prototype.renameClicked = function () {
         var _this = this;
         this.props.onActionsDisplayClick();
-        this.setState({
-            isEdit: true,
-        }, function () {
+        this.setState({ isEdit: true }, function () {
             if (_this.renameInput) {
                 _this.renameInput.focus();
                 _this.renameInput.value = _this.props.listName;
@@ -20477,7 +20476,7 @@ var AreaViewHead = /** @class */ (function (_super) {
      * @param e 鼠标点击事件
      */
     AreaViewHead.prototype.deleteClicked = function () {
-        var result = confirm("确定删除此列表吗？");
+        var result = confirm('确定删除此列表吗？');
         if (result) {
             this.props.deleteList(this.state.name);
         }
@@ -20508,18 +20507,18 @@ var AreaViewHead = /** @class */ (function (_super) {
     AreaViewHead.prototype.render = function () {
         var _this = this;
         var color = this.props.colorTheme;
-        var hideS = this.state.isEdit ? { display: "none" } : {};
+        var hideS = this.state.isEdit ? { display: 'none' } : {};
         if (this.props.isPrimaryList) {
             return (React.createElement("div", { style: lib_1.mix(headStyles, {
-                    background: "linear-gradient(to right, " + color + ", " + (color + "b3") + ")",
+                    background: "linear-gradient(to right, " + color + ", " + (color + 'b3') + ")",
                 }) },
                 React.createElement("div", { style: lib_1.mix(nameLabelStyles, headDirectChild) }, this.props.listName)));
         }
         return (React.createElement("div", { style: lib_1.mix(headStyles, {
-                background: "linear-gradient(to right, " + color + ", " + (color + "b3") + ")",
+                background: "linear-gradient(to right, " + color + ", " + (color + 'b3') + ")",
             }) },
             React.createElement("div", { style: lib_1.mix(nameLabelStyles, headDirectChild, hideS) }, this.props.listName),
-            React.createElement("input", { style: lib_1.mix(headDirectChild, this.state.isEdit ? {} : { display: "none" }), type: "text", onChange: this.inputChange, ref: function (input) { return (_this.renameInput = input); }, onBlur: this.inputBlur }),
+            React.createElement("input", { style: lib_1.mix(headDirectChild, this.state.isEdit ? {} : { display: 'none' }), type: "text", onChange: this.inputChange, ref: function (input) { return (_this.renameInput = input); }, onBlur: this.inputBlur }),
             React.createElement("button", { style: lib_1.mix(switcherStyles, { backgroundColor: color }), onClick: this.handleSwitch }, "\u00B7\u00B7\u00B7"),
             React.createElement(area_actions_1.AreaActions, { actionsShouldDisplay: this.props.actionsShouldDisplay, doneItemsDisplay: this.props.doneItemsDisplay, onColorPick: this.props.onColorPick, switchDoneItems: this.switchDoneItems, renameClicked: this.renameClicked, deleteClicked: this.deleteClicked })));
     };
@@ -21453,6 +21452,81 @@ exports.ListView = ListView;
 
 /***/ }),
 
+/***/ "./src/components/util/actionButton.tsx":
+/*!**********************************************!*\
+  !*** ./src/components/util/actionButton.tsx ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+var styles = {
+    height: 40,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+};
+var hoverStyle = {
+    backgroundColor: 'rgba(206, 197, 197, 0.2)',
+};
+var ActionButton = /** @class */ (function (_super) {
+    __extends(ActionButton, _super);
+    function ActionButton(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            hover: false,
+        };
+        // bind methods
+        _this.handleClick = _this.handleClick.bind(_this);
+        _this.mouseEnter = _this.mouseEnter.bind(_this);
+        _this.mouseLeave = _this.mouseLeave.bind(_this);
+        return _this;
+    }
+    ActionButton.prototype.render = function () {
+        var S = lib_1.mix(styles, this.props.style ? this.props.style : {});
+        if (this.state.hover) {
+            S = lib_1.mix(S, hoverStyle);
+        }
+        return (React.createElement("li", { style: S, onClick: this.handleClick, onMouseEnter: this.mouseEnter, onMouseLeave: this.mouseLeave }, this.props.text));
+    };
+    ActionButton.prototype.handleClick = function (e) {
+        e.stopPropagation();
+        this.props.onClick();
+    };
+    ActionButton.prototype.mouseEnter = function (e) {
+        e.stopPropagation();
+        this.setState({
+            hover: true,
+        });
+    };
+    ActionButton.prototype.mouseLeave = function (e) {
+        e.stopPropagation();
+        this.setState({
+            hover: false,
+        });
+    };
+    return ActionButton;
+}(React.Component));
+exports.default = ActionButton;
+
+
+/***/ }),
+
 /***/ "./src/components/util/area-actions.tsx":
 /*!**********************************************!*\
   !*** ./src/components/util/area-actions.tsx ***!
@@ -21476,98 +21550,38 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var colortheme_picker_1 = __webpack_require__(/*! ../areaview/colortheme-picker */ "./src/components/areaview/colortheme-picker.tsx");
 var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+var actionButton_1 = __webpack_require__(/*! ./actionButton */ "./src/components/util/actionButton.tsx");
 /**
  * 操作菜单的样式
  */
 var actionStyles = {
-    position: "absolute",
-    top: "calc(100% + 5px)",
+    position: 'absolute',
+    top: 'calc(100% + 5px)',
     right: 10,
-    visibility: "hidden",
+    visibility: 'hidden',
     width: 322,
-    listStyleType: "none",
-    backgroundColor: "white",
-    border: "1px solid rgba(206, 197, 197, 0.5)",
+    listStyleType: 'none',
+    backgroundColor: 'white',
+    border: '1px solid rgba(206, 197, 197, 0.5)',
     padding: 10,
     marginRight: 0,
 };
 var actionDisplay = {
-    visibility: "visible",
-};
-/**
- * 操作菜单按钮的样式
- */
-var actionButtonStyles = {
-    height: 40,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    cursor: "pointer",
-};
-var actionButtonHover = {
-    backgroundColor: "rgba(206, 197, 197, 0.2)",
+    visibility: 'visible',
 };
 var AreaActions = /** @class */ (function (_super) {
     __extends(AreaActions, _super);
-    function AreaActions(props) {
-        var _this = _super.call(this, props) || this;
-        _this.state = {
-            showDoneItemsHover: false,
-            renameHover: false,
-            deleteHover: false,
-        };
-        return _this;
+    function AreaActions() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     AreaActions.prototype.render = function () {
-        var _this = this;
         var actionShouldDisplay = this.props.actionsShouldDisplay;
-        var showDoneS = lib_1.mix(actionButtonStyles);
-        var renameS = lib_1.mix(actionButtonStyles);
-        var deleteS = lib_1.mix(actionButtonStyles, { color: "red" });
-        if (this.state.showDoneItemsHover) {
-            showDoneS = lib_1.mix(showDoneS, actionButtonHover);
-        }
-        if (this.state.renameHover) {
-            renameS = lib_1.mix(renameS, actionButtonHover);
-        }
-        if (this.state.deleteHover) {
-            deleteS = lib_1.mix(deleteS, actionButtonHover);
-        }
-        return (React.createElement("div", { className: actionShouldDisplay ? "animated fadeIn" : "animated", style: actionShouldDisplay ? lib_1.mix(actionStyles, actionDisplay) : actionStyles },
+        return (React.createElement("div", { className: actionShouldDisplay ? 'animated fadeIn' : 'animated', style: actionShouldDisplay ? lib_1.mix(actionStyles, actionDisplay) : actionStyles },
             React.createElement(colortheme_picker_1.ColorThemePicker, { onColorPick: this.props.onColorPick }),
             React.createElement("ul", null,
-                React.createElement("li", { style: showDoneS, onClick: function (e) {
-                        e.stopPropagation();
-                        _this.props.switchDoneItems();
-                    }, onMouseEnter: function (e) {
-                        e.stopPropagation();
-                        _this.setState({ showDoneItemsHover: true });
-                    }, onMouseLeave: function (e) {
-                        e.stopPropagation();
-                        _this.setState({ showDoneItemsHover: false });
-                    } },
-                    this.props.doneItemsDisplay ? "隐藏" : "显示",
-                    "\u5DF2\u5B8C\u6210\u7684\u9879\u76EE"),
-                React.createElement("li", { style: renameS, onClick: function (e) {
-                        e.stopPropagation();
-                        _this.props.renameClicked();
-                    }, onMouseEnter: function (e) {
-                        e.stopPropagation();
-                        _this.setState({ renameHover: true });
-                    }, onMouseLeave: function (e) {
-                        e.stopPropagation();
-                        _this.setState({ renameHover: false });
-                    } }, "\u91CD\u547D\u540D\u5217\u8868"),
-                React.createElement("li", { style: deleteS, onClick: function (e) {
-                        e.stopPropagation();
-                        _this.props.deleteClicked();
-                    }, onMouseEnter: function (e) {
-                        e.stopPropagation();
-                        _this.setState({ deleteHover: true });
-                    }, onMouseLeave: function (e) {
-                        e.stopPropagation();
-                        _this.setState({ deleteHover: false });
-                    } }, "\u5220\u9664\u5217\u8868"))));
+                React.createElement(actionButton_1.default, { onClick: this.props.switchDoneItems, text: (this.props.doneItemsDisplay ? '隐藏' : '显示') + '已完成的项目' }),
+                React.createElement(actionButton_1.default, { onClick: this.props.renameClicked, text: '重命名列表' }),
+                React.createElement(actionButton_1.default, { onClick: this.props.deleteClicked, text: '删除列表', style: { color: 'red' } }))));
     };
     return AreaActions;
 }(React.Component));
@@ -21604,58 +21618,58 @@ var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
 var backgroundStyles = {
     left: 0,
     top: 0,
-    width: "100vw",
-    height: "100vh",
-    position: "fixed",
+    width: '100vw',
+    height: '100vh',
+    position: 'fixed',
     zIndex: 2,
-    visibility: "hidden",
-    backgroundColor: "rgba(90, 85, 85, 0.37)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    visibility: 'hidden',
+    backgroundColor: 'rgba(90, 85, 85, 0.37)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
 };
 var backgroundDisplay = {
-    visibility: "visible",
+    visibility: 'visible',
 };
 /**
  * 提示框的样式
  */
 var alertStyles = {
-    width: "30vw",
-    height: "30vh",
-    backgroundColor: "white",
+    width: '30vw',
+    height: '30vh',
+    backgroundColor: 'white',
     borderRadius: 8,
-    borderColor: "rgba(206, 197, 197, 0.5)",
+    borderColor: 'rgba(206, 197, 197, 0.5)',
     padding: 10,
-    display: "flex",
-    flexWrap: "wrap",
+    display: 'flex',
+    flexWrap: 'wrap',
 };
 /**
  * alert的直接子元素样式
  */
 var alertDirectStyles = {
-    width: "100%",
+    width: '100%',
 };
 /**
  * 提示框操作部分的样式
  */
 var alertActionStyles = {
-    display: "flex",
-    flexDirection: "column-reverse",
-    width: "100%",
+    display: 'flex',
+    flexDirection: 'column-reverse',
+    width: '100%',
 };
 /**
  * “确认”按钮样式
  */
 var confirmButtonStyles = {
     height: 30,
-    border: "none",
-    backgroundColor: "transparent",
-    cursor: "pointer",
-    transition: "backgroud-color 0.3s",
+    border: 'none',
+    backgroundColor: 'transparent',
+    cursor: 'pointer',
+    transition: 'backgroud-color 0.3s',
 };
 var confirmButtonHover = {
-    backgroundColor: "rgba(206, 197, 197, 0.5)",
+    backgroundColor: 'rgba(206, 197, 197, 0.5)',
 };
 var Alert = /** @class */ (function (_super) {
     __extends(Alert, _super);
@@ -21666,21 +21680,21 @@ var Alert = /** @class */ (function (_super) {
         };
         // bind methods
         _this.handleConfirmClicked = _this.handleConfirmClicked.bind(_this);
-        _this.handleConfirmMouseEnter = _this.handleConfirmMouseEnter.bind(_this);
-        _this.handleConfirmMouseLeave = _this.handleConfirmMouseLeave.bind(_this);
+        _this.confirmMouseEnter = _this.confirmMouseEnter.bind(_this);
+        _this.confirmMouseLeave = _this.confirmMouseLeave.bind(_this);
         return _this;
     }
     Alert.prototype.handleConfirmClicked = function (e) {
         e.stopPropagation();
         this.props.onConfirmClicked();
     };
-    Alert.prototype.handleConfirmMouseEnter = function (e) {
+    Alert.prototype.confirmMouseEnter = function (e) {
         e.stopPropagation();
         this.setState({
             confirmButtonHover: true,
         });
     };
-    Alert.prototype.handleConfirmMouseLeave = function (e) {
+    Alert.prototype.confirmMouseLeave = function (e) {
         e.stopPropagation();
         this.setState({
             confirmButtonHover: false,
@@ -21698,7 +21712,7 @@ var Alert = /** @class */ (function (_super) {
             React.createElement("div", { style: alertStyles },
                 React.createElement("p", { style: alertDirectStyles }, this.props.message),
                 React.createElement("p", { style: alertActionStyles },
-                    React.createElement("button", { style: confirmS, onClick: this.handleConfirmClicked, onMouseEnter: this.handleConfirmMouseEnter, onMouseLeave: this.handleConfirmMouseLeave }, "\u597D\u7684")))));
+                    React.createElement("button", { style: confirmS, onClick: this.handleConfirmClicked, onMouseEnter: this.confirmMouseEnter, onMouseLeave: this.confirmMouseLeave }, "\u597D\u7684")))));
     };
     return Alert;
 }(React.Component));

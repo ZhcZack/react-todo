@@ -1,7 +1,7 @@
-import { CSSProperties } from "react";
+import { CSSProperties } from 'react'
 
-export const log = console.log.bind(console);
+export const log = console.log.bind(console)
 
 export const mix = (...args: CSSProperties[]): CSSProperties => {
-  return Object.assign({}, ...args);
-};
+  return Object.assign({}, ...args)
+}

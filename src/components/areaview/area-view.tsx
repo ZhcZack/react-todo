@@ -1,90 +1,91 @@
-import * as React from "react";
-import { TodoItem, TodoList, ListInfo } from "../../model/interface";
-import { DetailView } from "./../detailview/detail-view";
-import { AddNewItem } from "./add-new-item";
-import { AreaViewContent } from "./area-view-content";
-import { EditableHead } from "./editable-head";
-import { mix } from "../../lib";
+import * as React from 'react'
+import { TodoItem, TodoList, ListInfo } from '../../model/interface'
+import { DetailView } from './../detailview/detail-view'
+import { AddNewItem } from './add-new-item'
+import { AreaViewContent } from './area-view-content'
+import { EditableHead } from './editable-head'
+import { mix } from '../../lib'
 
 interface AreaViewProps {
   /**
    * 列表的信息
    */
-  listInfo: ListInfo;
+  listInfo: ListInfo
   /**列表下的所有todo事项 */
-  todoItems: TodoItem[];
+  todoItems: TodoItem[]
   /**列表是否要紧缩 */
-  shrink: boolean;
+  shrink: boolean
   /**todo事项点击，处理方法 */
-  itemClicked(itemName: string, listName: string): void;
+  itemClicked(itemName: string, listName: string): void
   /**重命名列表，处理方法 */
-  renameList(oldName: string, newName: string): void;
+  renameList(oldName: string, newName: string): void
   /**删除列表处理方法 */
-  deleteList(name: string): void;
+  deleteList(name: string): void
   /**在列表中添加新todo项目，处理方法 */
-  addNewItemInList(itemName: string, listName: string): void;
+  addNewItemInList(itemName: string, listName: string): void
   /**切换todo事项完成状态，处理方法 */
-  toggleItemInList(itemName: string, listName: string): void;
+  toggleItemInList(itemName: string, listName: string): void
   /**拖拽todo事项 */
-  onDragStart(data: string): void;
+  onDragStart(data: string): void
   /**拖拽结束/被取消 */
-  onDragEnd(): void;
+  onDragEnd(): void
   /**
    * 主题选择处理函数
    * @param color 主题色
    */
-  onColorPick(color: string): void;
+  onColorPick(color: string): void
   /**
    * 显示/隐藏操作区域
    */
-  onActionsDisplayClick(): void;
+  onActionsDisplayClick(): void
   /**
    * 操作区域是否要显示在屏幕上
    */
-  actionsShouldDisplay: boolean;
+  actionsShouldDisplay: boolean
 }
 
 interface AreaViewState {
   /**文本框输入的数据内容 */
-  inputValue: string;
-  showDoneItems: boolean;
+  inputValue: string
+  showDoneItems: boolean
 }
 
-const viewStyles = {
-  width: "calc(100% - 280px)",
-};
+const viewStyles: React.CSSProperties = {
+  width: 'calc(100% - 280px)',
+  overflow: 'hidden',
+}
 const viewShrinkStyles = {
-  width: "calc(100% - 280px - 280px)",
-};
+  width: 'calc(100% - 280px - 280px)',
+}
 
 export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
   constructor(props: AreaViewProps) {
-    super(props);
+    super(props)
     this.state = {
-      inputValue: "",
+      inputValue: '',
       showDoneItems: false,
-    };
+    }
 
     // bind methods
-    this.handleInput = this.handleInput.bind(this);
-    this.cancelInput = this.cancelInput.bind(this);
-    this.toggleItem = this.toggleItem.bind(this);
-    this.displayDetailView = this.displayDetailView.bind(this);
-    this.addNewItem = this.addNewItem.bind(this);
-    this.renameList = this.renameList.bind(this);
-    this.handleDragStart = this.handleDragStart.bind(this);
-    this.switchDoneItems = this.switchDoneItems.bind(this);
+    this.handleInput = this.handleInput.bind(this)
+    this.cancelInput = this.cancelInput.bind(this)
+    this.toggleItem = this.toggleItem.bind(this)
+    this.displayDetailView = this.displayDetailView.bind(this)
+    this.addNewItem = this.addNewItem.bind(this)
+    this.renameList = this.renameList.bind(this)
+    this.handleDragStart = this.handleDragStart.bind(this)
+    this.switchDoneItems = this.switchDoneItems.bind(this)
   }
 
   render() {
-    const listInfo = this.props.listInfo;
+    const listInfo = this.props.listInfo
 
     return (
       <div
         style={this.props.shrink ? mix(viewStyles, viewShrinkStyles) : viewStyles}
         onClick={e => {
-          e.stopPropagation();
-          this.props.actionsShouldDisplay && this.props.onActionsDisplayClick();
+          e.stopPropagation()
+          this.props.actionsShouldDisplay && this.props.onActionsDisplayClick()
         }}>
         <EditableHead
           isPrimaryList={listInfo.isPrimary}
@@ -114,15 +115,15 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
           onCancelClicked={this.cancelInput}
         />
       </div>
-    );
+    )
   }
 
   componentWillReceiveProps(nextProps: AreaViewProps) {
     // 切换列表的时候将输入框中的内容清空
     if (nextProps.listInfo.name !== this.props.listInfo.name) {
       this.setState({
-        inputValue: "",
-      });
+        inputValue: '',
+      })
     }
   }
 
@@ -132,7 +133,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
   private switchDoneItems() {
     this.setState(prev => ({
       showDoneItems: !prev.showDoneItems,
-    }));
+    }))
   }
 
   /**
@@ -140,13 +141,13 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
    * @param data todo事项的原始数据
    */
   private handleDragStart(data: string) {
-    const obj = JSON.parse(data);
+    const obj = JSON.parse(data)
     // console.log(`obj: ${obj}, type: ${typeof obj}`)
     const newData = JSON.stringify({
       listName: this.props.listInfo.name,
       data,
-    });
-    this.props.onDragStart(newData);
+    })
+    this.props.onDragStart(newData)
   }
 
   /**
@@ -154,7 +155,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
    * @param name 新的列表名称
    */
   private renameList(name: string) {
-    this.props.renameList(this.props.listInfo.name, name);
+    this.props.renameList(this.props.listInfo.name, name)
   }
 
   /**
@@ -163,10 +164,10 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
    */
   private handleInput(e: React.ChangeEvent<HTMLInputElement>) {
     // console.log(e.target)
-    const value = e.target.value;
+    const value = e.target.value
     this.setState({
       inputValue: value,
-    });
+    })
   }
 
   /**
@@ -175,9 +176,9 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
    * @param name `TodoItem`的名称
    */
   private toggleItem(e: React.MouseEvent<HTMLDivElement>, name: string) {
-    e.stopPropagation();
+    e.stopPropagation()
     // 切换完成状态
-    this.props.toggleItemInList(name, this.props.listInfo.name);
+    this.props.toggleItemInList(name, this.props.listInfo.name)
   }
 
   /**
@@ -185,10 +186,10 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
    * @param e 鼠标点击事件
    */
   private addNewItem() {
-    this.props.addNewItemInList(this.state.inputValue, this.props.listInfo.name);
+    this.props.addNewItemInList(this.state.inputValue, this.props.listInfo.name)
     this.setState({
-      inputValue: "",
-    });
+      inputValue: '',
+    })
   }
 
   /**
@@ -196,7 +197,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
    * @param e 鼠标点击事件
    */
   private cancelInput() {
-    this.setState({ inputValue: "" });
+    this.setState({ inputValue: '' })
   }
 
   /**
@@ -205,6 +206,6 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
    * @param name 选中`TodoItem`的名称
    */
   private displayDetailView(e: React.MouseEvent<HTMLLIElement>, name: string) {
-    this.props.itemClicked(name, this.props.listInfo.name);
+    this.props.itemClicked(name, this.props.listInfo.name)
   }
 }

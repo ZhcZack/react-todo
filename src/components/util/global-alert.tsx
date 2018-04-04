@@ -81,8 +81,8 @@ export class Alert extends React.Component<Props, State> {
 
     // bind methods
     this.handleConfirmClicked = this.handleConfirmClicked.bind(this)
-    this.handleConfirmMouseEnter = this.handleConfirmMouseEnter.bind(this)
-    this.handleConfirmMouseLeave = this.handleConfirmMouseLeave.bind(this)
+    this.confirmMouseEnter = this.confirmMouseEnter.bind(this)
+    this.confirmMouseLeave = this.confirmMouseLeave.bind(this)
   }
 
   private handleConfirmClicked(e: React.MouseEvent<HTMLButtonElement>) {
@@ -90,14 +90,14 @@ export class Alert extends React.Component<Props, State> {
     this.props.onConfirmClicked()
   }
 
-  private handleConfirmMouseEnter(e: React.MouseEvent<HTMLButtonElement>) {
+  private confirmMouseEnter(e: React.MouseEvent<HTMLButtonElement>) {
     e.stopPropagation()
     this.setState({
       confirmButtonHover: true,
     })
   }
 
-  private handleConfirmMouseLeave(e: React.MouseEvent<HTMLButtonElement>) {
+  private confirmMouseLeave(e: React.MouseEvent<HTMLButtonElement>) {
     e.stopPropagation()
     this.setState({
       confirmButtonHover: false,
@@ -120,8 +120,8 @@ export class Alert extends React.Component<Props, State> {
             <button
               style={confirmS}
               onClick={this.handleConfirmClicked}
-              onMouseEnter={this.handleConfirmMouseEnter}
-              onMouseLeave={this.handleConfirmMouseLeave}>
+              onMouseEnter={this.confirmMouseEnter}
+              onMouseLeave={this.confirmMouseLeave}>
               好的
             </button>
           </p>
