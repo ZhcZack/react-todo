@@ -18994,13 +18994,13 @@ var detail_view_1 = __webpack_require__(/*! ./components/detailview/detail-view 
 var data_server_1 = __webpack_require__(/*! ./model/data-server */ "./src/model/data-server.ts");
 var global_alert_1 = __webpack_require__(/*! ./components/util/global-alert */ "./src/components/util/global-alert.tsx");
 var appStyles = {
-    width: "100vw",
-    height: "100vh",
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "nowrap",
-    justifyContent: "flex-start",
-    position: "relative",
+    width: '100vw',
+    height: '100vh',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'nowrap',
+    justifyContent: 'flex-start',
+    position: 'relative',
     zIndex: 1,
 };
 /**
@@ -19010,17 +19010,19 @@ var App = /** @class */ (function (_super) {
     __extends(App, _super);
     function App(props) {
         var _this = _super.call(this, props) || this;
-        _this.primaryListName = "我的一天";
+        _this.primaryListName = '我的一天';
         _this.server = new data_server_1.DataServer();
         _this.state = {
-            lastModifiedListName: "",
+            lastModifiedListName: '',
             listInfos: [],
             itemsOfList: [],
             detailItem: undefined,
             // colorTheme: this.server.themeForList(this.server.lastModified),
             actionsShouldDisplay: false,
-            alertShouldDisplay: false,
-            alertMessage: "",
+            displayDataErrorAlert: false,
+            dataErrorMessage: '',
+            displayDeleteListAlert: false,
+            deleteConfirmMessage: '是否要删除列表？',
         };
         // bind methods
         _this.switchList = _this.switchList.bind(_this);
@@ -19039,9 +19041,10 @@ var App = /** @class */ (function (_super) {
         _this.handleDragEnd = _this.handleDragEnd.bind(_this);
         _this.handleColorPick = _this.handleColorPick.bind(_this);
         _this.toggleActionsDisplay = _this.toggleActionsDisplay.bind(_this);
-        _this.handleConfirmClicked = _this.handleConfirmClicked.bind(_this);
+        _this.alertDefaultAction = _this.alertDefaultAction.bind(_this);
         _this.copyItemToPrimaryListFromDetailView = _this.copyItemToPrimaryListFromDetailView.bind(_this);
         _this.cancelCopyToPrimaryList = _this.cancelCopyToPrimaryList.bind(_this);
+        _this.shouldDeleteList = _this.shouldDeleteList.bind(_this);
         return _this;
     }
     /**
@@ -19078,13 +19081,13 @@ var App = /** @class */ (function (_super) {
                 var items = JSON.parse(_this.server.itemsOfList(listName));
                 var message = _this.server.loadError;
                 if (message) {
-                    rej("local data error");
+                    rej('local data error');
                 }
                 if (Array.isArray(items)) {
                     res(items);
                 }
                 else {
-                    rej("local data error");
+                    rej('local data error');
                 }
                 items.forEach(function (item) {
                     if (item.name === undefined ||
@@ -19092,7 +19095,7 @@ var App = /** @class */ (function (_super) {
                         item.time === undefined ||
                         item.inPrimaryList === undefined ||
                         item.source === undefined) {
-                        rej("local data error");
+                        rej('local data error');
                     }
                 });
             });
@@ -19109,8 +19112,8 @@ var App = /** @class */ (function (_super) {
             }).then(function (message) {
                 // console.log('error')
                 _this.setState({
-                    alertShouldDisplay: message !== undefined,
-                    alertMessage: message ? message : "",
+                    displayDataErrorAlert: message !== undefined,
+                    dataErrorMessage: message ? message : '',
                 });
             });
         });
@@ -19162,8 +19165,8 @@ var App = /** @class */ (function (_super) {
         });
         p.then(function (message) {
             _this.setState({
-                alertShouldDisplay: message !== undefined,
-                alertMessage: message ? message : "",
+                displayDataErrorAlert: message !== undefined,
+                dataErrorMessage: message ? message : '',
             });
         });
     };
@@ -19176,10 +19179,13 @@ var App = /** @class */ (function (_super) {
      * 弹窗中”确认“按钮的点击处理函数
      * @param e 鼠标事件
      */
-    App.prototype.handleConfirmClicked = function () {
-        this.setState(function (prevState) { return ({
-            alertShouldDisplay: !prevState.alertShouldDisplay,
-        }); });
+    App.prototype.alertDefaultAction = function () {
+        // 默认的都是“好的”之类，要隐藏掉所有的弹出框内容
+        this.setState({
+            displayDataErrorAlert: false,
+            displayDeleteListAlert: false,
+            actionsShouldDisplay: false,
+        });
     };
     /**
      * 显示/隐藏area view的操作窗口
@@ -19244,7 +19250,7 @@ var App = /** @class */ (function (_super) {
         var item = JSON.parse(JSON.stringify(this.state.detailItem));
         var infos = JSON.parse(JSON.stringify(this.state.listInfos));
         var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
-        var currentList = "";
+        var currentList = '';
         var detailItem = undefined;
         for (var _i = 0, infos_1 = infos; _i < infos_1.length; _i++) {
             var info = infos_1[_i];
@@ -19374,11 +19380,17 @@ var App = /** @class */ (function (_super) {
             itemsOfList: todos,
         });
     };
+    App.prototype.shouldDeleteList = function () {
+        this.setState({
+            displayDeleteListAlert: true,
+        });
+    };
     /**
      * 删除列表
-     * @param name 要删除的列表名
+     * @param listName 要删除的列表名
      */
-    App.prototype.deleteList = function (name) {
+    App.prototype.deleteList = function (listName) {
+        var name = listName ? listName : this.state.lastModifiedListName;
         this.server.deleteList(name);
         var infos = this.state.listInfos.slice();
         var index = 0;
@@ -19394,6 +19406,7 @@ var App = /** @class */ (function (_super) {
             listInfos: infos,
             lastModifiedListName: infos[0].name,
             actionsShouldDisplay: false,
+            displayDeleteListAlert: false,
         });
         // 这里要继续使用这个方法，因为之前的todos要被清空换新
         this.fetchItems();
@@ -19445,7 +19458,7 @@ var App = /** @class */ (function (_super) {
             name: listName,
             count: 0,
             isActive: true,
-            theme: "#87cefa",
+            theme: '#87cefa',
             isPrimary: false,
         });
         this.setState({
@@ -19478,7 +19491,7 @@ var App = /** @class */ (function (_super) {
         items.push({
             name: itemName,
             done: false,
-            time: new Date().toLocaleDateString().split(" ")[0],
+            time: new Date().toLocaleDateString().split(' ')[0],
             comments: undefined,
             source: listName,
             inPrimaryList: listName === this.primaryListName,
@@ -19501,7 +19514,7 @@ var App = /** @class */ (function (_super) {
         /** 是否将todo切换为完成状态 */
         var switchDone = false;
         /** item所在的其他列表名称 */
-        var sourceListName = "";
+        var sourceListName = '';
         var item = undefined;
         var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
         var infos = JSON.parse(JSON.stringify(this.state.listInfos));
@@ -19510,7 +19523,7 @@ var App = /** @class */ (function (_super) {
             if (todo.name === itemName) {
                 item = Object.assign({}, todo);
                 todo.done = !todo.done;
-                sourceListName = todo.source ? todo.source : "";
+                sourceListName = todo.source ? todo.source : '';
                 break;
             }
         }
@@ -19741,13 +19754,92 @@ var App = /** @class */ (function (_super) {
             , { 
                 // currentListName={this.state.lastModifiedListName}
                 switchList: this.switchList, addNewList: this.addNewList, listInfos: this.state.listInfos, onDrop: this.handleDrop, actionsDisplay: this.state.actionsShouldDisplay, onActionsDisplayClick: this.toggleActionsDisplay }),
-            React.createElement(area_view_1.AreaView, { shrink: this.state.detailItem !== undefined, listInfo: listInfo, todoItems: this.state.itemsOfList, renameList: this.renameList, deleteList: this.deleteList, addNewItemInList: this.addNewItemInList, toggleItemInList: this.toggleItemInList, itemClicked: this.itemClicked, onDragStart: this.handleDragStart, onDragEnd: this.handleDragEnd, onColorPick: this.handleColorPick, onActionsDisplayClick: this.toggleActionsDisplay, actionsShouldDisplay: this.state.actionsShouldDisplay }),
+            React.createElement(area_view_1.AreaView, { shrink: this.state.detailItem !== undefined, listInfo: listInfo, todoItems: this.state.itemsOfList, renameList: this.renameList, shouldDeleteList: this.shouldDeleteList, addNewItemInList: this.addNewItemInList, toggleItemInList: this.toggleItemInList, itemClicked: this.itemClicked, onDragStart: this.handleDragStart, onDragEnd: this.handleDragEnd, onColorPick: this.handleColorPick, onActionsDisplayClick: this.toggleActionsDisplay, actionsShouldDisplay: this.state.actionsShouldDisplay }),
             React.createElement(detail_view_1.DetailView, { listName: this.state.lastModifiedListName, item: this.state.detailItem, onCloseClicked: this.handleCloseFromDetailView, onDeleteClicked: this.handleDeleteFromDetailView, onToggleClicked: this.handleToggleFromDetailView, onCommentsChange: this.handleCommentsChange, onCopyToPrimary: this.copyItemToPrimaryListFromDetailView, onCancelCopyToPrimary: this.cancelCopyToPrimaryList }),
-            this.state.alertShouldDisplay && (React.createElement(global_alert_1.Alert, { display: this.state.alertShouldDisplay, message: this.state.alertMessage, onConfirmClicked: this.handleConfirmClicked }))));
+            this.state.displayDataErrorAlert && (React.createElement(global_alert_1.Alert, { display: this.state.displayDataErrorAlert, message: this.state.dataErrorMessage, alertDefaultAction: this.alertDefaultAction, type: global_alert_1.AlertType.Alert })),
+            this.state.displayDeleteListAlert && (React.createElement(global_alert_1.Alert, { display: this.state.displayDeleteListAlert, message: this.state.deleteConfirmMessage, alertDefaultAction: this.alertDefaultAction, alertConfirmAction: this.deleteList, type: global_alert_1.AlertType.Confirm }))));
     };
     return App;
 }(React.Component));
 exports.App = App;
+
+
+/***/ }),
+
+/***/ "./src/components/areaview/actionButton.tsx":
+/*!**************************************************!*\
+  !*** ./src/components/areaview/actionButton.tsx ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+var styles = {
+    height: 40,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+};
+var hoverStyle = {
+    backgroundColor: 'rgba(206, 197, 197, 0.2)',
+};
+/**
+ * 操作列表里的选项按钮
+ */
+var ActionButton = /** @class */ (function (_super) {
+    __extends(ActionButton, _super);
+    function ActionButton(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            hover: false,
+        };
+        // bind methods
+        _this.handleClick = _this.handleClick.bind(_this);
+        _this.mouseEnter = _this.mouseEnter.bind(_this);
+        _this.mouseLeave = _this.mouseLeave.bind(_this);
+        return _this;
+    }
+    ActionButton.prototype.render = function () {
+        var S = lib_1.mix(styles, this.props.style ? this.props.style : {});
+        if (this.state.hover) {
+            S = lib_1.mix(S, hoverStyle);
+        }
+        return (React.createElement("li", { style: S, onClick: this.handleClick, onMouseEnter: this.mouseEnter, onMouseLeave: this.mouseLeave }, this.props.text));
+    };
+    ActionButton.prototype.handleClick = function (e) {
+        e.stopPropagation();
+        this.props.onClick();
+    };
+    ActionButton.prototype.mouseEnter = function (e) {
+        e.stopPropagation();
+        this.setState({
+            hover: true,
+        });
+    };
+    ActionButton.prototype.mouseLeave = function (e) {
+        e.stopPropagation();
+        this.setState({
+            hover: false,
+        });
+    };
+    return ActionButton;
+}(React.Component));
+exports.ActionButton = ActionButton;
 
 
 /***/ }),
@@ -19908,6 +20000,69 @@ var AddNewItem = /** @class */ (function (_super) {
     return AddNewItem;
 }(React.Component));
 exports.AddNewItem = AddNewItem;
+
+
+/***/ }),
+
+/***/ "./src/components/areaview/area-actions.tsx":
+/*!**************************************************!*\
+  !*** ./src/components/areaview/area-actions.tsx ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var colortheme_picker_1 = __webpack_require__(/*! ../areaview/colortheme-picker */ "./src/components/areaview/colortheme-picker.tsx");
+var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+var actionButton_1 = __webpack_require__(/*! ./actionButton */ "./src/components/areaview/actionButton.tsx");
+/**
+ * 操作菜单的样式
+ */
+var actionStyles = {
+    position: 'absolute',
+    top: 'calc(100% + 5px)',
+    right: 10,
+    visibility: 'hidden',
+    width: 322,
+    listStyleType: 'none',
+    backgroundColor: 'white',
+    border: '1px solid rgba(206, 197, 197, 0.5)',
+    padding: 10,
+    marginRight: 0,
+};
+var actionDisplay = {
+    visibility: 'visible',
+};
+var AreaActions = /** @class */ (function (_super) {
+    __extends(AreaActions, _super);
+    function AreaActions() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    AreaActions.prototype.render = function () {
+        var actionShouldDisplay = this.props.actionsShouldDisplay;
+        return (React.createElement("div", { className: actionShouldDisplay ? 'animated fadeIn' : 'animated', style: actionShouldDisplay ? lib_1.mix(actionStyles, actionDisplay) : actionStyles },
+            React.createElement(colortheme_picker_1.ColorThemePicker, { onColorPick: this.props.onColorPick }),
+            React.createElement("ul", null,
+                React.createElement(actionButton_1.ActionButton, { onClick: this.props.switchDoneItems, text: (this.props.doneItemsDisplay ? '隐藏' : '显示') + '已完成的项目' }),
+                React.createElement(actionButton_1.ActionButton, { onClick: this.props.renameClicked, text: '重命名列表' }),
+                React.createElement(actionButton_1.ActionButton, { onClick: this.props.deleteClicked, text: '删除列表', style: { color: 'red' } }))));
+    };
+    return AreaActions;
+}(React.Component));
+exports.AreaActions = AreaActions;
 
 
 /***/ }),
@@ -20197,18 +20352,28 @@ var AreaView = /** @class */ (function (_super) {
                 e.stopPropagation();
                 _this.props.actionsShouldDisplay && _this.props.onActionsDisplayClick();
             } },
-            React.createElement(editable_head_1.EditableHead, { isPrimaryList: listInfo.isPrimary, listName: listInfo.name, colorTheme: listInfo.theme, renameList: this.renameList, deleteList: this.props.deleteList, switchDoneItems: this.switchDoneItems, doneItemsDisplay: this.state.showDoneItems, onColorPick: this.props.onColorPick, onActionsDisplayClick: this.props.onActionsDisplayClick, actionsShouldDisplay: this.props.actionsShouldDisplay }),
+            React.createElement(editable_head_1.EditableHead, { isPrimaryList: listInfo.isPrimary, listName: listInfo.name, colorTheme: listInfo.theme, renameList: this.renameList, shouldDeleteList: this.props.shouldDeleteList, switchDoneItems: this.switchDoneItems, doneItemsDisplay: this.state.showDoneItems, onColorPick: this.props.onColorPick, onActionsDisplayClick: this.props.onActionsDisplayClick, actionsShouldDisplay: this.props.actionsShouldDisplay }),
             React.createElement(area_view_content_1.AreaViewContent, { isPrimary: listInfo.isPrimary, items: this.props.todoItems, checkboxClicked: this.toggleItem, itemClicked: this.displayDetailView, onDragStart: this.handleDragStart, onDragEnd: this.props.onDragEnd, showDoneItems: this.state.showDoneItems }),
             React.createElement(add_new_item_1.AddNewItem, { value: this.state.inputValue, onValueChange: this.handleInput, onAddClicked: this.addNewItem, onCancelClicked: this.cancelInput })));
     };
-    AreaView.prototype.componentWillReceiveProps = function (nextProps) {
-        // 切换列表的时候将输入框中的内容清空
-        if (nextProps.listInfo.name !== this.props.listInfo.name) {
-            this.setState({
+    AreaView.getDerivedStateFromProps = function (nextProps, prevState) {
+        if (nextProps.listInfo.name != prevState.inputValue) {
+            return {
                 inputValue: '',
-            });
+            };
         }
     };
+    /**
+     * @deprecated from v16.3 deprecated
+     */
+    // componentWillReceiveProps(nextProps: Props) {
+    //   // 切换列表的时候将输入框中的内容清空
+    //   if (nextProps.listInfo.name !== this.props.listInfo.name) {
+    //     this.setState({
+    //       inputValue: '',
+    //     })
+    //   }
+    // }
     /**
      * 显示/隐藏已完成的todo事项
      */
@@ -20389,7 +20554,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var area_actions_1 = __webpack_require__(/*! ../util/area-actions */ "./src/components/util/area-actions.tsx");
+var area_actions_1 = __webpack_require__(/*! ./area-actions */ "./src/components/areaview/area-actions.tsx");
 var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
 /**
  * 最外层样式
@@ -20476,10 +20641,7 @@ var AreaViewHead = /** @class */ (function (_super) {
      * @param e 鼠标点击事件
      */
     AreaViewHead.prototype.deleteClicked = function () {
-        var result = confirm('确定删除此列表吗？');
-        if (result) {
-            this.props.deleteList(this.state.name);
-        }
+        this.props.shouldDeleteList();
     };
     /**
      * 显示/隐藏操作列表的视图
@@ -21097,15 +21259,15 @@ var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
 var styles = {
     height: 40,
-    padding: "0 10px",
-    cursor: "pointer",
-    color: "blue",
+    padding: '0 10px',
+    cursor: 'pointer',
+    color: 'blue',
 };
 var hoverStyles = {
-    backgroundColor: "rgba(206, 197, 197, 0.5)",
+    backgroundColor: 'rgba(206, 197, 197, 0.5)',
 };
 var spanStyles = {
-    fontSize: "1.5em",
+    fontSize: '1.5em',
     marginRight: 10,
 };
 var AddListButton = /** @class */ (function (_super) {
@@ -21116,23 +21278,30 @@ var AddListButton = /** @class */ (function (_super) {
             hover: false,
         };
         _this.handleClick = _this.handleClick.bind(_this);
+        _this.buttonMouseEnter = _this.buttonMouseEnter.bind(_this);
+        _this.buttonMouseLeave = _this.buttonMouseLeave.bind(_this);
         return _this;
     }
     AddListButton.prototype.handleClick = function (e) {
         e.stopPropagation();
         this.props.onClick();
     };
+    AddListButton.prototype.buttonMouseEnter = function (e) {
+        e.stopPropagation();
+        this.setState({
+            hover: true,
+        });
+    };
+    AddListButton.prototype.buttonMouseLeave = function (e) {
+        e.stopPropagation();
+        this.setState({
+            hover: false,
+        });
+    };
     AddListButton.prototype.render = function () {
-        var _this = this;
         var s = this.state.hover ? lib_1.mix(styles, hoverStyles) : styles;
-        // log(s);
-        return (React.createElement("div", { style: s, onClick: this.props.onClick, onMouseEnter: function (e) {
-                e.stopPropagation();
-                _this.setState({ hover: true });
-            }, onMouseLeave: function (e) {
-                e.stopPropagation();
-                _this.setState({ hover: false });
-            } },
+        // log(s)
+        return (React.createElement("div", { style: s, onClick: this.props.onClick, onMouseEnter: this.buttonMouseEnter, onMouseLeave: this.buttonMouseLeave },
             React.createElement("span", { style: spanStyles }, "+"),
             "\u65B0\u5EFA\u6E05\u5355"));
     };
@@ -21386,15 +21555,15 @@ var addListButton_1 = __webpack_require__(/*! ./addListButton */ "./src/componen
  */
 var AddButtonStyles = {
     height: 40,
-    padding: "0 10px",
-    cursor: "pointer",
-    color: "blue",
+    padding: '0 10px',
+    cursor: 'pointer',
+    color: 'blue',
 };
 var viewStyles = {
     width: 280,
-    position: "relative",
-    overflow: "hidden",
-    borderRight: "1px solid rgba(206, 197, 197, 0.5)",
+    position: 'relative',
+    overflow: 'hidden',
+    borderRight: '1px solid rgba(206, 197, 197, 0.5)',
 };
 /**
  * 列表目录
@@ -21422,7 +21591,14 @@ var ListView = /** @class */ (function (_super) {
      * 添加新列表
      */
     ListView.prototype.addNewList = function () {
-        var name = this.getListName();
+        var result = true;
+        var name = '';
+        while (result) {
+            name = this.getListName();
+            result = this.props.listInfos.some(function (list) {
+                return list.name == name;
+            });
+        }
         this.props.addNewList(name);
     };
     /**
@@ -21430,7 +21606,7 @@ var ListView = /** @class */ (function (_super) {
      */
     ListView.prototype.getListName = function () {
         this.count++;
-        return "\u65E0\u547D\u540D\u6E05\u5355" + (this.count > 0 ? this.count : "");
+        return "\u65E0\u547D\u540D\u6E05\u5355" + (this.count > 0 ? this.count : '');
     };
     ListView.prototype.render = function () {
         var _this = this;
@@ -21452,10 +21628,10 @@ exports.ListView = ListView;
 
 /***/ }),
 
-/***/ "./src/components/util/actionButton.tsx":
-/*!**********************************************!*\
-  !*** ./src/components/util/actionButton.tsx ***!
-  \**********************************************/
+/***/ "./src/components/util/alertButton.tsx":
+/*!*********************************************!*\
+  !*** ./src/components/util/alertButton.tsx ***!
+  \*********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21474,118 +21650,59 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
-var styles = {
-    height: 40,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    cursor: 'pointer',
-};
-var hoverStyle = {
-    backgroundColor: 'rgba(206, 197, 197, 0.2)',
-};
-var ActionButton = /** @class */ (function (_super) {
-    __extends(ActionButton, _super);
-    function ActionButton(props) {
+/**
+ * 全局提示框里的按钮
+ */
+var AlertButton = /** @class */ (function (_super) {
+    __extends(AlertButton, _super);
+    function AlertButton(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {
             hover: false,
         };
-        // bind methods
-        _this.handleClick = _this.handleClick.bind(_this);
-        _this.mouseEnter = _this.mouseEnter.bind(_this);
-        _this.mouseLeave = _this.mouseLeave.bind(_this);
+        _this.onMouseEnter = _this.onMouseEnter.bind(_this);
+        _this.onMouseLeave = _this.onMouseLeave.bind(_this);
+        _this.onClick = _this.onClick.bind(_this);
         return _this;
     }
-    ActionButton.prototype.render = function () {
-        var S = lib_1.mix(styles, this.props.style ? this.props.style : {});
-        if (this.state.hover) {
-            S = lib_1.mix(S, hoverStyle);
-        }
-        return (React.createElement("li", { style: S, onClick: this.handleClick, onMouseEnter: this.mouseEnter, onMouseLeave: this.mouseLeave }, this.props.text));
-    };
-    ActionButton.prototype.handleClick = function (e) {
-        e.stopPropagation();
-        this.props.onClick();
-    };
-    ActionButton.prototype.mouseEnter = function (e) {
+    AlertButton.prototype.onMouseEnter = function (e) {
         e.stopPropagation();
         this.setState({
             hover: true,
         });
     };
-    ActionButton.prototype.mouseLeave = function (e) {
+    AlertButton.prototype.onMouseLeave = function (e) {
         e.stopPropagation();
         this.setState({
             hover: false,
         });
     };
-    return ActionButton;
-}(React.Component));
-exports.default = ActionButton;
-
-
-/***/ }),
-
-/***/ "./src/components/util/area-actions.tsx":
-/*!**********************************************!*\
-  !*** ./src/components/util/area-actions.tsx ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    AlertButton.prototype.onClick = function (e) {
+        e.stopPropagation();
+        this.props.onClick();
     };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var colortheme_picker_1 = __webpack_require__(/*! ../areaview/colortheme-picker */ "./src/components/areaview/colortheme-picker.tsx");
-var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
-var actionButton_1 = __webpack_require__(/*! ./actionButton */ "./src/components/util/actionButton.tsx");
+    AlertButton.prototype.render = function () {
+        var style = this.state.hover
+            ? lib_1.mix(confirmButtonStyles, confirmButtonHover)
+            : confirmButtonStyles;
+        return (React.createElement("button", { style: style, onMouseEnter: this.onMouseEnter, onMouseLeave: this.onMouseLeave, onClick: this.onClick }, this.props.title));
+    };
+    return AlertButton;
+}(React.Component));
+exports.AlertButton = AlertButton;
 /**
- * 操作菜单的样式
+ * “确认”按钮样式
  */
-var actionStyles = {
-    position: 'absolute',
-    top: 'calc(100% + 5px)',
-    right: 10,
-    visibility: 'hidden',
-    width: 322,
-    listStyleType: 'none',
-    backgroundColor: 'white',
-    border: '1px solid rgba(206, 197, 197, 0.5)',
-    padding: 10,
-    marginRight: 0,
+var confirmButtonStyles = {
+    height: 30,
+    border: 'none',
+    backgroundColor: 'transparent',
+    cursor: 'pointer',
+    transition: 'backgroud-color 0.3s',
 };
-var actionDisplay = {
-    visibility: 'visible',
+var confirmButtonHover = {
+    backgroundColor: 'rgba(206, 197, 197, 0.5)',
 };
-var AreaActions = /** @class */ (function (_super) {
-    __extends(AreaActions, _super);
-    function AreaActions() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    AreaActions.prototype.render = function () {
-        var actionShouldDisplay = this.props.actionsShouldDisplay;
-        return (React.createElement("div", { className: actionShouldDisplay ? 'animated fadeIn' : 'animated', style: actionShouldDisplay ? lib_1.mix(actionStyles, actionDisplay) : actionStyles },
-            React.createElement(colortheme_picker_1.ColorThemePicker, { onColorPick: this.props.onColorPick }),
-            React.createElement("ul", null,
-                React.createElement(actionButton_1.default, { onClick: this.props.switchDoneItems, text: (this.props.doneItemsDisplay ? '隐藏' : '显示') + '已完成的项目' }),
-                React.createElement(actionButton_1.default, { onClick: this.props.renameClicked, text: '重命名列表' }),
-                React.createElement(actionButton_1.default, { onClick: this.props.deleteClicked, text: '删除列表', style: { color: 'red' } }))));
-    };
-    return AreaActions;
-}(React.Component));
-exports.AreaActions = AreaActions;
 
 
 /***/ }),
@@ -21612,6 +21729,12 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+var alertButton_1 = __webpack_require__(/*! ./alertButton */ "./src/components/util/alertButton.tsx");
+var AlertType;
+(function (AlertType) {
+    AlertType[AlertType["Alert"] = 0] = "Alert";
+    AlertType[AlertType["Confirm"] = 1] = "Confirm";
+})(AlertType = exports.AlertType || (exports.AlertType = {}));
 /**
  * 提示框后的全屏背景遮罩层样式
  */
@@ -21645,9 +21768,9 @@ var alertStyles = {
     flexWrap: 'wrap',
 };
 /**
- * alert的直接子元素样式
+ * alert的提示消息样式
  */
-var alertDirectStyles = {
+var alertMessageStyles = {
     width: '100%',
 };
 /**
@@ -21658,61 +21781,45 @@ var alertActionStyles = {
     flexDirection: 'column-reverse',
     width: '100%',
 };
-/**
- * “确认”按钮样式
- */
-var confirmButtonStyles = {
-    height: 30,
-    border: 'none',
-    backgroundColor: 'transparent',
-    cursor: 'pointer',
-    transition: 'backgroud-color 0.3s',
-};
-var confirmButtonHover = {
-    backgroundColor: 'rgba(206, 197, 197, 0.5)',
-};
 var Alert = /** @class */ (function (_super) {
     __extends(Alert, _super);
     function Alert(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {
             confirmButtonHover: false,
+            type: _this.props.type,
         };
         // bind methods
-        _this.handleConfirmClicked = _this.handleConfirmClicked.bind(_this);
-        _this.confirmMouseEnter = _this.confirmMouseEnter.bind(_this);
-        _this.confirmMouseLeave = _this.confirmMouseLeave.bind(_this);
+        _this.defaultClick = _this.defaultClick.bind(_this);
+        _this.confirmClick = _this.confirmClick.bind(_this);
         return _this;
     }
-    Alert.prototype.handleConfirmClicked = function (e) {
-        e.stopPropagation();
-        this.props.onConfirmClicked();
+    // new lifecycle hook, replace `willReceive`
+    Alert.getDerivedStateFromProps = function (nextProps, prevState) {
+        return {
+            type: nextProps.type,
+            confirmButtonHover: prevState.confirmButtonHover,
+        };
     };
-    Alert.prototype.confirmMouseEnter = function (e) {
-        e.stopPropagation();
-        this.setState({
-            confirmButtonHover: true,
-        });
+    Alert.prototype.defaultClick = function () {
+        this.props.alertDefaultAction();
     };
-    Alert.prototype.confirmMouseLeave = function (e) {
-        e.stopPropagation();
-        this.setState({
-            confirmButtonHover: false,
-        });
+    Alert.prototype.confirmClick = function () {
+        if (this.props.alertConfirmAction) {
+            this.props.alertConfirmAction();
+        }
     };
     Alert.prototype.render = function () {
         var backgroundS = lib_1.mix(backgroundStyles);
         if (this.props.display) {
             backgroundS = lib_1.mix(backgroundS, backgroundDisplay);
         }
-        var confirmS = this.state.confirmButtonHover
-            ? lib_1.mix(confirmButtonStyles, confirmButtonHover)
-            : confirmButtonStyles;
         return (React.createElement("div", { style: backgroundS },
             React.createElement("div", { style: alertStyles },
-                React.createElement("p", { style: alertDirectStyles }, this.props.message),
-                React.createElement("p", { style: alertActionStyles },
-                    React.createElement("button", { style: confirmS, onClick: this.handleConfirmClicked, onMouseEnter: this.confirmMouseEnter, onMouseLeave: this.confirmMouseLeave }, "\u597D\u7684")))));
+                React.createElement("p", { style: alertMessageStyles }, this.props.message),
+                React.createElement("div", { style: alertActionStyles }, this.state.type == AlertType.Alert ? (React.createElement(alertButton_1.AlertButton, { title: '好的', onClick: this.defaultClick })) : (React.createElement("div", null,
+                    React.createElement(alertButton_1.AlertButton, { title: '取消', onClick: this.defaultClick }),
+                    React.createElement(alertButton_1.AlertButton, { title: '确定', onClick: this.confirmClick })))))));
     };
     return Alert;
 }(React.Component));
@@ -21736,7 +21843,7 @@ var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/in
 var app_1 = __webpack_require__(/*! ./app */ "./src/app.tsx");
 __webpack_require__(/*! animate.css */ "./node_modules/animate.css/animate.css");
 __webpack_require__(/*! ./styles/index.scss */ "./src/styles/index.scss");
-ReactDOM.render(React.createElement(app_1.App, null), document.getElementById("root"));
+ReactDOM.render(React.createElement(app_1.App, null), document.getElementById('root'));
 
 
 /***/ }),

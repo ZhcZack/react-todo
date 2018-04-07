@@ -1,14 +1,23 @@
 import * as React from 'react'
 import { mix } from '../../lib'
+import { AlertButton } from './alertButton'
 
 interface Props {
   display: boolean
   message: string
-  onConfirmClicked(): void
+  alertDefaultAction(): void
+  alertConfirmAction?: () => void
+  type: AlertType
 }
 
 interface State {
   confirmButtonHover: boolean
+  type: AlertType
+}
+
+export enum AlertType {
+  Alert,
+  Confirm,
 }
 
 /**
@@ -45,9 +54,9 @@ const alertStyles: React.CSSProperties = {
   flexWrap: 'wrap',
 }
 /**
- * alert的直接子元素样式
+ * alert的提示消息样式
  */
-const alertDirectStyles: React.CSSProperties = {
+const alertMessageStyles: React.CSSProperties = {
   width: '100%',
 }
 /**
@@ -58,50 +67,36 @@ const alertActionStyles: React.CSSProperties = {
   flexDirection: 'column-reverse',
   width: '100%',
 }
-/**
- * “确认”按钮样式
- */
-const confirmButtonStyles: React.CSSProperties = {
-  height: 30,
-  border: 'none',
-  backgroundColor: 'transparent',
-  cursor: 'pointer',
-  transition: 'backgroud-color 0.3s',
-}
-const confirmButtonHover: React.CSSProperties = {
-  backgroundColor: 'rgba(206, 197, 197, 0.5)',
-}
 
 export class Alert extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
       confirmButtonHover: false,
+      type: this.props.type,
     }
 
     // bind methods
-    this.handleConfirmClicked = this.handleConfirmClicked.bind(this)
-    this.confirmMouseEnter = this.confirmMouseEnter.bind(this)
-    this.confirmMouseLeave = this.confirmMouseLeave.bind(this)
+    this.defaultClick = this.defaultClick.bind(this)
+    this.confirmClick = this.confirmClick.bind(this)
   }
 
-  private handleConfirmClicked(e: React.MouseEvent<HTMLButtonElement>) {
-    e.stopPropagation()
-    this.props.onConfirmClicked()
+  // new lifecycle hook, replace `willReceive`
+  static getDerivedStateFromProps(nextProps: Props, prevState: State): State {
+    return {
+      type: nextProps.type,
+      confirmButtonHover: prevState.confirmButtonHover,
+    }
   }
 
-  private confirmMouseEnter(e: React.MouseEvent<HTMLButtonElement>) {
-    e.stopPropagation()
-    this.setState({
-      confirmButtonHover: true,
-    })
+  private defaultClick() {
+    this.props.alertDefaultAction()
   }
 
-  private confirmMouseLeave(e: React.MouseEvent<HTMLButtonElement>) {
-    e.stopPropagation()
-    this.setState({
-      confirmButtonHover: false,
-    })
+  private confirmClick() {
+    if (this.props.alertConfirmAction) {
+      this.props.alertConfirmAction()
+    }
   }
 
   render() {
@@ -109,22 +104,20 @@ export class Alert extends React.Component<Props, State> {
     if (this.props.display) {
       backgroundS = mix(backgroundS, backgroundDisplay)
     }
-    let confirmS = this.state.confirmButtonHover
-      ? mix(confirmButtonStyles, confirmButtonHover)
-      : confirmButtonStyles
     return (
       <div style={backgroundS}>
         <div style={alertStyles}>
-          <p style={alertDirectStyles}>{this.props.message}</p>
-          <p style={alertActionStyles}>
-            <button
-              style={confirmS}
-              onClick={this.handleConfirmClicked}
-              onMouseEnter={this.confirmMouseEnter}
-              onMouseLeave={this.confirmMouseLeave}>
-              好的
-            </button>
-          </p>
+          <p style={alertMessageStyles}>{this.props.message}</p>
+          <div style={alertActionStyles}>
+            {this.state.type == AlertType.Alert ? (
+              <AlertButton title={'好的'} onClick={this.defaultClick} />
+            ) : (
+              <div>
+                <AlertButton title={'取消'} onClick={this.defaultClick} />
+                <AlertButton title={'确定'} onClick={this.confirmClick} />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     )

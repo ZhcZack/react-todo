@@ -6,7 +6,7 @@ import { AreaViewContent } from './area-view-content'
 import { EditableHead } from './editable-head'
 import { mix } from '../../lib'
 
-interface AreaViewProps {
+interface Props {
   /**
    * 列表的信息
    */
@@ -20,7 +20,7 @@ interface AreaViewProps {
   /**重命名列表，处理方法 */
   renameList(oldName: string, newName: string): void
   /**删除列表处理方法 */
-  deleteList(name: string): void
+  shouldDeleteList(): void
   /**在列表中添加新todo项目，处理方法 */
   addNewItemInList(itemName: string, listName: string): void
   /**切换todo事项完成状态，处理方法 */
@@ -44,7 +44,7 @@ interface AreaViewProps {
   actionsShouldDisplay: boolean
 }
 
-interface AreaViewState {
+interface State {
   /**文本框输入的数据内容 */
   inputValue: string
   showDoneItems: boolean
@@ -58,8 +58,8 @@ const viewShrinkStyles = {
   width: 'calc(100% - 280px - 280px)',
 }
 
-export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
-  constructor(props: AreaViewProps) {
+export class AreaView extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props)
     this.state = {
       inputValue: '',
@@ -92,7 +92,7 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
           listName={listInfo.name}
           colorTheme={listInfo.theme}
           renameList={this.renameList}
-          deleteList={this.props.deleteList}
+          shouldDeleteList={this.props.shouldDeleteList}
           switchDoneItems={this.switchDoneItems}
           doneItemsDisplay={this.state.showDoneItems}
           onColorPick={this.props.onColorPick}
@@ -118,14 +118,25 @@ export class AreaView extends React.Component<AreaViewProps, AreaViewState> {
     )
   }
 
-  componentWillReceiveProps(nextProps: AreaViewProps) {
-    // 切换列表的时候将输入框中的内容清空
-    if (nextProps.listInfo.name !== this.props.listInfo.name) {
-      this.setState({
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    if (nextProps.listInfo.name != prevState.inputValue) {
+      return {
         inputValue: '',
-      })
+      }
     }
   }
+
+  /**
+   * @deprecated from v16.3 deprecated
+   */
+  // componentWillReceiveProps(nextProps: Props) {
+  //   // 切换列表的时候将输入框中的内容清空
+  //   if (nextProps.listInfo.name !== this.props.listInfo.name) {
+  //     this.setState({
+  //       inputValue: '',
+  //     })
+  //   }
+  // }
 
   /**
    * 显示/隐藏已完成的todo事项

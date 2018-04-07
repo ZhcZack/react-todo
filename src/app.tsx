@@ -1,98 +1,109 @@
-import * as React from "react";
-import { ListView } from "./components/listview/list-view";
-import { AreaView } from "./components/areaview/area-view";
-import { DetailView } from "./components/detailview/detail-view";
-import { DataServer } from "./model/data-server";
-import { TodoItem, ListInfo } from "./model/interface";
-import { Alert } from "./components/util/global-alert";
+import * as React from 'react'
+import { ListView } from './components/listview/list-view'
+import { AreaView } from './components/areaview/area-view'
+import { DetailView } from './components/detailview/detail-view'
+import { DataServer } from './model/data-server'
+import { TodoItem, ListInfo } from './model/interface'
+import { Alert, AlertType } from './components/util/global-alert'
 
 interface AppProps {}
 
 interface AppState {
   /**最后处理todo事项的列表名称 */
-  lastModifiedListName: string;
+  lastModifiedListName: string
   /**
    * 列表们的信息
    */
-  listInfos: ListInfo[];
+  listInfos: ListInfo[]
   /**
    * 一个列表中的所有todo事项
    */
-  itemsOfList: TodoItem[];
+  itemsOfList: TodoItem[]
   /**detail view中显示/编辑的todo事项 */
-  detailItem?: TodoItem;
+  detailItem?: TodoItem
   /**area view的主题颜色 */
   // colorTheme: string
   /**
    * area view操作列表是否要显示
    */
-  actionsShouldDisplay: boolean;
+  actionsShouldDisplay: boolean
   /**
-   * 提示框是否要显示
+   * 数据错误的提示框是否显示
    */
-  alertShouldDisplay: boolean;
+  displayDataErrorAlert: boolean
   /**
-   * 提示框内容
+   * 数据错误提示框内容
    */
-  alertMessage: string;
+  dataErrorMessage: string
+  /**
+   * 删除列表提示框是否显示
+   */
+  displayDeleteListAlert: boolean
+  /**
+   * 删除列表提示框内容
+   */
+  deleteConfirmMessage: string
 }
 
 const appStyles = {
-  width: "100vw",
-  height: "100vh",
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "nowrap",
-  justifyContent: "flex-start",
-  position: "relative",
+  width: '100vw',
+  height: '100vh',
+  display: 'flex',
+  flexDirection: 'row',
+  flexWrap: 'nowrap',
+  justifyContent: 'flex-start',
+  position: 'relative',
   zIndex: 1,
-} as React.CSSProperties;
+} as React.CSSProperties
 
 /**
  * App主内容区域
  */
 export class App extends React.Component<AppProps, AppState> {
   /**列表服务 */
-  private server: DataServer;
+  private server: DataServer
   /**拖拽过程中的数据 */
-  private dragData?: string;
-  private primaryListName = "我的一天";
+  private dragData?: string
+  private primaryListName = '我的一天'
 
   constructor(props: AppProps) {
-    super(props);
-    this.server = new DataServer();
+    super(props)
+    this.server = new DataServer()
 
     this.state = {
-      lastModifiedListName: "",
+      lastModifiedListName: '',
       listInfos: [],
       itemsOfList: [],
       detailItem: undefined,
       // colorTheme: this.server.themeForList(this.server.lastModified),
       actionsShouldDisplay: false,
-      alertShouldDisplay: false,
-      alertMessage: "",
-    };
+      displayDataErrorAlert: false,
+      dataErrorMessage: '',
+      displayDeleteListAlert: false,
+      deleteConfirmMessage: '是否要删除列表？',
+    }
 
     // bind methods
-    this.switchList = this.switchList.bind(this);
-    this.itemClicked = this.itemClicked.bind(this);
-    this.addNewList = this.addNewList.bind(this);
-    this.renameList = this.renameList.bind(this);
-    this.deleteList = this.deleteList.bind(this);
-    this.addNewItemInList = this.addNewItemInList.bind(this);
-    this.toggleItemInList = this.toggleItemInList.bind(this);
-    this.handleToggleFromDetailView = this.handleToggleFromDetailView.bind(this);
-    this.handleCloseFromDetailView = this.handleCloseFromDetailView.bind(this);
-    this.handleDeleteFromDetailView = this.handleDeleteFromDetailView.bind(this);
-    this.handleCommentsChange = this.handleCommentsChange.bind(this);
-    this.handleDragStart = this.handleDragStart.bind(this);
-    this.handleDrop = this.handleDrop.bind(this);
-    this.handleDragEnd = this.handleDragEnd.bind(this);
-    this.handleColorPick = this.handleColorPick.bind(this);
-    this.toggleActionsDisplay = this.toggleActionsDisplay.bind(this);
-    this.handleConfirmClicked = this.handleConfirmClicked.bind(this);
-    this.copyItemToPrimaryListFromDetailView = this.copyItemToPrimaryListFromDetailView.bind(this);
-    this.cancelCopyToPrimaryList = this.cancelCopyToPrimaryList.bind(this);
+    this.switchList = this.switchList.bind(this)
+    this.itemClicked = this.itemClicked.bind(this)
+    this.addNewList = this.addNewList.bind(this)
+    this.renameList = this.renameList.bind(this)
+    this.deleteList = this.deleteList.bind(this)
+    this.addNewItemInList = this.addNewItemInList.bind(this)
+    this.toggleItemInList = this.toggleItemInList.bind(this)
+    this.handleToggleFromDetailView = this.handleToggleFromDetailView.bind(this)
+    this.handleCloseFromDetailView = this.handleCloseFromDetailView.bind(this)
+    this.handleDeleteFromDetailView = this.handleDeleteFromDetailView.bind(this)
+    this.handleCommentsChange = this.handleCommentsChange.bind(this)
+    this.handleDragStart = this.handleDragStart.bind(this)
+    this.handleDrop = this.handleDrop.bind(this)
+    this.handleDragEnd = this.handleDragEnd.bind(this)
+    this.handleColorPick = this.handleColorPick.bind(this)
+    this.toggleActionsDisplay = this.toggleActionsDisplay.bind(this)
+    this.alertDefaultAction = this.alertDefaultAction.bind(this)
+    this.copyItemToPrimaryListFromDetailView = this.copyItemToPrimaryListFromDetailView.bind(this)
+    this.cancelCopyToPrimaryList = this.cancelCopyToPrimaryList.bind(this)
+    this.shouldDeleteList = this.shouldDeleteList.bind(this)
   }
 
   /**
@@ -102,38 +113,38 @@ export class App extends React.Component<AppProps, AppState> {
    */
   private initFetch() {
     new Promise<ListInfo[]>((resolve, reject) => {
-      const infos: ListInfo[] = JSON.parse(this.server.listInfos);
+      const infos: ListInfo[] = JSON.parse(this.server.listInfos)
       if (Array.isArray(infos)) {
-        resolve(infos);
+        resolve(infos)
       }
     })
       .then(infos => {
         this.setState({
           listInfos: infos,
-        });
+        })
         // let info = infos.filter(
         //   info => info.name === this.state.lastModifiedListName,
         // )
         // return info[0].name
         return new Promise((res: (name: string) => void, rej) => {
-          const name = this.server.lastModified;
+          const name = this.server.lastModified
           this.setState({
             lastModifiedListName: name,
-          });
-          res(name);
-        });
+          })
+          res(name)
+        })
       })
       .then(listName => {
         return new Promise((res: (items: TodoItem[]) => void, rej: (error: string) => void) => {
-          const items = JSON.parse(this.server.itemsOfList(listName)) as TodoItem[];
-          let message = this.server.loadError;
+          const items = JSON.parse(this.server.itemsOfList(listName)) as TodoItem[]
+          let message = this.server.loadError
           if (message) {
-            rej("local data error");
+            rej('local data error')
           }
           if (Array.isArray(items)) {
-            res(items);
+            res(items)
           } else {
-            rej("local data error");
+            rej('local data error')
           }
           items.forEach(item => {
             if (
@@ -143,31 +154,31 @@ export class App extends React.Component<AppProps, AppState> {
               item.inPrimaryList === undefined ||
               item.source === undefined
             ) {
-              rej("local data error");
+              rej('local data error')
             }
-          });
-        });
+          })
+        })
       })
       .then(
         items => {
           this.setState({
             itemsOfList: items,
-          });
+          })
         },
         error => {
           // console.log('error')
           new Promise((res: (value: string | undefined) => void, rej) => {
-            let message = this.server.loadError;
-            res(message);
+            let message = this.server.loadError
+            res(message)
           }).then(message => {
             // console.log('error')
             this.setState({
-              alertShouldDisplay: message !== undefined,
-              alertMessage: message ? message : "",
-            });
-          });
+              displayDataErrorAlert: message !== undefined,
+              dataErrorMessage: message ? message : '',
+            })
+          })
         },
-      );
+      )
   }
 
   /**
@@ -175,17 +186,17 @@ export class App extends React.Component<AppProps, AppState> {
    */
   private fetchListInfo() {
     let p: Promise<ListInfo[]> = new Promise((res, rej) => {
-      const infos: ListInfo[] = JSON.parse(this.server.listInfos);
+      const infos: ListInfo[] = JSON.parse(this.server.listInfos)
       if (Array.isArray(infos)) {
-        res(infos);
+        res(infos)
       }
-    });
+    })
     p.then(infos => {
       // console.log(infos);
       this.setState({
         listInfos: infos,
-      });
-    });
+      })
+    })
   }
 
   /**
@@ -193,17 +204,17 @@ export class App extends React.Component<AppProps, AppState> {
    */
   private fetchItems() {
     let p: Promise<TodoItem[]> = new Promise((res, rej) => {
-      const listName = this.server.lastModified;
-      const items = JSON.parse(this.server.itemsOfList(listName));
+      const listName = this.server.lastModified
+      const items = JSON.parse(this.server.itemsOfList(listName))
       if (Array.isArray(items)) {
-        res(items);
+        res(items)
       }
-    });
+    })
     p.then(items => {
       this.setState({
         itemsOfList: items,
-      });
-    });
+      })
+    })
   }
 
   /**
@@ -211,31 +222,34 @@ export class App extends React.Component<AppProps, AppState> {
    */
   private fetchErrorMessage() {
     let p: Promise<string | undefined> = new Promise((res, rej) => {
-      let message = this.server.loadError;
-      res(message);
-    });
+      let message = this.server.loadError
+      res(message)
+    })
     p.then(message => {
       this.setState({
-        alertShouldDisplay: message !== undefined,
-        alertMessage: message ? message : "",
-      });
-    });
+        displayDataErrorAlert: message !== undefined,
+        dataErrorMessage: message ? message : '',
+      })
+    })
   }
 
   componentDidMount() {
     // this.fetchItems()
     // this.fetchListInfo()
-    this.initFetch();
+    this.initFetch()
   }
 
   /**
    * 弹窗中”确认“按钮的点击处理函数
    * @param e 鼠标事件
    */
-  private handleConfirmClicked() {
-    this.setState(prevState => ({
-      alertShouldDisplay: !prevState.alertShouldDisplay,
-    }));
+  private alertDefaultAction() {
+    // 默认的都是“好的”之类，要隐藏掉所有的弹出框内容
+    this.setState({
+      displayDataErrorAlert: false,
+      displayDeleteListAlert: false,
+      actionsShouldDisplay: false,
+    })
   }
 
   /**
@@ -244,7 +258,7 @@ export class App extends React.Component<AppProps, AppState> {
   private toggleActionsDisplay() {
     this.setState(prevState => ({
       actionsShouldDisplay: !prevState.actionsShouldDisplay,
-    }));
+    }))
   }
 
   /**
@@ -253,47 +267,47 @@ export class App extends React.Component<AppProps, AppState> {
    */
   private handleDrop(targetListName: string) {
     if (!this.dragData) {
-      return;
+      return
     }
-    const data = JSON.parse(this.dragData);
-    const sourceListName = data.listName as string;
-    const itemData = JSON.parse(data.data) as TodoItem;
+    const data = JSON.parse(this.dragData)
+    const sourceListName = data.listName as string
+    const itemData = JSON.parse(data.data) as TodoItem
 
     // 开始和结束的列表不能是同一个，不然拖拽没有意义
     if (sourceListName === targetListName) {
-      return;
+      return
     }
 
-    this.dragData = undefined;
+    this.dragData = undefined
 
-    const todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[];
-    const infos = JSON.parse(JSON.stringify(this.state.listInfos)) as ListInfo[];
+    const todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[]
+    const infos = JSON.parse(JSON.stringify(this.state.listInfos)) as ListInfo[]
 
     // 从其他列表拉到“我的一天“
     if (targetListName === this.primaryListName) {
-      this.copyItemToPrimaryList(itemData, sourceListName);
+      this.copyItemToPrimaryList(itemData, sourceListName)
     } else {
       // 拉进哪个列表，source就是哪个列表，同时primary为false
-      this.server.deleteItemInList(itemData.name, sourceListName);
-      itemData.source = targetListName;
-      itemData.inPrimaryList = false;
-      this.server.addNewItemInList(itemData, targetListName);
+      this.server.deleteItemInList(itemData.name, sourceListName)
+      itemData.source = targetListName
+      itemData.inPrimaryList = false
+      this.server.addNewItemInList(itemData, targetListName)
 
-      let itemIndex = 0;
+      let itemIndex = 0
       for (let i = 0; i < todos.length; i++) {
         if (todos[i].name === itemData.name) {
-          itemIndex = i;
-          break;
+          itemIndex = i
+          break
         }
       }
 
-      todos.splice(itemIndex, 1);
-      this.fetchListInfo();
+      todos.splice(itemIndex, 1)
+      this.fetchListInfo()
       this.setState({
         listInfos: infos,
         itemsOfList: todos,
         detailItem: undefined,
-      });
+      })
     }
   }
 
@@ -303,59 +317,59 @@ export class App extends React.Component<AppProps, AppState> {
    */
   private cancelCopyToPrimaryList() {
     if (!this.state.detailItem) {
-      return;
+      return
     }
-    const item = JSON.parse(JSON.stringify(this.state.detailItem)) as TodoItem;
-    const infos = JSON.parse(JSON.stringify(this.state.listInfos)) as ListInfo[];
-    const todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[];
+    const item = JSON.parse(JSON.stringify(this.state.detailItem)) as TodoItem
+    const infos = JSON.parse(JSON.stringify(this.state.listInfos)) as ListInfo[]
+    const todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[]
 
-    let currentList = "";
-    let detailItem: TodoItem | undefined = undefined;
+    let currentList = ''
+    let detailItem: TodoItem | undefined = undefined
 
     for (let info of infos) {
       if (info.name === this.primaryListName) {
-        info.count -= 1;
+        info.count -= 1
       }
       if (info.isActive) {
-        currentList = info.name;
+        currentList = info.name
       }
     }
 
-    this.server.deleteItemInList(item.name, this.primaryListName);
+    this.server.deleteItemInList(item.name, this.primaryListName)
     // this.server.markItemNotPrimary(item.name, currentList);
-    this.server.markItemPrimaryStatus(item.name, currentList, false);
+    this.server.markItemPrimaryStatus(item.name, currentList, false)
 
     for (let todo of todos) {
       if (todo.name === item.name) {
-        todo.inPrimaryList = false;
-        detailItem = todo;
+        todo.inPrimaryList = false
+        detailItem = todo
         // todo.source =
-        break;
+        break
       }
     }
 
     // 同样的问题，要区分detail item是来自于primary list还是其他列表，又得分情况处理。
-    let itemIndex = -1;
+    let itemIndex = -1
     for (let i = 0; i < todos.length; i++) {
       if (todos[i].name === item.name) {
         // 如果来自于primary list则需要删掉这个todo
         if (this.state.lastModifiedListName === this.primaryListName) {
-          itemIndex = i;
+          itemIndex = i
         }
-        todos[i].inPrimaryList = false;
-        detailItem = todos[i];
-        break;
+        todos[i].inPrimaryList = false
+        detailItem = todos[i]
+        break
       }
     }
     if (itemIndex > -1) {
-      todos.splice(itemIndex, 1);
+      todos.splice(itemIndex, 1)
     }
 
     this.setState({
       listInfos: infos,
       itemsOfList: todos,
       detailItem,
-    });
+    })
   }
 
   /**
@@ -365,16 +379,16 @@ export class App extends React.Component<AppProps, AppState> {
    */
   private copyItemToPrimaryList(itemData: TodoItem, sourceListName: string) {
     // todo的source为来源列表，并且primary标记为true
-    const todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[];
+    const todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[]
 
-    itemData.source = sourceListName;
-    itemData.inPrimaryList = true;
-    this.server.addNewItemInList(itemData, this.primaryListName);
+    itemData.source = sourceListName
+    itemData.inPrimaryList = true
+    this.server.addNewItemInList(itemData, this.primaryListName)
     // this.server.markItemPrimary(itemData.name, sourceListName);
-    this.server.markItemPrimaryStatus(itemData.name, sourceListName, true);
+    this.server.markItemPrimaryStatus(itemData.name, sourceListName, true)
     for (let todo of todos) {
       if (todo.name == itemData.name) {
-        todo.inPrimaryList = true;
+        todo.inPrimaryList = true
       }
     }
     if (sourceListName == this.primaryListName) {
@@ -385,22 +399,22 @@ export class App extends React.Component<AppProps, AppState> {
         inPrimaryList: true,
         comments: itemData.comments,
         source: this.primaryListName,
-      });
+      })
     }
-    this.fetchListInfo();
+    this.fetchListInfo()
 
     // 根据todos的信息来更新detailItem的内容
     for (let todo of todos) {
       if (this.state.detailItem && todo.name == this.state.detailItem.name) {
         this.setState({
           detailItem: todo,
-        });
+        })
       }
     }
     this.setState({
       itemsOfList: todos,
       // detailItem: undefined,
-    });
+    })
   }
 
   /**
@@ -409,15 +423,15 @@ export class App extends React.Component<AppProps, AppState> {
    */
   private copyItemToPrimaryListFromDetailView() {
     if (!this.state.detailItem) {
-      return;
+      return
     }
-    const item = JSON.parse(JSON.stringify(this.state.detailItem)) as TodoItem;
-    this.copyItemToPrimaryList(item, this.state.lastModifiedListName);
+    const item = JSON.parse(JSON.stringify(this.state.detailItem)) as TodoItem
+    this.copyItemToPrimaryList(item, this.state.lastModifiedListName)
     // 对detail view的直接更改肯定要更新detailItem的内容
-    item.inPrimaryList = true;
+    item.inPrimaryList = true
     this.setState({
       detailItem: item,
-    });
+    })
   }
 
   /**
@@ -427,55 +441,63 @@ export class App extends React.Component<AppProps, AppState> {
    */
   private renameList(oldName: string, newName: string) {
     // console.log(`oldName: ${oldName}, newName: ${newName}`)
-    this.server.renameList(oldName, newName);
+    this.server.renameList(oldName, newName)
 
-    const infos = JSON.parse(JSON.stringify(this.state.listInfos)) as ListInfo[];
+    const infos = JSON.parse(JSON.stringify(this.state.listInfos)) as ListInfo[]
     for (let info of infos) {
       if (info.name === oldName) {
-        info.name = newName;
-        break;
+        info.name = newName
+        break
       }
     }
 
-    const todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[];
+    const todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[]
     todos.forEach(todo => {
-      todo.source = newName;
-    });
+      todo.source = newName
+    })
 
     this.setState({
       listInfos: infos,
       lastModifiedListName: newName,
       itemsOfList: todos,
-    });
+    })
+  }
+
+  private shouldDeleteList() {
+    this.setState({
+      displayDeleteListAlert: true,
+    })
   }
 
   /**
    * 删除列表
-   * @param name 要删除的列表名
+   * @param listName 要删除的列表名
    */
-  private deleteList(name: string) {
-    this.server.deleteList(name);
+  private deleteList(listName?: string) {
+    const name = listName ? listName : this.state.lastModifiedListName
+    this.server.deleteList(name)
 
-    const infos = this.state.listInfos.slice();
-    let index = 0;
+    const infos = this.state.listInfos.slice()
+    let index = 0
     for (let i = 0; i < infos.length; i++) {
       if (infos[i].name === name) {
-        index = i;
-        break;
+        index = i
+        break
       }
     }
-    infos[0].isActive = true;
-    infos.splice(index, 1);
+    infos[0].isActive = true
+    infos.splice(index, 1)
 
     this.setState({
       listInfos: infos,
       lastModifiedListName: infos[0].name,
       actionsShouldDisplay: false,
+      displayDeleteListAlert: false,
       // colorTheme: this.server.themeForList(this.server.lastModified),
       // itemsOfList: this.server.itemsOfList(listName),
-    });
+    })
     // 这里要继续使用这个方法，因为之前的todos要被清空换新
-    this.fetchItems();
+    this.fetchItems()
   }
 
   /**
@@ -484,15 +506,15 @@ export class App extends React.Component<AppProps, AppState> {
    */
   private switchList(listName: string) {
     // console.log('switchList: name is ' + listName);
-    this.server.lastModified = listName;
+    this.server.lastModified = listName
 
-    const infos = this.state.listInfos.slice();
+    const infos = this.state.listInfos.slice()
     infos.forEach(info => {
-      info.isActive = false;
+      info.isActive = false
       if (info.name === listName) {
-        info.isActive = true;
+        info.isActive = true
       }
-    });
+    })
 
     this.setState({
       listInfos: infos,
@@ -500,9 +522,9 @@ export class App extends React.Component<AppProps, AppState> {
       // colorTheme: this.server.themeForList(this.server.lastModified),
       actionsShouldDisplay: false,
       // itemsOfList: this.server.itemsOfList(listName),
-    });
+    })
     // 这里也要使用这个方法，因为切换列表也要清空换新。
-    this.fetchItems();
+    this.fetchItems()
   }
 
   /**
@@ -510,35 +532,35 @@ export class App extends React.Component<AppProps, AppState> {
    * @param listName 列表名称
    */
   private addNewList(listName: string) {
-    let infos = this.state.listInfos.slice();
-    let index = -1;
+    let infos = this.state.listInfos.slice()
+    let index = -1
     for (let i = 0; i < infos.length; i++) {
       if (infos[i].name === listName) {
-        index = i;
-        break;
+        index = i
+        break
       }
     }
     if (index !== -1) {
-      return;
+      return
     }
-    this.server.addNewList(listName);
+    this.server.addNewList(listName)
 
     infos.forEach(info => {
-      info.isActive = false;
-    });
+      info.isActive = false
+    })
     infos.push({
       name: listName,
       count: 0,
       isActive: true,
-      theme: "#87cefa",
+      theme: '#87cefa',
       isPrimary: false,
-    });
+    })
 
     this.setState({
       lastModifiedListName: listName,
       listInfos: infos,
       itemsOfList: [],
-    });
+    })
     // this.fetchItems()
   }
 
@@ -548,37 +570,37 @@ export class App extends React.Component<AppProps, AppState> {
    * @param listName item所在的列表名称
    */
   private addNewItemInList(itemName: string, listName: string) {
-    const items = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[];
+    const items = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[]
     for (let i = 0; i < items.length; i++) {
       if (items[i].name === itemName) {
-        return;
+        return
       }
     }
 
-    this.server.addNewItemInList(itemName, listName);
+    this.server.addNewItemInList(itemName, listName)
 
-    const infos = JSON.parse(JSON.stringify(this.state.listInfos)) as ListInfo[];
+    const infos = JSON.parse(JSON.stringify(this.state.listInfos)) as ListInfo[]
     infos.forEach(info => {
       if (info.name === listName) {
-        info.count++;
+        info.count++
       }
-    });
+    })
 
     // 额，这样做对吗？
     items.push({
       name: itemName,
       done: false,
-      time: new Date().toLocaleDateString().split(" ")[0],
+      time: new Date().toLocaleDateString().split(' ')[0],
       comments: undefined,
       source: listName,
       inPrimaryList: listName === this.primaryListName,
-    });
+    })
 
     this.setState({
       // itemsOfList: this.server.itemsOfList(this.state.lastModifiedListName),
       listInfos: infos,
       itemsOfList: items,
-    });
+    })
     // this.fetchItems()
   }
 
@@ -589,40 +611,40 @@ export class App extends React.Component<AppProps, AppState> {
    */
   private toggleItemInList(itemName: string, listName: string) {
     /** 是否在primary list中进行的操作 */
-    let actionInPrimary = listName === this.primaryListName;
+    let actionInPrimary = listName === this.primaryListName
     /** 是否将todo切换为完成状态 */
-    let switchDone = false;
+    let switchDone = false
     /** item所在的其他列表名称 */
-    let sourceListName = "";
-    let item: TodoItem | undefined = undefined;
+    let sourceListName = ''
+    let item: TodoItem | undefined = undefined
 
-    const todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[];
-    const infos = JSON.parse(JSON.stringify(this.state.listInfos)) as ListInfo[];
+    const todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[]
+    const infos = JSON.parse(JSON.stringify(this.state.listInfos)) as ListInfo[]
     for (let todo of todos) {
       if (todo.name === itemName) {
-        item = Object.assign({}, todo);
-        todo.done = !todo.done;
-        sourceListName = todo.source ? todo.source : "";
-        break;
+        item = Object.assign({}, todo)
+        todo.done = !todo.done
+        sourceListName = todo.source ? todo.source : ''
+        break
       }
     }
 
     if (!item) {
-      console.log(`item: ${item}`);
-      return;
+      console.log(`item: ${item}`)
+      return
     }
 
     // 从todos中得知状态为“已完成”的todo的数量
-    let count = 0;
+    let count = 0
     todos.forEach(todo => {
       if (!todo.done) {
-        count += 1;
+        count += 1
       }
-    });
+    })
     for (let info of infos) {
       if (info.name === listName) {
-        switchDone = count < info.count;
-        break;
+        switchDone = count < info.count
+        break
       }
     }
 
@@ -637,27 +659,27 @@ export class App extends React.Component<AppProps, AppState> {
      */
     if (item.inPrimaryList) {
       if (actionInPrimary) {
-        this.server.toggleItemInList(item.name, this.primaryListName);
-        this.server.toggleItemInList(item.name, sourceListName);
+        this.server.toggleItemInList(item.name, this.primaryListName)
+        this.server.toggleItemInList(item.name, sourceListName)
         for (let info of infos) {
           if (info.name === this.primaryListName || info.name === sourceListName) {
-            info.count += switchDone ? -1 : 1;
+            info.count += switchDone ? -1 : 1
           }
         }
       } else {
-        this.server.toggleItemInList(item.name, this.primaryListName);
-        this.server.toggleItemInList(item.name, listName);
+        this.server.toggleItemInList(item.name, this.primaryListName)
+        this.server.toggleItemInList(item.name, listName)
         for (let info of infos) {
           if (info.name === this.primaryListName || info.name === sourceListName) {
-            info.count += switchDone ? -1 : 1;
+            info.count += switchDone ? -1 : 1
           }
         }
       }
     } else {
-      this.server.toggleItemInList(item.name, listName);
+      this.server.toggleItemInList(item.name, listName)
       for (let info of infos) {
         if (info.name === listName) {
-          info.count = count;
+          info.count = count
         }
       }
     }
@@ -665,19 +687,19 @@ export class App extends React.Component<AppProps, AppState> {
     this.setState({
       itemsOfList: todos,
       listInfos: infos,
-    });
+    })
     // 如果点击的就是要详细显示的TodoItem，则要更新detailItem的状态
     if (this.state.detailItem && this.state.detailItem.name === itemName) {
-      let index = 0;
+      let index = 0
       for (let i = 0; i < todos.length; i++) {
         if (todos[i].name === itemName) {
-          index = i;
-          break;
+          index = i
+          break
         }
       }
       this.setState({
         detailItem: JSON.parse(JSON.stringify(todos[index])) as TodoItem,
-      });
+      })
     }
   }
 
@@ -687,25 +709,25 @@ export class App extends React.Component<AppProps, AppState> {
    */
   private handleToggleFromDetailView() {
     if (!this.state.detailItem) {
-      return;
+      return
     }
-    const itemName = this.state.detailItem.name;
-    const listName = this.state.lastModifiedListName;
+    const itemName = this.state.detailItem.name
+    const listName = this.state.lastModifiedListName
 
-    this.toggleItemInList(itemName, listName);
+    this.toggleItemInList(itemName, listName)
 
-    const todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[];
-    let index = 0;
+    const todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[]
+    let index = 0
     for (let i = 0; i < todos.length; i++) {
       if (todos[i].name === itemName) {
-        index = i;
-        break;
+        index = i
+        break
       }
     }
-    todos[index].done = !todos[index].done;
+    todos[index].done = !todos[index].done
     this.setState({
       detailItem: todos[index],
-    });
+    })
   }
 
   /**
@@ -715,7 +737,7 @@ export class App extends React.Component<AppProps, AppState> {
   private handleCloseFromDetailView() {
     this.setState({
       detailItem: undefined,
-    });
+    })
   }
 
   /**
@@ -724,29 +746,29 @@ export class App extends React.Component<AppProps, AppState> {
    */
   private handleDeleteFromDetailView() {
     if (!this.state.detailItem) {
-      return;
+      return
     }
 
-    const itemName = this.state.detailItem.name;
-    const listName = this.state.lastModifiedListName;
-    this.server.deleteItemInList(itemName, listName);
+    const itemName = this.state.detailItem.name
+    const listName = this.state.lastModifiedListName
+    this.server.deleteItemInList(itemName, listName)
 
-    const infos = JSON.parse(JSON.stringify(this.state.listInfos)) as ListInfo[];
+    const infos = JSON.parse(JSON.stringify(this.state.listInfos)) as ListInfo[]
     infos.forEach(info => {
       if (info.name === listName) {
-        info.count--;
+        info.count--
       }
-    });
+    })
 
-    const todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[];
-    let itemIndex = 0;
+    const todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[]
+    let itemIndex = 0
     for (let i = 0; i < todos.length; i++) {
       if (todos[i].name === itemName) {
-        itemIndex = i;
-        break;
+        itemIndex = i
+        break
       }
     }
-    todos.splice(itemIndex, 1);
+    todos.splice(itemIndex, 1)
 
     // 删除了todo之后，detailItem自然就没有了
     this.setState({
@@ -754,7 +776,7 @@ export class App extends React.Component<AppProps, AppState> {
       // itemsOfList: this.server.itemsOfList(listName),
       listInfos: infos,
       itemsOfList: todos,
-    });
+    })
     // this.fetchItems()
   }
 
@@ -764,30 +786,30 @@ export class App extends React.Component<AppProps, AppState> {
    */
   private handleCommentsChange(value: string) {
     if (!this.state.detailItem) {
-      return;
+      return
     }
     this.server.changeItemCommentsInList(
       value,
       this.state.detailItem.name,
       this.state.lastModifiedListName,
-    );
+    )
 
-    const todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[];
-    let index = 0;
+    const todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[]
+    let index = 0
     for (let i = 0; i < todos.length; i++) {
       if (todos[i].name === this.state.detailItem.name) {
-        index = i;
-        break;
+        index = i
+        break
       }
     }
-    todos[index].comments = value;
+    todos[index].comments = value
 
     this.setState(prevState => ({
       detailItem: prevState.detailItem
         ? (JSON.parse(JSON.stringify(todos[index])) as TodoItem)
         : undefined,
       itemsOfList: todos,
-    }));
+    }))
     // this.fetchItems()
   }
 
@@ -797,11 +819,11 @@ export class App extends React.Component<AppProps, AppState> {
    * @param listName 该todo所在的列表名称
    */
   private itemClicked(itemName: string, listName: string) {
-    let todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[];
-    todos = todos.filter(todo => todo.name === itemName);
+    let todos = JSON.parse(JSON.stringify(this.state.itemsOfList)) as TodoItem[]
+    todos = todos.filter(todo => todo.name === itemName)
     this.setState({
       detailItem: todos[0],
-    });
+    })
   }
 
   /**
@@ -809,13 +831,13 @@ export class App extends React.Component<AppProps, AppState> {
    * @param data 拖拽的todo事项数据
    */
   private handleDragStart(data: string) {
-    this.dragData = data;
+    this.dragData = data
     // console.log(`dragData: ${data.toString()}, type: ${typeof data}`)
   }
 
   /**拖拽结束/被取消时清除保存的拖拽数据 */
   private handleDragEnd() {
-    this.dragData = undefined;
+    this.dragData = undefined
   }
 
   /**
@@ -823,25 +845,25 @@ export class App extends React.Component<AppProps, AppState> {
    * @param color 新的主题色
    */
   private handleColorPick(color: string) {
-    this.server.changeColorThemeForList(color, this.state.lastModifiedListName);
-    const infos = JSON.parse(JSON.stringify(this.state.listInfos)) as ListInfo[];
+    this.server.changeColorThemeForList(color, this.state.lastModifiedListName)
+    const infos = JSON.parse(JSON.stringify(this.state.listInfos)) as ListInfo[]
     infos.forEach(info => {
       if (info.name === this.state.lastModifiedListName) {
-        info.theme = color;
+        info.theme = color
       }
-    });
+    })
     this.setState({
       listInfos: infos,
-    });
+    })
   }
 
   render() {
-    let listInfo: ListInfo = {} as ListInfo;
+    let listInfo: ListInfo = {} as ListInfo
     this.state.listInfos.slice().forEach(info => {
       if (info.name === this.state.lastModifiedListName) {
-        listInfo = info;
+        listInfo = info
       }
-    });
+    })
     // const infos = this.state.listInfos.splice(0)
     // console.log(`infos: ${infos}`)
     return (
@@ -860,7 +882,7 @@ export class App extends React.Component<AppProps, AppState> {
           listInfo={listInfo}
           todoItems={this.state.itemsOfList}
           renameList={this.renameList}
-          deleteList={this.deleteList}
+          shouldDeleteList={this.shouldDeleteList}
           addNewItemInList={this.addNewItemInList}
           toggleItemInList={this.toggleItemInList}
           itemClicked={this.itemClicked}
@@ -880,14 +902,24 @@ export class App extends React.Component<AppProps, AppState> {
           onCopyToPrimary={this.copyItemToPrimaryListFromDetailView}
           onCancelCopyToPrimary={this.cancelCopyToPrimaryList}
         />
-        {this.state.alertShouldDisplay && (
+        {this.state.displayDataErrorAlert && (
           <Alert
-            display={this.state.alertShouldDisplay}
-            message={this.state.alertMessage}
-            onConfirmClicked={this.handleConfirmClicked}
+            display={this.state.displayDataErrorAlert}
+            message={this.state.dataErrorMessage}
+            alertDefaultAction={this.alertDefaultAction}
+            type={AlertType.Alert}
+          />
+        )}
+        {this.state.displayDeleteListAlert && (
+          <Alert
+            display={this.state.displayDeleteListAlert}
+            message={this.state.deleteConfirmMessage}
+            alertDefaultAction={this.alertDefaultAction}
+            alertConfirmAction={this.deleteList}
+            type={AlertType.Confirm}
           />
         )}
       </div>
-    );
+    )
   }
 }

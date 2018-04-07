@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { ColorThemePicker } from './colortheme-picker'
-import { AreaActions } from '../util/area-actions'
+import { AreaActions } from './area-actions'
 import { mix } from '../../lib'
 
 interface HeadProps {
@@ -10,8 +10,11 @@ interface HeadProps {
   colorTheme: string
   /**重命名列表，处理方法 */
   renameList(name: string): void
-  /**删除列表，处理方法 */
-  deleteList(name: string): void
+  /**
+   * 是否要删除列表
+   * @param name 列表名称
+   */
+  shouldDeleteList(): void
   /**
    * 显示/隐藏已完成的todo事项
    */
@@ -131,10 +134,7 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
    * @param e 鼠标点击事件
    */
   private deleteClicked() {
-    const result = confirm('确定删除此列表吗？')
-    if (result) {
-      this.props.deleteList(this.state.name)
-    }
+    this.props.shouldDeleteList()
   }
 
   /**
