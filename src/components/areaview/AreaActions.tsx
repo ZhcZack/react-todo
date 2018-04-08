@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ThemePicker } from "../areaview/ThemePicker";
 import { mix } from "../../lib";
-import { ActionButton } from "./ActionButton";
+import { ActionButton } from "./AreaActionButton";
 
 // 样式
 const styles: { [prop: string]: string } = require("./AreaActions.css");

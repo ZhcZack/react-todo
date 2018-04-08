@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Content } from "./Content";
 import { ListInfo } from "../../model/interface";
-import AddListButton from "./AddListButton";
+import AddListButton from "./AddNewList";
 
 const styles: { [prop: string]: string } = require("./ListView.css");
 

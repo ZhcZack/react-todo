@@ -1,6 +1,6 @@
 import * as React from "react";
 import { mix } from "../../lib";
-import { AlertButton } from "./AlertButton";
+import { AlertButton } from "./GlobalAlertButton";
 
 // 样式
 const styles: { [prop: string]: string } = require("./GlobalAlert.css");

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { mix, log } from "../../lib";
 
-const styles: { [prop: string]: string } = require("./AddListButton.css");
+const styles: { [prop: string]: string } = require("./AddNewList.css");
 
 interface AddListButtonProps {
     onClick(): void;

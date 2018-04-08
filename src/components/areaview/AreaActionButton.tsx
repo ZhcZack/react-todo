@@ -1,7 +1,7 @@
 import * as React from "react";
 import { mix } from "../../lib";
 
-const styles: { [prop: string]: string } = require("./ActionButton.css");
+const styles: { [prop: string]: string } = require("./AreaActionButton.css");
 
 interface Props {
     /**

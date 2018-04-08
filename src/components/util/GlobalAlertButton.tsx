@@ -1,7 +1,7 @@
 import * as React from "react";
 import { mix } from "../../lib";
 
-const styles: { [prop: string]: string } = require("./AlertButton.css");
+const styles: { [prop: string]: string } = require("./GlobalAlertButton.css");
 
 interface Props {
     title: string;
