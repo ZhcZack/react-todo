@@ -20721,10 +20721,10 @@ var detailTitleContent_1 = __webpack_require__(/*! ./detailTitleContent */ "./sr
  */
 var detailViewStyles = {
     width: 280,
-    position: "relative",
-    overflow: "hidden",
-    borderLeft: "1px solid rgba(206, 197, 197, 0.5)",
-    backgroundColor: "rgba(206, 197, 197, 0.2)",
+    position: 'relative',
+    overflow: 'hidden',
+    borderLeft: '1px solid rgba(206, 197, 197, 0.5)',
+    backgroundColor: 'rgba(206, 197, 197, 0.2)',
 };
 var detailViewDisappear = {
     width: 0,
@@ -20741,8 +20741,8 @@ var DetailView = /** @class */ (function (_super) {
         }
         return (React.createElement("div", { id: "detailview", style: detailViewStyles },
             React.createElement(detailTitleContent_1.default, { item: item, onToggleClicked: this.props.onToggleClicked }),
-            React.createElement(detailPrimaryCopy_1.default, { item: item, onCancelCopyToPrimary: this.props.onCancelCopyToPrimary, onCopyToPrimary: this.props.onCopyToPrimary }),
-            React.createElement(detailComments_1.default, { onCommentsChange: this.props.onCommentsChange, initComments: this.props.item ? (this.props.item.comments ? this.props.item.comments : "") : "" }),
+            React.createElement(detailPrimaryCopy_1.DetailPrimaryCopy, { item: item, onCancelCopyToPrimary: this.props.onCancelCopyToPrimary, onCopyToPrimary: this.props.onCopyToPrimary }),
+            React.createElement(detailComments_1.default, { onCommentsChange: this.props.onCommentsChange, initComments: this.props.item ? (this.props.item.comments ? this.props.item.comments : '') : '' }),
             React.createElement(detailActions_1.default, { onCloseClicked: this.props.onCloseClicked, onDeleteClicked: this.props.onDeleteClicked, item: item })));
     };
     return DetailView;
@@ -20991,52 +20991,55 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
 var primaryStyles = {
-    width: "90%",
+    width: '90%',
     height: 40,
-    margin: "5%",
-    display: "flex",
-    border: "1px solid ,rgba(206, 197, 197, 0.5)",
-    backgroundColor: "white",
+    margin: '5%',
+    display: 'flex',
+    border: '1px solid ,rgba(206, 197, 197, 0.5)',
+    backgroundColor: 'white',
 };
 /**
  * copy area直接子元素基本样式
  */
 var directChildStyles = {
-    width: "100%",
-    display: "flex",
+    width: '100%',
+    display: 'flex',
 };
 /**
  * 添加到primary list后文字的样式
  */
 var textLabelStyles = {
-    color: "blue",
-    flex: "1 0 100px",
-    display: "flex",
-    alignItems: "center",
+    color: 'blue',
+    flex: '1 0 100px',
+    display: 'flex',
+    alignItems: 'center',
     padding: 10,
 };
 /**
  * “取消添加到primary list”按钮的样式
  */
 var cancelButtonStyles = {
-    flex: "0 0 40px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    fontSize: "0.8em",
-    cursor: "pointer",
+    flex: '0 0 40px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '0.8em',
+    cursor: 'pointer',
 };
 /**
  * “添加到primary list”按钮的样式
  */
 var copyButtonStyles = {
     padding: 10,
-    alignItems: "center",
-    cursor: "pointer",
+    alignItems: 'center',
+    cursor: 'pointer',
 };
 var hoverStyles = {
-    backgroundColor: "rgba(206, 197, 197, 0.2)",
+    backgroundColor: 'rgba(206, 197, 197, 0.2)',
 };
+/**
+ * “添加到primary list”按钮
+ */
 var DetailPrimaryCopy = /** @class */ (function (_super) {
     __extends(DetailPrimaryCopy, _super);
     function DetailPrimaryCopy(props) {
@@ -21109,7 +21112,7 @@ var DetailPrimaryCopy = /** @class */ (function (_super) {
     };
     return DetailPrimaryCopy;
 }(React.Component));
-exports.default = DetailPrimaryCopy;
+exports.DetailPrimaryCopy = DetailPrimaryCopy;
 
 
 /***/ }),
@@ -21864,7 +21867,16 @@ exports.mix = function () {
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
     }
-    return Object.assign.apply(Object, [{}].concat(args));
+    var o = {};
+    for (var _a = 0, args_1 = args; _a < args_1.length; _a++) {
+        var arg = args_1[_a];
+        for (var p in arg) {
+            if (arg.hasOwnProperty(p)) {
+                o[p] = arg[p];
+            }
+        }
+    }
+    return o;
 };
 
 

@@ -2,7 +2,7 @@ import * as React from "react";
 import { TodoItem } from "../../model/interface";
 import DetailActions from "./detailActions";
 import DetailComments from "./detailComments";
-import DetailPrimaryCopy from "./detailPrimaryCopy";
+import { DetailPrimaryCopy } from "./detailPrimaryCopy";
 import DetailTitleContent from "./detailTitleContent";
 
 interface DetailViewProps {
