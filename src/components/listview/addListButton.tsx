@@ -59,7 +59,6 @@ export default class AddListButton extends React.Component<AddListButtonProps, A
 
     render() {
         // const s = this.state.hover ? mix(styles, hoverStyles) : styles;
-        // log(s)
         return (
             <div
                 className={styles.button}
