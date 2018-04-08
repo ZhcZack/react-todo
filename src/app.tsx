@@ -6,6 +6,8 @@ import { DataServer } from "./model/data-server";
 import { TodoItem, ListInfo } from "./model/interface";
 import { Alert, AlertType } from "./components/util/GlobalAlert";
 
+const styles: { [prop: string]: string } = require("./App.css");
+
 interface AppProps {}
 
 interface AppState {
@@ -45,16 +47,16 @@ interface AppState {
     deleteConfirmMessage: string;
 }
 
-const appStyles = {
-    width: "100vw",
-    height: "100vh",
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "nowrap",
-    justifyContent: "flex-start",
-    position: "relative",
-    zIndex: 1,
-} as React.CSSProperties;
+// const appStyles = {
+//     width: "100vw",
+//     height: "100vh",
+//     display: "flex",
+//     flexDirection: "row",
+//     flexWrap: "nowrap",
+//     justifyContent: "flex-start",
+//     position: "relative",
+//     zIndex: 1,
+// } as React.CSSProperties;
 
 /**
  * App主内容区域
@@ -871,7 +873,7 @@ export class App extends React.Component<AppProps, AppState> {
         // const infos = this.state.listInfos.splice(0)
         // console.log(`infos: ${infos}`)
         return (
-            <div style={appStyles}>
+            <div id={styles.app}>
                 <ListView
                     // currentListName={this.state.lastModifiedListName}
                     switchList={this.switchList}

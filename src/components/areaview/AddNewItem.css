@@ -38,6 +38,7 @@
 }
 
 .input {
+    font-size: 1em;
     border: none;
     flex: 10 1 100px;
     outline: none;

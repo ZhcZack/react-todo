@@ -18956,6 +18956,18 @@ if (false) {} else {
 
 /***/ }),
 
+/***/ "./src/App.css":
+/*!*********************!*\
+  !*** ./src/App.css ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"app":"App-app-NghkZ4o"};
+
+/***/ }),
+
 /***/ "./src/app.tsx":
 /*!*********************!*\
   !*** ./src/app.tsx ***!
@@ -18982,16 +18994,17 @@ var AreaView_1 = __webpack_require__(/*! ./components/areaview/AreaView */ "./sr
 var DetailView_1 = __webpack_require__(/*! ./components/detailview/DetailView */ "./src/components/detailview/DetailView.tsx");
 var data_server_1 = __webpack_require__(/*! ./model/data-server */ "./src/model/data-server.ts");
 var GlobalAlert_1 = __webpack_require__(/*! ./components/util/GlobalAlert */ "./src/components/util/GlobalAlert.tsx");
-var appStyles = {
-    width: "100vw",
-    height: "100vh",
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "nowrap",
-    justifyContent: "flex-start",
-    position: "relative",
-    zIndex: 1,
-};
+var styles = __webpack_require__(/*! ./App.css */ "./src/App.css");
+// const appStyles = {
+//     width: "100vw",
+//     height: "100vh",
+//     display: "flex",
+//     flexDirection: "row",
+//     flexWrap: "nowrap",
+//     justifyContent: "flex-start",
+//     position: "relative",
+//     zIndex: 1,
+// } as React.CSSProperties;
 /**
  * App主内容区域
  */
@@ -19737,7 +19750,7 @@ var App = /** @class */ (function (_super) {
         });
         // const infos = this.state.listInfos.splice(0)
         // console.log(`infos: ${infos}`)
-        return (React.createElement("div", { style: appStyles },
+        return (React.createElement("div", { id: styles.app },
             React.createElement(ListView_1.ListView
             // currentListName={this.state.lastModifiedListName}
             , { 
@@ -20594,7 +20607,7 @@ exports.AreaViewContent = AreaViewContent;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"todo":"ViewItem-todo-2CST4iA","checkbox":"ViewItem-checkbox-niXRWTn","checked":"ViewItem-checked-1gioHZo","text":"ViewItem-text-i-3FWSi","done":"ViewItem-done-3El4gXD","source":"ViewItem-source-o8w7sM3","inPrimary":"ViewItem-inPrimary-14Zj131","comment":"ViewItem-comment-pPrAn-_"};
+module.exports = {"todo":"ViewItem-todo-2CST4iA","checkbox":"ViewItem-checkbox-niXRWTn","checked":"ViewItem-checked-1gioHZo","text":"ViewItem-text-i-3FWSi","done":"ViewItem-done-3El4gXD","source":"ViewItem-source-o8w7sM3","comment":"ViewItem-comment-pPrAn-_","inPrimary":"ViewItem-inPrimary-14Zj131"};
 
 /***/ }),
 
@@ -22048,7 +22061,7 @@ var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 var app_1 = __webpack_require__(/*! ./app */ "./src/app.tsx");
 // import 'animate.css'
-__webpack_require__(/*! ./styles/index.scss */ "./src/styles/index.scss");
+// import "./styles/index.scss";
 ReactDOM.render(React.createElement(app_1.App, null), document.getElementById("root"));
 
 
@@ -22768,17 +22781,6 @@ var TodoListClass = /** @class */ (function () {
 }());
 exports.TodoListClass = TodoListClass;
 
-
-/***/ }),
-
-/***/ "./src/styles/index.scss":
-/*!*******************************!*\
-  !*** ./src/styles/index.scss ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ })
 

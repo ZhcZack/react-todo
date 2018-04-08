@@ -13,6 +13,24 @@
 
 .AreaActions-actions-1uihpZy.AreaActions-display-2nMRPBD {
   visibility: visible; }
+@charset "UTF-8";
+#App-app-NghkZ4o {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box; }
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+  font-family: -apple-system, Source Han Sans CN, Segoe UI, Helvetica Neue, Helvetica, 微软雅黑, sans-serif; }
 .AlertButton-alertButton-C77qSBb {
   height: 30;
   border: none;
@@ -23,41 +41,6 @@
 
 .AlertButton-alertButton-C77qSBb:hover {
   background-color: rgba(206, 197, 197, 0.5); }
-.GlobalAlert-background-2zVlkm2 {
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  z-index: 2;
-  visibility: hidden;
-  background-color: rgba(90, 85, 85, 0.37);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box; }
-
-.GlobalAlert-background-2zVlkm2.GlobalAlert-display-zSRV4fW {
-  visibility: visible; }
-
-.GlobalAlert-alert-2Rq7EoF {
-  width: 30vw;
-  height: 30vh;
-  background-color: white;
-  border-radius: 8px;
-  border-color: rgba(206, 197, 197, 0.5);
-  padding: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  box-sizing: border-box; }
-
-.GlobalAlert-message-2dES97i {
-  width: 100%; }
-
-.GlobalAlert-actions-1wrj7g1 {
-  display: flex;
-  flex-direction: column-reverse;
-  width: 100%; }
 #DetailView-detailView-_qpCAca {
   width: 280px;
   position: relative;
@@ -83,7 +66,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #ca0909;
+  border: 1px solid gray;
   border-radius: 50%;
   color: transparent;
   background-color: transparent;
@@ -116,6 +99,7 @@
   display: flex; }
 
 .PrimaryCopy-copyText-4Ab8XTQ {
+  margin: 0;
   color: blue;
   flex: 1 0 100px;
   display: flex;
@@ -213,17 +197,41 @@
   cursor: pointer;
   color: white;
   font-weight: bold; }
-@charset "UTF-8";
-/**
- * 这里本应该将这些全局的设置放进每一个组件里去的，不过在我弄完之后才看到这个要改动好累。
- * 意思我明白就好，就放着不改了。
- */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-size: 16px;
-  font-family: -apple-system, Source Han Sans CN, Segoe UI, Helvetica Neue, Helvetica, 微软雅黑, sans-serif; }
+.GlobalAlert-background-2zVlkm2 {
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 2;
+  visibility: hidden;
+  background-color: rgba(90, 85, 85, 0.37);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box; }
+
+.GlobalAlert-background-2zVlkm2.GlobalAlert-display-zSRV4fW {
+  visibility: visible; }
+
+.GlobalAlert-alert-2Rq7EoF {
+  width: 30vw;
+  height: 30vh;
+  background-color: white;
+  border-radius: 8px;
+  border-color: rgba(206, 197, 197, 0.5);
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box; }
+
+.GlobalAlert-message-2dES97i {
+  width: 100%; }
+
+.GlobalAlert-actions-1wrj7g1 {
+  display: flex;
+  flex-direction: column-reverse;
+  width: 100%; }
 .ActionButton-button-JPuWiT- {
   height: 40px;
   display: flex;
@@ -258,7 +266,8 @@
   overflow: auto; }
 
 .ViewContent-list-22QKM5K {
-  margin: 0 20px; }
+  margin: 0 20px;
+  padding: 0; }
 .ViewItem-todo-2CST4iA {
   height: 60px;
   display: flex;
@@ -308,13 +317,13 @@
 .ViewItem-source-o8w7sM3 {
   display: flex; }
 
-.ViewItem-inPrimary-14Zj131 {
-  color: blue; }
-
 .ViewItem-comment-pPrAn-_ {
   font-size: 0.6em;
   color: gray;
   margin-right: 10px; }
+
+.ViewItem-comment-pPrAn-_.ViewItem-inPrimary-14Zj131 {
+  color: blue; }
 
 /* .source */
 .AddNewItem-container-3cob6bN {
@@ -354,6 +363,7 @@
   box-sizing: border-box; }
 
 .AddNewItem-input-rgzm11b {
+  font-size: 1em;
   border: none;
   flex: 10 1 100px;
   outline: none;
@@ -404,6 +414,7 @@
 .Content-content-1a8xgLs {
   list-style-type: none;
   padding: 10px;
+  margin: 0;
   box-sizing: border-box; }
 .ViewItem-itemName-3bWFULe {
   flex: 9 1 100px;
