@@ -1,10 +1,12 @@
 import * as React from "react";
 import { TodoItem, TodoList, ListInfo } from "../../model/interface";
 import { DetailView } from "./../detailview/DetailView";
-import { AddNewItem } from "./add-new-item";
-import { AreaViewContent } from "./area-view-content";
-import { EditableHead } from "./editable-head";
+import { AddNewItem } from "./AddNewItem";
+import { AreaViewContent } from "./ViewContent";
+import { EditableHead } from "./EditableHead";
 import { mix } from "../../lib";
+
+const styles: { [prop: string]: string } = require("./AreaView.css");
 
 interface Props {
     /**
@@ -50,13 +52,13 @@ interface State {
     showDoneItems: boolean;
 }
 
-const viewStyles: React.CSSProperties = {
-    width: "calc(100% - 280px)",
-    overflow: "hidden",
-};
-const viewShrinkStyles = {
-    width: "calc(100% - 280px - 280px)",
-};
+// const viewStyles: React.CSSProperties = {
+//     width: 'calc(100% - 280px)',
+//     overflow: 'hidden',
+// }
+// const viewShrinkStyles = {
+//     width: 'calc(100% - 280px - 280px)',
+// }
 
 export class AreaView extends React.Component<Props, State> {
     constructor(props: Props) {
@@ -82,7 +84,9 @@ export class AreaView extends React.Component<Props, State> {
 
         return (
             <div
-                style={this.props.shrink ? mix(viewStyles, viewShrinkStyles) : viewStyles}
+                // style={this.props.shrink ? mix(viewStyles, viewShrinkStyles) : viewStyles}
+                id={styles.areaView}
+                className={this.props.shrink ? styles.shrink : ""}
                 onClick={e => {
                     e.stopPropagation();
                     this.props.actionsShouldDisplay && this.props.onActionsDisplayClick();

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ListContent } from "./ListContent";
+import { Content } from "./Content";
 import { ListInfo } from "../../model/interface";
 import AddListButton from "./AddListButton";
 
@@ -85,7 +85,7 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
                     e.stopPropagation();
                     this.props.actionsDisplay && this.props.onActionsDisplayClick();
                 }}>
-                <ListContent
+                <Content
                     // currentListName={this.props.currentListName}
                     listInfos={this.props.listInfos}
                     onClick={this.handleClick}

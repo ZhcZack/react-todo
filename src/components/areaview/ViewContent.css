@@ -1,0 +1,8 @@
+.content {
+    max-height: calc(100vh - 200px - 60px);
+    overflow: auto;
+}
+
+.list {
+    margin: 0 20px;
+}

@@ -27,7 +27,7 @@ module.exports = {
                     use: [
                         {
                             loader:
-                                "css-loader?modules&localIdentName=[name]---[local]---[hash:base64:7]",
+                                "css-loader?modules&localIdentName=[name]-[local]-[hash:base64:7]",
                         },
                         {
                             loader: "sass-loader",
@@ -36,6 +36,7 @@ module.exports = {
                     // use style-loader in development
                     fallback: "style-loader",
                 }),
+                exclude: /node_modules/,
             },
         ],
     },

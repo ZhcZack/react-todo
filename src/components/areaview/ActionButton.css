@@ -1,0 +1,11 @@
+.button {
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+.button:hover {
+    background-color: rgba(206, 197, 197, 0.2);
+}

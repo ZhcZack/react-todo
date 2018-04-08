@@ -1,14 +1,14 @@
-import * as React from "react"
+import * as React from "react";
 
-const styles: { [propName: string]: string } = require("./DetailComments.css")
+const styles: { [propName: string]: string } = require("./Comments.css");
 
-interface DetailCommentsProps {
-    onCommentsChange(value: string): void
-    initComments: string
+interface Props {
+    onCommentsChange(value: string): void;
+    initComments: string;
 }
 
-interface DetailCommentsState {
-    comments: string
+interface State {
+    comments: string;
 }
 
 /**
@@ -25,25 +25,22 @@ interface DetailCommentsState {
 //   outline: "none",
 // }
 
-export default class DetailComments extends React.Component<
-    DetailCommentsProps,
-    DetailCommentsState
-> {
-    constructor(props: DetailCommentsProps) {
-        super(props)
+export class Comments extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
         this.state = {
             comments: this.props.initComments,
-        }
+        };
 
         // bind methods
-        this.handleCommentsChange = this.handleCommentsChange.bind(this)
-        this.handleCommentsOnBlur = this.handleCommentsOnBlur.bind(this)
+        this.handleCommentsChange = this.handleCommentsChange.bind(this);
+        this.handleCommentsOnBlur = this.handleCommentsOnBlur.bind(this);
     }
 
-    componentWillReceiveProps(newProps: DetailCommentsProps) {
+    componentWillReceiveProps(newProps: Props) {
         this.setState({
             comments: newProps.initComments,
-        })
+        });
     }
 
     /**
@@ -51,8 +48,8 @@ export default class DetailComments extends React.Component<
      * @param e 键盘输入事件
      */
     private handleCommentsChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-        e.stopPropagation()
-        this.setState({ comments: e.target.value })
+        e.stopPropagation();
+        this.setState({ comments: e.target.value });
     }
 
     /**
@@ -60,8 +57,8 @@ export default class DetailComments extends React.Component<
      * @param e 光标移出事件
      */
     private handleCommentsOnBlur(e: React.FocusEvent<HTMLTextAreaElement>) {
-        e.stopPropagation()
-        this.props.onCommentsChange(this.state.comments)
+        e.stopPropagation();
+        this.props.onCommentsChange(this.state.comments);
     }
     render() {
         return (
@@ -73,6 +70,6 @@ export default class DetailComments extends React.Component<
                 onBlur={this.handleCommentsOnBlur}
                 placeholder="添加备注"
             />
-        )
+        );
     }
 }

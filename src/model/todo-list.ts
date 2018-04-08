@@ -1,48 +1,49 @@
-import { TodoItem, TodoList, ListInfo } from './interface'
-import { TodoItemClass } from './todo-item'
+import { TodoItem, TodoList, ListInfo } from "./interface";
+import { TodoItemClass } from "./todo-item";
 
 /**
  * 保存todo项目的列表类
  */
 export class TodoListClass implements TodoList {
+    private primaryListName = "我的一天";
     /**保存的todo项目 */
-    private todoItems: TodoItemClass[]
-    private color = '#87cefa'
+    private todoItems: TodoItemClass[];
+    private color = "#87cefa";
 
     get colorTheme(): string {
-        return this.color
+        return this.color;
     }
 
     set colorTheme(color: string) {
-        this.color = color
+        this.color = color;
     }
 
     get items(): TodoItemClass[] {
-        return this.todoItems
+        return this.todoItems;
     }
 
     /**保存项目的数量 */
     get count(): number {
-        return this.todoItems.length
+        return this.todoItems.length;
     }
 
     /**
      * 返回列表的名称以及未完成todo的数量
      */
     get listInfo(): ListInfo {
-        let count = 0
+        let count = 0;
         for (let item of this.todoItems) {
             if (!item.done) {
-                count++
+                count++;
             }
         }
         return {
             name: this.name,
             count,
             isActive: false,
-            isPrimary: this.name === '我的一天',
+            isPrimary: this.name === "我的一天",
             theme: this.colorTheme,
-        }
+        };
     }
 
     get listTotalInfo(): ListInfo {
@@ -51,13 +52,13 @@ export class TodoListClass implements TodoList {
             count: this.count,
             isActive: false,
             theme: this.colorTheme,
-            isPrimary: this.name === '我的一天',
-        }
+            isPrimary: this.name === "我的一天",
+        };
     }
 
     constructor(public name: string) {
-        this.name = name
-        this.todoItems = []
+        this.name = name;
+        this.todoItems = [];
     }
 
     private toJSON() {
@@ -66,7 +67,7 @@ export class TodoListClass implements TodoList {
             items: this.todoItems,
             count: this.count,
             theme: this.colorTheme,
-        }
+        };
     }
 
     /**
@@ -76,10 +77,10 @@ export class TodoListClass implements TodoList {
     containsItem(itemName: string): boolean {
         for (let i = 0; i < this.todoItems.length; i++) {
             if (this.todoItems[i].name === itemName) {
-                return true
+                return true;
             }
         }
-        return false
+        return false;
     }
 
     /**
@@ -87,18 +88,19 @@ export class TodoListClass implements TodoList {
      * @param item 要添加的todo项目（有两种表示方式，一个是todo的名称，另一个是todo本身）
      */
     addNewItem(item: TodoItem | string) {
-        if (typeof item === 'string') {
-            const inOrNot = this.containsItem(item)
+        if (typeof item == "string") {
+            const inOrNot = this.containsItem(item);
             if (inOrNot) {
-                return
+                return;
             }
-            const newItem = new TodoItemClass(item)
-            newItem.source = this.name
-            this.todoItems.push(newItem)
+            const newItem = new TodoItemClass(item);
+            newItem.source = this.name;
+            newItem.inPrimaryList = this.name == this.primaryListName;
+            this.todoItems.push(newItem);
         } else {
-            const inOrNot = this.containsItem(item.name)
+            const inOrNot = this.containsItem(item.name);
             if (inOrNot) {
-                return
+                return;
             }
             // console.log(`item: ${item}`)
             this.todoItems.push(
@@ -110,7 +112,7 @@ export class TodoListClass implements TodoList {
                     item.comments,
                     item.source,
                 ),
-            )
+            );
         }
     }
 
@@ -119,12 +121,12 @@ export class TodoListClass implements TodoList {
      * @param itemName 要删除的todo名称
      */
     removeItem(itemName: string) {
-        const inOrNot = this.containsItem(itemName)
+        const inOrNot = this.containsItem(itemName);
         if (!inOrNot) {
-            return
+            return;
         }
-        const index = this.itemIndex(itemName)
-        this.todoItems.splice(index, 1)
+        const index = this.itemIndex(itemName);
+        this.todoItems.splice(index, 1);
     }
 
     /**
@@ -134,14 +136,14 @@ export class TodoListClass implements TodoList {
      */
     renameItem(oldName: string, newName: string) {
         if (oldName === newName) {
-            return
+            return;
         }
-        const inOrNot = this.containsItem(oldName)
+        const inOrNot = this.containsItem(oldName);
         if (!inOrNot) {
-            return
+            return;
         }
-        const index = this.itemIndex(oldName)
-        this.todoItems[index].name = newName
+        const index = this.itemIndex(oldName);
+        this.todoItems[index].name = newName;
     }
 
     /**
@@ -149,12 +151,12 @@ export class TodoListClass implements TodoList {
      * @param itemName 项目名称
      */
     itemInfo(itemName: string): TodoItem | undefined {
-        const inOrNot = this.containsItem(itemName)
+        const inOrNot = this.containsItem(itemName);
         if (!inOrNot) {
-            return undefined
+            return undefined;
         }
-        const index = this.itemIndex(itemName)
-        const item = this.todoItems[index]
+        const index = this.itemIndex(itemName);
+        const item = this.todoItems[index];
         return {
             name: item.name,
             done: item.done,
@@ -162,7 +164,7 @@ export class TodoListClass implements TodoList {
             inPrimaryList: item.inPrimaryList,
             comments: item.comments,
             source: item.source,
-        }
+        };
     }
 
     /**
@@ -171,12 +173,12 @@ export class TodoListClass implements TodoList {
      */
     rename(newName: string) {
         if (newName === this.name) {
-            return
+            return;
         }
-        this.name = newName
+        this.name = newName;
         this.todoItems.forEach(item => {
-            item.source = newName
-        })
+            item.source = newName;
+        });
     }
 
     /**
@@ -186,9 +188,9 @@ export class TodoListClass implements TodoList {
     private itemIndex(name: string): number {
         for (let i = 0; i < this.todoItems.length; i++) {
             if (this.items[i].name === name) {
-                return i
+                return i;
             }
         }
-        return -1
+        return -1;
     }
 }

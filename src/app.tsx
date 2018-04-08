@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ListView } from "./components/listview/ListView";
-import { AreaView } from "./components/areaview/area-view";
+import { AreaView } from "./components/areaview/AreaView";
 import { DetailView } from "./components/detailview/DetailView";
 import { DataServer } from "./model/data-server";
 import { TodoItem, ListInfo } from "./model/interface";

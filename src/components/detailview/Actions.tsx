@@ -2,15 +2,15 @@ import * as React from "react";
 import { TodoItem } from "../../model/interface";
 import { mix } from "../../lib";
 
-const styles: { [prop: string]: string } = require("./DetailActions.css");
+const styles: { [prop: string]: string } = require("./Actions.css");
 
-interface DetailActionsProps {
+interface Props {
     onCloseClicked(): void;
     onDeleteClicked(): void;
     item: TodoItem;
 }
 
-interface DetailActionsState {
+interface State {
     // disappearHover: boolean;
     // deleteHover: boolean;
 }
@@ -56,8 +56,8 @@ interface DetailActionsState {
 //   alignItems: "center",
 // } as React.CSSProperties;
 
-export default class DetailActions extends React.Component<DetailActionsProps, DetailActionsState> {
-    constructor(props: DetailActionsProps) {
+export class Actions extends React.Component<Props, State> {
+    constructor(props: Props) {
         super(props);
         // this.state = {
         //   disappearHover: false,

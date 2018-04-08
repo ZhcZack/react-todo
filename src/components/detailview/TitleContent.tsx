@@ -2,7 +2,7 @@ import * as React from "react";
 import { TodoItem } from "../../model/interface";
 import { mix } from "../../lib";
 
-const styles: { [prop: string]: string } = require("./DetailTitleContent.css");
+const styles: { [prop: string]: string } = require("./TitleContent.css");
 
 interface DetailTitleContentProps {
     item: TodoItem;
@@ -65,7 +65,7 @@ interface DetailTitleContentState {
 //     wordBreak: "break-all",
 // } as React.CSSProperties;
 
-export default class DetailTitleContent extends React.Component<
+export class TitleContent extends React.Component<
     DetailTitleContentProps,
     DetailTitleContentState
 > {

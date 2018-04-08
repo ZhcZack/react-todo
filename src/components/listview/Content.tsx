@@ -1,8 +1,8 @@
 import * as React from "react";
 import { ListInfo } from "../../model/interface";
-import { ListViewItem } from "./ListViewItem";
+import { ViewItem } from "./ViewItem";
 
-const styles: { [prop: string]: string } = require("./ListContent.css");
+const styles: { [prop: string]: string } = require("./Content.css");
 
 interface ListContentProps {
     /**所有列表的信息 */
@@ -22,12 +22,12 @@ interface ListContentProps {
 
 interface ListContentState {}
 
-export class ListContent extends React.Component<ListContentProps, ListContentState> {
+export class Content extends React.Component<ListContentProps, ListContentState> {
     render() {
         return (
             <ul className={styles.content}>
                 {this.props.listInfos.map(info => (
-                    <ListViewItem
+                    <ViewItem
                         // currentListName={this.props.currentListName}
                         info={info}
                         onClick={this.props.onClick}

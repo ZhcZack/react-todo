@@ -71,18 +71,6 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./node_modules/animate.css/animate.css":
-/*!**********************************************!*\
-  !*** ./node_modules/animate.css/animate.css ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-module.exports = {"animated":"animate---animated---1FroVGL","infinite":"animate---infinite---1taofQn","bounce":"animate---bounce---S_vKrOa","flash":"animate---flash---3T4NK4L","pulse":"animate---pulse---3cx7sg8","rubberBand":"animate---rubberBand---1okyCb6","shake":"animate---shake---2Eo-Ghh","headShake":"animate---headShake---12skuxv","swing":"animate---swing---26AKGGz","tada":"animate---tada---3lxza7e","wobble":"animate---wobble---PIRC3JH","jello":"animate---jello---WgEzg1O","bounceIn":"animate---bounceIn---3A8GxGN","bounceInDown":"animate---bounceInDown---2ucFBcu","bounceInLeft":"animate---bounceInLeft---1Fjo5vz","bounceInRight":"animate---bounceInRight---2Xyfq2R","bounceInUp":"animate---bounceInUp---3630MyC","bounceOut":"animate---bounceOut---3p7OHKR","bounceOutDown":"animate---bounceOutDown---8kMqv4A","bounceOutLeft":"animate---bounceOutLeft---29w_Nps","bounceOutRight":"animate---bounceOutRight---2d1AYfC","bounceOutUp":"animate---bounceOutUp---3SnrFnK","fadeIn":"animate---fadeIn---1_nKw4l","fadeInDown":"animate---fadeInDown---3AlFdiI","fadeInDownBig":"animate---fadeInDownBig---ZpuXzCM","fadeInLeft":"animate---fadeInLeft---26kIr0V","fadeInLeftBig":"animate---fadeInLeftBig---k5GQjWP","fadeInRight":"animate---fadeInRight---tFzpk0Z","fadeInRightBig":"animate---fadeInRightBig---3zOsiHK","fadeInUp":"animate---fadeInUp---1SbEpxA","fadeInUpBig":"animate---fadeInUpBig---3CJFZCV","fadeOut":"animate---fadeOut---35Dywdz","fadeOutDown":"animate---fadeOutDown---2DXdkfn","fadeOutDownBig":"animate---fadeOutDownBig---3ULqWe6","fadeOutLeft":"animate---fadeOutLeft---p-IfRgN","fadeOutLeftBig":"animate---fadeOutLeftBig---3UburYa","fadeOutRight":"animate---fadeOutRight---2EtORrR","fadeOutRightBig":"animate---fadeOutRightBig---2FbTo8s","fadeOutUp":"animate---fadeOutUp---2x472VT","fadeOutUpBig":"animate---fadeOutUpBig---fVqOxiX","flip":"animate---flip---1WLNyge","flipInX":"animate---flipInX---fhLE9YI","flipInY":"animate---flipInY---1KLov1J","flipOutX":"animate---flipOutX---3jpdJEI","flipOutY":"animate---flipOutY---2GA3h-R","lightSpeedIn":"animate---lightSpeedIn---3Jbgifw","lightSpeedOut":"animate---lightSpeedOut---2pmqbXP","rotateIn":"animate---rotateIn---tqRytXY","rotateInDownLeft":"animate---rotateInDownLeft---1dxAvFY","rotateInDownRight":"animate---rotateInDownRight---EjGxIXP","rotateInUpLeft":"animate---rotateInUpLeft---1rKQjYu","rotateInUpRight":"animate---rotateInUpRight---2CWBhrV","rotateOut":"animate---rotateOut---3QBv5zN","rotateOutDownLeft":"animate---rotateOutDownLeft---plh9V8U","rotateOutDownRight":"animate---rotateOutDownRight---3jcYKZK","rotateOutUpLeft":"animate---rotateOutUpLeft---3OIvkHn","rotateOutUpRight":"animate---rotateOutUpRight---1dd3J8U","hinge":"animate---hinge---EJQmn6O","jackInTheBox":"animate---jackInTheBox---tYTI1nT","rollIn":"animate---rollIn---CN-NcE_","rollOut":"animate---rollOut---1iWGwMb","zoomIn":"animate---zoomIn---39DVBjv","zoomInDown":"animate---zoomInDown---1Oh1oGr","zoomInLeft":"animate---zoomInLeft---3671Zl4","zoomInRight":"animate---zoomInRight---2vvAHXz","zoomInUp":"animate---zoomInUp---4Qsm-Kt","zoomOut":"animate---zoomOut---1sjS9pY","zoomOutDown":"animate---zoomOutDown---2BQuzj8","zoomOutLeft":"animate---zoomOutLeft---2u-SPiA","zoomOutRight":"animate---zoomOutRight---2HhH9GF","zoomOutUp":"animate---zoomOutUp---8c9ysV5","slideInDown":"animate---slideInDown---2x-AhpP","slideInLeft":"animate---slideInLeft---1kgNL6k","slideInRight":"animate---slideInRight---1mhoqzn","slideInUp":"animate---slideInUp---2eD7JAR","slideOutDown":"animate---slideOutDown---1Jk70Ta","slideOutLeft":"animate---slideOutLeft---3k0us7N","slideOutRight":"animate---slideOutRight---3j1A28f","slideOutUp":"animate---slideOutUp---MbY0qbV"};
-
-/***/ }),
-
 /***/ "./node_modules/fbjs/lib/ExecutionEnvironment.js":
 /*!*******************************************************!*\
   !*** ./node_modules/fbjs/lib/ExecutionEnvironment.js ***!
@@ -18990,7 +18978,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var ListView_1 = __webpack_require__(/*! ./components/listview/ListView */ "./src/components/listview/ListView.tsx");
-var area_view_1 = __webpack_require__(/*! ./components/areaview/area-view */ "./src/components/areaview/area-view.tsx");
+var AreaView_1 = __webpack_require__(/*! ./components/areaview/AreaView */ "./src/components/areaview/AreaView.tsx");
 var DetailView_1 = __webpack_require__(/*! ./components/detailview/DetailView */ "./src/components/detailview/DetailView.tsx");
 var data_server_1 = __webpack_require__(/*! ./model/data-server */ "./src/model/data-server.ts");
 var GlobalAlert_1 = __webpack_require__(/*! ./components/util/GlobalAlert */ "./src/components/util/GlobalAlert.tsx");
@@ -19755,7 +19743,7 @@ var App = /** @class */ (function (_super) {
             , { 
                 // currentListName={this.state.lastModifiedListName}
                 switchList: this.switchList, addNewList: this.addNewList, listInfos: this.state.listInfos, onDrop: this.handleDrop, actionsDisplay: this.state.actionsShouldDisplay, onActionsDisplayClick: this.toggleActionsDisplay }),
-            React.createElement(area_view_1.AreaView, { shrink: this.state.detailItem !== undefined, listInfo: listInfo, todoItems: this.state.itemsOfList, renameList: this.renameList, shouldDeleteList: this.shouldDeleteList, addNewItemInList: this.addNewItemInList, toggleItemInList: this.toggleItemInList, itemClicked: this.itemClicked, onDragStart: this.handleDragStart, onDragEnd: this.handleDragEnd, onColorPick: this.handleColorPick, onActionsDisplayClick: this.toggleActionsDisplay, actionsShouldDisplay: this.state.actionsShouldDisplay }),
+            React.createElement(AreaView_1.AreaView, { shrink: this.state.detailItem !== undefined, listInfo: listInfo, todoItems: this.state.itemsOfList, renameList: this.renameList, shouldDeleteList: this.shouldDeleteList, addNewItemInList: this.addNewItemInList, toggleItemInList: this.toggleItemInList, itemClicked: this.itemClicked, onDragStart: this.handleDragStart, onDragEnd: this.handleDragEnd, onColorPick: this.handleColorPick, onActionsDisplayClick: this.toggleActionsDisplay, actionsShouldDisplay: this.state.actionsShouldDisplay }),
             React.createElement(DetailView_1.DetailView, { listName: this.state.lastModifiedListName, item: this.state.detailItem, onCloseClicked: this.handleCloseFromDetailView, onDeleteClicked: this.handleDeleteFromDetailView, onToggleClicked: this.handleToggleFromDetailView, onCommentsChange: this.handleCommentsChange, onCopyToPrimary: this.copyItemToPrimaryListFromDetailView, onCancelCopyToPrimary: this.cancelCopyToPrimaryList }),
             this.state.displayDataErrorAlert && (React.createElement(GlobalAlert_1.Alert, { display: this.state.displayDataErrorAlert, message: this.state.dataErrorMessage, alertDefaultAction: this.alertDefaultAction, type: GlobalAlert_1.AlertType.Alert })),
             this.state.displayDeleteListAlert && (React.createElement(GlobalAlert_1.Alert, { display: this.state.displayDeleteListAlert, message: this.state.deleteConfirmMessage, alertDefaultAction: this.alertDefaultAction, alertConfirmAction: this.deleteList, type: GlobalAlert_1.AlertType.Confirm }))));
@@ -19767,9 +19755,21 @@ exports.App = App;
 
 /***/ }),
 
-/***/ "./src/components/areaview/actionButton.tsx":
+/***/ "./src/components/areaview/ActionButton.css":
 /*!**************************************************!*\
-  !*** ./src/components/areaview/actionButton.tsx ***!
+  !*** ./src/components/areaview/ActionButton.css ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"button":"ActionButton-button-JPuWiT-"};
+
+/***/ }),
+
+/***/ "./src/components/areaview/ActionButton.tsx":
+/*!**************************************************!*\
+  !*** ./src/components/areaview/ActionButton.tsx ***!
   \**************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -19788,17 +19788,17 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
-var styles = {
-    height: 40,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    cursor: 'pointer',
-};
-var hoverStyle = {
-    backgroundColor: 'rgba(206, 197, 197, 0.2)',
-};
+var styles = __webpack_require__(/*! ./ActionButton.css */ "./src/components/areaview/ActionButton.css");
+// const styles: React.CSSProperties = {
+//   height: 40,
+//   display: 'flex',
+//   justifyContent: 'center',
+//   alignItems: 'center',
+//   cursor: 'pointer',
+// }
+// const hoverStyle: React.CSSProperties = {
+//   backgroundColor: 'rgba(206, 197, 197, 0.2)',
+// }
 /**
  * 操作列表里的选项按钮
  */
@@ -19806,37 +19806,25 @@ var ActionButton = /** @class */ (function (_super) {
     __extends(ActionButton, _super);
     function ActionButton(props) {
         var _this = _super.call(this, props) || this;
-        _this.state = {
-            hover: false,
-        };
+        // this.state = {
+        //   hover: false,
+        // }
         // bind methods
         _this.handleClick = _this.handleClick.bind(_this);
-        _this.mouseEnter = _this.mouseEnter.bind(_this);
-        _this.mouseLeave = _this.mouseLeave.bind(_this);
         return _this;
+        // this.mouseEnter = this.mouseEnter.bind(this)
+        // this.mouseLeave = this.mouseLeave.bind(this)
     }
     ActionButton.prototype.render = function () {
-        var S = lib_1.mix(styles, this.props.style ? this.props.style : {});
-        if (this.state.hover) {
-            S = lib_1.mix(S, hoverStyle);
-        }
-        return (React.createElement("li", { style: S, onClick: this.handleClick, onMouseEnter: this.mouseEnter, onMouseLeave: this.mouseLeave }, this.props.text));
+        // let S = mix(styles, this.props.style ? this.props.style : {})
+        // if (this.state.hover) {
+        //   S = mix(S, hoverStyle)
+        // }
+        return (React.createElement("li", { className: styles.button, onClick: this.handleClick }, this.props.text));
     };
     ActionButton.prototype.handleClick = function (e) {
         e.stopPropagation();
         this.props.onClick();
-    };
-    ActionButton.prototype.mouseEnter = function (e) {
-        e.stopPropagation();
-        this.setState({
-            hover: true,
-        });
-    };
-    ActionButton.prototype.mouseLeave = function (e) {
-        e.stopPropagation();
-        this.setState({
-            hover: false,
-        });
     };
     return ActionButton;
 }(React.Component));
@@ -19845,10 +19833,22 @@ exports.ActionButton = ActionButton;
 
 /***/ }),
 
-/***/ "./src/components/areaview/add-new-item.tsx":
-/*!**************************************************!*\
-  !*** ./src/components/areaview/add-new-item.tsx ***!
-  \**************************************************/
+/***/ "./src/components/areaview/AddNewItem.css":
+/*!************************************************!*\
+  !*** ./src/components/areaview/AddNewItem.css ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"container":"AddNewItem-container-3cob6bN","symbol":"AddNewItem-symbol-2Cp5T41","checkbox":"AddNewItem-checkbox-2oYSk8w","input":"AddNewItem-input-rgzm11b","close":"AddNewItem-close-3QWXnQ7","add":"AddNewItem-add-wbFXGnf","hide":"AddNewItem-hide-1-xQo9r"};
+
+/***/ }),
+
+/***/ "./src/components/areaview/AddNewItem.tsx":
+/*!************************************************!*\
+  !*** ./src/components/areaview/AddNewItem.tsx ***!
+  \************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -19866,82 +19866,83 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
-var containerStyles = {
-    margin: "0 20px",
-    padding: "10px 0",
-    height: 60,
-    display: "flex",
-    borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
-};
+// 样式
+var styles = __webpack_require__(/*! ./AddNewItem.css */ "./src/components/areaview/AddNewItem.css");
+// const containerStyles = {
+//     margin: "0 20px",
+//     padding: "10px 0",
+//     height: 60,
+//     display: "flex",
+//     borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
+// };
 /**
  * “添加新todo”标志的样式
  */
-var addSymbolStyles = {
-    fontWeight: "bold",
-    fontSize: "1.5em",
-    color: "blue",
-    flex: "0 1 30px",
-    marginRight: 10,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-};
+// const addSymbolStyles = {
+//     fontWeight: "bold",
+//     fontSize: "1.5em",
+//     color: "blue",
+//     flex: "0 1 30px",
+//     marginRight: 10,
+//     display: "flex",
+//     alignItems: "center",
+//     justifyContent: "center",
+// } as React.CSSProperties;
 /**
  * 自定义checkbox的样式
  */
-var checkboxStyles = {
-    fontSize: "1.5rem",
-    width: 30,
-    height: 30,
-    margin: "0 10px",
-    borderRadius: "50%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
-    border: "1px solid gray",
-    color: "transparent",
-    backgroundColor: "transparent",
-    cursor: "pointer",
-    transition: "color 0.3s, background-color 0.3s",
-};
+// const checkboxStyles = {
+//     fontSize: "1.5rem",
+//     width: 30,
+//     height: 30,
+//     margin: "0 10px",
+//     borderRadius: "50%",
+//     display: "flex",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     alignSelf: "center",
+//     border: "1px solid gray",
+//     color: "transparent",
+//     backgroundColor: "transparent",
+//     cursor: "pointer",
+//     transition: "color 0.3s, background-color 0.3s",
+// } as React.CSSProperties;
 /**
  * 输入框的样式
  */
-var inputStyles = {
-    border: "none",
-    flex: "10 1 100px",
-    outline: "none",
-};
+// const inputStyles = {
+//     border: "none",
+//     flex: "10 1 100px",
+//     outline: "none",
+// };
 /**
  * "X"按钮的样式
  */
-var closeButtonStyles = {
-    flex: "0 1 30px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    cursor: "pointer",
-};
+// const closeButtonStyles = {
+//     flex: "0 1 30px",
+//     display: "flex",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     cursor: "pointer",
+// } as React.CSSProperties;
 /**
  * “添加”按钮的样式
  */
-var addButtonStyles = lib_1.mix(closeButtonStyles, { flex: "0 1 60px" });
+// const addButtonStyles = mix(closeButtonStyles, { flex: "0 1 60px" });
 /**
  * 按钮hover状态的样式
  */
-var buttonHover = {
-    backgroundColor: "rgba(206, 197, 197, 0.2)",
-};
+// const buttonHover = {
+//     backgroundColor: "rgba(206, 197, 197, 0.2)",
+// };
 var AddNewItem = /** @class */ (function (_super) {
     __extends(AddNewItem, _super);
     function AddNewItem(props) {
         var _this = _super.call(this, props) || this;
-        _this.state = {
-            cancelButtonHover: false,
-            addButtonHover: false,
-        };
+        // this.state = {
+        //     cancelButtonHover: false,
+        //     addButtonHover: false,
+        // };
         // bind methods
         _this.handleAddClicked = _this.handleAddClicked.bind(_this);
         _this.handleCancelClicked = _this.handleCancelClicked.bind(_this);
@@ -19977,26 +19978,30 @@ var AddNewItem = /** @class */ (function (_super) {
     };
     AddNewItem.prototype.render = function () {
         var emptyValue = this.props.value === "";
-        var symbolS = emptyValue ? addSymbolStyles : checkboxStyles;
-        var addButtonS = addButtonStyles;
-        var closeButtonS = closeButtonStyles;
+        // const symbolS = emptyValue ? addSymbolStyles : checkboxStyles;
+        // let addButtonS = addButtonStyles;
+        // let closeButtonS = closeButtonStyles;
         // 输入框内容为空的时候add和close都不显示
-        if (emptyValue) {
-            addButtonS = lib_1.mix(addButtonS, { display: "none" });
-            closeButtonS = lib_1.mix(closeButtonS, { display: "none" });
-        }
+        // if (emptyValue) {
+        //     addButtonS = mix(addButtonS, { display: "none" });
+        //     closeButtonS = mix(closeButtonS, { display: "none" });
+        // }
         // add和close各自hover的情况
-        if (this.state.cancelButtonHover) {
-            closeButtonS = lib_1.mix(closeButtonS, buttonHover);
-        }
-        if (this.state.addButtonHover) {
-            addButtonS = lib_1.mix(addButtonS, buttonHover);
-        }
-        return (React.createElement("div", { style: containerStyles },
-            React.createElement("span", { style: symbolS }, emptyValue ? "+" : ""),
-            React.createElement("input", { type: "text", style: inputStyles, placeholder: "\u6DFB\u52A0\u4EE3\u529E\u4E8B\u9879", value: this.props.value, onChange: this.props.onValueChange }),
-            React.createElement("span", { style: closeButtonS, onClick: this.handleCancelClicked, onMouseEnter: this.handleCloseButtonMouseEnter, onMouseLeave: this.handleCloseButtonMouseLeave }, "X"),
-            React.createElement("span", { style: addButtonS, onClick: this.handleAddClicked, onMouseEnter: this.handleAddButtonMouseEnter, onMouseLeave: this.handleAddButtonMouseLeave }, "\u6DFB\u52A0")));
+        // if (this.state.cancelButtonHover) {
+        //     closeButtonS = mix(closeButtonS, buttonHover);
+        // }
+        // if (this.state.addButtonHover) {
+        //     addButtonS = mix(addButtonS, buttonHover);
+        // }
+        return (React.createElement("div", { className: styles.container },
+            React.createElement("span", { className: emptyValue ? styles.symbol : styles.checkbox }, emptyValue ? "+" : ""),
+            React.createElement("input", { type: "text", className: styles.input, placeholder: "\u6DFB\u52A0\u4EE3\u529E\u4E8B\u9879", value: this.props.value, onChange: this.props.onValueChange }),
+            React.createElement("span", { 
+                // style={closeButtonS}
+                className: emptyValue ? styles.hide : styles.close, onClick: this.handleCancelClicked, onMouseEnter: this.handleCloseButtonMouseEnter, onMouseLeave: this.handleCloseButtonMouseLeave }, "X"),
+            React.createElement("span", { 
+                // style={addButtonS}
+                className: emptyValue ? styles.hide : styles.add, onClick: this.handleAddClicked, onMouseEnter: this.handleAddButtonMouseEnter, onMouseLeave: this.handleAddButtonMouseLeave }, "\u6DFB\u52A0")));
     };
     return AddNewItem;
 }(React.Component));
@@ -20005,10 +20010,22 @@ exports.AddNewItem = AddNewItem;
 
 /***/ }),
 
-/***/ "./src/components/areaview/area-actions.tsx":
-/*!**************************************************!*\
-  !*** ./src/components/areaview/area-actions.tsx ***!
-  \**************************************************/
+/***/ "./src/components/areaview/AreaActions.css":
+/*!*************************************************!*\
+  !*** ./src/components/areaview/AreaActions.css ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"actions":"AreaActions-actions-1uihpZy","display":"AreaActions-display-2nMRPBD"};
+
+/***/ }),
+
+/***/ "./src/components/areaview/AreaActions.tsx":
+/*!*************************************************!*\
+  !*** ./src/components/areaview/AreaActions.tsx ***!
+  \*************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -20026,27 +20043,28 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var colortheme_picker_1 = __webpack_require__(/*! ../areaview/colortheme-picker */ "./src/components/areaview/colortheme-picker.tsx");
-var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
-var actionButton_1 = __webpack_require__(/*! ./actionButton */ "./src/components/areaview/actionButton.tsx");
+var ThemePicker_1 = __webpack_require__(/*! ../areaview/ThemePicker */ "./src/components/areaview/ThemePicker.tsx");
+var ActionButton_1 = __webpack_require__(/*! ./ActionButton */ "./src/components/areaview/ActionButton.tsx");
+// 样式
+var styles = __webpack_require__(/*! ./AreaActions.css */ "./src/components/areaview/AreaActions.css");
 /**
  * 操作菜单的样式
  */
-var actionStyles = {
-    position: 'absolute',
-    top: 'calc(100% + 5px)',
-    right: 10,
-    visibility: 'hidden',
-    width: 322,
-    listStyleType: 'none',
-    backgroundColor: 'white',
-    border: '1px solid rgba(206, 197, 197, 0.5)',
-    padding: 10,
-    marginRight: 0,
-};
-var actionDisplay = {
-    visibility: 'visible',
-};
+// const actionStyles = {
+//     position: "absolute",
+//     top: "calc(100% + 5px)",
+//     right: 10,
+//     visibility: "hidden",
+//     width: 322,
+//     listStyleType: "none",
+//     backgroundColor: "white",
+//     border: "1px solid rgba(206, 197, 197, 0.5)",
+//     padding: 10,
+//     marginRight: 0,
+// } as React.CSSProperties;
+// const actionDisplay = {
+//     visibility: "visible",
+// };
 var AreaActions = /** @class */ (function (_super) {
     __extends(AreaActions, _super);
     function AreaActions() {
@@ -20054,12 +20072,12 @@ var AreaActions = /** @class */ (function (_super) {
     }
     AreaActions.prototype.render = function () {
         var actionShouldDisplay = this.props.actionsShouldDisplay;
-        return (React.createElement("div", { className: actionShouldDisplay ? 'animated fadeIn' : 'animated', style: actionShouldDisplay ? lib_1.mix(actionStyles, actionDisplay) : actionStyles },
-            React.createElement(colortheme_picker_1.ColorThemePicker, { onColorPick: this.props.onColorPick }),
+        return (React.createElement("div", { className: (actionShouldDisplay ? "animated fadeIn" : "animated") + " " + (actionShouldDisplay ? styles.actions + " " + styles.display : styles.actions) },
+            React.createElement(ThemePicker_1.ThemePicker, { onColorPick: this.props.onColorPick }),
             React.createElement("ul", null,
-                React.createElement(actionButton_1.ActionButton, { onClick: this.props.switchDoneItems, text: (this.props.doneItemsDisplay ? '隐藏' : '显示') + '已完成的项目' }),
-                React.createElement(actionButton_1.ActionButton, { onClick: this.props.renameClicked, text: '重命名列表' }),
-                React.createElement(actionButton_1.ActionButton, { onClick: this.props.deleteClicked, text: '删除列表', style: { color: 'red' } }))));
+                React.createElement(ActionButton_1.ActionButton, { onClick: this.props.switchDoneItems, text: (this.props.doneItemsDisplay ? "隐藏" : "显示") + "已完成的项目" }),
+                React.createElement(ActionButton_1.ActionButton, { onClick: this.props.renameClicked, text: "重命名列表" }),
+                React.createElement(ActionButton_1.ActionButton, { onClick: this.props.deleteClicked, text: "删除列表", style: { color: "red" } }))));
     };
     return AreaActions;
 }(React.Component));
@@ -20068,67 +20086,22 @@ exports.AreaActions = AreaActions;
 
 /***/ }),
 
-/***/ "./src/components/areaview/area-view-content.tsx":
-/*!*******************************************************!*\
-  !*** ./src/components/areaview/area-view-content.tsx ***!
-  \*******************************************************/
+/***/ "./src/components/areaview/AreaView.css":
+/*!**********************************************!*\
+  !*** ./src/components/areaview/AreaView.css ***!
+  \**********************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var area_view_item_1 = __webpack_require__(/*! ./area-view-item */ "./src/components/areaview/area-view-item.tsx");
-var viewStyles = {
-    maxHeight: "calc(100vh - 200px -60px)",
-    overflow: "auto",
-};
-var viewListStyles = {
-    margin: "0 20px",
-};
-var AreaViewContent = /** @class */ (function (_super) {
-    __extends(AreaViewContent, _super);
-    function AreaViewContent() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    AreaViewContent.prototype.createList = function () {
-        var _this = this;
-        return this.props.items.map(function (item) {
-            if (_this.props.showDoneItems) {
-                return (React.createElement(area_view_item_1.AreaViewItem, { isPrimary: _this.props.isPrimary, item: item, onItemClicked: _this.props.itemClicked, onCheckboxClicked: _this.props.checkboxClicked, onDragStart: _this.props.onDragStart, onDragEnd: _this.props.onDragEnd, key: item.name }));
-            }
-            if (item.done && !_this.props.isPrimary) {
-                return null;
-            }
-            return (React.createElement(area_view_item_1.AreaViewItem, { isPrimary: _this.props.isPrimary, item: item, onItemClicked: _this.props.itemClicked, onCheckboxClicked: _this.props.checkboxClicked, onDragStart: _this.props.onDragStart, onDragEnd: _this.props.onDragEnd, key: item.name }));
-        });
-    };
-    AreaViewContent.prototype.render = function () {
-        return (React.createElement("div", { style: viewStyles },
-            React.createElement("ul", { style: viewListStyles }, this.createList())));
-    };
-    return AreaViewContent;
-}(React.Component));
-exports.AreaViewContent = AreaViewContent;
-
+// removed by extract-text-webpack-plugin
+module.exports = {"areaView":"AreaView-areaView-2nggvZE","shrink":"AreaView-shrink-2myv31T"};
 
 /***/ }),
 
-/***/ "./src/components/areaview/area-view-item.tsx":
-/*!****************************************************!*\
-  !*** ./src/components/areaview/area-view-item.tsx ***!
-  \****************************************************/
+/***/ "./src/components/areaview/AreaView.tsx":
+/*!**********************************************!*\
+  !*** ./src/components/areaview/AreaView.tsx ***!
+  \**********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -20146,187 +20119,17 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
-var todoStyles = {
-    height: 60,
-    display: "flex",
-    alignItems: "center",
-    padding: "10px 0",
-    borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
-    backgroundColor: "transparent",
-    transition: "background-color 0.3s",
-};
-var todoHover = {
-    backgroundColor: "rgba(206, 197, 197, 0.5)",
-};
-/**
- * 自定义checkbox的样式
- */
-var checkboxStyles = {
-    fontSize: "1.5rem",
-    width: 30,
-    height: 30,
-    margin: "0 10px",
-    borderRadius: "50%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
-    border: "1px solid gray",
-    color: "transparent",
-    backgroundColor: "transparent",
-    cursor: "pointer",
-    transition: "color 0.3s, background-color 0.3s",
-};
-var checkboxHover = {
-    color: "white",
-    backgroundColor: "gray",
-};
-var checkedBox = {
-    color: "white",
-    backgroundColor: "green",
-};
-/**
- * todo文字部分的样式
- */
-var itemStyles = {
-    display: "flex",
-    flexDirection: "column",
-};
-/**
- * todo完成时文字部分的样式
- */
-var itemDoneStyles = {
-    textDecoration: "line-through",
-    color: "gray",
-};
-/**
- * 备注等信息文字部分的样式
- */
-var itemExtraStyles = {
-    display: "flex",
-};
-var extraDirectChild = {
-    fontSize: "0.6em",
-    color: "gray",
-    marginRight: 10,
-};
-var AreaViewItem = /** @class */ (function (_super) {
-    __extends(AreaViewItem, _super);
-    function AreaViewItem(props) {
-        var _this = _super.call(this, props) || this;
-        _this.state = {
-            todoHover: false,
-            checkboxHover: false,
-        };
-        // bind methods
-        _this.handleDrag = _this.handleDrag.bind(_this);
-        _this.handleDragEnd = _this.handleDragEnd.bind(_this);
-        _this.handleTodoMouseEnter = _this.handleTodoMouseEnter.bind(_this);
-        _this.handleTodoMouseLeave = _this.handleTodoMouseLeave.bind(_this);
-        _this.handleCheckboxMouseEnter = _this.handleCheckboxMouseEnter.bind(_this);
-        _this.handleCheckboxMouseLeave = _this.handleCheckboxMouseLeave.bind(_this);
-        return _this;
-    }
-    /**
-     * 拖拽开始的处理方法，将todo的数据转化为字符串并交由父组件处理
-     * @param e 拖拽开始事件
-     */
-    AreaViewItem.prototype.handleDrag = function (e) {
-        var data = JSON.stringify(this.props.item);
-        e.dataTransfer.setData("text/plain", "");
-        e.dataTransfer.dropEffect = "move";
-        this.props.onDragStart(data);
-    };
-    /**
-     * 拖拽结束/被取消了
-     * @param e 拖拽结束/被取消的处理方法
-     */
-    AreaViewItem.prototype.handleDragEnd = function (e) {
-        e.stopPropagation();
-        this.props.onDragEnd();
-    };
-    AreaViewItem.prototype.handleTodoMouseEnter = function (e) {
-        e.stopPropagation();
-        this.setState({
-            todoHover: true,
-        });
-    };
-    AreaViewItem.prototype.handleTodoMouseLeave = function (e) {
-        e.stopPropagation();
-        this.setState({
-            todoHover: false,
-        });
-    };
-    AreaViewItem.prototype.render = function () {
-        var _this = this;
-        var item = this.props.item;
-        var todoS = todoStyles;
-        if (this.state.todoHover) {
-            todoS = lib_1.mix(todoS, todoHover);
-        }
-        var checkboxS = checkboxStyles;
-        if (item.done) {
-            checkboxS = lib_1.mix(checkboxS, checkedBox);
-        }
-        if (this.state.checkboxHover) {
-            checkboxS = lib_1.mix(checkboxS, checkboxHover);
-        }
-        return (React.createElement("li", { draggable: true, style: todoS, onClick: function (e) { return _this.props.onItemClicked(e, item.name); }, onDragStart: this.handleDrag, onDragEnd: this.handleDragEnd, onMouseEnter: this.handleTodoMouseEnter, onMouseLeave: this.handleTodoMouseLeave },
-            React.createElement("div", { style: checkboxS, onClick: function (e) { return _this.props.onCheckboxClicked(e, item.name); }, onMouseEnter: this.handleCheckboxMouseEnter, onMouseLeave: this.handleCheckboxMouseLeave }, "\u221A"),
-            React.createElement("div", { style: itemStyles },
-                React.createElement("span", { style: item.done ? itemDoneStyles : {} }, item.name),
-                React.createElement("div", { style: itemExtraStyles },
-                    item.inPrimaryList && (React.createElement("span", { style: lib_1.mix(extraDirectChild, { color: "blue" }) }, this.props.isPrimary ? item.source : "我的一天")),
-                    item.comments && React.createElement("span", { style: extraDirectChild }, "\u5907\u6CE8")))));
-    };
-    AreaViewItem.prototype.handleCheckboxMouseLeave = function (e) {
-        e.stopPropagation();
-        this.setState({ checkboxHover: false });
-    };
-    AreaViewItem.prototype.handleCheckboxMouseEnter = function (e) {
-        e.stopPropagation();
-        this.setState({ checkboxHover: true });
-    };
-    return AreaViewItem;
-}(React.Component));
-exports.AreaViewItem = AreaViewItem;
-
-
-/***/ }),
-
-/***/ "./src/components/areaview/area-view.tsx":
-/*!***********************************************!*\
-  !*** ./src/components/areaview/area-view.tsx ***!
-  \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var add_new_item_1 = __webpack_require__(/*! ./add-new-item */ "./src/components/areaview/add-new-item.tsx");
-var area_view_content_1 = __webpack_require__(/*! ./area-view-content */ "./src/components/areaview/area-view-content.tsx");
-var editable_head_1 = __webpack_require__(/*! ./editable-head */ "./src/components/areaview/editable-head.tsx");
-var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
-var viewStyles = {
-    width: "calc(100% - 280px)",
-    overflow: "hidden",
-};
-var viewShrinkStyles = {
-    width: "calc(100% - 280px - 280px)",
-};
+var AddNewItem_1 = __webpack_require__(/*! ./AddNewItem */ "./src/components/areaview/AddNewItem.tsx");
+var ViewContent_1 = __webpack_require__(/*! ./ViewContent */ "./src/components/areaview/ViewContent.tsx");
+var EditableHead_1 = __webpack_require__(/*! ./EditableHead */ "./src/components/areaview/EditableHead.tsx");
+var styles = __webpack_require__(/*! ./AreaView.css */ "./src/components/areaview/AreaView.css");
+// const viewStyles: React.CSSProperties = {
+//     width: 'calc(100% - 280px)',
+//     overflow: 'hidden',
+// }
+// const viewShrinkStyles = {
+//     width: 'calc(100% - 280px - 280px)',
+// }
 var AreaView = /** @class */ (function (_super) {
     __extends(AreaView, _super);
     function AreaView(props) {
@@ -20349,13 +20152,15 @@ var AreaView = /** @class */ (function (_super) {
     AreaView.prototype.render = function () {
         var _this = this;
         var listInfo = this.props.listInfo;
-        return (React.createElement("div", { style: this.props.shrink ? lib_1.mix(viewStyles, viewShrinkStyles) : viewStyles, onClick: function (e) {
+        return (React.createElement("div", { 
+            // style={this.props.shrink ? mix(viewStyles, viewShrinkStyles) : viewStyles}
+            id: styles.areaView, className: this.props.shrink ? styles.shrink : "", onClick: function (e) {
                 e.stopPropagation();
                 _this.props.actionsShouldDisplay && _this.props.onActionsDisplayClick();
             } },
-            React.createElement(editable_head_1.EditableHead, { isPrimaryList: listInfo.isPrimary, listName: listInfo.name, colorTheme: listInfo.theme, renameList: this.renameList, shouldDeleteList: this.props.shouldDeleteList, switchDoneItems: this.switchDoneItems, doneItemsDisplay: this.state.showDoneItems, onColorPick: this.props.onColorPick, onActionsDisplayClick: this.props.onActionsDisplayClick, actionsShouldDisplay: this.props.actionsShouldDisplay }),
-            React.createElement(area_view_content_1.AreaViewContent, { isPrimary: listInfo.isPrimary, items: this.props.todoItems, checkboxClicked: this.toggleItem, itemClicked: this.displayDetailView, onDragStart: this.handleDragStart, onDragEnd: this.props.onDragEnd, showDoneItems: this.state.showDoneItems }),
-            React.createElement(add_new_item_1.AddNewItem, { value: this.state.inputValue, onValueChange: this.handleInput, onAddClicked: this.addNewItem, onCancelClicked: this.cancelInput })));
+            React.createElement(EditableHead_1.EditableHead, { isPrimaryList: listInfo.isPrimary, listName: listInfo.name, colorTheme: listInfo.theme, renameList: this.renameList, shouldDeleteList: this.props.shouldDeleteList, switchDoneItems: this.switchDoneItems, doneItemsDisplay: this.state.showDoneItems, onColorPick: this.props.onColorPick, onActionsDisplayClick: this.props.onActionsDisplayClick, actionsShouldDisplay: this.props.actionsShouldDisplay }),
+            React.createElement(ViewContent_1.AreaViewContent, { isPrimary: listInfo.isPrimary, items: this.props.todoItems, checkboxClicked: this.toggleItem, itemClicked: this.displayDetailView, onDragStart: this.handleDragStart, onDragEnd: this.props.onDragEnd, showDoneItems: this.state.showDoneItems }),
+            React.createElement(AddNewItem_1.AddNewItem, { value: this.state.inputValue, onValueChange: this.handleInput, onAddClicked: this.addNewItem, onCancelClicked: this.cancelInput })));
     };
     AreaView.getDerivedStateFromProps = function (nextProps, prevState) {
         if (nextProps.listInfo.name != prevState.inputValue) {
@@ -20456,88 +20261,22 @@ exports.AreaView = AreaView;
 
 /***/ }),
 
-/***/ "./src/components/areaview/colortheme-picker.tsx":
-/*!*******************************************************!*\
-  !*** ./src/components/areaview/colortheme-picker.tsx ***!
-  \*******************************************************/
+/***/ "./src/components/areaview/EditableHead.css":
+/*!**************************************************!*\
+  !*** ./src/components/areaview/EditableHead.css ***!
+  \**************************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
-/**
- * 组件最外层样式
- */
-var colorPickerStyles = {
-    marginBottom: 10,
-};
-/**
- * 文字部分样式
- */
-var themeTextStyles = {
-    marginBottom: 10,
-};
-/**
- * 颜色列表的样式
- */
-var pickerListStyles = {
-    listStyleType: "none",
-    display: "flex",
-    flexWrap: "wrap",
-    height: 50,
-    justifyContent: "space-between",
-};
-/**
- * 每个颜色项目的样式
- */
-var listElementStyles = {
-    width: 50,
-    height: 50,
-    cursor: "pointer",
-};
-var ColorThemePicker = /** @class */ (function (_super) {
-    __extends(ColorThemePicker, _super);
-    function ColorThemePicker() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.colors = [
-            { name: "purple", value: "#a525a5" },
-            { name: "pink", value: "#FFC0CB" },
-            { name: "green", value: "#34bc34" },
-            { name: "orange", value: "#f29f08" },
-            { name: "skyblue", value: "#87cefa" },
-        ];
-        return _this;
-    }
-    ColorThemePicker.prototype.render = function () {
-        var _this = this;
-        return (React.createElement("div", { style: colorPickerStyles },
-            React.createElement("p", { style: themeTextStyles }, "\u4E3B\u9898"),
-            React.createElement("ul", { style: pickerListStyles }, this.colors.map(function (color) { return (React.createElement("li", { style: lib_1.mix(listElementStyles, { backgroundColor: color.value }), onClick: function (e) { return _this.props.onColorPick(color.value); }, key: color.name })); }))));
-    };
-    return ColorThemePicker;
-}(React.Component));
-exports.ColorThemePicker = ColorThemePicker;
-
+// removed by extract-text-webpack-plugin
+module.exports = {"head":"EditableHead-head-1gsRikC","headDirectChild":"EditableHead-headDirectChild-3Vaxgo5","hide":"EditableHead-hide-28bAOsi","name":"EditableHead-name-2zP2d_M","switcher":"EditableHead-switcher-1QmaDbD"};
 
 /***/ }),
 
-/***/ "./src/components/areaview/editable-head.tsx":
-/*!***************************************************!*\
-  !*** ./src/components/areaview/editable-head.tsx ***!
-  \***************************************************/
+/***/ "./src/components/areaview/EditableHead.tsx":
+/*!**************************************************!*\
+  !*** ./src/components/areaview/EditableHead.tsx ***!
+  \**************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -20555,42 +20294,43 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var area_actions_1 = __webpack_require__(/*! ./area-actions */ "./src/components/areaview/area-actions.tsx");
-var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+var AreaActions_1 = __webpack_require__(/*! ./AreaActions */ "./src/components/areaview/AreaActions.tsx");
+// import { mix } from "../../lib";
+var styles = __webpack_require__(/*! ./EditableHead.css */ "./src/components/areaview/EditableHead.css");
 /**
  * 最外层样式
  */
-var headStyles = {
-    height: 200,
-    padding: 10,
-    borderBottom: '1px solid rgba(206, 197, 197, 0.5)',
-    display: 'flex',
-    position: 'relative',
-};
-var headDirectChild = {
-    alignSelf: 'flex-end',
-};
+// const headStyles = {
+//     height: 200,
+//     padding: 10,
+//     borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
+//     display: "flex",
+//     position: "relative",
+// } as React.CSSProperties;
+// const headDirectChild = {
+//     alignSelf: "flex-end",
+// } as React.CSSProperties;
 /**
  * 列表名称文字的样式
  */
-var nameLabelStyles = {
-    fontSize: '2rem',
-    color: 'white',
-};
+// const nameLabelStyles = {
+//     fontSize: "2rem",
+//     color: "white",
+// };
 /**
  * 显示操作菜单按钮的样式
  */
-var switcherStyles = {
-    width: 40,
-    height: 30,
-    position: 'absolute',
-    right: 10,
-    bottom: 10,
-    border: 'none',
-    cursor: 'pointer',
-    color: 'white',
-    fontWeight: 'bold',
-};
+// const switcherStyles = {
+//     width: 40,
+//     height: 30,
+//     position: "absolute",
+//     right: 10,
+//     bottom: 10,
+//     border: "none",
+//     cursor: "pointer",
+//     color: "white",
+//     fontWeight: "bold",
+// } as React.CSSProperties;
 var AreaViewHead = /** @class */ (function (_super) {
     __extends(AreaViewHead, _super);
     function AreaViewHead(props) {
@@ -20670,20 +20410,20 @@ var AreaViewHead = /** @class */ (function (_super) {
     AreaViewHead.prototype.render = function () {
         var _this = this;
         var color = this.props.colorTheme;
-        var hideS = this.state.isEdit ? { display: 'none' } : {};
+        var hideS = this.state.isEdit ? { display: "none" } : {};
         if (this.props.isPrimaryList) {
-            return (React.createElement("div", { style: lib_1.mix(headStyles, {
-                    background: "linear-gradient(to right, " + color + ", " + (color + 'b3') + ")",
-                }) },
-                React.createElement("div", { style: lib_1.mix(nameLabelStyles, headDirectChild) }, this.props.listName)));
+            return (React.createElement("div", { className: styles.head, style: {
+                    background: "linear-gradient(to right, " + color + ", " + (color + "b3") + ")",
+                } },
+                React.createElement("div", { className: styles.headDirectChild + " " + styles.name }, this.props.listName)));
         }
-        return (React.createElement("div", { style: lib_1.mix(headStyles, {
-                background: "linear-gradient(to right, " + color + ", " + (color + 'b3') + ")",
-            }) },
-            React.createElement("div", { style: lib_1.mix(nameLabelStyles, headDirectChild, hideS) }, this.props.listName),
-            React.createElement("input", { style: lib_1.mix(headDirectChild, this.state.isEdit ? {} : { display: 'none' }), type: "text", onChange: this.inputChange, ref: function (input) { return (_this.renameInput = input); }, onBlur: this.inputBlur }),
-            React.createElement("button", { style: lib_1.mix(switcherStyles, { backgroundColor: color }), onClick: this.handleSwitch }, "\u00B7\u00B7\u00B7"),
-            React.createElement(area_actions_1.AreaActions, { actionsShouldDisplay: this.props.actionsShouldDisplay, doneItemsDisplay: this.props.doneItemsDisplay, onColorPick: this.props.onColorPick, switchDoneItems: this.switchDoneItems, renameClicked: this.renameClicked, deleteClicked: this.deleteClicked })));
+        return (React.createElement("div", { className: styles.head, style: {
+                background: "linear-gradient(to right, " + color + ", " + (color + "b3") + ")",
+            } },
+            React.createElement("div", { className: styles.headDirectChild + " " + styles.name + " " + (this.state.isEdit ? styles.hide : "") }, this.props.listName),
+            React.createElement("input", { className: styles.headDirectChild + " " + (this.state.isEdit ? "" : styles.hide), type: "text", onChange: this.inputChange, ref: function (input) { return (_this.renameInput = input); }, onBlur: this.inputBlur }),
+            React.createElement("button", { className: styles.switcher, style: { backgroundColor: color }, onClick: this.handleSwitch }, "\u00B7\u00B7\u00B7"),
+            React.createElement(AreaActions_1.AreaActions, { actionsShouldDisplay: this.props.actionsShouldDisplay, doneItemsDisplay: this.props.doneItemsDisplay, onColorPick: this.props.onColorPick, switchDoneItems: this.switchDoneItems, renameClicked: this.renameClicked, deleteClicked: this.deleteClicked })));
     };
     return AreaViewHead;
 }(React.Component));
@@ -20692,70 +20432,22 @@ exports.EditableHead = AreaViewHead;
 
 /***/ }),
 
-/***/ "./src/components/detailview/DetailActions.css":
-/*!*****************************************************!*\
-  !*** ./src/components/detailview/DetailActions.css ***!
-  \*****************************************************/
+/***/ "./src/components/areaview/ThemePicker.css":
+/*!*************************************************!*\
+  !*** ./src/components/areaview/ThemePicker.css ***!
+  \*************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"actions":"DetailActions---actions---2IoUMEk","sideButton":"DetailActions---sideButton---EABAaFZ","timeLabel":"DetailActions---timeLabel---PExXm_n"};
+module.exports = {"picker":"ThemePicker-picker-1D1lp7S","text":"ThemePicker-text-2ONbNdA","pickList":"ThemePicker-pickList-1FCyKW_","pickElement":"ThemePicker-pickElement-12H7V9Q"};
 
 /***/ }),
 
-/***/ "./src/components/detailview/DetailComments.css":
-/*!******************************************************!*\
-  !*** ./src/components/detailview/DetailComments.css ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-module.exports = {"comments":"DetailComments---comments---ft8DGxN"};
-
-/***/ }),
-
-/***/ "./src/components/detailview/DetailPrimaryCopy.css":
-/*!*********************************************************!*\
-  !*** ./src/components/detailview/DetailPrimaryCopy.css ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-module.exports = {"primaryCopy":"DetailPrimaryCopy---primaryCopy---1kgNVSy","copyArea":"DetailPrimaryCopy---copyArea---3UFo1Oj","copyText":"DetailPrimaryCopy---copyText---3pmOxmQ","cancelButton":"DetailPrimaryCopy---cancelButton---3YbobXB","copyButton":"DetailPrimaryCopy---copyButton---23f7wTo"};
-
-/***/ }),
-
-/***/ "./src/components/detailview/DetailTitleContent.css":
-/*!**********************************************************!*\
-  !*** ./src/components/detailview/DetailTitleContent.css ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-module.exports = {"titleContent":"DetailTitleContent---titleContent---2kBQwTA","checkbox":"DetailTitleContent---checkbox---2x6DO1b","checkedbox":"DetailTitleContent---checkedbox---CydAp7K","titleLabel":"DetailTitleContent---titleLabel---h6vIjO9"};
-
-/***/ }),
-
-/***/ "./src/components/detailview/DetailView.css":
-/*!**************************************************!*\
-  !*** ./src/components/detailview/DetailView.css ***!
-  \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-module.exports = {"detailView":"DetailView---detailView---35WsUh0","disappear":"DetailView---disappear---3pc_UC6"};
-
-/***/ }),
-
-/***/ "./src/components/detailview/DetailView.tsx":
-/*!**************************************************!*\
-  !*** ./src/components/detailview/DetailView.tsx ***!
-  \**************************************************/
+/***/ "./src/components/areaview/ThemePicker.tsx":
+/*!*************************************************!*\
+  !*** ./src/components/areaview/ThemePicker.tsx ***!
+  \*************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -20773,53 +20465,143 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var detailActions_1 = __webpack_require__(/*! ./detailActions */ "./src/components/detailview/detailActions.tsx");
-var detailComments_1 = __webpack_require__(/*! ./detailComments */ "./src/components/detailview/detailComments.tsx");
-var detailPrimaryCopy_1 = __webpack_require__(/*! ./detailPrimaryCopy */ "./src/components/detailview/detailPrimaryCopy.tsx");
-var detailTitleContent_1 = __webpack_require__(/*! ./detailTitleContent */ "./src/components/detailview/detailTitleContent.tsx");
-var styles = __webpack_require__(/*! ./DetailView.css */ "./src/components/detailview/DetailView.css");
+var styles = __webpack_require__(/*! ./ThemePicker.css */ "./src/components/areaview/ThemePicker.css");
 /**
- * detail view的样式
+ * 组件最外层样式
  */
-// const detailViewStyles = {
-//   width: 280,
-//   position: "relative",
-//   overflow: "hidden",
-//   borderLeft: "1px solid rgba(206, 197, 197, 0.5)",
-//   backgroundColor: "rgba(206, 197, 197, 0.2)",
-// } as React.CSSProperties;
-// const detailViewDisappear = {
-//   width: 0,
+// const colorPickerStyles = {
+//     marginBottom: 10,
 // };
-var DetailView = /** @class */ (function (_super) {
-    __extends(DetailView, _super);
-    function DetailView() {
+/**
+ * 文字部分样式
+ */
+// const themeTextStyles = {
+//     marginBottom: 10,
+// };
+/**
+ * 颜色列表的样式
+ */
+// const pickerListStyles = {
+//     listStyleType: "none",
+//     display: "flex",
+//     flexWrap: "wrap",
+//     height: 50,
+//     justifyContent: "space-between",
+// } as React.CSSProperties;
+/**
+ * 每个颜色项目的样式
+ */
+// const listElementStyles = {
+//     width: 50,
+//     height: 50,
+//     cursor: "pointer",
+// };
+var ThemePicker = /** @class */ (function (_super) {
+    __extends(ThemePicker, _super);
+    function ThemePicker() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.colors = [
+            { name: "purple", value: "#a525a5" },
+            { name: "pink", value: "#FFC0CB" },
+            { name: "green", value: "#34bc34" },
+            { name: "orange", value: "#f29f08" },
+            { name: "skyblue", value: "#87cefa" },
+        ];
+        return _this;
+    }
+    ThemePicker.prototype.render = function () {
+        var _this = this;
+        return (React.createElement("div", { className: styles.picker },
+            React.createElement("p", { className: styles.text }, "\u4E3B\u9898"),
+            React.createElement("ul", { className: styles.pickList }, this.colors.map(function (color) { return (React.createElement("li", { className: styles.pickElement, style: { backgroundColor: color.value }, onClick: function (e) { return _this.props.onColorPick(color.value); }, key: color.name })); }))));
+    };
+    return ThemePicker;
+}(React.Component));
+exports.ThemePicker = ThemePicker;
+
+
+/***/ }),
+
+/***/ "./src/components/areaview/ViewContent.css":
+/*!*************************************************!*\
+  !*** ./src/components/areaview/ViewContent.css ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"content":"ViewContent-content-1CItQIM","list":"ViewContent-list-22QKM5K"};
+
+/***/ }),
+
+/***/ "./src/components/areaview/ViewContent.tsx":
+/*!*************************************************!*\
+  !*** ./src/components/areaview/ViewContent.tsx ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var ViewItem_1 = __webpack_require__(/*! ./ViewItem */ "./src/components/areaview/ViewItem.tsx");
+// 样式
+var styles = __webpack_require__(/*! ./ViewContent.css */ "./src/components/areaview/ViewContent.css");
+var AreaViewContent = /** @class */ (function (_super) {
+    __extends(AreaViewContent, _super);
+    function AreaViewContent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    DetailView.prototype.render = function () {
-        var item = this.props.item;
-        if (!item) {
-            return null;
-        }
-        return (React.createElement("div", { id: styles.detailView, className: this.props.item ? "" : "" + styles.disappear },
-            React.createElement(detailTitleContent_1.default, { item: item, onToggleClicked: this.props.onToggleClicked }),
-            React.createElement(detailPrimaryCopy_1.DetailPrimaryCopy, { item: item, onCancelCopyToPrimary: this.props.onCancelCopyToPrimary, onCopyToPrimary: this.props.onCopyToPrimary }),
-            React.createElement(detailComments_1.default, { onCommentsChange: this.props.onCommentsChange, initComments: this.props.item
-                    ? this.props.item.comments ? this.props.item.comments : ""
-                    : "" }),
-            React.createElement(detailActions_1.default, { onCloseClicked: this.props.onCloseClicked, onDeleteClicked: this.props.onDeleteClicked, item: item })));
+    AreaViewContent.prototype.createList = function () {
+        var _this = this;
+        return this.props.items.map(function (item) {
+            if (_this.props.showDoneItems) {
+                return (React.createElement(ViewItem_1.AreaViewItem, { isPrimary: _this.props.isPrimary, item: item, onItemClicked: _this.props.itemClicked, onCheckboxClicked: _this.props.checkboxClicked, onDragStart: _this.props.onDragStart, onDragEnd: _this.props.onDragEnd, key: item.name }));
+            }
+            if (item.done && !_this.props.isPrimary) {
+                return null;
+            }
+            return (React.createElement(ViewItem_1.AreaViewItem, { isPrimary: _this.props.isPrimary, item: item, onItemClicked: _this.props.itemClicked, onCheckboxClicked: _this.props.checkboxClicked, onDragStart: _this.props.onDragStart, onDragEnd: _this.props.onDragEnd, key: item.name }));
+        });
     };
-    return DetailView;
+    AreaViewContent.prototype.render = function () {
+        return (React.createElement("div", { className: styles.content },
+            React.createElement("ul", { className: styles.list }, this.createList())));
+    };
+    return AreaViewContent;
 }(React.Component));
-exports.DetailView = DetailView;
+exports.AreaViewContent = AreaViewContent;
 
 
 /***/ }),
 
-/***/ "./src/components/detailview/detailActions.tsx":
-/*!*****************************************************!*\
-  !*** ./src/components/detailview/detailActions.tsx ***!
-  \*****************************************************/
+/***/ "./src/components/areaview/ViewItem.css":
+/*!**********************************************!*\
+  !*** ./src/components/areaview/ViewItem.css ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"todo":"ViewItem-todo-2CST4iA","checkbox":"ViewItem-checkbox-niXRWTn","checked":"ViewItem-checked-1gioHZo","text":"ViewItem-text-i-3FWSi","done":"ViewItem-done-3El4gXD","source":"ViewItem-source-o8w7sM3","inPrimary":"ViewItem-inPrimary-14Zj131","comment":"ViewItem-comment-pPrAn-_"};
+
+/***/ }),
+
+/***/ "./src/components/areaview/ViewItem.tsx":
+/*!**********************************************!*\
+  !*** ./src/components/areaview/ViewItem.tsx ***!
+  \**********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -20837,7 +20619,186 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var styles = __webpack_require__(/*! ./DetailActions.css */ "./src/components/detailview/DetailActions.css");
+// 样式
+var styles = __webpack_require__(/*! ./ViewItem.css */ "./src/components/areaview/ViewItem.css");
+// const todoStyles = {
+//     height: 60,
+//     display: "flex",
+//     alignItems: "center",
+//     padding: "10px 0",
+//     borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
+//     backgroundColor: "transparent",
+//     transition: "background-color 0.3s",
+// } as React.CSSProperties;
+// const todoHover = {
+//     backgroundColor: "rgba(206, 197, 197, 0.5)",
+// };
+/**
+ * 自定义checkbox的样式
+ */
+// const checkboxStyles = {
+//     fontSize: "1.5rem",
+//     width: 30,
+//     height: 30,
+//     margin: "0 10px",
+//     borderRadius: "50%",
+//     display: "flex",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     alignSelf: "center",
+//     border: "1px solid gray",
+//     color: "transparent",
+//     backgroundColor: "transparent",
+//     cursor: "pointer",
+//     transition: "color 0.3s, background-color 0.3s",
+// } as React.CSSProperties;
+// const checkboxHover = {
+//     color: "white",
+//     backgroundColor: "gray",
+// };
+// const checkedBox = {
+//     color: "white",
+//     backgroundColor: "green",
+// };
+/**
+ * todo文字部分的样式
+ */
+// const itemStyles = {
+//     display: "flex",
+//     flexDirection: "column",
+// } as React.CSSProperties;
+/**
+ * todo完成时文字部分的样式
+ */
+// const itemDoneStyles = {
+//     textDecoration: "line-through",
+//     color: "gray",
+// } as React.CSSProperties;
+/**
+ * 备注等信息文字部分的样式
+ */
+// const itemExtraStyles = {
+//     display: "flex",
+// };
+// const extraDirectChild = {
+//     fontSize: "0.6em",
+//     color: "gray",
+//     marginRight: 10,
+// };
+var AreaViewItem = /** @class */ (function (_super) {
+    __extends(AreaViewItem, _super);
+    function AreaViewItem(props) {
+        var _this = _super.call(this, props) || this;
+        // this.state = {
+        //   todoHover: false,
+        //   checkboxHover: false,
+        // };
+        // bind methods
+        _this.handleDrag = _this.handleDrag.bind(_this);
+        _this.handleDragEnd = _this.handleDragEnd.bind(_this);
+        return _this;
+        // this.handleTodoMouseEnter = this.handleTodoMouseEnter.bind(this);
+        // this.handleTodoMouseLeave = this.handleTodoMouseLeave.bind(this);
+        // this.handleCheckboxMouseEnter = this.handleCheckboxMouseEnter.bind(this);
+        // this.handleCheckboxMouseLeave = this.handleCheckboxMouseLeave.bind(this);
+    }
+    /**
+     * 拖拽开始的处理方法，将todo的数据转化为字符串并交由父组件处理
+     * @param e 拖拽开始事件
+     */
+    AreaViewItem.prototype.handleDrag = function (e) {
+        var data = JSON.stringify(this.props.item);
+        e.dataTransfer.setData("text/plain", "");
+        e.dataTransfer.dropEffect = "move";
+        this.props.onDragStart(data);
+    };
+    /**
+     * 拖拽结束/被取消了
+     * @param e 拖拽结束/被取消的处理方法
+     */
+    AreaViewItem.prototype.handleDragEnd = function (e) {
+        e.stopPropagation();
+        this.props.onDragEnd();
+    };
+    // private handleTodoMouseEnter(e: React.MouseEvent<HTMLLIElement>) {
+    //     e.stopPropagation();
+    //     this.setState({
+    //         todoHover: true,
+    //     });
+    // }
+    // private handleTodoMouseLeave(e: React.MouseEvent<HTMLLIElement>) {
+    //     e.stopPropagation();
+    //     this.setState({
+    //         todoHover: false,
+    //     });
+    // }
+    AreaViewItem.prototype.render = function () {
+        var _this = this;
+        var item = this.props.item;
+        // let todoS = todoStyles;
+        // if (this.state.todoHover) {
+        //     todoS = mix(todoS, todoHover);
+        // }
+        // let checkboxS = checkboxStyles;
+        // if (item.done) {
+        //     checkboxS = mix(checkboxS, checkedBox);
+        // }
+        // if (this.state.checkboxHover) {
+        //     checkboxS = mix(checkboxS, checkboxHover);
+        // }
+        return (React.createElement("li", { draggable: true, 
+            // style={todoS}
+            className: styles.todo, onClick: function (e) { return _this.props.onItemClicked(e, item.name); }, onDragStart: this.handleDrag, onDragEnd: this.handleDragEnd },
+            React.createElement("div", { 
+                // style={checkboxS}
+                className: styles.checkbox + " " + (item.done ? styles.checked : ""), onClick: function (e) { return _this.props.onCheckboxClicked(e, item.name); } }, "\u221A"),
+            React.createElement("div", { className: styles.text },
+                React.createElement("span", { className: item.done ? styles.text + " " + styles.done : "" }, item.name),
+                React.createElement("div", { className: styles.source },
+                    item.inPrimaryList && (React.createElement("span", { className: styles.comment + " " + styles.inPrimary }, this.props.isPrimary ? item.source : "我的一天")),
+                    item.comments && React.createElement("span", { className: styles.comment }, "\u5907\u6CE8")))));
+    };
+    return AreaViewItem;
+}(React.Component));
+exports.AreaViewItem = AreaViewItem;
+
+
+/***/ }),
+
+/***/ "./src/components/detailview/Actions.css":
+/*!***********************************************!*\
+  !*** ./src/components/detailview/Actions.css ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"actions":"Actions-actions-WJz1wjy","sideButton":"Actions-sideButton-ER0nISx","timeLabel":"Actions-timeLabel-1d-5RW0"};
+
+/***/ }),
+
+/***/ "./src/components/detailview/Actions.tsx":
+/*!***********************************************!*\
+  !*** ./src/components/detailview/Actions.tsx ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var styles = __webpack_require__(/*! ./Actions.css */ "./src/components/detailview/Actions.css");
 /**
  * 整个actions bar的样式
  */
@@ -20875,9 +20836,9 @@ var styles = __webpack_require__(/*! ./DetailActions.css */ "./src/components/de
 //   justifyContent: "center",
 //   alignItems: "center",
 // } as React.CSSProperties;
-var DetailActions = /** @class */ (function (_super) {
-    __extends(DetailActions, _super);
-    function DetailActions(props) {
+var Actions = /** @class */ (function (_super) {
+    __extends(Actions, _super);
+    function Actions(props) {
         var _this = _super.call(this, props) || this;
         // this.state = {
         //   disappearHover: false,
@@ -20920,7 +20881,7 @@ var DetailActions = /** @class */ (function (_super) {
      * 关闭detail view
      * @param e 鼠标点击事件
      */
-    DetailActions.prototype.handleCloseClicked = function (e) {
+    Actions.prototype.handleCloseClicked = function (e) {
         e.stopPropagation();
         this.props.onCloseClicked();
     };
@@ -20928,11 +20889,11 @@ var DetailActions = /** @class */ (function (_super) {
      * 删除对应的todo
      * @param e 鼠标点击事件
      */
-    DetailActions.prototype.handleDeleteClicked = function (e) {
+    Actions.prototype.handleDeleteClicked = function (e) {
         e.stopPropagation();
         this.props.onDeleteClicked();
     };
-    DetailActions.prototype.render = function () {
+    Actions.prototype.render = function () {
         // let disappearStyle = mix(sideButtonStyles);
         // let deleteStyle = mix(sideButtonStyles);
         // if (this.state.disappearHover) {
@@ -20948,17 +20909,29 @@ var DetailActions = /** @class */ (function (_super) {
                 this.props.item.time),
             React.createElement("span", { className: styles.sideButton, onClick: this.handleDeleteClicked }, "\u5220\u9664")));
     };
-    return DetailActions;
+    return Actions;
 }(React.Component));
-exports.default = DetailActions;
+exports.Actions = Actions;
 
 
 /***/ }),
 
-/***/ "./src/components/detailview/detailComments.tsx":
-/*!******************************************************!*\
-  !*** ./src/components/detailview/detailComments.tsx ***!
-  \******************************************************/
+/***/ "./src/components/detailview/Comments.css":
+/*!************************************************!*\
+  !*** ./src/components/detailview/Comments.css ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"comments":"Comments-comments-2WtPO0j"};
+
+/***/ }),
+
+/***/ "./src/components/detailview/Comments.tsx":
+/*!************************************************!*\
+  !*** ./src/components/detailview/Comments.tsx ***!
+  \************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -20976,7 +20949,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var styles = __webpack_require__(/*! ./DetailComments.css */ "./src/components/detailview/DetailComments.css");
+var styles = __webpack_require__(/*! ./Comments.css */ "./src/components/detailview/Comments.css");
 /**
  * 备注区域的样式
  */
@@ -20990,9 +20963,9 @@ var styles = __webpack_require__(/*! ./DetailComments.css */ "./src/components/d
 //   borderColor: "rgba(206, 197, 197, 0.5)",
 //   outline: "none",
 // }
-var DetailComments = /** @class */ (function (_super) {
-    __extends(DetailComments, _super);
-    function DetailComments(props) {
+var Comments = /** @class */ (function (_super) {
+    __extends(Comments, _super);
+    function Comments(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {
             comments: _this.props.initComments,
@@ -21002,7 +20975,7 @@ var DetailComments = /** @class */ (function (_super) {
         _this.handleCommentsOnBlur = _this.handleCommentsOnBlur.bind(_this);
         return _this;
     }
-    DetailComments.prototype.componentWillReceiveProps = function (newProps) {
+    Comments.prototype.componentWillReceiveProps = function (newProps) {
         this.setState({
             comments: newProps.initComments,
         });
@@ -21011,7 +20984,7 @@ var DetailComments = /** @class */ (function (_super) {
      * 更新comments的值
      * @param e 键盘输入事件
      */
-    DetailComments.prototype.handleCommentsChange = function (e) {
+    Comments.prototype.handleCommentsChange = function (e) {
         e.stopPropagation();
         this.setState({ comments: e.target.value });
     };
@@ -21019,26 +20992,114 @@ var DetailComments = /** @class */ (function (_super) {
      * textarea失去标点的时候更新todo的备注
      * @param e 光标移出事件
      */
-    DetailComments.prototype.handleCommentsOnBlur = function (e) {
+    Comments.prototype.handleCommentsOnBlur = function (e) {
         e.stopPropagation();
         this.props.onCommentsChange(this.state.comments);
     };
-    DetailComments.prototype.render = function () {
+    Comments.prototype.render = function () {
         return (React.createElement("textarea", { 
             // style={commentStyles}
             className: styles.comments, value: this.state.comments, onChange: this.handleCommentsChange, onBlur: this.handleCommentsOnBlur, placeholder: "\u6DFB\u52A0\u5907\u6CE8" }));
     };
-    return DetailComments;
+    return Comments;
 }(React.Component));
-exports.default = DetailComments;
+exports.Comments = Comments;
 
 
 /***/ }),
 
-/***/ "./src/components/detailview/detailPrimaryCopy.tsx":
-/*!*********************************************************!*\
-  !*** ./src/components/detailview/detailPrimaryCopy.tsx ***!
-  \*********************************************************/
+/***/ "./src/components/detailview/DetailView.css":
+/*!**************************************************!*\
+  !*** ./src/components/detailview/DetailView.css ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"detailView":"DetailView-detailView-_qpCAca","disappear":"DetailView-disappear-1gv2jXM"};
+
+/***/ }),
+
+/***/ "./src/components/detailview/DetailView.tsx":
+/*!**************************************************!*\
+  !*** ./src/components/detailview/DetailView.tsx ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var Actions_1 = __webpack_require__(/*! ./Actions */ "./src/components/detailview/Actions.tsx");
+var Comments_1 = __webpack_require__(/*! ./Comments */ "./src/components/detailview/Comments.tsx");
+var PrimaryCopy_1 = __webpack_require__(/*! ./PrimaryCopy */ "./src/components/detailview/PrimaryCopy.tsx");
+var TitleContent_1 = __webpack_require__(/*! ./TitleContent */ "./src/components/detailview/TitleContent.tsx");
+var styles = __webpack_require__(/*! ./DetailView.css */ "./src/components/detailview/DetailView.css");
+/**
+ * detail view的样式
+ */
+// const detailViewStyles = {
+//   width: 280,
+//   position: "relative",
+//   overflow: "hidden",
+//   borderLeft: "1px solid rgba(206, 197, 197, 0.5)",
+//   backgroundColor: "rgba(206, 197, 197, 0.2)",
+// } as React.CSSProperties;
+// const detailViewDisappear = {
+//   width: 0,
+// };
+var DetailView = /** @class */ (function (_super) {
+    __extends(DetailView, _super);
+    function DetailView() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DetailView.prototype.render = function () {
+        var item = this.props.item;
+        if (!item) {
+            return null;
+        }
+        return (React.createElement("div", { id: styles.detailView, className: this.props.item ? "" : "" + styles.disappear },
+            React.createElement(TitleContent_1.TitleContent, { item: item, onToggleClicked: this.props.onToggleClicked }),
+            React.createElement(PrimaryCopy_1.PrimaryCopy, { item: item, onCancelCopyToPrimary: this.props.onCancelCopyToPrimary, onCopyToPrimary: this.props.onCopyToPrimary }),
+            React.createElement(Comments_1.Comments, { onCommentsChange: this.props.onCommentsChange, initComments: this.props.item
+                    ? this.props.item.comments ? this.props.item.comments : ""
+                    : "" }),
+            React.createElement(Actions_1.Actions, { onCloseClicked: this.props.onCloseClicked, onDeleteClicked: this.props.onDeleteClicked, item: item })));
+    };
+    return DetailView;
+}(React.Component));
+exports.DetailView = DetailView;
+
+
+/***/ }),
+
+/***/ "./src/components/detailview/PrimaryCopy.css":
+/*!***************************************************!*\
+  !*** ./src/components/detailview/PrimaryCopy.css ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"primaryCopy":"PrimaryCopy-primaryCopy-2T9ZfG9","copyArea":"PrimaryCopy-copyArea-3B5_moD","copyText":"PrimaryCopy-copyText-4Ab8XTQ","cancelButton":"PrimaryCopy-cancelButton-3gj0Xqg","copyButton":"PrimaryCopy-copyButton-33P9zp5"};
+
+/***/ }),
+
+/***/ "./src/components/detailview/PrimaryCopy.tsx":
+/*!***************************************************!*\
+  !*** ./src/components/detailview/PrimaryCopy.tsx ***!
+  \***************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21057,60 +21118,60 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 // import * as styles from "./DetailPrimaryCopy.css"
-var styles = __webpack_require__(/*! ./DetailPrimaryCopy.css */ "./src/components/detailview/DetailPrimaryCopy.css");
-var primaryStyles = {
-    width: "90%",
-    height: 40,
-    margin: "5%",
-    display: "flex",
-    border: "1px solid ,rgba(206, 197, 197, 0.5)",
-    backgroundColor: "white",
-};
+var styles = __webpack_require__(/*! ./PrimaryCopy.css */ "./src/components/detailview/PrimaryCopy.css");
+// const primaryStyles: React.CSSProperties = {
+//     width: "90%",
+//     height: 40,
+//     margin: "5%",
+//     display: "flex",
+//     border: "1px solid ,rgba(206, 197, 197, 0.5)",
+//     backgroundColor: "white",
+// };
 /**
  * copy area直接子元素基本样式
  */
-var directChildStyles = {
-    width: "100%",
-    display: "flex",
-};
+// const directChildStyles: React.CSSProperties = {
+//     width: "100%",
+//     display: "flex",
+// };
 /**
  * 添加到primary list后文字的样式
  */
-var textLabelStyles = {
-    color: "blue",
-    flex: "1 0 100px",
-    display: "flex",
-    alignItems: "center",
-    padding: 10,
-};
+// const textLabelStyles: React.CSSProperties = {
+//     color: "blue",
+//     flex: "1 0 100px",
+//     display: "flex",
+//     alignItems: "center",
+//     padding: 10,
+// };
 /**
  * “取消添加到primary list”按钮的样式
  */
-var cancelButtonStyles = {
-    flex: "0 0 40px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    fontSize: "0.8em",
-    cursor: "pointer",
-};
+// const cancelButtonStyles: React.CSSProperties = {
+//     flex: "0 0 40px",
+//     display: "flex",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     fontSize: "0.8em",
+//     cursor: "pointer",
+// };
 /**
  * “添加到primary list”按钮的样式
  */
-var copyButtonStyles = {
-    padding: 10,
-    alignItems: "center",
-    cursor: "pointer",
-};
-var hoverStyles = {
-    backgroundColor: "rgba(206, 197, 197, 0.2)",
-};
+// const copyButtonStyles: React.CSSProperties = {
+//     padding: 10,
+//     alignItems: "center",
+//     cursor: "pointer",
+// };
+// const hoverStyles: React.CSSProperties = {
+//     backgroundColor: "rgba(206, 197, 197, 0.2)",
+// };
 /**
  * “添加到primary list”按钮
  */
-var DetailPrimaryCopy = /** @class */ (function (_super) {
-    __extends(DetailPrimaryCopy, _super);
-    function DetailPrimaryCopy(props) {
+var PrimaryCopy = /** @class */ (function (_super) {
+    __extends(PrimaryCopy, _super);
+    function PrimaryCopy(props) {
         var _this = _super.call(this, props) || this;
         // this.state = {
         //   cancelButtonHover: false,
@@ -21129,7 +21190,7 @@ var DetailPrimaryCopy = /** @class */ (function (_super) {
      * 从primary list中移除todo
      * @param e 鼠标事件
      */
-    DetailPrimaryCopy.prototype.handleCancelCopyToPrimary = function (e) {
+    PrimaryCopy.prototype.handleCancelCopyToPrimary = function (e) {
         e.stopPropagation();
         this.props.onCancelCopyToPrimary();
     };
@@ -21137,35 +21198,35 @@ var DetailPrimaryCopy = /** @class */ (function (_super) {
      * 复制copy到primary list中
      * @param e 鼠标事件
      */
-    DetailPrimaryCopy.prototype.handleCopyToPrimary = function (e) {
+    PrimaryCopy.prototype.handleCopyToPrimary = function (e) {
         e.stopPropagation();
         this.props.onCopyToPrimary();
     };
-    DetailPrimaryCopy.prototype.handleCopyButtonMouseEnter = function (e) {
+    PrimaryCopy.prototype.handleCopyButtonMouseEnter = function (e) {
         e.stopPropagation();
         this.setState({
             copyButtonHover: true,
         });
     };
-    DetailPrimaryCopy.prototype.handleCopyButtonMouseLeave = function (e) {
+    PrimaryCopy.prototype.handleCopyButtonMouseLeave = function (e) {
         e.stopPropagation();
         this.setState({
             copyButtonHover: false,
         });
     };
-    DetailPrimaryCopy.prototype.handleCancelButtonMouseEnter = function (e) {
+    PrimaryCopy.prototype.handleCancelButtonMouseEnter = function (e) {
         e.stopPropagation();
         this.setState({
             cancelButtonHover: true,
         });
     };
-    DetailPrimaryCopy.prototype.handleCancelButtonMouseLeave = function (e) {
+    PrimaryCopy.prototype.handleCancelButtonMouseLeave = function (e) {
         e.stopPropagation();
         this.setState({
             cancelButtonHover: false,
         });
     };
-    DetailPrimaryCopy.prototype.render = function () {
+    PrimaryCopy.prototype.render = function () {
         // let cancelStyle = mix(cancelButtonStyles)
         // let copyStyle = mix(copyButtonStyles, directChildStyles)
         // if (this.state.cancelButtonHover) {
@@ -21178,17 +21239,29 @@ var DetailPrimaryCopy = /** @class */ (function (_super) {
             React.createElement("p", { className: styles.copyText }, "\u5DF2\u6DFB\u52A0\u5230\u201C\u6211\u7684\u4E00\u5929\u201D"),
             React.createElement("span", { className: styles.cancelButton, onClick: this.handleCancelCopyToPrimary }, "X"))) : (React.createElement("p", { className: styles.copyButton, onClick: this.handleCopyToPrimary }, "\u6DFB\u52A0\u5230\u201C\u6211\u7684\u4E00\u5929\u201D"))));
     };
-    return DetailPrimaryCopy;
+    return PrimaryCopy;
 }(React.Component));
-exports.DetailPrimaryCopy = DetailPrimaryCopy;
+exports.PrimaryCopy = PrimaryCopy;
 
 
 /***/ }),
 
-/***/ "./src/components/detailview/detailTitleContent.tsx":
-/*!**********************************************************!*\
-  !*** ./src/components/detailview/detailTitleContent.tsx ***!
-  \**********************************************************/
+/***/ "./src/components/detailview/TitleContent.css":
+/*!****************************************************!*\
+  !*** ./src/components/detailview/TitleContent.css ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"titleContent":"TitleContent-titleContent-3Gu0EB2","checkbox":"TitleContent-checkbox-1BDXzG8","checkedbox":"TitleContent-checkedbox-1c6s8p9","titleLabel":"TitleContent-titleLabel-31dP9Gu"};
+
+/***/ }),
+
+/***/ "./src/components/detailview/TitleContent.tsx":
+/*!****************************************************!*\
+  !*** ./src/components/detailview/TitleContent.tsx ***!
+  \****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21206,7 +21279,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var styles = __webpack_require__(/*! ./DetailTitleContent.css */ "./src/components/detailview/DetailTitleContent.css");
+var styles = __webpack_require__(/*! ./TitleContent.css */ "./src/components/detailview/TitleContent.css");
 /**
  * 名称部分的样式
  */
@@ -21258,9 +21331,9 @@ var styles = __webpack_require__(/*! ./DetailTitleContent.css */ "./src/componen
 //     fontWeight: "bold",
 //     wordBreak: "break-all",
 // } as React.CSSProperties;
-var DetailTitleContent = /** @class */ (function (_super) {
-    __extends(DetailTitleContent, _super);
-    function DetailTitleContent(props) {
+var TitleContent = /** @class */ (function (_super) {
+    __extends(TitleContent, _super);
+    function TitleContent(props) {
         var _this = _super.call(this, props) || this;
         // this.state = {
         //     checkboxHover: false,
@@ -21271,23 +21344,23 @@ var DetailTitleContent = /** @class */ (function (_super) {
         _this.handleCheckboxMouseLeave = _this.handleCheckboxMouseLeave.bind(_this);
         return _this;
     }
-    DetailTitleContent.prototype.handleCheckboxMouseEnter = function (e) {
+    TitleContent.prototype.handleCheckboxMouseEnter = function (e) {
         e.stopPropagation();
         this.setState({
             checkboxHover: true,
         });
     };
-    DetailTitleContent.prototype.handleCheckboxMouseLeave = function (e) {
+    TitleContent.prototype.handleCheckboxMouseLeave = function (e) {
         e.stopPropagation();
         this.setState({
             checkboxHover: false,
         });
     };
-    DetailTitleContent.prototype.handleToggleClicked = function (e) {
+    TitleContent.prototype.handleToggleClicked = function (e) {
         e.stopPropagation();
         this.props.onToggleClicked();
     };
-    DetailTitleContent.prototype.render = function () {
+    TitleContent.prototype.render = function () {
         // let checkStyle = mix(checkboxStyles);
         // if (this.props.item.done) {
         //     checkStyle = mix(checkStyle, checkedBoxStyle);
@@ -21303,9 +21376,9 @@ var DetailTitleContent = /** @class */ (function (_super) {
                     : styles.checkbox, onClick: this.handleToggleClicked }, "\u221A"),
             React.createElement("span", { className: styles.titleLabel }, this.props.item.name)));
     };
-    return DetailTitleContent;
+    return TitleContent;
 }(React.Component));
-exports.default = DetailTitleContent;
+exports.TitleContent = TitleContent;
 
 
 /***/ }),
@@ -21318,7 +21391,7 @@ exports.default = DetailTitleContent;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"button":"AddListButton---button---2yE6Skc","text":"AddListButton---text---1Zxv_dQ"};
+module.exports = {"button":"AddListButton-button-19BcYJL","text":"AddListButton-text-3UIyxVy"};
 
 /***/ }),
 
@@ -21399,22 +21472,22 @@ exports.default = AddListButton;
 
 /***/ }),
 
-/***/ "./src/components/listview/ListContent.css":
-/*!*************************************************!*\
-  !*** ./src/components/listview/ListContent.css ***!
-  \*************************************************/
+/***/ "./src/components/listview/Content.css":
+/*!*********************************************!*\
+  !*** ./src/components/listview/Content.css ***!
+  \*********************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"content":"ListContent---content---3FDUcdV"};
+module.exports = {"content":"Content-content-1a8xgLs"};
 
 /***/ }),
 
-/***/ "./src/components/listview/ListContent.tsx":
-/*!*************************************************!*\
-  !*** ./src/components/listview/ListContent.tsx ***!
-  \*************************************************/
+/***/ "./src/components/listview/Content.tsx":
+/*!*********************************************!*\
+  !*** ./src/components/listview/Content.tsx ***!
+  \*********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21432,24 +21505,24 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var ListViewItem_1 = __webpack_require__(/*! ./ListViewItem */ "./src/components/listview/ListViewItem.tsx");
-var styles = __webpack_require__(/*! ./ListContent.css */ "./src/components/listview/ListContent.css");
-var ListContent = /** @class */ (function (_super) {
-    __extends(ListContent, _super);
-    function ListContent() {
+var ViewItem_1 = __webpack_require__(/*! ./ViewItem */ "./src/components/listview/ViewItem.tsx");
+var styles = __webpack_require__(/*! ./Content.css */ "./src/components/listview/Content.css");
+var Content = /** @class */ (function (_super) {
+    __extends(Content, _super);
+    function Content() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    ListContent.prototype.render = function () {
+    Content.prototype.render = function () {
         var _this = this;
-        return (React.createElement("ul", { className: styles.content }, this.props.listInfos.map(function (info) { return (React.createElement(ListViewItem_1.ListViewItem
+        return (React.createElement("ul", { className: styles.content }, this.props.listInfos.map(function (info) { return (React.createElement(ViewItem_1.ViewItem
         // currentListName={this.props.currentListName}
         , { 
             // currentListName={this.props.currentListName}
             info: info, onClick: _this.props.onClick, onDrop: _this.props.onDrop, key: info.name })); })));
     };
-    return ListContent;
+    return Content;
 }(React.Component));
-exports.ListContent = ListContent;
+exports.Content = Content;
 
 
 /***/ }),
@@ -21462,7 +21535,7 @@ exports.ListContent = ListContent;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"listView":"ListView---listView---3xfUY4U"};
+module.exports = {"listView":"ListView-listView-3Ie2sLR"};
 
 /***/ }),
 
@@ -21487,7 +21560,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var ListContent_1 = __webpack_require__(/*! ./ListContent */ "./src/components/listview/ListContent.tsx");
+var Content_1 = __webpack_require__(/*! ./Content */ "./src/components/listview/Content.tsx");
 var AddListButton_1 = __webpack_require__(/*! ./AddListButton */ "./src/components/listview/AddListButton.tsx");
 var styles = __webpack_require__(/*! ./ListView.css */ "./src/components/listview/ListView.css");
 // const viewStyles = {
@@ -21545,7 +21618,7 @@ var ListView = /** @class */ (function (_super) {
                 e.stopPropagation();
                 _this.props.actionsDisplay && _this.props.onActionsDisplayClick();
             } },
-            React.createElement(ListContent_1.ListContent
+            React.createElement(Content_1.Content
             // currentListName={this.props.currentListName}
             , { 
                 // currentListName={this.props.currentListName}
@@ -21559,22 +21632,22 @@ exports.ListView = ListView;
 
 /***/ }),
 
-/***/ "./src/components/listview/ListViewItem.css":
-/*!**************************************************!*\
-  !*** ./src/components/listview/ListViewItem.css ***!
-  \**************************************************/
+/***/ "./src/components/listview/ViewItem.css":
+/*!**********************************************!*\
+  !*** ./src/components/listview/ViewItem.css ***!
+  \**********************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"itemName":"ListViewItem---itemName---1gg2Pp5","active":"ListViewItem---active---397o8oF","itemNumber":"ListViewItem---itemNumber---1WUVz6M","dragEnter":"ListViewItem---dragEnter---3A1I4lH","listItem":"ListViewItem---listItem---1B4IrvG"};
+module.exports = {"itemName":"ViewItem-itemName-3bWFULe","active":"ViewItem-active-3w22MLp","itemNumber":"ViewItem-itemNumber-uoSyxc8","listItem":"ViewItem-listItem-1T85Q8K","dragEnter":"ViewItem-dragEnter-2e2M79L"};
 
 /***/ }),
 
-/***/ "./src/components/listview/ListViewItem.tsx":
-/*!**************************************************!*\
-  !*** ./src/components/listview/ListViewItem.tsx ***!
-  \**************************************************/
+/***/ "./src/components/listview/ViewItem.tsx":
+/*!**********************************************!*\
+  !*** ./src/components/listview/ViewItem.tsx ***!
+  \**********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21592,7 +21665,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var styles = __webpack_require__(/*! ./ListViewItem.css */ "./src/components/listview/ListViewItem.css");
+var styles = __webpack_require__(/*! ./ViewItem.css */ "./src/components/listview/ViewItem.css");
 /**
  * 列表名称的样式
  */
@@ -21643,9 +21716,9 @@ var styles = __webpack_require__(/*! ./ListViewItem.css */ "./src/components/lis
 // const listItemDragEnter = {
 //   border: "3px solid blue",
 // };
-var ListViewItem = /** @class */ (function (_super) {
-    __extends(ListViewItem, _super);
-    function ListViewItem(props) {
+var ViewItem = /** @class */ (function (_super) {
+    __extends(ViewItem, _super);
+    function ViewItem(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {
             // hover: false,
@@ -21662,7 +21735,7 @@ var ListViewItem = /** @class */ (function (_super) {
      * 当元素被拖拽到这里的时候，拖拽结束触发这个方法
      * @param e 拖拽事件
      */
-    ListViewItem.prototype.handleDragOver = function (e) {
+    ViewItem.prototype.handleDragOver = function (e) {
         e.preventDefault();
         e.dataTransfer.dropEffect = "move";
     };
@@ -21672,7 +21745,7 @@ var ListViewItem = /** @class */ (function (_super) {
      * 这里把处理数据的工作交由父组件代劳
      * @param e 拖拽事件
      */
-    ListViewItem.prototype.handleDrop = function (e) {
+    ViewItem.prototype.handleDrop = function (e) {
         e.preventDefault();
         var target = e.target;
         if (target.nodeName.toLowerCase() !== "li") {
@@ -21688,19 +21761,19 @@ var ListViewItem = /** @class */ (function (_super) {
             dragEnter: false,
         });
     };
-    ListViewItem.prototype.handleDragEnter = function (e) {
+    ViewItem.prototype.handleDragEnter = function (e) {
         var target = e.target;
         this.setState({
             dragEnter: true,
         });
     };
-    ListViewItem.prototype.handleDragLeave = function (e) {
+    ViewItem.prototype.handleDragLeave = function (e) {
         var target = e.target;
         this.setState({
             dragEnter: false,
         });
     };
-    ListViewItem.prototype.render = function () {
+    ViewItem.prototype.render = function () {
         var _this = this;
         var isActive = this.props.info.isActive;
         // const isHover = this.state.hover;
@@ -21721,12 +21794,12 @@ var ListViewItem = /** @class */ (function (_super) {
         return (React.createElement("li", { className: (this.state.dragEnter ? styles.dragEnter : "") + " " + styles.listItem + " " + (isActive ? styles.active : ""), 
             // style={listS}
             onDragOver: this.handleDragOver, onDrop: this.handleDrop, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onClick: function (e) { return _this.props.onClick(e, _this.props.info.name); } },
-            React.createElement("span", { className: "animated " + (isActive ? styles.active + " fadeIn" : "") + " " + styles.itemName }, this.props.info.name),
+            React.createElement("span", { className: styles.itemName + " animated " + (isActive ? styles.active + " fadeIn" : "") }, this.props.info.name),
             React.createElement("span", { className: styles.itemNumber }, this.props.info.count > 0 ? this.props.info.count : "")));
     };
-    return ListViewItem;
+    return ViewItem;
 }(React.Component));
-exports.ListViewItem = ListViewItem;
+exports.ViewItem = ViewItem;
 
 
 /***/ }),
@@ -21739,7 +21812,7 @@ exports.ListViewItem = ListViewItem;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"alertButton":"AlertButton---alertButton---22Y3-0J"};
+module.exports = {"alertButton":"AlertButton-alertButton-C77qSBb"};
 
 /***/ }),
 
@@ -21834,7 +21907,7 @@ exports.AlertButton = AlertButton;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"background":"GlobalAlert---background---35KNT0b","display":"GlobalAlert---display---KNhi1di","alert":"GlobalAlert---alert---2OjYmj0","message":"GlobalAlert---message---1WQH8bk","actions":"GlobalAlert---actions---32As3tn"};
+module.exports = {"background":"GlobalAlert-background-2zVlkm2","display":"GlobalAlert-display-zSRV4fW","alert":"GlobalAlert-alert-2Rq7EoF","message":"GlobalAlert-message-2dES97i","actions":"GlobalAlert-actions-1wrj7g1"};
 
 /***/ }),
 
@@ -21974,40 +22047,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 var app_1 = __webpack_require__(/*! ./app */ "./src/app.tsx");
-__webpack_require__(/*! animate.css */ "./node_modules/animate.css/animate.css");
+// import 'animate.css'
 __webpack_require__(/*! ./styles/index.scss */ "./src/styles/index.scss");
-ReactDOM.render(React.createElement(app_1.App, null), document.getElementById('root'));
-
-
-/***/ }),
-
-/***/ "./src/lib.ts":
-/*!********************!*\
-  !*** ./src/lib.ts ***!
-  \********************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.log = console.log.bind(console);
-exports.mix = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    var o = {};
-    for (var _a = 0, args_1 = args; _a < args_1.length; _a++) {
-        var arg = args_1[_a];
-        for (var p in arg) {
-            if (arg.hasOwnProperty(p)) {
-                o[p] = arg[p];
-            }
-        }
-    }
-    return o;
-};
+ReactDOM.render(React.createElement(app_1.App, null), document.getElementById("root"));
 
 
 /***/ }),
@@ -22539,7 +22581,8 @@ var todo_item_1 = __webpack_require__(/*! ./todo-item */ "./src/model/todo-item.
 var TodoListClass = /** @class */ (function () {
     function TodoListClass(name) {
         this.name = name;
-        this.color = '#87cefa';
+        this.primaryListName = "我的一天";
+        this.color = "#87cefa";
         this.name = name;
         this.todoItems = [];
     }
@@ -22584,7 +22627,7 @@ var TodoListClass = /** @class */ (function () {
                 name: this.name,
                 count: count,
                 isActive: false,
-                isPrimary: this.name === '我的一天',
+                isPrimary: this.name === "我的一天",
                 theme: this.colorTheme,
             };
         },
@@ -22598,7 +22641,7 @@ var TodoListClass = /** @class */ (function () {
                 count: this.count,
                 isActive: false,
                 theme: this.colorTheme,
-                isPrimary: this.name === '我的一天',
+                isPrimary: this.name === "我的一天",
             };
         },
         enumerable: true,
@@ -22629,13 +22672,14 @@ var TodoListClass = /** @class */ (function () {
      * @param item 要添加的todo项目（有两种表示方式，一个是todo的名称，另一个是todo本身）
      */
     TodoListClass.prototype.addNewItem = function (item) {
-        if (typeof item === 'string') {
+        if (typeof item == "string") {
             var inOrNot = this.containsItem(item);
             if (inOrNot) {
                 return;
             }
             var newItem = new todo_item_1.TodoItemClass(item);
             newItem.source = this.name;
+            newItem.inPrimaryList = this.name == this.primaryListName;
             this.todoItems.push(newItem);
         }
         else {

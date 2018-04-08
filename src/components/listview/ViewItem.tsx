@@ -2,7 +2,7 @@ import * as React from "react";
 import { ListInfo } from "../../model/interface";
 import { mix } from "../../lib";
 
-const styles: { [prop: string]: string } = require("./ListViewItem.css");
+const styles: { [prop: string]: string } = require("./ViewItem.css");
 
 interface ListViewItemProps {
     /**当前进行编辑操作的列表名称 */
@@ -78,7 +78,7 @@ interface ListViewItemState {
 //   border: "3px solid blue",
 // };
 
-export class ListViewItem extends React.Component<ListViewItemProps, ListViewItemState> {
+export class ViewItem extends React.Component<ListViewItemProps, ListViewItemState> {
     constructor(props: ListViewItemProps) {
         super(props);
         this.state = {
@@ -170,8 +170,8 @@ export class ListViewItem extends React.Component<ListViewItemProps, ListViewIte
                 onDragLeave={this.handleDragLeave}
                 onClick={e => this.props.onClick(e, this.props.info.name)}>
                 <span
-                    className={`animated ${isActive ? styles.active + " fadeIn" : ""} ${
-                        styles.itemName
+                    className={`${styles.itemName} animated ${
+                        isActive ? styles.active + " fadeIn" : ""
                     }`}>
                     {this.props.info.name}
                 </span>

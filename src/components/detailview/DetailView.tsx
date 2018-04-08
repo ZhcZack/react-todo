@@ -1,9 +1,9 @@
 import * as React from "react";
 import { TodoItem } from "../../model/interface";
-import DetailActions from "./detailActions";
-import DetailComments from "./detailComments";
-import { DetailPrimaryCopy } from "./detailPrimaryCopy";
-import DetailTitleContent from "./detailTitleContent";
+import { Actions } from "./Actions";
+import { Comments } from "./Comments";
+import { PrimaryCopy } from "./PrimaryCopy";
+import { TitleContent } from "./TitleContent";
 
 const styles: { [prop: string]: string } = require("./DetailView.css");
 
@@ -42,13 +42,13 @@ export class DetailView extends React.Component<DetailViewProps, DetailViewState
         }
         return (
             <div id={styles.detailView} className={this.props.item ? `` : `${styles.disappear}`}>
-                <DetailTitleContent item={item} onToggleClicked={this.props.onToggleClicked} />
-                <DetailPrimaryCopy
+                <TitleContent item={item} onToggleClicked={this.props.onToggleClicked} />
+                <PrimaryCopy
                     item={item}
                     onCancelCopyToPrimary={this.props.onCancelCopyToPrimary}
                     onCopyToPrimary={this.props.onCopyToPrimary}
                 />
-                <DetailComments
+                <Comments
                     onCommentsChange={this.props.onCommentsChange}
                     initComments={
                         this.props.item
@@ -56,7 +56,7 @@ export class DetailView extends React.Component<DetailViewProps, DetailViewState
                             : ""
                     }
                 />
-                <DetailActions
+                <Actions
                     onCloseClicked={this.props.onCloseClicked}
                     onDeleteClicked={this.props.onDeleteClicked}
                     item={item}

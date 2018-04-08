@@ -14,10 +14,6 @@
     box-sizing: border-box;
 }
 
-.dragEnter {
-    border: 3px solid blue;
-}
-
 .listItem {
     height: 40px;
     display: flex;
@@ -25,6 +21,9 @@
     align-items: center;
     cursor: pointer;
     border: 3px solid transparent;
+}
+.listItem.dragEnter {
+    border: 3px solid blue;
 }
 .listItem:hover {
     background-color: rgba(206, 197, 107, 0.5);

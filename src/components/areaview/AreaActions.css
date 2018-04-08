@@ -1,0 +1,16 @@
+.actions {
+    position: absolute;
+    top: calc(100% + 5px);
+    right: 10px;
+    visibility: hidden;
+    width: 322px;
+    list-style-type: none;
+    background-color: white;
+    border: 1px solid rgba(206, 197, 197, 0.5);
+    padding: 10px;
+    margin-right: 0;
+    box-sizing: border-box;
+}
+.actions.display {
+    visibility: visible;
+}
