@@ -1,0 +1,11 @@
+#detailView {
+    width: 280px;
+    position: relative;
+    overflow: hidden;
+    border-left: 1px solid rgba(206, 197, 197, 0.5);
+    background-color: rgba(206, 197, 197, 0.2);
+}
+
+.disappear {
+    width: 0;
+}

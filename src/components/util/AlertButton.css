@@ -1,0 +1,12 @@
+.alertButton {
+    height: 30;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-sizing: border-box;
+}
+
+.alertButton:hover {
+    background-color: rgba(206, 197, 197, 0.5);
+}

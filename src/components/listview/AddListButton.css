@@ -1,0 +1,16 @@
+.button {
+    height: 40px;
+    padding: 0 10px;
+    cursor: pointer;
+    color: blue;
+    box-sizing: border-box;
+}
+.button:hover {
+    background-color: rgba(206, 197, 197, 0.5);
+}
+
+.text {
+    font-size: 1.5em;
+    margin-right: 10px;
+    box-sizing: border-box;
+}

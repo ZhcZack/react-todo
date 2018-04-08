@@ -1,0 +1,39 @@
+.titleContent {
+    min-height: 80px;
+    padding: 10px 10px 20px 10px;
+    border-bottom: 1px solid rgba(206, 197, 197, 0.5);
+    background-color: white;
+    display: flex;
+}
+
+.checkbox {
+    flex: 1 0 30px;
+    font-size: 1.5em;
+    width: 30px;
+    height: 30px;
+    margin: 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid gray;
+    border-radius: 50%;
+    color: transparent;
+    background-color: transparent;
+    cursor: pointer;
+    transition: color 0.3s, background-color 0.3s;
+}
+.checkbox:hover {
+    color: white;
+    background-color: gray;
+}
+
+.checkedbox {
+    color: white;
+    background-color: green;
+}
+
+.titleLabel {
+    flex: 4 0 calc(100% - 50px);
+    font-weight: bold;
+    word-break: break-all;
+}

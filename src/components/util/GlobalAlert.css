@@ -1,0 +1,39 @@
+.background {
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 2;
+    visibility: hidden;
+    background-color: rgba(90, 85, 85, 0.37);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+.background.display {
+    visibility: visible;
+}
+
+.alert {
+    width: 30vw;
+    height: 30vh;
+    background-color: white;
+    border-radius: 8px;
+    border-color: rgba(206, 197, 197, 0.5);
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+}
+
+.message {
+    width: 100%;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column-reverse;
+    width: 100%;
+}

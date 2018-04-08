@@ -1,0 +1,11 @@
+.comments {
+    width: 90%;
+    height: calc(30vh);
+    margin: 5%;
+    padding: 10px;
+    resize: none;
+    scroll-behavior: auto;
+    border-color: rgba(206, 197, 197, 0.5);
+    outline: none;
+    box-sizing: border-box;
+}

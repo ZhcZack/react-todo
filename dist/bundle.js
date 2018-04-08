@@ -79,6 +79,7 @@
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+module.exports = {"animated":"animate---animated---1FroVGL","infinite":"animate---infinite---1taofQn","bounce":"animate---bounce---S_vKrOa","flash":"animate---flash---3T4NK4L","pulse":"animate---pulse---3cx7sg8","rubberBand":"animate---rubberBand---1okyCb6","shake":"animate---shake---2Eo-Ghh","headShake":"animate---headShake---12skuxv","swing":"animate---swing---26AKGGz","tada":"animate---tada---3lxza7e","wobble":"animate---wobble---PIRC3JH","jello":"animate---jello---WgEzg1O","bounceIn":"animate---bounceIn---3A8GxGN","bounceInDown":"animate---bounceInDown---2ucFBcu","bounceInLeft":"animate---bounceInLeft---1Fjo5vz","bounceInRight":"animate---bounceInRight---2Xyfq2R","bounceInUp":"animate---bounceInUp---3630MyC","bounceOut":"animate---bounceOut---3p7OHKR","bounceOutDown":"animate---bounceOutDown---8kMqv4A","bounceOutLeft":"animate---bounceOutLeft---29w_Nps","bounceOutRight":"animate---bounceOutRight---2d1AYfC","bounceOutUp":"animate---bounceOutUp---3SnrFnK","fadeIn":"animate---fadeIn---1_nKw4l","fadeInDown":"animate---fadeInDown---3AlFdiI","fadeInDownBig":"animate---fadeInDownBig---ZpuXzCM","fadeInLeft":"animate---fadeInLeft---26kIr0V","fadeInLeftBig":"animate---fadeInLeftBig---k5GQjWP","fadeInRight":"animate---fadeInRight---tFzpk0Z","fadeInRightBig":"animate---fadeInRightBig---3zOsiHK","fadeInUp":"animate---fadeInUp---1SbEpxA","fadeInUpBig":"animate---fadeInUpBig---3CJFZCV","fadeOut":"animate---fadeOut---35Dywdz","fadeOutDown":"animate---fadeOutDown---2DXdkfn","fadeOutDownBig":"animate---fadeOutDownBig---3ULqWe6","fadeOutLeft":"animate---fadeOutLeft---p-IfRgN","fadeOutLeftBig":"animate---fadeOutLeftBig---3UburYa","fadeOutRight":"animate---fadeOutRight---2EtORrR","fadeOutRightBig":"animate---fadeOutRightBig---2FbTo8s","fadeOutUp":"animate---fadeOutUp---2x472VT","fadeOutUpBig":"animate---fadeOutUpBig---fVqOxiX","flip":"animate---flip---1WLNyge","flipInX":"animate---flipInX---fhLE9YI","flipInY":"animate---flipInY---1KLov1J","flipOutX":"animate---flipOutX---3jpdJEI","flipOutY":"animate---flipOutY---2GA3h-R","lightSpeedIn":"animate---lightSpeedIn---3Jbgifw","lightSpeedOut":"animate---lightSpeedOut---2pmqbXP","rotateIn":"animate---rotateIn---tqRytXY","rotateInDownLeft":"animate---rotateInDownLeft---1dxAvFY","rotateInDownRight":"animate---rotateInDownRight---EjGxIXP","rotateInUpLeft":"animate---rotateInUpLeft---1rKQjYu","rotateInUpRight":"animate---rotateInUpRight---2CWBhrV","rotateOut":"animate---rotateOut---3QBv5zN","rotateOutDownLeft":"animate---rotateOutDownLeft---plh9V8U","rotateOutDownRight":"animate---rotateOutDownRight---3jcYKZK","rotateOutUpLeft":"animate---rotateOutUpLeft---3OIvkHn","rotateOutUpRight":"animate---rotateOutUpRight---1dd3J8U","hinge":"animate---hinge---EJQmn6O","jackInTheBox":"animate---jackInTheBox---tYTI1nT","rollIn":"animate---rollIn---CN-NcE_","rollOut":"animate---rollOut---1iWGwMb","zoomIn":"animate---zoomIn---39DVBjv","zoomInDown":"animate---zoomInDown---1Oh1oGr","zoomInLeft":"animate---zoomInLeft---3671Zl4","zoomInRight":"animate---zoomInRight---2vvAHXz","zoomInUp":"animate---zoomInUp---4Qsm-Kt","zoomOut":"animate---zoomOut---1sjS9pY","zoomOutDown":"animate---zoomOutDown---2BQuzj8","zoomOutLeft":"animate---zoomOutLeft---2u-SPiA","zoomOutRight":"animate---zoomOutRight---2HhH9GF","zoomOutUp":"animate---zoomOutUp---8c9ysV5","slideInDown":"animate---slideInDown---2x-AhpP","slideInLeft":"animate---slideInLeft---1kgNL6k","slideInRight":"animate---slideInRight---1mhoqzn","slideInUp":"animate---slideInUp---2eD7JAR","slideOutDown":"animate---slideOutDown---1Jk70Ta","slideOutLeft":"animate---slideOutLeft---3k0us7N","slideOutRight":"animate---slideOutRight---3j1A28f","slideOutUp":"animate---slideOutUp---MbY0qbV"};
 
 /***/ }),
 
@@ -18988,19 +18989,19 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var list_view_1 = __webpack_require__(/*! ./components/listview/list-view */ "./src/components/listview/list-view.tsx");
+var ListView_1 = __webpack_require__(/*! ./components/listview/ListView */ "./src/components/listview/ListView.tsx");
 var area_view_1 = __webpack_require__(/*! ./components/areaview/area-view */ "./src/components/areaview/area-view.tsx");
-var detail_view_1 = __webpack_require__(/*! ./components/detailview/detail-view */ "./src/components/detailview/detail-view.tsx");
+var DetailView_1 = __webpack_require__(/*! ./components/detailview/DetailView */ "./src/components/detailview/DetailView.tsx");
 var data_server_1 = __webpack_require__(/*! ./model/data-server */ "./src/model/data-server.ts");
-var global_alert_1 = __webpack_require__(/*! ./components/util/global-alert */ "./src/components/util/global-alert.tsx");
+var GlobalAlert_1 = __webpack_require__(/*! ./components/util/GlobalAlert */ "./src/components/util/GlobalAlert.tsx");
 var appStyles = {
-    width: '100vw',
-    height: '100vh',
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'nowrap',
-    justifyContent: 'flex-start',
-    position: 'relative',
+    width: "100vw",
+    height: "100vh",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    justifyContent: "flex-start",
+    position: "relative",
     zIndex: 1,
 };
 /**
@@ -19010,19 +19011,19 @@ var App = /** @class */ (function (_super) {
     __extends(App, _super);
     function App(props) {
         var _this = _super.call(this, props) || this;
-        _this.primaryListName = '我的一天';
+        _this.primaryListName = "我的一天";
         _this.server = new data_server_1.DataServer();
         _this.state = {
-            lastModifiedListName: '',
+            lastModifiedListName: "",
             listInfos: [],
             itemsOfList: [],
             detailItem: undefined,
             // colorTheme: this.server.themeForList(this.server.lastModified),
             actionsShouldDisplay: false,
             displayDataErrorAlert: false,
-            dataErrorMessage: '',
+            dataErrorMessage: "",
             displayDeleteListAlert: false,
-            deleteConfirmMessage: '是否要删除列表？',
+            deleteConfirmMessage: "是否要删除列表？",
         };
         // bind methods
         _this.switchList = _this.switchList.bind(_this);
@@ -19081,13 +19082,13 @@ var App = /** @class */ (function (_super) {
                 var items = JSON.parse(_this.server.itemsOfList(listName));
                 var message = _this.server.loadError;
                 if (message) {
-                    rej('local data error');
+                    rej("local data error");
                 }
                 if (Array.isArray(items)) {
                     res(items);
                 }
                 else {
-                    rej('local data error');
+                    rej("local data error");
                 }
                 items.forEach(function (item) {
                     if (item.name === undefined ||
@@ -19095,7 +19096,7 @@ var App = /** @class */ (function (_super) {
                         item.time === undefined ||
                         item.inPrimaryList === undefined ||
                         item.source === undefined) {
-                        rej('local data error');
+                        rej("local data error");
                     }
                 });
             });
@@ -19113,7 +19114,7 @@ var App = /** @class */ (function (_super) {
                 // console.log('error')
                 _this.setState({
                     displayDataErrorAlert: message !== undefined,
-                    dataErrorMessage: message ? message : '',
+                    dataErrorMessage: message ? message : "",
                 });
             });
         });
@@ -19166,7 +19167,7 @@ var App = /** @class */ (function (_super) {
         p.then(function (message) {
             _this.setState({
                 displayDataErrorAlert: message !== undefined,
-                dataErrorMessage: message ? message : '',
+                dataErrorMessage: message ? message : "",
             });
         });
     };
@@ -19250,7 +19251,7 @@ var App = /** @class */ (function (_super) {
         var item = JSON.parse(JSON.stringify(this.state.detailItem));
         var infos = JSON.parse(JSON.stringify(this.state.listInfos));
         var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
-        var currentList = '';
+        var currentList = "";
         var detailItem = undefined;
         for (var _i = 0, infos_1 = infos; _i < infos_1.length; _i++) {
             var info = infos_1[_i];
@@ -19458,7 +19459,7 @@ var App = /** @class */ (function (_super) {
             name: listName,
             count: 0,
             isActive: true,
-            theme: '#87cefa',
+            theme: "#87cefa",
             isPrimary: false,
         });
         this.setState({
@@ -19491,7 +19492,7 @@ var App = /** @class */ (function (_super) {
         items.push({
             name: itemName,
             done: false,
-            time: new Date().toLocaleDateString().split(' ')[0],
+            time: new Date().toLocaleDateString().split(" ")[0],
             comments: undefined,
             source: listName,
             inPrimaryList: listName === this.primaryListName,
@@ -19514,7 +19515,7 @@ var App = /** @class */ (function (_super) {
         /** 是否将todo切换为完成状态 */
         var switchDone = false;
         /** item所在的其他列表名称 */
-        var sourceListName = '';
+        var sourceListName = "";
         var item = undefined;
         var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
         var infos = JSON.parse(JSON.stringify(this.state.listInfos));
@@ -19523,7 +19524,7 @@ var App = /** @class */ (function (_super) {
             if (todo.name === itemName) {
                 item = Object.assign({}, todo);
                 todo.done = !todo.done;
-                sourceListName = todo.source ? todo.source : '';
+                sourceListName = todo.source ? todo.source : "";
                 break;
             }
         }
@@ -19749,15 +19750,15 @@ var App = /** @class */ (function (_super) {
         // const infos = this.state.listInfos.splice(0)
         // console.log(`infos: ${infos}`)
         return (React.createElement("div", { style: appStyles },
-            React.createElement(list_view_1.ListView
+            React.createElement(ListView_1.ListView
             // currentListName={this.state.lastModifiedListName}
             , { 
                 // currentListName={this.state.lastModifiedListName}
                 switchList: this.switchList, addNewList: this.addNewList, listInfos: this.state.listInfos, onDrop: this.handleDrop, actionsDisplay: this.state.actionsShouldDisplay, onActionsDisplayClick: this.toggleActionsDisplay }),
             React.createElement(area_view_1.AreaView, { shrink: this.state.detailItem !== undefined, listInfo: listInfo, todoItems: this.state.itemsOfList, renameList: this.renameList, shouldDeleteList: this.shouldDeleteList, addNewItemInList: this.addNewItemInList, toggleItemInList: this.toggleItemInList, itemClicked: this.itemClicked, onDragStart: this.handleDragStart, onDragEnd: this.handleDragEnd, onColorPick: this.handleColorPick, onActionsDisplayClick: this.toggleActionsDisplay, actionsShouldDisplay: this.state.actionsShouldDisplay }),
-            React.createElement(detail_view_1.DetailView, { listName: this.state.lastModifiedListName, item: this.state.detailItem, onCloseClicked: this.handleCloseFromDetailView, onDeleteClicked: this.handleDeleteFromDetailView, onToggleClicked: this.handleToggleFromDetailView, onCommentsChange: this.handleCommentsChange, onCopyToPrimary: this.copyItemToPrimaryListFromDetailView, onCancelCopyToPrimary: this.cancelCopyToPrimaryList }),
-            this.state.displayDataErrorAlert && (React.createElement(global_alert_1.Alert, { display: this.state.displayDataErrorAlert, message: this.state.dataErrorMessage, alertDefaultAction: this.alertDefaultAction, type: global_alert_1.AlertType.Alert })),
-            this.state.displayDeleteListAlert && (React.createElement(global_alert_1.Alert, { display: this.state.displayDeleteListAlert, message: this.state.deleteConfirmMessage, alertDefaultAction: this.alertDefaultAction, alertConfirmAction: this.deleteList, type: global_alert_1.AlertType.Confirm }))));
+            React.createElement(DetailView_1.DetailView, { listName: this.state.lastModifiedListName, item: this.state.detailItem, onCloseClicked: this.handleCloseFromDetailView, onDeleteClicked: this.handleDeleteFromDetailView, onToggleClicked: this.handleToggleFromDetailView, onCommentsChange: this.handleCommentsChange, onCopyToPrimary: this.copyItemToPrimaryListFromDetailView, onCancelCopyToPrimary: this.cancelCopyToPrimaryList }),
+            this.state.displayDataErrorAlert && (React.createElement(GlobalAlert_1.Alert, { display: this.state.displayDataErrorAlert, message: this.state.dataErrorMessage, alertDefaultAction: this.alertDefaultAction, type: GlobalAlert_1.AlertType.Alert })),
+            this.state.displayDeleteListAlert && (React.createElement(GlobalAlert_1.Alert, { display: this.state.displayDeleteListAlert, message: this.state.deleteConfirmMessage, alertDefaultAction: this.alertDefaultAction, alertConfirmAction: this.deleteList, type: GlobalAlert_1.AlertType.Confirm }))));
     };
     return App;
 }(React.Component));
@@ -20320,18 +20321,18 @@ var area_view_content_1 = __webpack_require__(/*! ./area-view-content */ "./src/
 var editable_head_1 = __webpack_require__(/*! ./editable-head */ "./src/components/areaview/editable-head.tsx");
 var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
 var viewStyles = {
-    width: 'calc(100% - 280px)',
-    overflow: 'hidden',
+    width: "calc(100% - 280px)",
+    overflow: "hidden",
 };
 var viewShrinkStyles = {
-    width: 'calc(100% - 280px - 280px)',
+    width: "calc(100% - 280px - 280px)",
 };
 var AreaView = /** @class */ (function (_super) {
     __extends(AreaView, _super);
     function AreaView(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {
-            inputValue: '',
+            inputValue: "",
             showDoneItems: false,
         };
         // bind methods
@@ -20359,7 +20360,7 @@ var AreaView = /** @class */ (function (_super) {
     AreaView.getDerivedStateFromProps = function (nextProps, prevState) {
         if (nextProps.listInfo.name != prevState.inputValue) {
             return {
-                inputValue: '',
+                inputValue: "",
             };
         }
     };
@@ -20430,7 +20431,7 @@ var AreaView = /** @class */ (function (_super) {
     AreaView.prototype.addNewItem = function () {
         this.props.addNewItemInList(this.state.inputValue, this.props.listInfo.name);
         this.setState({
-            inputValue: '',
+            inputValue: "",
         });
     };
     /**
@@ -20438,7 +20439,7 @@ var AreaView = /** @class */ (function (_super) {
      * @param e 鼠标点击事件
      */
     AreaView.prototype.cancelInput = function () {
-        this.setState({ inputValue: '' });
+        this.setState({ inputValue: "" });
     };
     /**
      * 在detail view显示选中`TodoItem`的详细内容
@@ -20691,10 +20692,70 @@ exports.EditableHead = AreaViewHead;
 
 /***/ }),
 
-/***/ "./src/components/detailview/detail-view.tsx":
-/*!***************************************************!*\
-  !*** ./src/components/detailview/detail-view.tsx ***!
-  \***************************************************/
+/***/ "./src/components/detailview/DetailActions.css":
+/*!*****************************************************!*\
+  !*** ./src/components/detailview/DetailActions.css ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"actions":"DetailActions---actions---2IoUMEk","sideButton":"DetailActions---sideButton---EABAaFZ","timeLabel":"DetailActions---timeLabel---PExXm_n"};
+
+/***/ }),
+
+/***/ "./src/components/detailview/DetailComments.css":
+/*!******************************************************!*\
+  !*** ./src/components/detailview/DetailComments.css ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"comments":"DetailComments---comments---ft8DGxN"};
+
+/***/ }),
+
+/***/ "./src/components/detailview/DetailPrimaryCopy.css":
+/*!*********************************************************!*\
+  !*** ./src/components/detailview/DetailPrimaryCopy.css ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"primaryCopy":"DetailPrimaryCopy---primaryCopy---1kgNVSy","copyArea":"DetailPrimaryCopy---copyArea---3UFo1Oj","copyText":"DetailPrimaryCopy---copyText---3pmOxmQ","cancelButton":"DetailPrimaryCopy---cancelButton---3YbobXB","copyButton":"DetailPrimaryCopy---copyButton---23f7wTo"};
+
+/***/ }),
+
+/***/ "./src/components/detailview/DetailTitleContent.css":
+/*!**********************************************************!*\
+  !*** ./src/components/detailview/DetailTitleContent.css ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"titleContent":"DetailTitleContent---titleContent---2kBQwTA","checkbox":"DetailTitleContent---checkbox---2x6DO1b","checkedbox":"DetailTitleContent---checkedbox---CydAp7K","titleLabel":"DetailTitleContent---titleLabel---h6vIjO9"};
+
+/***/ }),
+
+/***/ "./src/components/detailview/DetailView.css":
+/*!**************************************************!*\
+  !*** ./src/components/detailview/DetailView.css ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"detailView":"DetailView---detailView---35WsUh0","disappear":"DetailView---disappear---3pc_UC6"};
+
+/***/ }),
+
+/***/ "./src/components/detailview/DetailView.tsx":
+/*!**************************************************!*\
+  !*** ./src/components/detailview/DetailView.tsx ***!
+  \**************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -20716,19 +20777,20 @@ var detailActions_1 = __webpack_require__(/*! ./detailActions */ "./src/componen
 var detailComments_1 = __webpack_require__(/*! ./detailComments */ "./src/components/detailview/detailComments.tsx");
 var detailPrimaryCopy_1 = __webpack_require__(/*! ./detailPrimaryCopy */ "./src/components/detailview/detailPrimaryCopy.tsx");
 var detailTitleContent_1 = __webpack_require__(/*! ./detailTitleContent */ "./src/components/detailview/detailTitleContent.tsx");
+var styles = __webpack_require__(/*! ./DetailView.css */ "./src/components/detailview/DetailView.css");
 /**
  * detail view的样式
  */
-var detailViewStyles = {
-    width: 280,
-    position: 'relative',
-    overflow: 'hidden',
-    borderLeft: '1px solid rgba(206, 197, 197, 0.5)',
-    backgroundColor: 'rgba(206, 197, 197, 0.2)',
-};
-var detailViewDisappear = {
-    width: 0,
-};
+// const detailViewStyles = {
+//   width: 280,
+//   position: "relative",
+//   overflow: "hidden",
+//   borderLeft: "1px solid rgba(206, 197, 197, 0.5)",
+//   backgroundColor: "rgba(206, 197, 197, 0.2)",
+// } as React.CSSProperties;
+// const detailViewDisappear = {
+//   width: 0,
+// };
 var DetailView = /** @class */ (function (_super) {
     __extends(DetailView, _super);
     function DetailView() {
@@ -20739,10 +20801,12 @@ var DetailView = /** @class */ (function (_super) {
         if (!item) {
             return null;
         }
-        return (React.createElement("div", { id: "detailview", style: detailViewStyles },
+        return (React.createElement("div", { id: styles.detailView, className: this.props.item ? "" : "" + styles.disappear },
             React.createElement(detailTitleContent_1.default, { item: item, onToggleClicked: this.props.onToggleClicked }),
             React.createElement(detailPrimaryCopy_1.DetailPrimaryCopy, { item: item, onCancelCopyToPrimary: this.props.onCancelCopyToPrimary, onCopyToPrimary: this.props.onCopyToPrimary }),
-            React.createElement(detailComments_1.default, { onCommentsChange: this.props.onCommentsChange, initComments: this.props.item ? (this.props.item.comments ? this.props.item.comments : '') : '' }),
+            React.createElement(detailComments_1.default, { onCommentsChange: this.props.onCommentsChange, initComments: this.props.item
+                    ? this.props.item.comments ? this.props.item.comments : ""
+                    : "" }),
             React.createElement(detailActions_1.default, { onCloseClicked: this.props.onCloseClicked, onDeleteClicked: this.props.onDeleteClicked, item: item })));
     };
     return DetailView;
@@ -20773,85 +20837,85 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+var styles = __webpack_require__(/*! ./DetailActions.css */ "./src/components/detailview/DetailActions.css");
 /**
  * 整个actions bar的样式
  */
-var actionStyles = {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    width: "100%",
-    height: 40,
-    display: "flex",
-    backgroundColor: "white",
-};
+// const actionStyles = {
+//   position: "absolute",
+//   bottom: 0,
+//   left: 0,
+//   width: "100%",
+//   height: 40,
+//   display: "flex",
+//   backgroundColor: "white",
+// } as React.CSSProperties;
 /**
  * 两侧按钮的样式
  */
-var sideButtonStyles = {
-    flex: "1 1 30px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    cursor: "pointer",
-};
+// const sideButtonStyles = {
+//   flex: "1 1 30px",
+//   display: "flex",
+//   justifyContent: "center",
+//   alignItems: "center",
+//   cursor: "pointer",
+// } as React.CSSProperties;
 /**
  * 两侧按钮hover样式
  */
-var sideButtonHover = {
-    backgroundColor: "rgba(206, 197, 197, 0.5)",
-};
+// const sideButtonHover = {
+//   backgroundColor: "rgba(206, 197, 197, 0.5)",
+// };
 /**
  * 中间展示创建时间的标签的样式
  */
-var timeLabelStyles = {
-    flex: "8 1 auto",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-};
+// const timeLabelStyles = {
+//   flex: "8 1 auto",
+//   display: "flex",
+//   justifyContent: "center",
+//   alignItems: "center",
+// } as React.CSSProperties;
 var DetailActions = /** @class */ (function (_super) {
     __extends(DetailActions, _super);
     function DetailActions(props) {
         var _this = _super.call(this, props) || this;
-        _this.state = {
-            disappearHover: false,
-            deleteHover: false,
-        };
+        // this.state = {
+        //   disappearHover: false,
+        //   deleteHover: false,
+        // };
         // bind methods
-        _this.handleCloseMouseEnter = _this.handleCloseMouseEnter.bind(_this);
-        _this.handleCloseMouseLeave = _this.handleCloseMouseLeave.bind(_this);
-        _this.handleDeleteMouseEnter = _this.handleDeleteMouseEnter.bind(_this);
-        _this.handleDeleteMouseLeave = _this.handleDeleteMouseLeave.bind(_this);
+        // this.handleCloseMouseEnter = this.handleCloseMouseEnter.bind(this);
+        // this.handleCloseMouseLeave = this.handleCloseMouseLeave.bind(this);
+        // this.handleDeleteMouseEnter = this.handleDeleteMouseEnter.bind(this);
+        // this.handleDeleteMouseLeave = this.handleDeleteMouseLeave.bind(this);
         _this.handleCloseClicked = _this.handleCloseClicked.bind(_this);
         _this.handleDeleteClicked = _this.handleDeleteClicked.bind(_this);
         return _this;
     }
-    DetailActions.prototype.handleCloseMouseEnter = function (e) {
-        e.stopPropagation();
-        this.setState({
-            disappearHover: true,
-        });
-    };
-    DetailActions.prototype.handleCloseMouseLeave = function (e) {
-        e.stopPropagation();
-        this.setState({
-            disappearHover: false,
-        });
-    };
-    DetailActions.prototype.handleDeleteMouseEnter = function (e) {
-        e.stopPropagation();
-        this.setState({
-            deleteHover: true,
-        });
-    };
-    DetailActions.prototype.handleDeleteMouseLeave = function (e) {
-        e.stopPropagation();
-        this.setState({
-            deleteHover: false,
-        });
-    };
+    // private handleCloseMouseEnter(e: React.MouseEvent<HTMLSpanElement>) {
+    //   e.stopPropagation();
+    //   this.setState({
+    //     disappearHover: true,
+    //   });
+    // }
+    // private handleCloseMouseLeave(e: React.MouseEvent<HTMLSpanElement>) {
+    //   e.stopPropagation();
+    //   this.setState({
+    //     disappearHover: false,
+    //   });
+    // }
+    // private handleDeleteMouseEnter(e: React.MouseEvent<HTMLSpanElement>) {
+    //   e.stopPropagation();
+    //   this.setState({
+    //     deleteHover: true,
+    //   });
+    // }
+    // private handleDeleteMouseLeave(e: React.MouseEvent<HTMLSpanElement>) {
+    //   e.stopPropagation();
+    //   this.setState({
+    //     deleteHover: false,
+    //   });
+    // }
     /**
      * 关闭detail view
      * @param e 鼠标点击事件
@@ -20869,20 +20933,20 @@ var DetailActions = /** @class */ (function (_super) {
         this.props.onDeleteClicked();
     };
     DetailActions.prototype.render = function () {
-        var disappearStyle = lib_1.mix(sideButtonStyles);
-        var deleteStyle = lib_1.mix(sideButtonStyles);
-        if (this.state.disappearHover) {
-            disappearStyle = lib_1.mix(disappearStyle, sideButtonHover);
-        }
-        if (this.state.deleteHover) {
-            deleteStyle = lib_1.mix(deleteStyle, sideButtonHover);
-        }
-        return (React.createElement("div", { style: actionStyles },
-            React.createElement("span", { style: disappearStyle, onClick: this.handleCloseClicked, onMouseEnter: this.handleCloseMouseEnter, onMouseLeave: this.handleCloseMouseLeave }, ">"),
-            React.createElement("span", { style: timeLabelStyles },
+        // let disappearStyle = mix(sideButtonStyles);
+        // let deleteStyle = mix(sideButtonStyles);
+        // if (this.state.disappearHover) {
+        //     disappearStyle = mix(disappearStyle, sideButtonHover);
+        // }
+        // if (this.state.deleteHover) {
+        //     deleteStyle = mix(deleteStyle, sideButtonHover);
+        // }
+        return (React.createElement("div", { className: styles.actions },
+            React.createElement("span", { className: styles.sideButton, onClick: this.handleCloseClicked }, ">"),
+            React.createElement("span", { className: styles.timeLabel },
                 "\u521B\u5EFA\u4E8E",
                 this.props.item.time),
-            React.createElement("span", { style: deleteStyle, onClick: this.handleDeleteClicked, onMouseEnter: this.handleDeleteMouseEnter, onMouseLeave: this.handleDeleteMouseLeave }, "\u5220\u9664")));
+            React.createElement("span", { className: styles.sideButton, onClick: this.handleDeleteClicked }, "\u5220\u9664")));
     };
     return DetailActions;
 }(React.Component));
@@ -20912,19 +20976,20 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var styles = __webpack_require__(/*! ./DetailComments.css */ "./src/components/detailview/DetailComments.css");
 /**
  * 备注区域的样式
  */
-var commentStyles = {
-    width: "90%",
-    height: "calc(30vh)",
-    margin: "5%",
-    padding: 10,
-    resize: "none",
-    scrollBehavior: "auto",
-    borderColor: "rgba(206, 197, 197, 0.5)",
-    outline: "none",
-};
+// const commentStyles = {
+//   width: "90%",
+//   height: "calc(30vh)",
+//   margin: "5%",
+//   padding: 10,
+//   resize: "none",
+//   scrollBehavior: "auto",
+//   borderColor: "rgba(206, 197, 197, 0.5)",
+//   outline: "none",
+// }
 var DetailComments = /** @class */ (function (_super) {
     __extends(DetailComments, _super);
     function DetailComments(props) {
@@ -20959,7 +21024,9 @@ var DetailComments = /** @class */ (function (_super) {
         this.props.onCommentsChange(this.state.comments);
     };
     DetailComments.prototype.render = function () {
-        return (React.createElement("textarea", { style: commentStyles, value: this.state.comments, onChange: this.handleCommentsChange, onBlur: this.handleCommentsOnBlur, placeholder: "\u6DFB\u52A0\u5907\u6CE8" }));
+        return (React.createElement("textarea", { 
+            // style={commentStyles}
+            className: styles.comments, value: this.state.comments, onChange: this.handleCommentsChange, onBlur: this.handleCommentsOnBlur, placeholder: "\u6DFB\u52A0\u5907\u6CE8" }));
     };
     return DetailComments;
 }(React.Component));
@@ -20989,53 +21056,54 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+// import * as styles from "./DetailPrimaryCopy.css"
+var styles = __webpack_require__(/*! ./DetailPrimaryCopy.css */ "./src/components/detailview/DetailPrimaryCopy.css");
 var primaryStyles = {
-    width: '90%',
+    width: "90%",
     height: 40,
-    margin: '5%',
-    display: 'flex',
-    border: '1px solid ,rgba(206, 197, 197, 0.5)',
-    backgroundColor: 'white',
+    margin: "5%",
+    display: "flex",
+    border: "1px solid ,rgba(206, 197, 197, 0.5)",
+    backgroundColor: "white",
 };
 /**
  * copy area直接子元素基本样式
  */
 var directChildStyles = {
-    width: '100%',
-    display: 'flex',
+    width: "100%",
+    display: "flex",
 };
 /**
  * 添加到primary list后文字的样式
  */
 var textLabelStyles = {
-    color: 'blue',
-    flex: '1 0 100px',
-    display: 'flex',
-    alignItems: 'center',
+    color: "blue",
+    flex: "1 0 100px",
+    display: "flex",
+    alignItems: "center",
     padding: 10,
 };
 /**
  * “取消添加到primary list”按钮的样式
  */
 var cancelButtonStyles = {
-    flex: '0 0 40px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: '0.8em',
-    cursor: 'pointer',
+    flex: "0 0 40px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: "0.8em",
+    cursor: "pointer",
 };
 /**
  * “添加到primary list”按钮的样式
  */
 var copyButtonStyles = {
     padding: 10,
-    alignItems: 'center',
-    cursor: 'pointer',
+    alignItems: "center",
+    cursor: "pointer",
 };
 var hoverStyles = {
-    backgroundColor: 'rgba(206, 197, 197, 0.2)',
+    backgroundColor: "rgba(206, 197, 197, 0.2)",
 };
 /**
  * “添加到primary list”按钮
@@ -21044,18 +21112,18 @@ var DetailPrimaryCopy = /** @class */ (function (_super) {
     __extends(DetailPrimaryCopy, _super);
     function DetailPrimaryCopy(props) {
         var _this = _super.call(this, props) || this;
-        _this.state = {
-            cancelButtonHover: false,
-            copyButtonHover: false,
-        };
+        // this.state = {
+        //   cancelButtonHover: false,
+        //   copyButtonHover: false,
+        // }
         // bind methods
         _this.handleCancelCopyToPrimary = _this.handleCancelCopyToPrimary.bind(_this);
         _this.handleCopyToPrimary = _this.handleCopyToPrimary.bind(_this);
-        _this.handleCancelButtonMouseEnter = _this.handleCancelButtonMouseEnter.bind(_this);
-        _this.handleCancelButtonMouseLeave = _this.handleCancelButtonMouseLeave.bind(_this);
-        _this.handleCopyButtonMouseEnter = _this.handleCopyButtonMouseEnter.bind(_this);
-        _this.handleCopyButtonMouseLeave = _this.handleCopyButtonMouseLeave.bind(_this);
         return _this;
+        // this.handleCancelButtonMouseEnter = this.handleCancelButtonMouseEnter.bind(this)
+        // this.handleCancelButtonMouseLeave = this.handleCancelButtonMouseLeave.bind(this)
+        // this.handleCopyButtonMouseEnter = this.handleCopyButtonMouseEnter.bind(this)
+        // this.handleCopyButtonMouseLeave = this.handleCopyButtonMouseLeave.bind(this)
     }
     /**
      * 从primary list中移除todo
@@ -21098,17 +21166,17 @@ var DetailPrimaryCopy = /** @class */ (function (_super) {
         });
     };
     DetailPrimaryCopy.prototype.render = function () {
-        var cancelStyle = lib_1.mix(cancelButtonStyles);
-        var copyStyle = lib_1.mix(copyButtonStyles, directChildStyles);
-        if (this.state.cancelButtonHover) {
-            cancelStyle = lib_1.mix(cancelStyle, hoverStyles);
-        }
-        if (this.state.copyButtonHover) {
-            copyStyle = lib_1.mix(copyStyle, hoverStyles);
-        }
-        return (React.createElement("div", { style: primaryStyles }, this.props.item.inPrimaryList ? (React.createElement("div", { style: directChildStyles },
-            React.createElement("p", { style: textLabelStyles }, "\u5DF2\u6DFB\u52A0\u5230\u201C\u6211\u7684\u4E00\u5929\u201D"),
-            React.createElement("span", { style: cancelStyle, onClick: this.handleCancelCopyToPrimary, onMouseEnter: this.handleCancelButtonMouseEnter, onMouseLeave: this.handleCancelButtonMouseLeave }, "X"))) : (React.createElement("p", { style: copyStyle, onClick: this.handleCopyToPrimary, onMouseEnter: this.handleCopyButtonMouseEnter, onMouseLeave: this.handleCopyButtonMouseLeave }, "\u6DFB\u52A0\u5230\u201C\u6211\u7684\u4E00\u5929\u201D"))));
+        // let cancelStyle = mix(cancelButtonStyles)
+        // let copyStyle = mix(copyButtonStyles, directChildStyles)
+        // if (this.state.cancelButtonHover) {
+        //   cancelStyle = mix(cancelStyle, hoverStyles)
+        // }
+        // if (this.state.copyButtonHover) {
+        //   copyStyle = mix(copyStyle, hoverStyles)
+        // }
+        return (React.createElement("div", { className: styles.primaryCopy }, this.props.item.inPrimaryList ? (React.createElement("div", { className: styles.copyArea },
+            React.createElement("p", { className: styles.copyText }, "\u5DF2\u6DFB\u52A0\u5230\u201C\u6211\u7684\u4E00\u5929\u201D"),
+            React.createElement("span", { className: styles.cancelButton, onClick: this.handleCancelCopyToPrimary }, "X"))) : (React.createElement("p", { className: styles.copyButton, onClick: this.handleCopyToPrimary }, "\u6DFB\u52A0\u5230\u201C\u6211\u7684\u4E00\u5929\u201D"))));
     };
     return DetailPrimaryCopy;
 }(React.Component));
@@ -21138,65 +21206,65 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+var styles = __webpack_require__(/*! ./DetailTitleContent.css */ "./src/components/detailview/DetailTitleContent.css");
 /**
  * 名称部分的样式
  */
-var contentStyles = {
-    minHeight: 80,
-    padding: "10px 10px 20px 10px",
-    borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
-    backgroundColor: "white",
-    display: "flex",
-};
+// const contentStyles = {
+//     minHeight: 80,
+//     padding: "10px 10px 20px 10px",
+//     borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
+//     backgroundColor: "white",
+//     display: "flex",
+// };
 /**
  * 自定义checkbox的样式
  */
-var checkboxStyles = {
-    flex: "1 0 30px",
-    fontSize: "1.5rem",
-    width: 30,
-    height: 30,
-    margin: "0 10px",
-    borderRadius: "50%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    border: "1px solid gray",
-    color: "transparent",
-    backgroundColor: "transparent",
-    cursor: "pointer",
-    transition: "color 0.3s, background-color 0.3s",
-};
+// const checkboxStyles = {
+//     flex: "1 0 30px",
+//     fontSize: "1.5rem",
+//     width: 30,
+//     height: 30,
+//     margin: "0 10px",
+//     borderRadius: "50%",
+//     display: "flex",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     border: "1px solid gray",
+//     color: "transparent",
+//     backgroundColor: "transparent",
+//     cursor: "pointer",
+//     transition: "color 0.3s, background-color 0.3s",
+// } as React.CSSProperties;
 /**
  * checkbox的hover状态
  */
-var checkboxHoverStyles = {
-    color: "white",
-    backgroundColor: "gray",
-};
+// const checkboxHoverStyles = {
+//     color: "white",
+//     backgroundColor: "gray",
+// };
 /**
  * checkbox的checked状态
  */
-var checkedBoxStyle = {
-    color: "white",
-    backgroundColor: "green",
-};
+// const checkedBoxStyle = {
+//     color: "white",
+//     backgroundColor: "green",
+// };
 /**
  * todo名称label的样式
  */
-var titleLabelStyles = {
-    flex: "4 0 calc(100% - 50px)",
-    fontWeight: "bold",
-    wordBreak: "break-all",
-};
+// const titleLabelStyles = {
+//     flex: "4 0 calc(100% - 50px)",
+//     fontWeight: "bold",
+//     wordBreak: "break-all",
+// } as React.CSSProperties;
 var DetailTitleContent = /** @class */ (function (_super) {
     __extends(DetailTitleContent, _super);
     function DetailTitleContent(props) {
         var _this = _super.call(this, props) || this;
-        _this.state = {
-            checkboxHover: false,
-        };
+        // this.state = {
+        //     checkboxHover: false,
+        // };
         // bind methods
         _this.handleToggleClicked = _this.handleToggleClicked.bind(_this);
         _this.handleCheckboxMouseEnter = _this.handleCheckboxMouseEnter.bind(_this);
@@ -21220,16 +21288,20 @@ var DetailTitleContent = /** @class */ (function (_super) {
         this.props.onToggleClicked();
     };
     DetailTitleContent.prototype.render = function () {
-        var checkStyle = lib_1.mix(checkboxStyles);
-        if (this.props.item.done) {
-            checkStyle = lib_1.mix(checkStyle, checkedBoxStyle);
-        }
-        if (this.state.checkboxHover) {
-            checkStyle = lib_1.mix(checkStyle, checkboxHoverStyles);
-        }
-        return (React.createElement("div", { style: contentStyles },
-            React.createElement("div", { style: checkStyle, onClick: this.handleToggleClicked, onMouseEnter: this.handleCheckboxMouseEnter, onMouseLeave: this.handleCheckboxMouseLeave }, "\u221A"),
-            React.createElement("span", { style: titleLabelStyles }, this.props.item.name)));
+        // let checkStyle = mix(checkboxStyles);
+        // if (this.props.item.done) {
+        //     checkStyle = mix(checkStyle, checkedBoxStyle);
+        // }
+        // if (this.state.checkboxHover) {
+        //     checkStyle = mix(checkStyle, checkboxHoverStyles);
+        // }
+        return (React.createElement("div", { className: styles.titleContent },
+            React.createElement("div", { 
+                // style={checkStyle}
+                className: this.props.item.done
+                    ? styles.checkedbox + " " + styles.checkbox
+                    : styles.checkbox, onClick: this.handleToggleClicked }, "\u221A"),
+            React.createElement("span", { className: styles.titleLabel }, this.props.item.name)));
     };
     return DetailTitleContent;
 }(React.Component));
@@ -21238,9 +21310,21 @@ exports.default = DetailTitleContent;
 
 /***/ }),
 
-/***/ "./src/components/listview/addListButton.tsx":
+/***/ "./src/components/listview/AddListButton.css":
 /*!***************************************************!*\
-  !*** ./src/components/listview/addListButton.tsx ***!
+  !*** ./src/components/listview/AddListButton.css ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"button":"AddListButton---button---2yE6Skc","text":"AddListButton---text---1Zxv_dQ"};
+
+/***/ }),
+
+/***/ "./src/components/listview/AddListButton.tsx":
+/*!***************************************************!*\
+  !*** ./src/components/listview/AddListButton.tsx ***!
   \***************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -21259,53 +21343,53 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
-var styles = {
-    height: 40,
-    padding: '0 10px',
-    cursor: 'pointer',
-    color: 'blue',
-};
-var hoverStyles = {
-    backgroundColor: 'rgba(206, 197, 197, 0.5)',
-};
-var spanStyles = {
-    fontSize: '1.5em',
-    marginRight: 10,
-};
+var styles = __webpack_require__(/*! ./AddListButton.css */ "./src/components/listview/AddListButton.css");
+// const styles = {
+//     height: 40,
+//     padding: "0 10px",
+//     cursor: "pointer",
+//     color: "blue",
+// };
+// const hoverStyles = {
+//     backgroundColor: "rgba(206, 197, 197, 0.5)",
+// };
+// const spanStyles = {
+//     fontSize: "1.5em",
+//     marginRight: 10,
+// };
 var AddListButton = /** @class */ (function (_super) {
     __extends(AddListButton, _super);
     function AddListButton(props) {
         var _this = _super.call(this, props) || this;
-        _this.state = {
-            hover: false,
-        };
+        // this.state = {
+        //   hover: false,
+        // }
         _this.handleClick = _this.handleClick.bind(_this);
-        _this.buttonMouseEnter = _this.buttonMouseEnter.bind(_this);
-        _this.buttonMouseLeave = _this.buttonMouseLeave.bind(_this);
         return _this;
+        // this.buttonMouseEnter = this.buttonMouseEnter.bind(this)
+        // this.buttonMouseLeave = this.buttonMouseLeave.bind(this)
     }
     AddListButton.prototype.handleClick = function (e) {
         e.stopPropagation();
         this.props.onClick();
     };
-    AddListButton.prototype.buttonMouseEnter = function (e) {
-        e.stopPropagation();
-        this.setState({
-            hover: true,
-        });
-    };
-    AddListButton.prototype.buttonMouseLeave = function (e) {
-        e.stopPropagation();
-        this.setState({
-            hover: false,
-        });
-    };
+    // private buttonMouseEnter(e: React.MouseEvent<HTMLDivElement>) {
+    //   e.stopPropagation()
+    //   this.setState({
+    //     hover: true,
+    //   })
+    // }
+    // private buttonMouseLeave(e: React.MouseEvent<HTMLDivElement>) {
+    //   e.stopPropagation()
+    //   this.setState({
+    //     hover: false,
+    //   })
+    // }
     AddListButton.prototype.render = function () {
-        var s = this.state.hover ? lib_1.mix(styles, hoverStyles) : styles;
+        // const s = this.state.hover ? mix(styles, hoverStyles) : styles;
         // log(s)
-        return (React.createElement("div", { style: s, onClick: this.props.onClick, onMouseEnter: this.buttonMouseEnter, onMouseLeave: this.buttonMouseLeave },
-            React.createElement("span", { style: spanStyles }, "+"),
+        return (React.createElement("div", { className: styles.button, onClick: this.props.onClick },
+            React.createElement("span", { className: styles.text }, "+"),
             "\u65B0\u5EFA\u6E05\u5355"));
     };
     return AddListButton;
@@ -21315,9 +21399,181 @@ exports.default = AddListButton;
 
 /***/ }),
 
-/***/ "./src/components/listview/list-content.tsx":
+/***/ "./src/components/listview/ListContent.css":
+/*!*************************************************!*\
+  !*** ./src/components/listview/ListContent.css ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"content":"ListContent---content---3FDUcdV"};
+
+/***/ }),
+
+/***/ "./src/components/listview/ListContent.tsx":
+/*!*************************************************!*\
+  !*** ./src/components/listview/ListContent.tsx ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var ListViewItem_1 = __webpack_require__(/*! ./ListViewItem */ "./src/components/listview/ListViewItem.tsx");
+var styles = __webpack_require__(/*! ./ListContent.css */ "./src/components/listview/ListContent.css");
+var ListContent = /** @class */ (function (_super) {
+    __extends(ListContent, _super);
+    function ListContent() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ListContent.prototype.render = function () {
+        var _this = this;
+        return (React.createElement("ul", { className: styles.content }, this.props.listInfos.map(function (info) { return (React.createElement(ListViewItem_1.ListViewItem
+        // currentListName={this.props.currentListName}
+        , { 
+            // currentListName={this.props.currentListName}
+            info: info, onClick: _this.props.onClick, onDrop: _this.props.onDrop, key: info.name })); })));
+    };
+    return ListContent;
+}(React.Component));
+exports.ListContent = ListContent;
+
+
+/***/ }),
+
+/***/ "./src/components/listview/ListView.css":
+/*!**********************************************!*\
+  !*** ./src/components/listview/ListView.css ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"listView":"ListView---listView---3xfUY4U"};
+
+/***/ }),
+
+/***/ "./src/components/listview/ListView.tsx":
+/*!**********************************************!*\
+  !*** ./src/components/listview/ListView.tsx ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var ListContent_1 = __webpack_require__(/*! ./ListContent */ "./src/components/listview/ListContent.tsx");
+var AddListButton_1 = __webpack_require__(/*! ./AddListButton */ "./src/components/listview/AddListButton.tsx");
+var styles = __webpack_require__(/*! ./ListView.css */ "./src/components/listview/ListView.css");
+// const viewStyles = {
+//   width: 280,
+//   position: 'relative',
+//   overflow: 'hidden',
+//   borderRight: '1px solid rgba(206, 197, 197, 0.5)',
+// } as React.CSSProperties
+/**
+ * 列表目录
+ */
+var ListView = /** @class */ (function (_super) {
+    __extends(ListView, _super);
+    function ListView(props) {
+        var _this = _super.call(this, props) || this;
+        _this.count = -1;
+        // bind methods
+        _this.addNewList = _this.addNewList.bind(_this);
+        _this.handleClick = _this.handleClick.bind(_this);
+        return _this;
+    }
+    /**
+     * 用户点击处理函数
+     * @param e `click`事件
+     */
+    ListView.prototype.handleClick = function (e, name) {
+        e.stopPropagation();
+        // console.log('handleClick: name is ' + name);
+        this.props.switchList(name);
+    };
+    /**
+     * 添加新列表
+     */
+    ListView.prototype.addNewList = function () {
+        var result = true;
+        var name = "";
+        while (result) {
+            name = this.getListName();
+            result = this.props.listInfos.some(function (list) {
+                return list.name == name;
+            });
+        }
+        this.props.addNewList(name);
+    };
+    /**
+     * 返回添加的新列表的名称
+     */
+    ListView.prototype.getListName = function () {
+        this.count++;
+        return "\u65E0\u547D\u540D\u6E05\u5355" + (this.count > 0 ? this.count : "");
+    };
+    ListView.prototype.render = function () {
+        var _this = this;
+        return (React.createElement("div", { id: styles.listView, onClick: function (e) {
+                e.stopPropagation();
+                _this.props.actionsDisplay && _this.props.onActionsDisplayClick();
+            } },
+            React.createElement(ListContent_1.ListContent
+            // currentListName={this.props.currentListName}
+            , { 
+                // currentListName={this.props.currentListName}
+                listInfos: this.props.listInfos, onClick: this.handleClick, onDrop: this.props.onDrop }),
+            React.createElement(AddListButton_1.default, { onClick: this.addNewList })));
+    };
+    return ListView;
+}(React.Component));
+exports.ListView = ListView;
+
+
+/***/ }),
+
+/***/ "./src/components/listview/ListViewItem.css":
 /*!**************************************************!*\
-  !*** ./src/components/listview/list-content.tsx ***!
+  !*** ./src/components/listview/ListViewItem.css ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"itemName":"ListViewItem---itemName---1gg2Pp5","active":"ListViewItem---active---397o8oF","itemNumber":"ListViewItem---itemNumber---1WUVz6M","dragEnter":"ListViewItem---dragEnter---3A1I4lH","listItem":"ListViewItem---listItem---1B4IrvG"};
+
+/***/ }),
+
+/***/ "./src/components/listview/ListViewItem.tsx":
+/*!**************************************************!*\
+  !*** ./src/components/listview/ListViewItem.tsx ***!
   \**************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -21336,109 +21592,63 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var list_view_item_1 = __webpack_require__(/*! ./list-view-item */ "./src/components/listview/list-view-item.tsx");
-var styles = {
-    listStyleType: "none",
-    padding: 10,
-};
-var ListContent = /** @class */ (function (_super) {
-    __extends(ListContent, _super);
-    function ListContent() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    ListContent.prototype.render = function () {
-        var _this = this;
-        return (React.createElement("ul", { style: styles }, this.props.listInfos.map(function (info) { return (React.createElement(list_view_item_1.ListViewItem
-        // currentListName={this.props.currentListName}
-        , { 
-            // currentListName={this.props.currentListName}
-            info: info, onClick: _this.props.onClick, onDrop: _this.props.onDrop, key: info.name })); })));
-    };
-    return ListContent;
-}(React.Component));
-exports.ListContent = ListContent;
-
-
-/***/ }),
-
-/***/ "./src/components/listview/list-view-item.tsx":
-/*!****************************************************!*\
-  !*** ./src/components/listview/list-view-item.tsx ***!
-  \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+var styles = __webpack_require__(/*! ./ListViewItem.css */ "./src/components/listview/ListViewItem.css");
 /**
  * 列表名称的样式
  */
-var itemNameStyles = {
-    flex: "9 1 100px",
-    pointerEvents: "none",
-};
-var itemNameStylesWithActive = {
-    fontWeight: "bold",
-};
+// const itemNameStyles = {
+//   flex: "9 1 100px",
+//   pointerEvents: "none",
+// } as React.CSSProperties;
+// const itemNameStylesWithActive = {
+//   fontWeight: "bold",
+// } as React.CSSProperties;
 /**
  * 表示列表还有多少未完成todo事项数字的样式
  */
-var itemNumberStyles = {
-    flex: "1 1 20px",
-    textAlign: "center",
-    pointerEvents: "none",
-};
+// const itemNumberStyles = {
+//   flex: "1 1 20px",
+//   textAlign: "center",
+//   pointerEvents: "none",
+// };
 /**
  * 列表样式
  */
-var listItemStyles = {
-    height: 40,
-    display: "flex",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    cursor: "pointer",
-    border: "3px solid transparent",
-};
+// const listItemStyles = {
+//   height: 40,
+//   display: "flex",
+//   justifyContent: "flex-start",
+//   alignItems: "center",
+//   cursor: "pointer",
+//   border: "3px solid transparent",
+// } as React.CSSProperties;
 /**
  * 正常情况下列表hover样式
  */
-var listItemHover = {
-    backgroundColor: "rgba(206, 197, 197, 0.5)",
-};
+// const listItemHover = {
+//   backgroundColor: "rgba(206, 197, 197, 0.5)",
+// };
 /**
  * active时列表hover样式
  */
-var listItemActiveHover = {
-    backgroundColor: "#87ceeb",
-};
+// const listItemActiveHover = {
+//   backgroundColor: "#87ceeb",
+// };
 /**
  * active时列表的背景色样式
  */
-var listItemStylesWithActive = {
-    backgroundColor: "#abddf1",
-};
-var listItemDragEnter = {
-    border: "3px solid blue",
-};
+// const listItemStylesWithActive = {
+//   backgroundColor: "#abddf1",
+// };
+// const listItemDragEnter = {
+//   border: "3px solid blue",
+// };
 var ListViewItem = /** @class */ (function (_super) {
     __extends(ListViewItem, _super);
     function ListViewItem(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {
-            hover: false,
+            // hover: false,
             dragEnter: false,
         };
         // bind methods
@@ -21493,35 +21703,26 @@ var ListViewItem = /** @class */ (function (_super) {
     ListViewItem.prototype.render = function () {
         var _this = this;
         var isActive = this.props.info.isActive;
-        var isHover = this.state.hover;
-        var listS = listItemStyles;
-        var itemS = itemNameStyles;
-        if (isActive) {
-            if (isHover) {
-                listS = lib_1.mix(listS, listItemActiveHover);
-            }
-            else {
-                listS = lib_1.mix(listS, listItemStylesWithActive);
-            }
-            itemS = lib_1.mix(itemS, itemNameStylesWithActive);
-        }
-        else {
-            if (isHover) {
-                listS = lib_1.mix(listS, listItemHover);
-            }
-        }
-        if (this.state.dragEnter) {
-            listS = lib_1.mix(listS, listItemDragEnter);
-        }
-        return (React.createElement("li", { style: listS, onDragOver: this.handleDragOver, onDrop: this.handleDrop, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onClick: function (e) { return _this.props.onClick(e, _this.props.info.name); }, onMouseEnter: function (e) {
-                e.stopPropagation();
-                _this.setState({ hover: true });
-            }, onMouseLeave: function (e) {
-                e.stopPropagation();
-                _this.setState({ hover: false });
-            } },
-            React.createElement("span", { className: isActive ? "animated fadeIn" : "animated", style: itemS }, this.props.info.name),
-            React.createElement("span", { style: itemNumberStyles }, this.props.info.count > 0 ? this.props.info.count : "")));
+        // const isHover = this.state.hover;
+        // let listS: React.CSSProperties = listItemStyles;
+        // let itemS = itemNameStyles;
+        // if (isActive) {
+        //     if (isHover) {
+        //         listS = mix(listS, listItemActiveHover);
+        //     } else {
+        //         listS = mix(listS, listItemStylesWithActive);
+        //     }
+        //     itemS = mix(itemS, itemNameStylesWithActive);
+        // } else {
+        //     if (isHover) {
+        //         listS = mix(listS, listItemHover);
+        //     }
+        // }
+        return (React.createElement("li", { className: (this.state.dragEnter ? styles.dragEnter : "") + " " + styles.listItem + " " + (isActive ? styles.active : ""), 
+            // style={listS}
+            onDragOver: this.handleDragOver, onDrop: this.handleDrop, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onClick: function (e) { return _this.props.onClick(e, _this.props.info.name); } },
+            React.createElement("span", { className: "animated " + (isActive ? styles.active + " fadeIn" : "") + " " + styles.itemName }, this.props.info.name),
+            React.createElement("span", { className: styles.itemNumber }, this.props.info.count > 0 ? this.props.info.count : "")));
     };
     return ListViewItem;
 }(React.Component));
@@ -21530,110 +21731,21 @@ exports.ListViewItem = ListViewItem;
 
 /***/ }),
 
-/***/ "./src/components/listview/list-view.tsx":
-/*!***********************************************!*\
-  !*** ./src/components/listview/list-view.tsx ***!
-  \***********************************************/
+/***/ "./src/components/util/AlertButton.css":
+/*!*********************************************!*\
+  !*** ./src/components/util/AlertButton.css ***!
+  \*********************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var list_content_1 = __webpack_require__(/*! ./list-content */ "./src/components/listview/list-content.tsx");
-var addListButton_1 = __webpack_require__(/*! ./addListButton */ "./src/components/listview/addListButton.tsx");
-/**
- * “新建清单”按钮的样式
- */
-var AddButtonStyles = {
-    height: 40,
-    padding: '0 10px',
-    cursor: 'pointer',
-    color: 'blue',
-};
-var viewStyles = {
-    width: 280,
-    position: 'relative',
-    overflow: 'hidden',
-    borderRight: '1px solid rgba(206, 197, 197, 0.5)',
-};
-/**
- * 列表目录
- */
-var ListView = /** @class */ (function (_super) {
-    __extends(ListView, _super);
-    function ListView(props) {
-        var _this = _super.call(this, props) || this;
-        _this.count = -1;
-        // bind methods
-        _this.addNewList = _this.addNewList.bind(_this);
-        _this.handleClick = _this.handleClick.bind(_this);
-        return _this;
-    }
-    /**
-     * 用户点击处理函数
-     * @param e `click`事件
-     */
-    ListView.prototype.handleClick = function (e, name) {
-        e.stopPropagation();
-        // console.log('handleClick: name is ' + name);
-        this.props.switchList(name);
-    };
-    /**
-     * 添加新列表
-     */
-    ListView.prototype.addNewList = function () {
-        var result = true;
-        var name = '';
-        while (result) {
-            name = this.getListName();
-            result = this.props.listInfos.some(function (list) {
-                return list.name == name;
-            });
-        }
-        this.props.addNewList(name);
-    };
-    /**
-     * 返回添加的新列表的名称
-     */
-    ListView.prototype.getListName = function () {
-        this.count++;
-        return "\u65E0\u547D\u540D\u6E05\u5355" + (this.count > 0 ? this.count : '');
-    };
-    ListView.prototype.render = function () {
-        var _this = this;
-        return (React.createElement("div", { style: viewStyles, onClick: function (e) {
-                e.stopPropagation();
-                _this.props.actionsDisplay && _this.props.onActionsDisplayClick();
-            } },
-            React.createElement(list_content_1.ListContent
-            // currentListName={this.props.currentListName}
-            , { 
-                // currentListName={this.props.currentListName}
-                listInfos: this.props.listInfos, onClick: this.handleClick, onDrop: this.props.onDrop }),
-            React.createElement(addListButton_1.default, { onClick: this.addNewList })));
-    };
-    return ListView;
-}(React.Component));
-exports.ListView = ListView;
-
+// removed by extract-text-webpack-plugin
+module.exports = {"alertButton":"AlertButton---alertButton---22Y3-0J"};
 
 /***/ }),
 
-/***/ "./src/components/util/alertButton.tsx":
+/***/ "./src/components/util/AlertButton.tsx":
 /*!*********************************************!*\
-  !*** ./src/components/util/alertButton.tsx ***!
+  !*** ./src/components/util/AlertButton.tsx ***!
   \*********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -21652,7 +21764,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
+var styles = __webpack_require__(/*! ./AlertButton.css */ "./src/components/util/AlertButton.css");
 /**
  * 全局提示框里的按钮
  */
@@ -21660,35 +21772,39 @@ var AlertButton = /** @class */ (function (_super) {
     __extends(AlertButton, _super);
     function AlertButton(props) {
         var _this = _super.call(this, props) || this;
-        _this.state = {
-            hover: false,
-        };
-        _this.onMouseEnter = _this.onMouseEnter.bind(_this);
-        _this.onMouseLeave = _this.onMouseLeave.bind(_this);
+        // this.state = {
+        //     hover: false,
+        // };
+        // this.onMouseEnter = this.onMouseEnter.bind(this);
+        // this.onMouseLeave = this.onMouseLeave.bind(this);
         _this.onClick = _this.onClick.bind(_this);
         return _this;
     }
-    AlertButton.prototype.onMouseEnter = function (e) {
-        e.stopPropagation();
-        this.setState({
-            hover: true,
-        });
-    };
-    AlertButton.prototype.onMouseLeave = function (e) {
-        e.stopPropagation();
-        this.setState({
-            hover: false,
-        });
-    };
+    // private onMouseEnter(e: React.MouseEvent<HTMLButtonElement>) {
+    //     e.stopPropagation();
+    //     this.setState({
+    //         hover: true,
+    //     });
+    // }
+    // private onMouseLeave(e: React.MouseEvent<HTMLButtonElement>) {
+    //     e.stopPropagation();
+    //     this.setState({
+    //         hover: false,
+    //     });
+    // }
     AlertButton.prototype.onClick = function (e) {
         e.stopPropagation();
         this.props.onClick();
     };
     AlertButton.prototype.render = function () {
-        var style = this.state.hover
-            ? lib_1.mix(confirmButtonStyles, confirmButtonHover)
-            : confirmButtonStyles;
-        return (React.createElement("button", { style: style, onMouseEnter: this.onMouseEnter, onMouseLeave: this.onMouseLeave, onClick: this.onClick }, this.props.title));
+        // const style = this.state.hover
+        //     ? mix(confirmButtonStyles, confirmButtonHover)
+        //     : confirmButtonStyles;
+        return (React.createElement("button", { className: styles.alertButton, 
+            // style={style}
+            // onMouseEnter={this.onMouseEnter}
+            // onMouseLeave={this.onMouseLeave}
+            onClick: this.onClick }, this.props.title));
     };
     return AlertButton;
 }(React.Component));
@@ -21696,24 +21812,36 @@ exports.AlertButton = AlertButton;
 /**
  * “确认”按钮样式
  */
-var confirmButtonStyles = {
-    height: 30,
-    border: 'none',
-    backgroundColor: 'transparent',
-    cursor: 'pointer',
-    transition: 'backgroud-color 0.3s',
-};
-var confirmButtonHover = {
-    backgroundColor: 'rgba(206, 197, 197, 0.5)',
-};
+// const confirmButtonStyles: React.CSSProperties = {
+//     height: 30,
+//     border: "none",
+//     backgroundColor: "transparent",
+//     cursor: "pointer",
+//     transition: "backgroud-color 0.3s",
+// };
+// const confirmButtonHover: React.CSSProperties = {
+//     backgroundColor: "rgba(206, 197, 197, 0.5)",
+// };
 
 
 /***/ }),
 
-/***/ "./src/components/util/global-alert.tsx":
-/*!**********************************************!*\
-  !*** ./src/components/util/global-alert.tsx ***!
-  \**********************************************/
+/***/ "./src/components/util/GlobalAlert.css":
+/*!*********************************************!*\
+  !*** ./src/components/util/GlobalAlert.css ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"background":"GlobalAlert---background---35KNT0b","display":"GlobalAlert---display---KNhi1di","alert":"GlobalAlert---alert---2OjYmj0","message":"GlobalAlert---message---1WQH8bk","actions":"GlobalAlert---actions---32As3tn"};
+
+/***/ }),
+
+/***/ "./src/components/util/GlobalAlert.tsx":
+/*!*********************************************!*\
+  !*** ./src/components/util/GlobalAlert.tsx ***!
+  \*********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21731,8 +21859,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var lib_1 = __webpack_require__(/*! ../../lib */ "./src/lib.ts");
-var alertButton_1 = __webpack_require__(/*! ./alertButton */ "./src/components/util/alertButton.tsx");
+var AlertButton_1 = __webpack_require__(/*! ./AlertButton */ "./src/components/util/AlertButton.tsx");
+// 样式
+var styles = __webpack_require__(/*! ./GlobalAlert.css */ "./src/components/util/GlobalAlert.css");
 var AlertType;
 (function (AlertType) {
     AlertType[AlertType["Alert"] = 0] = "Alert";
@@ -21741,55 +21870,55 @@ var AlertType;
 /**
  * 提示框后的全屏背景遮罩层样式
  */
-var backgroundStyles = {
-    left: 0,
-    top: 0,
-    width: '100vw',
-    height: '100vh',
-    position: 'fixed',
-    zIndex: 2,
-    visibility: 'hidden',
-    backgroundColor: 'rgba(90, 85, 85, 0.37)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-};
-var backgroundDisplay = {
-    visibility: 'visible',
-};
+// const backgroundStyles: React.CSSProperties = {
+//     left: 0,
+//     top: 0,
+//     width: "100vw",
+//     height: "100vh",
+//     position: "fixed",
+//     zIndex: 2,
+//     visibility: "hidden",
+//     backgroundColor: "rgba(90, 85, 85, 0.37)",
+//     display: "flex",
+//     justifyContent: "center",
+//     alignItems: "center",
+// };
+// const backgroundDisplay: React.CSSProperties = {
+//     visibility: "visible",
+// };
 /**
  * 提示框的样式
  */
-var alertStyles = {
-    width: '30vw',
-    height: '30vh',
-    backgroundColor: 'white',
-    borderRadius: 8,
-    borderColor: 'rgba(206, 197, 197, 0.5)',
-    padding: 10,
-    display: 'flex',
-    flexWrap: 'wrap',
-};
+// const alertStyles: React.CSSProperties = {
+//     width: "30vw",
+//     height: "30vh",
+//     backgroundColor: "white",
+//     borderRadius: 8,
+//     borderColor: "rgba(206, 197, 197, 0.5)",
+//     padding: 10,
+//     display: "flex",
+//     flexWrap: "wrap",
+// };
 /**
  * alert的提示消息样式
  */
-var alertMessageStyles = {
-    width: '100%',
-};
+// const alertMessageStyles: React.CSSProperties = {
+//     width: "100%",
+// };
 /**
  * 提示框操作部分的样式
  */
-var alertActionStyles = {
-    display: 'flex',
-    flexDirection: 'column-reverse',
-    width: '100%',
-};
+// const alertActionStyles: React.CSSProperties = {
+//     display: "flex",
+//     flexDirection: "column-reverse",
+//     width: "100%",
+// };
 var Alert = /** @class */ (function (_super) {
     __extends(Alert, _super);
     function Alert(props) {
         var _this = _super.call(this, props) || this;
         _this.state = {
-            confirmButtonHover: false,
+            // confirmButtonHover: false,
             type: _this.props.type,
         };
         // bind methods
@@ -21801,7 +21930,6 @@ var Alert = /** @class */ (function (_super) {
     Alert.getDerivedStateFromProps = function (nextProps, prevState) {
         return {
             type: nextProps.type,
-            confirmButtonHover: prevState.confirmButtonHover,
         };
     };
     Alert.prototype.defaultClick = function () {
@@ -21813,16 +21941,18 @@ var Alert = /** @class */ (function (_super) {
         }
     };
     Alert.prototype.render = function () {
-        var backgroundS = lib_1.mix(backgroundStyles);
-        if (this.props.display) {
-            backgroundS = lib_1.mix(backgroundS, backgroundDisplay);
-        }
-        return (React.createElement("div", { style: backgroundS },
-            React.createElement("div", { style: alertStyles },
-                React.createElement("p", { style: alertMessageStyles }, this.props.message),
-                React.createElement("div", { style: alertActionStyles }, this.state.type == AlertType.Alert ? (React.createElement(alertButton_1.AlertButton, { title: '好的', onClick: this.defaultClick })) : (React.createElement("div", null,
-                    React.createElement(alertButton_1.AlertButton, { title: '取消', onClick: this.defaultClick }),
-                    React.createElement(alertButton_1.AlertButton, { title: '确定', onClick: this.confirmClick })))))));
+        // let backgroundS = mix(backgroundStyles);
+        // if (this.props.display) {
+        //     backgroundS = mix(backgroundS, backgroundDisplay);
+        // }
+        return (React.createElement("div", { className: this.props.display
+                ? styles.background + " " + styles.display
+                : styles.background },
+            React.createElement("div", { className: styles.alert },
+                React.createElement("p", { className: styles.message }, this.props.message),
+                React.createElement("div", { className: styles.actions }, this.state.type == AlertType.Alert ? (React.createElement(AlertButton_1.AlertButton, { title: "好的", onClick: this.defaultClick })) : (React.createElement("div", null,
+                    React.createElement(AlertButton_1.AlertButton, { title: "取消", onClick: this.defaultClick }),
+                    React.createElement(AlertButton_1.AlertButton, { title: "确定", onClick: this.confirmClick })))))));
     };
     return Alert;
 }(React.Component));
