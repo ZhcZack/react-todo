@@ -1,10 +1,18 @@
+/**
+ * AreaView的顶部区域，可对列表进行“重命名”，“删除”等操作。
+ */
+
 import * as React from "react";
 import { ThemePicker } from "./ThemePicker";
 import { AreaActions } from "./AreaActions";
 // import { mix } from "../../lib";
 
+// 样式表
 const styles: { [prop: string]: string } = require("./EditableHead.css");
 
+/**
+ * 从父组件得到的数据
+ */
 interface HeadProps {
     /**列表名称 */
     listName: string;
@@ -14,7 +22,6 @@ interface HeadProps {
     renameList(name: string): void;
     /**
      * 是否要删除列表
-     * @param name 列表名称
      */
     shouldDeleteList(): void;
     /**
@@ -31,54 +38,24 @@ interface HeadProps {
      * 主题选择处理方法
      */
     onColorPick(color: string): void;
-    actionsShouldDisplay: boolean;
-    onActionsDisplayClick(): void;
 }
 
+/**
+ * 组件内部的状态
+ */
 interface HeadState {
     /**是否处于编辑状态 */
     isEdit: boolean;
     /**保存编辑后的名称，通过props的值初始化 */
     name: string;
+    /**
+     * 列表操作框是否显示
+     */
+    isActionDisplay: boolean;
 }
 
-/**
- * 最外层样式
- */
-// const headStyles = {
-//     height: 200,
-//     padding: 10,
-//     borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
-//     display: "flex",
-//     position: "relative",
-// } as React.CSSProperties;
-
-// const headDirectChild = {
-//     alignSelf: "flex-end",
-// } as React.CSSProperties;
-/**
- * 列表名称文字的样式
- */
-// const nameLabelStyles = {
-//     fontSize: "2rem",
-//     color: "white",
-// };
-/**
- * 显示操作菜单按钮的样式
- */
-// const switcherStyles = {
-//     width: 40,
-//     height: 30,
-//     position: "absolute",
-//     right: 10,
-//     bottom: 10,
-//     border: "none",
-//     cursor: "pointer",
-//     color: "white",
-//     fontWeight: "bold",
-// } as React.CSSProperties;
-
-class AreaViewHead extends React.Component<HeadProps, HeadState> {
+export class EditableHead extends React.Component<HeadProps, HeadState> {
+    // ref引用，是一个输入文本框
     private renameInput: HTMLInputElement | null;
 
     constructor(props: HeadProps) {
@@ -88,6 +65,7 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
         this.state = {
             isEdit: false,
             name: this.props.listName,
+            isActionDisplay: false,
         };
 
         this.inputChange = this.inputChange.bind(this);
@@ -96,19 +74,19 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
         this.handleSwitch = this.handleSwitch.bind(this);
         this.inputBlur = this.inputBlur.bind(this);
         this.switchDoneItems = this.switchDoneItems.bind(this);
+        this.closeActions = this.closeActions.bind(this);
     }
 
-    componentWillReceiveProps(nextProps: HeadProps) {
-        // 传入新的listName之后，保存这个值作为编辑的预留名称
-        this.setState({
+    static getDerivedStateFromProps(nextProps: HeadProps, prevState: HeadState): HeadState {
+        return {
             name: nextProps.listName,
-            // isEdit: false,
-        });
+            isEdit: false,
+            isActionDisplay: false,
+        };
     }
 
     /**
      * 保存输入的内容，作为新的列表名
-     * @param e 输入内容改变事件
      */
     private inputChange(e: React.ChangeEvent<HTMLInputElement>) {
         this.setState({
@@ -118,10 +96,9 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
 
     /**
      * 进行重命名工作
-     * @param e 鼠标点击事件
      */
     private renameClicked() {
-        this.props.onActionsDisplayClick();
+        this.toggleActionsDisplay();
 
         this.setState({ isEdit: true }, () => {
             if (this.renameInput) {
@@ -133,7 +110,6 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
 
     /**
      * 确认删除列表操作
-     * @param e 鼠标点击事件
      */
     private deleteClicked() {
         this.props.shouldDeleteList();
@@ -141,16 +117,24 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
 
     /**
      * 显示/隐藏操作列表的视图
-     * @param e 鼠标点击事件
      */
-    private handleSwitch(e: React.MouseEvent<HTMLButtonElement>) {
+    private handleSwitch(e: React.MouseEvent<HTMLDivElement>) {
         e.stopPropagation();
-        this.props.onActionsDisplayClick();
+        // this.props.onActionsDisplayClick();
+        this.toggleActionsDisplay();
+    }
+
+    /**
+     * 这个方法用于切换列表操作框，将它显示或隐藏。
+     */
+    private toggleActionsDisplay() {
+        this.setState(prevState => ({
+            isActionDisplay: !prevState.isActionDisplay,
+        }));
     }
 
     /**
      * 当焦点从输入框移走时，进行列表的重命名工作
-     * @param e 焦点移走事件
      */
     private inputBlur(e: React.FocusEvent<HTMLInputElement>) {
         e.stopPropagation();
@@ -160,14 +144,25 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
         });
     }
 
+    /**
+     * 显示/隐藏已完成的todo事项
+     */
     private switchDoneItems() {
         this.props.switchDoneItems();
-        this.props.onActionsDisplayClick();
+        this.toggleActionsDisplay();
+    }
+
+    /**
+     * 关闭操作窗口
+     */
+    private closeActions() {
+        this.setState({
+            isActionDisplay: false,
+        });
     }
 
     render() {
         const color = this.props.colorTheme;
-        const hideS = this.state.isEdit ? { display: "none" } : {};
         if (this.props.isPrimaryList) {
             return (
                 <div
@@ -194,29 +189,32 @@ class AreaViewHead extends React.Component<HeadProps, HeadState> {
                     {this.props.listName}
                 </div>
                 <input
-                    className={`${styles.headDirectChild} ${this.state.isEdit ? "" : styles.hide}`}
+                    className={`${styles.headDirectChild} ${styles.input} ${
+                        this.state.isEdit ? "" : styles.hide
+                    }`}
                     type="text"
                     onChange={this.inputChange}
                     ref={input => (this.renameInput = input)}
                     onBlur={this.inputBlur}
                 />
-                <button
+                <div
                     className={styles.switcher}
                     style={{ backgroundColor: color }}
                     onClick={this.handleSwitch}>
                     ···
-                </button>
-                <AreaActions
-                    actionsShouldDisplay={this.props.actionsShouldDisplay}
-                    doneItemsDisplay={this.props.doneItemsDisplay}
-                    onColorPick={this.props.onColorPick}
-                    switchDoneItems={this.switchDoneItems}
-                    renameClicked={this.renameClicked}
-                    deleteClicked={this.deleteClicked}
-                />
+                </div>
+                {this.state.isActionDisplay && (
+                    <AreaActions
+                        // actionsShouldDisplay={this.props.actionsShouldDisplay}
+                        doneItemsDisplay={this.props.doneItemsDisplay}
+                        onColorPick={this.props.onColorPick}
+                        switchDoneItems={this.switchDoneItems}
+                        renameClicked={this.renameClicked}
+                        deleteClicked={this.deleteClicked}
+                        closeActions={this.closeActions}
+                    />
+                )}
             </div>
         );
     }
 }
-
-export { AreaViewHead as EditableHead };

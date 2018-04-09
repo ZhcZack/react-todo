@@ -1,71 +1,36 @@
+/**
+ * “添加新列表”按钮组件
+ */
+
 import * as React from "react";
 import { mix, log } from "../../lib";
 
+// 样式表
 const styles: { [prop: string]: string } = require("./AddNewList.css");
 
-interface AddListButtonProps {
+interface Props {
     onClick(): void;
 }
 
-interface AddListButtonState {
-    // hover: boolean
-}
+interface State {}
 
-// const styles = {
-//     height: 40,
-//     padding: "0 10px",
-//     cursor: "pointer",
-//     color: "blue",
-// };
-
-// const hoverStyles = {
-//     backgroundColor: "rgba(206, 197, 197, 0.5)",
-// };
-
-// const spanStyles = {
-//     fontSize: "1.5em",
-//     marginRight: 10,
-// };
-
-export default class AddListButton extends React.Component<AddListButtonProps, AddListButtonState> {
-    constructor(props: AddListButtonProps) {
+export default class AddListButton extends React.Component<Props, State> {
+    constructor(props: Props) {
         super(props);
-        // this.state = {
-        //   hover: false,
-        // }
         this.handleClick = this.handleClick.bind(this);
-        // this.buttonMouseEnter = this.buttonMouseEnter.bind(this)
-        // this.buttonMouseLeave = this.buttonMouseLeave.bind(this)
     }
 
+    /**
+     * 点击按钮新建列表
+     */
     private handleClick(e: React.MouseEvent<HTMLDivElement>) {
         e.stopPropagation();
         this.props.onClick();
     }
 
-    // private buttonMouseEnter(e: React.MouseEvent<HTMLDivElement>) {
-    //   e.stopPropagation()
-    //   this.setState({
-    //     hover: true,
-    //   })
-    // }
-
-    // private buttonMouseLeave(e: React.MouseEvent<HTMLDivElement>) {
-    //   e.stopPropagation()
-    //   this.setState({
-    //     hover: false,
-    //   })
-    // }
-
     render() {
-        // const s = this.state.hover ? mix(styles, hoverStyles) : styles;
         return (
-            <div
-                className={styles.button}
-                onClick={this.props.onClick}
-                // onMouseEnter={this.buttonMouseEnter}
-                // onMouseLeave={this.buttonMouseLeave}
-            >
+            <div className={styles.button} onClick={this.handleClick}>
                 <span className={styles.text}>+</span>新建清单
             </div>
         );

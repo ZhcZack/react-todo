@@ -1,16 +1,21 @@
+/**
+ * 显示每一个列表的组件
+ *
+ * 组件支持HTML5拖拽，可以将area view中的todo拖到列表上进行复制、转移操作。
+ */
+
 import * as React from "react";
 import { ListInfo } from "../../model/interface";
 import { mix } from "../../lib";
 
+// 样式表
 const styles: { [prop: string]: string } = require("./ViewItem.css");
 
-interface ListViewItemProps {
-    /**当前进行编辑操作的列表名称 */
-    // currentListName: string
+interface Props {
     /**此列表的信息 */
     info: ListInfo;
     /**列表点击处理方法 */
-    onClick(e: React.MouseEvent<HTMLLIElement>, itemName: string): void;
+    onClick(itemName: string): void;
     /**
      * 拖拽之后“放置”元素的处理方法
      *
@@ -19,70 +24,14 @@ interface ListViewItemProps {
     onDrop(targetListName: string): void;
 }
 
-interface ListViewItemState {
-    // hover: boolean;
+interface State {
     dragEnter: boolean;
 }
 
-/**
- * 列表名称的样式
- */
-// const itemNameStyles = {
-//   flex: "9 1 100px",
-//   pointerEvents: "none",
-// } as React.CSSProperties;
-// const itemNameStylesWithActive = {
-//   fontWeight: "bold",
-// } as React.CSSProperties;
-/**
- * 表示列表还有多少未完成todo事项数字的样式
- */
-// const itemNumberStyles = {
-//   flex: "1 1 20px",
-//   textAlign: "center",
-//   pointerEvents: "none",
-// };
-
-/**
- * 列表样式
- */
-// const listItemStyles = {
-//   height: 40,
-//   display: "flex",
-//   justifyContent: "flex-start",
-//   alignItems: "center",
-//   cursor: "pointer",
-//   border: "3px solid transparent",
-// } as React.CSSProperties;
-
-/**
- * 正常情况下列表hover样式
- */
-// const listItemHover = {
-//   backgroundColor: "rgba(206, 197, 197, 0.5)",
-// };
-/**
- * active时列表hover样式
- */
-// const listItemActiveHover = {
-//   backgroundColor: "#87ceeb",
-// };
-/**
- * active时列表的背景色样式
- */
-// const listItemStylesWithActive = {
-//   backgroundColor: "#abddf1",
-// };
-
-// const listItemDragEnter = {
-//   border: "3px solid blue",
-// };
-
-export class ViewItem extends React.Component<ListViewItemProps, ListViewItemState> {
-    constructor(props: ListViewItemProps) {
+export class ViewItem extends React.Component<Props, State> {
+    constructor(props: Props) {
         super(props);
         this.state = {
-            // hover: false,
             dragEnter: false,
         };
 
@@ -95,7 +44,6 @@ export class ViewItem extends React.Component<ListViewItemProps, ListViewItemSta
 
     /**
      * 当元素被拖拽到这里的时候，拖拽结束触发这个方法
-     * @param e 拖拽事件
      */
     private handleDragOver(e: React.DragEvent<HTMLLIElement>) {
         e.preventDefault();
@@ -106,7 +54,6 @@ export class ViewItem extends React.Component<ListViewItemProps, ListViewItemSta
      * 元素“放”在这里的时候，触发这个方法。
      *
      * 这里把处理数据的工作交由父组件代劳
-     * @param e 拖拽事件
      */
     private handleDrop(e: React.DragEvent<HTMLLIElement>) {
         e.preventDefault();
@@ -125,38 +72,38 @@ export class ViewItem extends React.Component<ListViewItemProps, ListViewItemSta
         });
     }
 
+    /**
+     * 列表处于`dragenter`状态时的操作
+     */
     private handleDragEnter(e: React.DragEvent<HTMLLIElement>) {
-        const target = e.target as HTMLElement;
+        e.stopPropagation();
+        // const target = e.target as HTMLElement;
         this.setState({
             dragEnter: true,
         });
     }
 
+    /**
+     * 列表处于`dragend`状态时的操作
+     */
     private handleDragLeave(e: React.DragEvent<HTMLLIElement>) {
-        const target = e.target as HTMLElement;
+        e.stopPropagation();
+        // const target = e.target as HTMLElement;
         this.setState({
             dragEnter: false,
         });
     }
 
+    /**
+     * 点击列表，显示todo内容
+     */
+    private clickList(e: React.MouseEvent<HTMLLIElement>) {
+        e.stopPropagation();
+        this.props.onClick(this.props.info.name);
+    }
+
     render() {
         const isActive = this.props.info.isActive;
-        // const isHover = this.state.hover;
-        // let listS: React.CSSProperties = listItemStyles;
-        // let itemS = itemNameStyles;
-
-        // if (isActive) {
-        //     if (isHover) {
-        //         listS = mix(listS, listItemActiveHover);
-        //     } else {
-        //         listS = mix(listS, listItemStylesWithActive);
-        //     }
-        //     itemS = mix(itemS, itemNameStylesWithActive);
-        // } else {
-        //     if (isHover) {
-        //         listS = mix(listS, listItemHover);
-        //     }
-        // }
 
         return (
             <li
@@ -168,7 +115,7 @@ export class ViewItem extends React.Component<ListViewItemProps, ListViewItemSta
                 onDrop={this.handleDrop}
                 onDragEnter={this.handleDragEnter}
                 onDragLeave={this.handleDragLeave}
-                onClick={e => this.props.onClick(e, this.props.info.name)}>
+                onClick={this.clickList}>
                 <span
                     className={`${styles.itemName} animated ${
                         isActive ? styles.active + " fadeIn" : ""

@@ -1,6 +1,7 @@
+@charset "UTF-8";
 .AreaActions-actions-3t2tT77 {
   position: absolute;
-  top: calc(100% + 5px);
+  top: 200px;
   right: 10px;
   visibility: hidden;
   width: 322px;
@@ -9,7 +10,8 @@
   border: 1px solid rgba(206, 197, 197, 0.5);
   padding: 10px;
   margin-right: 0;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  z-index: 11; }
 
 .AreaActions-actions-3t2tT77.AreaActions-display-2vVG8-6 {
   visibility: visible; }
@@ -18,24 +20,16 @@
   padding: 0;
   margin: 0;
   margin-bottom: 10px; }
-@charset "UTF-8";
-#App-app-2hfFHIu {
+
+/*操作窗口底部背景遮罩层*/
+.AreaActions-globalBackground-Hn68LaF {
   width: 100vw;
   height: 100vh;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  position: relative;
-  z-index: 1;
-  box-sizing: border-box; }
-
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-size: 16px;
-  font-family: -apple-system, Source Han Sans CN, Segoe UI, Helvetica Neue, Helvetica, 微软雅黑, sans-serif; }
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: transparent;
+  z-index: 10; }
 .GlobalAlert-background-35KNT0b {
   left: 0;
   top: 0;
@@ -71,6 +65,16 @@ body {
   display: flex;
   flex-direction: column-reverse;
   width: 100%; }
+.GlobalAlertButton-alertButton-2XdzmM7 {
+  height: 30;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-sizing: border-box; }
+
+.GlobalAlertButton-alertButton-2XdzmM7:hover {
+  background-color: rgba(206, 197, 197, 0.5); }
 #DetailView-detailView-35WsUh0 {
   width: 280px;
   position: relative;
@@ -219,6 +223,9 @@ body {
   font-size: 2rem;
   color: white; }
 
+.EditableHead-input-3WZ1UID {
+  font-size: 2rem; }
+
 .EditableHead-switcher-2ngK88g {
   width: 40px;
   height: 30px;
@@ -228,17 +235,29 @@ body {
   border: none;
   cursor: pointer;
   color: white;
-  font-weight: bold; }
-.GlobalAlertButton-alertButton-2XdzmM7 {
-  height: 30;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  font-weight: bold;
+  z-index: 11;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+@charset "UTF-8";
+#App-app-2hfFHIu {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  position: relative;
+  z-index: 1;
   box-sizing: border-box; }
 
-.GlobalAlertButton-alertButton-2XdzmM7:hover {
-  background-color: rgba(206, 197, 197, 0.5); }
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+  font-family: -apple-system, Source Han Sans CN, Segoe UI, Helvetica Neue, Helvetica, 微软雅黑, sans-serif; }
 .AreaActionButton-button-1E_JxHi {
   height: 40px;
   display: flex;
@@ -270,14 +289,14 @@ body {
   height: 50px;
   cursor: pointer;
   box-sizing: border-box; }
-.ViewContent-content-3CP5Vjw {
+.ViewTodoContent-content-23z30C3 {
   max-height: calc(100vh - 200px - 60px);
   overflow: auto; }
 
-.ViewContent-list-1iWogZ3 {
+.ViewTodoContent-list-2bVwiEm {
   margin: 0 20px;
   padding: 0; }
-.ViewItem-todo-J6m5S6_ {
+.ViewTodoItem-todo-kCI7EnG {
   height: 60px;
   display: flex;
   align-items: center;
@@ -287,10 +306,10 @@ body {
   transition: background-color 0.3s;
   box-sizing: border-box; }
 
-.ViewItem-todo-J6m5S6_:hover {
+.ViewTodoItem-todo-kCI7EnG:hover {
   background-color: rgba(206, 197, 197, 0.5); }
 
-.ViewItem-checkbox-3WJrUe6 {
+.ViewTodoItem-checkbox-1GBcfCg {
   font-size: 1.5rem;
   width: 30px;
   height: 30px;
@@ -307,31 +326,31 @@ body {
   transition: color 0.3s, background-color 0.3s;
   box-sizing: border-box; }
 
-.ViewItem-checkbox-3WJrUe6:hover {
+.ViewTodoItem-checkbox-1GBcfCg:hover {
   color: white;
   background-color: gray; }
 
-.ViewItem-checked-2CXvd7W {
+.ViewTodoItem-checked-2ScWkLI {
   color: white;
   background-color: green; }
 
-.ViewItem-text-1OPR_y- {
+.ViewTodoItem-text-2D2uZfl {
   display: flex;
   flex-direction: column; }
 
-.ViewItem-text-1OPR_y-.ViewItem-done-3Kmbw1T {
+.ViewTodoItem-text-2D2uZfl.ViewTodoItem-done-1im6UYC {
   text-decoration: line-through;
   color: gray; }
 
-.ViewItem-source-3n4y3bx {
+.ViewTodoItem-source-1h1QnVZ {
   display: flex; }
 
-.ViewItem-comment--Ju2Bt1 {
+.ViewTodoItem-comment-3sRH1f2 {
   font-size: 0.6em;
   color: gray;
   margin-right: 10px; }
 
-.ViewItem-comment--Ju2Bt1.ViewItem-inPrimary-2b7o7tu {
+.ViewTodoItem-comment-3sRH1f2.ViewTodoItem-inPrimary-362FUWU {
   color: blue; }
 
 /* .source */

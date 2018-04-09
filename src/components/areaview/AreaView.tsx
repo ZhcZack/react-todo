@@ -2,7 +2,7 @@ import * as React from "react";
 import { TodoItem, TodoList, ListInfo } from "../../model/interface";
 import { DetailView } from "./../detailview/DetailView";
 import { AddNewItem } from "./AddNewItem";
-import { AreaViewContent } from "./ViewContent";
+import { AreaViewContent } from "./ViewTodoContent";
 import { EditableHead } from "./EditableHead";
 import { mix } from "../../lib";
 
@@ -36,14 +36,6 @@ interface Props {
      * @param color 主题色
      */
     onColorPick(color: string): void;
-    /**
-     * 显示/隐藏操作区域
-     */
-    onActionsDisplayClick(): void;
-    /**
-     * 操作区域是否要显示在屏幕上
-     */
-    actionsShouldDisplay: boolean;
 }
 
 interface State {
@@ -86,11 +78,7 @@ export class AreaView extends React.Component<Props, State> {
             <div
                 // style={this.props.shrink ? mix(viewStyles, viewShrinkStyles) : viewStyles}
                 id={styles.areaView}
-                className={this.props.shrink ? styles.shrink : ""}
-                onClick={e => {
-                    e.stopPropagation();
-                    this.props.actionsShouldDisplay && this.props.onActionsDisplayClick();
-                }}>
+                className={this.props.shrink ? styles.shrink : ""}>
                 <EditableHead
                     isPrimaryList={listInfo.isPrimary}
                     listName={listInfo.name}
@@ -100,11 +88,11 @@ export class AreaView extends React.Component<Props, State> {
                     switchDoneItems={this.switchDoneItems}
                     doneItemsDisplay={this.state.showDoneItems}
                     onColorPick={this.props.onColorPick}
-                    onActionsDisplayClick={this.props.onActionsDisplayClick}
-                    actionsShouldDisplay={this.props.actionsShouldDisplay}
+                    // onActionsDisplayClick={this.props.onActionsDisplayClick}
+                    // actionsShouldDisplay={this.props.actionsShouldDisplay}
                 />
                 <AreaViewContent
-                    isPrimary={listInfo.isPrimary}
+                    isPrimaryList={listInfo.isPrimary}
                     items={this.props.todoItems}
                     checkboxClicked={this.toggleItem}
                     itemClicked={this.displayDetailView}
@@ -190,8 +178,7 @@ export class AreaView extends React.Component<Props, State> {
      * @param e 鼠标点击事件
      * @param name `TodoItem`的名称
      */
-    private toggleItem(e: React.MouseEvent<HTMLDivElement>, name: string) {
-        e.stopPropagation();
+    private toggleItem(name: string) {
         // 切换完成状态
         this.props.toggleItemInList(name, this.props.listInfo.name);
     }
@@ -220,7 +207,7 @@ export class AreaView extends React.Component<Props, State> {
      * @param e 鼠标点击事件
      * @param name 选中`TodoItem`的名称
      */
-    private displayDetailView(e: React.MouseEvent<HTMLLIElement>, name: string) {
+    private displayDetailView(name: string) {
         this.props.itemClicked(name, this.props.listInfo.name);
     }
 }

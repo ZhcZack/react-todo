@@ -1,6 +1,11 @@
+/**
+ * 操作窗口里的选项按钮
+ */
+
 import * as React from "react";
 import { mix } from "../../lib";
 
+// 样式表
 const styles: { [prop: string]: string } = require("./AreaActionButton.css");
 
 interface Props {
@@ -18,72 +23,29 @@ interface Props {
     text: string;
 }
 
-interface State {
-    // /**
-    //  * 按钮的hover状态
-    //  */
-    // hover: boolean
-}
+interface State {}
 
-// const styles: React.CSSProperties = {
-//   height: 40,
-//   display: 'flex',
-//   justifyContent: 'center',
-//   alignItems: 'center',
-//   cursor: 'pointer',
-// }
-// const hoverStyle: React.CSSProperties = {
-//   backgroundColor: 'rgba(206, 197, 197, 0.2)',
-// }
-
-/**
- * 操作列表里的选项按钮
- */
 export class ActionButton extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        // this.state = {
-        //   hover: false,
-        // }
 
         // bind methods
         this.handleClick = this.handleClick.bind(this);
-        // this.mouseEnter = this.mouseEnter.bind(this)
-        // this.mouseLeave = this.mouseLeave.bind(this)
     }
+
     render() {
-        // let S = mix(styles, this.props.style ? this.props.style : {})
-        // if (this.state.hover) {
-        //   S = mix(S, hoverStyle)
-        // }
         return (
-            <li
-                className={styles.button}
-                onClick={this.handleClick}
-                // onMouseEnter={this.mouseEnter}
-                // onMouseLeave={this.mouseLeave}
-            >
+            <li className={styles.button} onClick={this.handleClick}>
                 {this.props.text}
             </li>
         );
     }
 
+    /**
+     * 点击按钮，具体的功能由父组件决定
+     */
     private handleClick(e: React.MouseEvent<HTMLLIElement>) {
         e.stopPropagation();
         this.props.onClick();
     }
-
-    // private mouseEnter(e: React.MouseEvent<HTMLLIElement>) {
-    //   e.stopPropagation()
-    //   this.setState({
-    //     hover: true,
-    //   })
-    // }
-
-    // private mouseLeave(e: React.MouseEvent<HTMLLIElement>) {
-    //   e.stopPropagation()
-    //   this.setState({
-    //     hover: false,
-    //   })
-    // }
 }

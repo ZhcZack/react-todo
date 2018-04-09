@@ -18968,9 +18968,9 @@ module.exports = {"app":"App-app-2hfFHIu"};
 
 /***/ }),
 
-/***/ "./src/app.tsx":
+/***/ "./src/App.tsx":
 /*!*********************!*\
-  !*** ./src/app.tsx ***!
+  !*** ./src/App.tsx ***!
   \*********************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -19020,7 +19020,6 @@ var App = /** @class */ (function (_super) {
             itemsOfList: [],
             detailItem: undefined,
             // colorTheme: this.server.themeForList(this.server.lastModified),
-            actionsShouldDisplay: false,
             displayDataErrorAlert: false,
             dataErrorMessage: "",
             displayDeleteListAlert: false,
@@ -19042,7 +19041,6 @@ var App = /** @class */ (function (_super) {
         _this.handleDrop = _this.handleDrop.bind(_this);
         _this.handleDragEnd = _this.handleDragEnd.bind(_this);
         _this.handleColorPick = _this.handleColorPick.bind(_this);
-        _this.toggleActionsDisplay = _this.toggleActionsDisplay.bind(_this);
         _this.alertDefaultAction = _this.alertDefaultAction.bind(_this);
         _this.copyItemToPrimaryListFromDetailView = _this.copyItemToPrimaryListFromDetailView.bind(_this);
         _this.cancelCopyToPrimaryList = _this.cancelCopyToPrimaryList.bind(_this);
@@ -19186,16 +19184,7 @@ var App = /** @class */ (function (_super) {
         this.setState({
             displayDataErrorAlert: false,
             displayDeleteListAlert: false,
-            actionsShouldDisplay: false,
         });
-    };
-    /**
-     * 显示/隐藏area view的操作窗口
-     */
-    App.prototype.toggleActionsDisplay = function () {
-        this.setState(function (prevState) { return ({
-            actionsShouldDisplay: !prevState.actionsShouldDisplay,
-        }); });
     };
     /**
      * 拖拽完成/结束时的处理方法，将一个todo移动到另一个列表中去。
@@ -19407,7 +19396,6 @@ var App = /** @class */ (function (_super) {
         this.setState({
             listInfos: infos,
             lastModifiedListName: infos[0].name,
-            actionsShouldDisplay: false,
             displayDeleteListAlert: false,
         });
         // 这里要继续使用这个方法，因为之前的todos要被清空换新
@@ -19430,8 +19418,6 @@ var App = /** @class */ (function (_super) {
         this.setState({
             listInfos: infos,
             lastModifiedListName: listName,
-            // colorTheme: this.server.themeForList(this.server.lastModified),
-            actionsShouldDisplay: false,
         });
         // 这里也要使用这个方法，因为切换列表也要清空换新。
         this.fetchItems();
@@ -19755,8 +19741,8 @@ var App = /** @class */ (function (_super) {
             // currentListName={this.state.lastModifiedListName}
             , { 
                 // currentListName={this.state.lastModifiedListName}
-                switchList: this.switchList, addNewList: this.addNewList, listInfos: this.state.listInfos, onDrop: this.handleDrop, actionsDisplay: this.state.actionsShouldDisplay, onActionsDisplayClick: this.toggleActionsDisplay }),
-            React.createElement(AreaView_1.AreaView, { shrink: this.state.detailItem !== undefined, listInfo: listInfo, todoItems: this.state.itemsOfList, renameList: this.renameList, shouldDeleteList: this.shouldDeleteList, addNewItemInList: this.addNewItemInList, toggleItemInList: this.toggleItemInList, itemClicked: this.itemClicked, onDragStart: this.handleDragStart, onDragEnd: this.handleDragEnd, onColorPick: this.handleColorPick, onActionsDisplayClick: this.toggleActionsDisplay, actionsShouldDisplay: this.state.actionsShouldDisplay }),
+                switchList: this.switchList, addNewList: this.addNewList, listInfos: this.state.listInfos, onDrop: this.handleDrop }),
+            React.createElement(AreaView_1.AreaView, { shrink: this.state.detailItem !== undefined, listInfo: listInfo, todoItems: this.state.itemsOfList, renameList: this.renameList, shouldDeleteList: this.shouldDeleteList, addNewItemInList: this.addNewItemInList, toggleItemInList: this.toggleItemInList, itemClicked: this.itemClicked, onDragStart: this.handleDragStart, onDragEnd: this.handleDragEnd, onColorPick: this.handleColorPick }),
             React.createElement(DetailView_1.DetailView, { listName: this.state.lastModifiedListName, item: this.state.detailItem, onCloseClicked: this.handleCloseFromDetailView, onDeleteClicked: this.handleDeleteFromDetailView, onToggleClicked: this.handleToggleFromDetailView, onCommentsChange: this.handleCommentsChange, onCopyToPrimary: this.copyItemToPrimaryListFromDetailView, onCancelCopyToPrimary: this.cancelCopyToPrimaryList }),
             this.state.displayDataErrorAlert && (React.createElement(GlobalAlert_1.Alert, { display: this.state.displayDataErrorAlert, message: this.state.dataErrorMessage, alertDefaultAction: this.alertDefaultAction, type: GlobalAlert_1.AlertType.Alert })),
             this.state.displayDeleteListAlert && (React.createElement(GlobalAlert_1.Alert, { display: this.state.displayDeleteListAlert, message: this.state.deleteConfirmMessage, alertDefaultAction: this.alertDefaultAction, alertConfirmAction: this.deleteList, type: GlobalAlert_1.AlertType.Confirm }))));
@@ -20031,7 +20017,7 @@ exports.ActionButton = ActionButton;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"actions":"AreaActions-actions-3t2tT77","display":"AreaActions-display-2vVG8-6","buttonList":"AreaActions-buttonList-2s_2LTi"};
+module.exports = {"actions":"AreaActions-actions-3t2tT77","display":"AreaActions-display-2vVG8-6","buttonList":"AreaActions-buttonList-2s_2LTi","globalBackground":"AreaActions-globalBackground-Hn68LaF"};
 
 /***/ }),
 
@@ -20044,6 +20030,11 @@ module.exports = {"actions":"AreaActions-actions-3t2tT77","display":"AreaActions
 
 "use strict";
 
+/**
+ * 操作列表的弹出窗口
+ *
+ * 可以重命名和删除列表，也也可以显示/隐藏已完成的todo事项
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -20058,39 +20049,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var ThemePicker_1 = __webpack_require__(/*! ../areaview/ThemePicker */ "./src/components/areaview/ThemePicker.tsx");
 var AreaActionButton_1 = __webpack_require__(/*! ./AreaActionButton */ "./src/components/areaview/AreaActionButton.tsx");
-// 样式
+// 样式表
 var styles = __webpack_require__(/*! ./AreaActions.css */ "./src/components/areaview/AreaActions.css");
-/**
- * 操作菜单的样式
- */
-// const actionStyles = {
-//     position: "absolute",
-//     top: "calc(100% + 5px)",
-//     right: 10,
-//     visibility: "hidden",
-//     width: 322,
-//     listStyleType: "none",
-//     backgroundColor: "white",
-//     border: "1px solid rgba(206, 197, 197, 0.5)",
-//     padding: 10,
-//     marginRight: 0,
-// } as React.CSSProperties;
-// const actionDisplay = {
-//     visibility: "visible",
-// };
 var AreaActions = /** @class */ (function (_super) {
     __extends(AreaActions, _super);
-    function AreaActions() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function AreaActions(props) {
+        var _this = _super.call(this, props) || this;
+        _this.closeActions = _this.closeActions.bind(_this);
+        return _this;
     }
+    /**
+     * 关闭操作窗口
+     */
+    AreaActions.prototype.closeActions = function (e) {
+        e.stopPropagation();
+        this.props.closeActions();
+    };
     AreaActions.prototype.render = function () {
-        var actionShouldDisplay = this.props.actionsShouldDisplay;
-        return (React.createElement("div", { className: (actionShouldDisplay ? "animated fadeIn" : "animated") + " " + (actionShouldDisplay ? styles.actions + " " + styles.display : styles.actions) },
-            React.createElement(ThemePicker_1.ThemePicker, { onColorPick: this.props.onColorPick }),
-            React.createElement("ul", { className: styles.buttonList },
-                React.createElement(AreaActionButton_1.ActionButton, { onClick: this.props.switchDoneItems, text: (this.props.doneItemsDisplay ? "隐藏" : "显示") + "已完成的项目" }),
-                React.createElement(AreaActionButton_1.ActionButton, { onClick: this.props.renameClicked, text: "重命名列表" }),
-                React.createElement(AreaActionButton_1.ActionButton, { onClick: this.props.deleteClicked, text: "删除列表", style: { color: "red" } }))));
+        return (React.createElement("div", { className: styles.globalBackground, onClick: this.closeActions },
+            React.createElement("div", { className: "animated fadeIn" + " " + styles.actions + " " + styles.display },
+                React.createElement(ThemePicker_1.ThemePicker, { onColorPick: this.props.onColorPick }),
+                React.createElement("ul", { className: styles.buttonList },
+                    React.createElement(AreaActionButton_1.ActionButton, { onClick: this.props.switchDoneItems, text: (this.props.doneItemsDisplay ? "隐藏" : "显示") + "已完成的项目" }),
+                    React.createElement(AreaActionButton_1.ActionButton, { onClick: this.props.renameClicked, text: "重命名列表" }),
+                    React.createElement(AreaActionButton_1.ActionButton, { onClick: this.props.deleteClicked, text: "删除列表", style: { color: "red" } })))));
     };
     return AreaActions;
 }(React.Component));
@@ -20133,7 +20115,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var AddNewItem_1 = __webpack_require__(/*! ./AddNewItem */ "./src/components/areaview/AddNewItem.tsx");
-var ViewContent_1 = __webpack_require__(/*! ./ViewContent */ "./src/components/areaview/ViewContent.tsx");
+var ViewTodoContent_1 = __webpack_require__(/*! ./ViewTodoContent */ "./src/components/areaview/ViewTodoContent.tsx");
 var EditableHead_1 = __webpack_require__(/*! ./EditableHead */ "./src/components/areaview/EditableHead.tsx");
 var styles = __webpack_require__(/*! ./AreaView.css */ "./src/components/areaview/AreaView.css");
 // const viewStyles: React.CSSProperties = {
@@ -20163,16 +20145,12 @@ var AreaView = /** @class */ (function (_super) {
         return _this;
     }
     AreaView.prototype.render = function () {
-        var _this = this;
         var listInfo = this.props.listInfo;
         return (React.createElement("div", { 
             // style={this.props.shrink ? mix(viewStyles, viewShrinkStyles) : viewStyles}
-            id: styles.areaView, className: this.props.shrink ? styles.shrink : "", onClick: function (e) {
-                e.stopPropagation();
-                _this.props.actionsShouldDisplay && _this.props.onActionsDisplayClick();
-            } },
-            React.createElement(EditableHead_1.EditableHead, { isPrimaryList: listInfo.isPrimary, listName: listInfo.name, colorTheme: listInfo.theme, renameList: this.renameList, shouldDeleteList: this.props.shouldDeleteList, switchDoneItems: this.switchDoneItems, doneItemsDisplay: this.state.showDoneItems, onColorPick: this.props.onColorPick, onActionsDisplayClick: this.props.onActionsDisplayClick, actionsShouldDisplay: this.props.actionsShouldDisplay }),
-            React.createElement(ViewContent_1.AreaViewContent, { isPrimary: listInfo.isPrimary, items: this.props.todoItems, checkboxClicked: this.toggleItem, itemClicked: this.displayDetailView, onDragStart: this.handleDragStart, onDragEnd: this.props.onDragEnd, showDoneItems: this.state.showDoneItems }),
+            id: styles.areaView, className: this.props.shrink ? styles.shrink : "" },
+            React.createElement(EditableHead_1.EditableHead, { isPrimaryList: listInfo.isPrimary, listName: listInfo.name, colorTheme: listInfo.theme, renameList: this.renameList, shouldDeleteList: this.props.shouldDeleteList, switchDoneItems: this.switchDoneItems, doneItemsDisplay: this.state.showDoneItems, onColorPick: this.props.onColorPick }),
+            React.createElement(ViewTodoContent_1.AreaViewContent, { isPrimary: listInfo.isPrimary, items: this.props.todoItems, checkboxClicked: this.toggleItem, itemClicked: this.displayDetailView, onDragStart: this.handleDragStart, onDragEnd: this.props.onDragEnd, showDoneItems: this.state.showDoneItems }),
             React.createElement(AddNewItem_1.AddNewItem, { value: this.state.inputValue, onValueChange: this.handleInput, onAddClicked: this.addNewItem, onCancelClicked: this.cancelInput })));
     };
     AreaView.getDerivedStateFromProps = function (nextProps, prevState) {
@@ -20282,7 +20260,7 @@ exports.AreaView = AreaView;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"head":"EditableHead-head-19QzYRI","headDirectChild":"EditableHead-headDirectChild-33S3uLe","hide":"EditableHead-hide-3UJdIsC","name":"EditableHead-name-jjFy9La","switcher":"EditableHead-switcher-2ngK88g"};
+module.exports = {"head":"EditableHead-head-19QzYRI","headDirectChild":"EditableHead-headDirectChild-33S3uLe","hide":"EditableHead-hide-3UJdIsC","name":"EditableHead-name-jjFy9La","input":"EditableHead-input-3WZ1UID","switcher":"EditableHead-switcher-2ngK88g"};
 
 /***/ }),
 
@@ -20295,6 +20273,9 @@ module.exports = {"head":"EditableHead-head-19QzYRI","headDirectChild":"Editable
 
 "use strict";
 
+/**
+ * AreaView的顶部区域，可对列表进行“重命名”，“删除”等操作。
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -20309,49 +20290,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var AreaActions_1 = __webpack_require__(/*! ./AreaActions */ "./src/components/areaview/AreaActions.tsx");
 // import { mix } from "../../lib";
+// 样式表
 var styles = __webpack_require__(/*! ./EditableHead.css */ "./src/components/areaview/EditableHead.css");
-/**
- * 最外层样式
- */
-// const headStyles = {
-//     height: 200,
-//     padding: 10,
-//     borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
-//     display: "flex",
-//     position: "relative",
-// } as React.CSSProperties;
-// const headDirectChild = {
-//     alignSelf: "flex-end",
-// } as React.CSSProperties;
-/**
- * 列表名称文字的样式
- */
-// const nameLabelStyles = {
-//     fontSize: "2rem",
-//     color: "white",
-// };
-/**
- * 显示操作菜单按钮的样式
- */
-// const switcherStyles = {
-//     width: 40,
-//     height: 30,
-//     position: "absolute",
-//     right: 10,
-//     bottom: 10,
-//     border: "none",
-//     cursor: "pointer",
-//     color: "white",
-//     fontWeight: "bold",
-// } as React.CSSProperties;
-var AreaViewHead = /** @class */ (function (_super) {
-    __extends(AreaViewHead, _super);
-    function AreaViewHead(props) {
+var EditableHead = /** @class */ (function (_super) {
+    __extends(EditableHead, _super);
+    function EditableHead(props) {
         var _this = _super.call(this, props) || this;
         _this.renameInput = null;
         _this.state = {
             isEdit: false,
             name: _this.props.listName,
+            isActionDisplay: false,
         };
         _this.inputChange = _this.inputChange.bind(_this);
         _this.renameClicked = _this.renameClicked.bind(_this);
@@ -20359,30 +20308,30 @@ var AreaViewHead = /** @class */ (function (_super) {
         _this.handleSwitch = _this.handleSwitch.bind(_this);
         _this.inputBlur = _this.inputBlur.bind(_this);
         _this.switchDoneItems = _this.switchDoneItems.bind(_this);
+        _this.closeActions = _this.closeActions.bind(_this);
         return _this;
     }
-    AreaViewHead.prototype.componentWillReceiveProps = function (nextProps) {
-        // 传入新的listName之后，保存这个值作为编辑的预留名称
-        this.setState({
+    EditableHead.getDerivedStateFromProps = function (nextProps, prevState) {
+        return {
             name: nextProps.listName,
-        });
+            isEdit: false,
+            isActionDisplay: false,
+        };
     };
     /**
      * 保存输入的内容，作为新的列表名
-     * @param e 输入内容改变事件
      */
-    AreaViewHead.prototype.inputChange = function (e) {
+    EditableHead.prototype.inputChange = function (e) {
         this.setState({
             name: e.target.value,
         });
     };
     /**
      * 进行重命名工作
-     * @param e 鼠标点击事件
      */
-    AreaViewHead.prototype.renameClicked = function () {
+    EditableHead.prototype.renameClicked = function () {
         var _this = this;
-        this.props.onActionsDisplayClick();
+        this.toggleActionsDisplay();
         this.setState({ isEdit: true }, function () {
             if (_this.renameInput) {
                 _this.renameInput.focus();
@@ -20392,38 +20341,54 @@ var AreaViewHead = /** @class */ (function (_super) {
     };
     /**
      * 确认删除列表操作
-     * @param e 鼠标点击事件
      */
-    AreaViewHead.prototype.deleteClicked = function () {
+    EditableHead.prototype.deleteClicked = function () {
         this.props.shouldDeleteList();
     };
     /**
      * 显示/隐藏操作列表的视图
-     * @param e 鼠标点击事件
      */
-    AreaViewHead.prototype.handleSwitch = function (e) {
+    EditableHead.prototype.handleSwitch = function (e) {
         e.stopPropagation();
-        this.props.onActionsDisplayClick();
+        // this.props.onActionsDisplayClick();
+        this.toggleActionsDisplay();
+    };
+    /**
+     * 这个方法用于切换列表操作框，将它显示或隐藏。
+     */
+    EditableHead.prototype.toggleActionsDisplay = function () {
+        this.setState(function (prevState) { return ({
+            isActionDisplay: !prevState.isActionDisplay,
+        }); });
     };
     /**
      * 当焦点从输入框移走时，进行列表的重命名工作
-     * @param e 焦点移走事件
      */
-    AreaViewHead.prototype.inputBlur = function (e) {
+    EditableHead.prototype.inputBlur = function (e) {
         e.stopPropagation();
         this.props.renameList(this.state.name);
         this.setState({
             isEdit: false,
         });
     };
-    AreaViewHead.prototype.switchDoneItems = function () {
+    /**
+     * 显示/隐藏已完成的todo事项
+     */
+    EditableHead.prototype.switchDoneItems = function () {
         this.props.switchDoneItems();
-        this.props.onActionsDisplayClick();
+        this.toggleActionsDisplay();
     };
-    AreaViewHead.prototype.render = function () {
+    /**
+     * 关闭操作窗口
+     */
+    EditableHead.prototype.closeActions = function () {
+        this.setState({
+            isActionDisplay: false,
+        });
+    };
+    EditableHead.prototype.render = function () {
         var _this = this;
         var color = this.props.colorTheme;
-        var hideS = this.state.isEdit ? { display: "none" } : {};
         if (this.props.isPrimaryList) {
             return (React.createElement("div", { className: styles.head, style: {
                     background: "linear-gradient(to right, " + color + ", " + (color + "b3") + ")",
@@ -20434,13 +20399,17 @@ var AreaViewHead = /** @class */ (function (_super) {
                 background: "linear-gradient(to right, " + color + ", " + (color + "b3") + ")",
             } },
             React.createElement("div", { className: styles.headDirectChild + " " + styles.name + " " + (this.state.isEdit ? styles.hide : "") }, this.props.listName),
-            React.createElement("input", { className: styles.headDirectChild + " " + (this.state.isEdit ? "" : styles.hide), type: "text", onChange: this.inputChange, ref: function (input) { return (_this.renameInput = input); }, onBlur: this.inputBlur }),
-            React.createElement("button", { className: styles.switcher, style: { backgroundColor: color }, onClick: this.handleSwitch }, "\u00B7\u00B7\u00B7"),
-            React.createElement(AreaActions_1.AreaActions, { actionsShouldDisplay: this.props.actionsShouldDisplay, doneItemsDisplay: this.props.doneItemsDisplay, onColorPick: this.props.onColorPick, switchDoneItems: this.switchDoneItems, renameClicked: this.renameClicked, deleteClicked: this.deleteClicked })));
+            React.createElement("input", { className: styles.headDirectChild + " " + styles.input + " " + (this.state.isEdit ? "" : styles.hide), type: "text", onChange: this.inputChange, ref: function (input) { return (_this.renameInput = input); }, onBlur: this.inputBlur }),
+            React.createElement("div", { className: styles.switcher, style: { backgroundColor: color }, onClick: this.handleSwitch }, "\u00B7\u00B7\u00B7"),
+            this.state.isActionDisplay && (React.createElement(AreaActions_1.AreaActions
+            // actionsShouldDisplay={this.props.actionsShouldDisplay}
+            , { 
+                // actionsShouldDisplay={this.props.actionsShouldDisplay}
+                doneItemsDisplay: this.props.doneItemsDisplay, onColorPick: this.props.onColorPick, switchDoneItems: this.switchDoneItems, renameClicked: this.renameClicked, deleteClicked: this.deleteClicked, closeActions: this.closeActions }))));
     };
-    return AreaViewHead;
+    return EditableHead;
 }(React.Component));
-exports.EditableHead = AreaViewHead;
+exports.EditableHead = EditableHead;
 
 
 /***/ }),
@@ -20466,6 +20435,11 @@ module.exports = {"picker":"ThemePicker-picker-U0BqUQT","text":"ThemePicker-text
 
 "use strict";
 
+/**
+ * 列表主题颜色选择器
+ *
+ * 目前只有五种颜色供选择
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -20479,36 +20453,6 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var styles = __webpack_require__(/*! ./ThemePicker.css */ "./src/components/areaview/ThemePicker.css");
-/**
- * 组件最外层样式
- */
-// const colorPickerStyles = {
-//     marginBottom: 10,
-// };
-/**
- * 文字部分样式
- */
-// const themeTextStyles = {
-//     marginBottom: 10,
-// };
-/**
- * 颜色列表的样式
- */
-// const pickerListStyles = {
-//     listStyleType: "none",
-//     display: "flex",
-//     flexWrap: "wrap",
-//     height: 50,
-//     justifyContent: "space-between",
-// } as React.CSSProperties;
-/**
- * 每个颜色项目的样式
- */
-// const listElementStyles = {
-//     width: 50,
-//     height: 50,
-//     cursor: "pointer",
-// };
 var ThemePicker = /** @class */ (function (_super) {
     __extends(ThemePicker, _super);
     function ThemePicker() {
@@ -20535,27 +20479,30 @@ exports.ThemePicker = ThemePicker;
 
 /***/ }),
 
-/***/ "./src/components/areaview/ViewContent.css":
-/*!*************************************************!*\
-  !*** ./src/components/areaview/ViewContent.css ***!
-  \*************************************************/
+/***/ "./src/components/areaview/ViewTodoContent.css":
+/*!*****************************************************!*\
+  !*** ./src/components/areaview/ViewTodoContent.css ***!
+  \*****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"content":"ViewContent-content-3CP5Vjw","list":"ViewContent-list-1iWogZ3"};
+module.exports = {"content":"ViewTodoContent-content-23z30C3","list":"ViewTodoContent-list-2bVwiEm"};
 
 /***/ }),
 
-/***/ "./src/components/areaview/ViewContent.tsx":
-/*!*************************************************!*\
-  !*** ./src/components/areaview/ViewContent.tsx ***!
-  \*************************************************/
+/***/ "./src/components/areaview/ViewTodoContent.tsx":
+/*!*****************************************************!*\
+  !*** ./src/components/areaview/ViewTodoContent.tsx ***!
+  \*****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+/**
+ * 显示todo列表内容的区域
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -20568,24 +20515,36 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var ViewItem_1 = __webpack_require__(/*! ./ViewItem */ "./src/components/areaview/ViewItem.tsx");
+var ViewTodoItem_1 = __webpack_require__(/*! ./ViewTodoItem */ "./src/components/areaview/ViewTodoItem.tsx");
 // 样式
-var styles = __webpack_require__(/*! ./ViewContent.css */ "./src/components/areaview/ViewContent.css");
+var styles = __webpack_require__(/*! ./ViewTodoContent.css */ "./src/components/areaview/ViewTodoContent.css");
 var AreaViewContent = /** @class */ (function (_super) {
     __extends(AreaViewContent, _super);
     function AreaViewContent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    /**
+     * 根据todo的内容以及列表的状态生成`<li>`元素
+     */
     AreaViewContent.prototype.createList = function () {
         var _this = this;
         return this.props.items.map(function (item) {
             if (_this.props.showDoneItems) {
-                return (React.createElement(ViewItem_1.AreaViewItem, { isPrimary: _this.props.isPrimary, item: item, onItemClicked: _this.props.itemClicked, onCheckboxClicked: _this.props.checkboxClicked, onDragStart: _this.props.onDragStart, onDragEnd: _this.props.onDragEnd, key: item.name }));
+                return (React.createElement(ViewTodoItem_1.AreaViewItem
+                // isPrimary={this.props.isPrimary}
+                , { 
+                    // isPrimary={this.props.isPrimary}
+                    item: item, onItemClicked: _this.props.itemClicked, onCheckboxClicked: _this.props.checkboxClicked, onDragStart: _this.props.onDragStart, onDragEnd: _this.props.onDragEnd, key: item.name }));
             }
+            // primary list中的todo是不会被隐藏的，不在primary list中的才会被隐藏
             if (item.done && !_this.props.isPrimary) {
                 return null;
             }
-            return (React.createElement(ViewItem_1.AreaViewItem, { isPrimary: _this.props.isPrimary, item: item, onItemClicked: _this.props.itemClicked, onCheckboxClicked: _this.props.checkboxClicked, onDragStart: _this.props.onDragStart, onDragEnd: _this.props.onDragEnd, key: item.name }));
+            return (React.createElement(ViewTodoItem_1.AreaViewItem
+            // isPrimary={this.props.isPrimary}
+            , { 
+                // isPrimary={this.props.isPrimary}
+                item: item, onItemClicked: _this.props.itemClicked, onCheckboxClicked: _this.props.checkboxClicked, onDragStart: _this.props.onDragStart, onDragEnd: _this.props.onDragEnd, key: item.name }));
         });
     };
     AreaViewContent.prototype.render = function () {
@@ -20599,27 +20558,30 @@ exports.AreaViewContent = AreaViewContent;
 
 /***/ }),
 
-/***/ "./src/components/areaview/ViewItem.css":
-/*!**********************************************!*\
-  !*** ./src/components/areaview/ViewItem.css ***!
-  \**********************************************/
+/***/ "./src/components/areaview/ViewTodoItem.css":
+/*!**************************************************!*\
+  !*** ./src/components/areaview/ViewTodoItem.css ***!
+  \**************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"todo":"ViewItem-todo-J6m5S6_","checkbox":"ViewItem-checkbox-3WJrUe6","checked":"ViewItem-checked-2CXvd7W","text":"ViewItem-text-1OPR_y-","done":"ViewItem-done-3Kmbw1T","source":"ViewItem-source-3n4y3bx","comment":"ViewItem-comment--Ju2Bt1","inPrimary":"ViewItem-inPrimary-2b7o7tu"};
+module.exports = {"todo":"ViewTodoItem-todo-kCI7EnG","checkbox":"ViewTodoItem-checkbox-1GBcfCg","checked":"ViewTodoItem-checked-2ScWkLI","text":"ViewTodoItem-text-2D2uZfl","done":"ViewTodoItem-done-1im6UYC","source":"ViewTodoItem-source-1h1QnVZ","comment":"ViewTodoItem-comment-3sRH1f2","inPrimary":"ViewTodoItem-inPrimary-362FUWU"};
 
 /***/ }),
 
-/***/ "./src/components/areaview/ViewItem.tsx":
-/*!**********************************************!*\
-  !*** ./src/components/areaview/ViewItem.tsx ***!
-  \**********************************************/
+/***/ "./src/components/areaview/ViewTodoItem.tsx":
+/*!**************************************************!*\
+  !*** ./src/components/areaview/ViewTodoItem.tsx ***!
+  \**************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+/**
+ * 显示todo事项的区域
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -20633,91 +20595,18 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 // 样式
-var styles = __webpack_require__(/*! ./ViewItem.css */ "./src/components/areaview/ViewItem.css");
-// const todoStyles = {
-//     height: 60,
-//     display: "flex",
-//     alignItems: "center",
-//     padding: "10px 0",
-//     borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
-//     backgroundColor: "transparent",
-//     transition: "background-color 0.3s",
-// } as React.CSSProperties;
-// const todoHover = {
-//     backgroundColor: "rgba(206, 197, 197, 0.5)",
-// };
-/**
- * 自定义checkbox的样式
- */
-// const checkboxStyles = {
-//     fontSize: "1.5rem",
-//     width: 30,
-//     height: 30,
-//     margin: "0 10px",
-//     borderRadius: "50%",
-//     display: "flex",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     alignSelf: "center",
-//     border: "1px solid gray",
-//     color: "transparent",
-//     backgroundColor: "transparent",
-//     cursor: "pointer",
-//     transition: "color 0.3s, background-color 0.3s",
-// } as React.CSSProperties;
-// const checkboxHover = {
-//     color: "white",
-//     backgroundColor: "gray",
-// };
-// const checkedBox = {
-//     color: "white",
-//     backgroundColor: "green",
-// };
-/**
- * todo文字部分的样式
- */
-// const itemStyles = {
-//     display: "flex",
-//     flexDirection: "column",
-// } as React.CSSProperties;
-/**
- * todo完成时文字部分的样式
- */
-// const itemDoneStyles = {
-//     textDecoration: "line-through",
-//     color: "gray",
-// } as React.CSSProperties;
-/**
- * 备注等信息文字部分的样式
- */
-// const itemExtraStyles = {
-//     display: "flex",
-// };
-// const extraDirectChild = {
-//     fontSize: "0.6em",
-//     color: "gray",
-//     marginRight: 10,
-// };
+var styles = __webpack_require__(/*! ./ViewTodoItem.css */ "./src/components/areaview/ViewTodoItem.css");
 var AreaViewItem = /** @class */ (function (_super) {
     __extends(AreaViewItem, _super);
     function AreaViewItem(props) {
         var _this = _super.call(this, props) || this;
-        // this.state = {
-        //   todoHover: false,
-        //   checkboxHover: false,
-        // };
         // bind methods
         _this.handleDrag = _this.handleDrag.bind(_this);
         _this.handleDragEnd = _this.handleDragEnd.bind(_this);
         return _this;
-        // this.handleTodoMouseEnter = this.handleTodoMouseEnter.bind(this);
-        // this.handleTodoMouseLeave = this.handleTodoMouseLeave.bind(this);
-        // this.handleCheckboxMouseEnter = this.handleCheckboxMouseEnter.bind(this);
-        // this.handleCheckboxMouseLeave = this.handleCheckboxMouseLeave.bind(this);
     }
     /**
      * 拖拽开始的处理方法，将todo的数据转化为字符串并交由父组件处理
-     * @param e 拖拽开始事件
      */
     AreaViewItem.prototype.handleDrag = function (e) {
         var data = JSON.stringify(this.props.item);
@@ -20727,48 +20616,20 @@ var AreaViewItem = /** @class */ (function (_super) {
     };
     /**
      * 拖拽结束/被取消了
-     * @param e 拖拽结束/被取消的处理方法
      */
     AreaViewItem.prototype.handleDragEnd = function (e) {
         e.stopPropagation();
         this.props.onDragEnd();
     };
-    // private handleTodoMouseEnter(e: React.MouseEvent<HTMLLIElement>) {
-    //     e.stopPropagation();
-    //     this.setState({
-    //         todoHover: true,
-    //     });
-    // }
-    // private handleTodoMouseLeave(e: React.MouseEvent<HTMLLIElement>) {
-    //     e.stopPropagation();
-    //     this.setState({
-    //         todoHover: false,
-    //     });
-    // }
     AreaViewItem.prototype.render = function () {
         var _this = this;
         var item = this.props.item;
-        // let todoS = todoStyles;
-        // if (this.state.todoHover) {
-        //     todoS = mix(todoS, todoHover);
-        // }
-        // let checkboxS = checkboxStyles;
-        // if (item.done) {
-        //     checkboxS = mix(checkboxS, checkedBox);
-        // }
-        // if (this.state.checkboxHover) {
-        //     checkboxS = mix(checkboxS, checkboxHover);
-        // }
-        return (React.createElement("li", { draggable: true, 
-            // style={todoS}
-            className: styles.todo, onClick: function (e) { return _this.props.onItemClicked(e, item.name); }, onDragStart: this.handleDrag, onDragEnd: this.handleDragEnd },
-            React.createElement("div", { 
-                // style={checkboxS}
-                className: styles.checkbox + " " + (item.done ? styles.checked : ""), onClick: function (e) { return _this.props.onCheckboxClicked(e, item.name); } }, "\u221A"),
+        return (React.createElement("li", { draggable: true, className: styles.todo, onClick: function (e) { return _this.props.onItemClicked(e, item.name); }, onDragStart: this.handleDrag, onDragEnd: this.handleDragEnd },
+            React.createElement("div", { className: styles.checkbox + " " + (item.done ? styles.checked : ""), onClick: function (e) { return _this.props.onCheckboxClicked(e, item.name); } }, "\u221A"),
             React.createElement("div", { className: styles.text },
                 React.createElement("span", { className: item.done ? styles.text + " " + styles.done : "" }, item.name),
                 React.createElement("div", { className: styles.source },
-                    item.inPrimaryList && (React.createElement("span", { className: styles.comment + " " + styles.inPrimary }, this.props.isPrimary ? item.source : "我的一天")),
+                    item.inPrimaryList && (React.createElement("span", { className: styles.comment + " " + styles.inPrimary }, item.source)),
                     item.comments && React.createElement("span", { className: styles.comment }, "\u5907\u6CE8")))));
     };
     return AreaViewItem;
@@ -21625,11 +21486,7 @@ var ListView = /** @class */ (function (_super) {
         return "\u65E0\u547D\u540D\u6E05\u5355" + (this.count > 0 ? this.count : "");
     };
     ListView.prototype.render = function () {
-        var _this = this;
-        return (React.createElement("div", { id: styles.listView, onClick: function (e) {
-                e.stopPropagation();
-                _this.props.actionsDisplay && _this.props.onActionsDisplayClick();
-            } },
+        return (React.createElement("div", { id: styles.listView },
             React.createElement(Content_1.Content
             // currentListName={this.props.currentListName}
             , { 
@@ -22058,10 +21915,10 @@ exports.AlertButton = AlertButton;
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-var app_1 = __webpack_require__(/*! ./app */ "./src/app.tsx");
+var App_1 = __webpack_require__(/*! ./App */ "./src/App.tsx");
 // import 'animate.css'
 // import "./styles/index.scss";
-ReactDOM.render(React.createElement(app_1.App, null), document.getElementById("root"));
+ReactDOM.render(React.createElement(App_1.App, null), document.getElementById("root"));
 
 
 /***/ }),

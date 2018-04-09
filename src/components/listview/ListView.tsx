@@ -1,32 +1,32 @@
+/**
+ * 列表区域组件
+ *
+ * 显示所有列表的名称，以及一个“添加新列表”按钮
+ */
+
 import * as React from "react";
 import { Content } from "./Content";
 import { ListInfo } from "../../model/interface";
 import AddListButton from "./AddNewList";
 
+// 样式表
 const styles: { [prop: string]: string } = require("./ListView.css");
 
 interface ListViewProps {
-    /**当前进行处理的列表名称 */
-    // currentListName: string
     /**所有列表名称 */
     listInfos: ListInfo[];
     /**添加新列表 */
     addNewList(name: string): void;
     /**切换area view显示的列表 */
     switchList(listName: string): void;
+    /**
+     * 鼠标放开拖拽成功后，处理放置的todo事项
+     * @param targetListName 目标列表（鼠标放置处的列表）的名称
+     */
     onDrop(targetListName: string): void;
-    actionsDisplay: boolean;
-    onActionsDisplayClick(): void;
 }
 
 interface ListViewState {}
-
-// const viewStyles = {
-//   width: 280,
-//   position: 'relative',
-//   overflow: 'hidden',
-//   borderRight: '1px solid rgba(206, 197, 197, 0.5)',
-// } as React.CSSProperties
 
 /**
  * 列表目录
@@ -45,11 +45,9 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
     }
 
     /**
-     * 用户点击处理函数
-     * @param e `click`事件
+     * 切换列表，显示列表中的todo
      */
-    private handleClick(e: React.MouseEvent<HTMLLIElement>, name: string) {
-        e.stopPropagation();
+    private handleClick(name: string) {
         // console.log('handleClick: name is ' + name);
         this.props.switchList(name);
     }
@@ -79,14 +77,8 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
 
     render() {
         return (
-            <div
-                id={styles.listView}
-                onClick={e => {
-                    e.stopPropagation();
-                    this.props.actionsDisplay && this.props.onActionsDisplayClick();
-                }}>
+            <div id={styles.listView}>
                 <Content
-                    // currentListName={this.props.currentListName}
                     listInfos={this.props.listInfos}
                     onClick={this.handleClick}
                     onDrop={this.props.onDrop}

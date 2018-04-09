@@ -21,6 +21,10 @@
     color: white;
 }
 
+.input {
+    font-size: 2rem;
+}
+
 .switcher {
     width: 40px;
     height: 30px;
@@ -31,4 +35,8 @@
     cursor: pointer;
     color: white;
     font-weight: bold;
+    z-index: 11;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

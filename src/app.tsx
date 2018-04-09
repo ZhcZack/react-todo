@@ -23,12 +23,6 @@ interface AppState {
     itemsOfList: TodoItem[];
     /**detail view中显示/编辑的todo事项 */
     detailItem?: TodoItem;
-    /**area view的主题颜色 */
-    // colorTheme: string
-    /**
-     * area view操作列表是否要显示
-     */
-    actionsShouldDisplay: boolean;
     /**
      * 数据错误的提示框是否显示
      */
@@ -78,7 +72,6 @@ export class App extends React.Component<AppProps, AppState> {
             itemsOfList: [],
             detailItem: undefined,
             // colorTheme: this.server.themeForList(this.server.lastModified),
-            actionsShouldDisplay: false,
             displayDataErrorAlert: false,
             dataErrorMessage: "",
             displayDeleteListAlert: false,
@@ -101,7 +94,6 @@ export class App extends React.Component<AppProps, AppState> {
         this.handleDrop = this.handleDrop.bind(this);
         this.handleDragEnd = this.handleDragEnd.bind(this);
         this.handleColorPick = this.handleColorPick.bind(this);
-        this.toggleActionsDisplay = this.toggleActionsDisplay.bind(this);
         this.alertDefaultAction = this.alertDefaultAction.bind(this);
         this.copyItemToPrimaryListFromDetailView = this.copyItemToPrimaryListFromDetailView.bind(
             this,
@@ -254,17 +246,7 @@ export class App extends React.Component<AppProps, AppState> {
         this.setState({
             displayDataErrorAlert: false,
             displayDeleteListAlert: false,
-            actionsShouldDisplay: false,
         });
-    }
-
-    /**
-     * 显示/隐藏area view的操作窗口
-     */
-    private toggleActionsDisplay() {
-        this.setState(prevState => ({
-            actionsShouldDisplay: !prevState.actionsShouldDisplay,
-        }));
     }
 
     /**
@@ -497,7 +479,6 @@ export class App extends React.Component<AppProps, AppState> {
         this.setState({
             listInfos: infos,
             lastModifiedListName: infos[0].name,
-            actionsShouldDisplay: false,
             displayDeleteListAlert: false,
             // colorTheme: this.server.themeForList(this.server.lastModified),
             // itemsOfList: this.server.itemsOfList(listName),
@@ -525,9 +506,6 @@ export class App extends React.Component<AppProps, AppState> {
         this.setState({
             listInfos: infos,
             lastModifiedListName: listName,
-            // colorTheme: this.server.themeForList(this.server.lastModified),
-            actionsShouldDisplay: false,
-            // itemsOfList: this.server.itemsOfList(listName),
         });
         // 这里也要使用这个方法，因为切换列表也要清空换新。
         this.fetchItems();
@@ -880,8 +858,6 @@ export class App extends React.Component<AppProps, AppState> {
                     addNewList={this.addNewList}
                     listInfos={this.state.listInfos}
                     onDrop={this.handleDrop}
-                    actionsDisplay={this.state.actionsShouldDisplay}
-                    onActionsDisplayClick={this.toggleActionsDisplay}
                 />
                 <AreaView
                     shrink={this.state.detailItem !== undefined}
@@ -895,8 +871,6 @@ export class App extends React.Component<AppProps, AppState> {
                     onDragStart={this.handleDragStart}
                     onDragEnd={this.handleDragEnd}
                     onColorPick={this.handleColorPick}
-                    onActionsDisplayClick={this.toggleActionsDisplay}
-                    actionsShouldDisplay={this.state.actionsShouldDisplay}
                 />
                 <DetailView
                     listName={this.state.lastModifiedListName}
