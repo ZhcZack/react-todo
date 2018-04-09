@@ -52,7 +52,7 @@ export class AreaActions extends React.Component<Props, State> {
                     actionShouldDisplay ? `${styles.actions} ${styles.display}` : styles.actions
                 }`}>
                 <ThemePicker onColorPick={this.props.onColorPick} />
-                <ul>
+                <ul className={styles.buttonList}>
                     <ActionButton
                         onClick={this.props.switchDoneItems}
                         text={(this.props.doneItemsDisplay ? "隐藏" : "显示") + "已完成的项目"}

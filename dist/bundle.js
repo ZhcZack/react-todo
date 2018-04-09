@@ -18964,7 +18964,7 @@ if (false) {} else {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"app":"App-app-NghkZ4o"};
+module.exports = {"app":"App-app-2hfFHIu"};
 
 /***/ }),
 
@@ -19768,84 +19768,6 @@ exports.App = App;
 
 /***/ }),
 
-/***/ "./src/components/areaview/ActionButton.css":
-/*!**************************************************!*\
-  !*** ./src/components/areaview/ActionButton.css ***!
-  \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-module.exports = {"button":"ActionButton-button-JPuWiT-"};
-
-/***/ }),
-
-/***/ "./src/components/areaview/ActionButton.tsx":
-/*!**************************************************!*\
-  !*** ./src/components/areaview/ActionButton.tsx ***!
-  \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var styles = __webpack_require__(/*! ./ActionButton.css */ "./src/components/areaview/ActionButton.css");
-// const styles: React.CSSProperties = {
-//   height: 40,
-//   display: 'flex',
-//   justifyContent: 'center',
-//   alignItems: 'center',
-//   cursor: 'pointer',
-// }
-// const hoverStyle: React.CSSProperties = {
-//   backgroundColor: 'rgba(206, 197, 197, 0.2)',
-// }
-/**
- * 操作列表里的选项按钮
- */
-var ActionButton = /** @class */ (function (_super) {
-    __extends(ActionButton, _super);
-    function ActionButton(props) {
-        var _this = _super.call(this, props) || this;
-        // this.state = {
-        //   hover: false,
-        // }
-        // bind methods
-        _this.handleClick = _this.handleClick.bind(_this);
-        return _this;
-        // this.mouseEnter = this.mouseEnter.bind(this)
-        // this.mouseLeave = this.mouseLeave.bind(this)
-    }
-    ActionButton.prototype.render = function () {
-        // let S = mix(styles, this.props.style ? this.props.style : {})
-        // if (this.state.hover) {
-        //   S = mix(S, hoverStyle)
-        // }
-        return (React.createElement("li", { className: styles.button, onClick: this.handleClick }, this.props.text));
-    };
-    ActionButton.prototype.handleClick = function (e) {
-        e.stopPropagation();
-        this.props.onClick();
-    };
-    return ActionButton;
-}(React.Component));
-exports.ActionButton = ActionButton;
-
-
-/***/ }),
-
 /***/ "./src/components/areaview/AddNewItem.css":
 /*!************************************************!*\
   !*** ./src/components/areaview/AddNewItem.css ***!
@@ -19854,7 +19776,7 @@ exports.ActionButton = ActionButton;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"container":"AddNewItem-container-3cob6bN","symbol":"AddNewItem-symbol-2Cp5T41","checkbox":"AddNewItem-checkbox-2oYSk8w","input":"AddNewItem-input-rgzm11b","close":"AddNewItem-close-3QWXnQ7","add":"AddNewItem-add-wbFXGnf","hide":"AddNewItem-hide-1-xQo9r"};
+module.exports = {"container":"AddNewItem-container-1Yo5wCP","symbol":"AddNewItem-symbol-4o3E-MT","checkbox":"AddNewItem-checkbox-271-xWM","input":"AddNewItem-input-1lg1_2m","close":"AddNewItem-close-1tIn3J8","add":"AddNewItem-add-3yOxwln","hide":"AddNewItem-hide-1rMoOSe"};
 
 /***/ }),
 
@@ -20023,6 +19945,84 @@ exports.AddNewItem = AddNewItem;
 
 /***/ }),
 
+/***/ "./src/components/areaview/AreaActionButton.css":
+/*!******************************************************!*\
+  !*** ./src/components/areaview/AreaActionButton.css ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"button":"AreaActionButton-button-1E_JxHi"};
+
+/***/ }),
+
+/***/ "./src/components/areaview/AreaActionButton.tsx":
+/*!******************************************************!*\
+  !*** ./src/components/areaview/AreaActionButton.tsx ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var styles = __webpack_require__(/*! ./AreaActionButton.css */ "./src/components/areaview/AreaActionButton.css");
+// const styles: React.CSSProperties = {
+//   height: 40,
+//   display: 'flex',
+//   justifyContent: 'center',
+//   alignItems: 'center',
+//   cursor: 'pointer',
+// }
+// const hoverStyle: React.CSSProperties = {
+//   backgroundColor: 'rgba(206, 197, 197, 0.2)',
+// }
+/**
+ * 操作列表里的选项按钮
+ */
+var ActionButton = /** @class */ (function (_super) {
+    __extends(ActionButton, _super);
+    function ActionButton(props) {
+        var _this = _super.call(this, props) || this;
+        // this.state = {
+        //   hover: false,
+        // }
+        // bind methods
+        _this.handleClick = _this.handleClick.bind(_this);
+        return _this;
+        // this.mouseEnter = this.mouseEnter.bind(this)
+        // this.mouseLeave = this.mouseLeave.bind(this)
+    }
+    ActionButton.prototype.render = function () {
+        // let S = mix(styles, this.props.style ? this.props.style : {})
+        // if (this.state.hover) {
+        //   S = mix(S, hoverStyle)
+        // }
+        return (React.createElement("li", { className: styles.button, onClick: this.handleClick }, this.props.text));
+    };
+    ActionButton.prototype.handleClick = function (e) {
+        e.stopPropagation();
+        this.props.onClick();
+    };
+    return ActionButton;
+}(React.Component));
+exports.ActionButton = ActionButton;
+
+
+/***/ }),
+
 /***/ "./src/components/areaview/AreaActions.css":
 /*!*************************************************!*\
   !*** ./src/components/areaview/AreaActions.css ***!
@@ -20031,7 +20031,7 @@ exports.AddNewItem = AddNewItem;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"actions":"AreaActions-actions-1uihpZy","display":"AreaActions-display-2nMRPBD"};
+module.exports = {"actions":"AreaActions-actions-3t2tT77","display":"AreaActions-display-2vVG8-6","buttonList":"AreaActions-buttonList-2s_2LTi"};
 
 /***/ }),
 
@@ -20057,7 +20057,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var ThemePicker_1 = __webpack_require__(/*! ../areaview/ThemePicker */ "./src/components/areaview/ThemePicker.tsx");
-var ActionButton_1 = __webpack_require__(/*! ./ActionButton */ "./src/components/areaview/ActionButton.tsx");
+var AreaActionButton_1 = __webpack_require__(/*! ./AreaActionButton */ "./src/components/areaview/AreaActionButton.tsx");
 // 样式
 var styles = __webpack_require__(/*! ./AreaActions.css */ "./src/components/areaview/AreaActions.css");
 /**
@@ -20087,10 +20087,10 @@ var AreaActions = /** @class */ (function (_super) {
         var actionShouldDisplay = this.props.actionsShouldDisplay;
         return (React.createElement("div", { className: (actionShouldDisplay ? "animated fadeIn" : "animated") + " " + (actionShouldDisplay ? styles.actions + " " + styles.display : styles.actions) },
             React.createElement(ThemePicker_1.ThemePicker, { onColorPick: this.props.onColorPick }),
-            React.createElement("ul", null,
-                React.createElement(ActionButton_1.ActionButton, { onClick: this.props.switchDoneItems, text: (this.props.doneItemsDisplay ? "隐藏" : "显示") + "已完成的项目" }),
-                React.createElement(ActionButton_1.ActionButton, { onClick: this.props.renameClicked, text: "重命名列表" }),
-                React.createElement(ActionButton_1.ActionButton, { onClick: this.props.deleteClicked, text: "删除列表", style: { color: "red" } }))));
+            React.createElement("ul", { className: styles.buttonList },
+                React.createElement(AreaActionButton_1.ActionButton, { onClick: this.props.switchDoneItems, text: (this.props.doneItemsDisplay ? "隐藏" : "显示") + "已完成的项目" }),
+                React.createElement(AreaActionButton_1.ActionButton, { onClick: this.props.renameClicked, text: "重命名列表" }),
+                React.createElement(AreaActionButton_1.ActionButton, { onClick: this.props.deleteClicked, text: "删除列表", style: { color: "red" } }))));
     };
     return AreaActions;
 }(React.Component));
@@ -20107,7 +20107,7 @@ exports.AreaActions = AreaActions;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"areaView":"AreaView-areaView-2nggvZE","shrink":"AreaView-shrink-2myv31T"};
+module.exports = {"areaView":"AreaView-areaView-3uAzCRq","shrink":"AreaView-shrink-2JwCds5"};
 
 /***/ }),
 
@@ -20282,7 +20282,7 @@ exports.AreaView = AreaView;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"head":"EditableHead-head-1gsRikC","headDirectChild":"EditableHead-headDirectChild-3Vaxgo5","hide":"EditableHead-hide-28bAOsi","name":"EditableHead-name-2zP2d_M","switcher":"EditableHead-switcher-1QmaDbD"};
+module.exports = {"head":"EditableHead-head-19QzYRI","headDirectChild":"EditableHead-headDirectChild-33S3uLe","hide":"EditableHead-hide-3UJdIsC","name":"EditableHead-name-jjFy9La","switcher":"EditableHead-switcher-2ngK88g"};
 
 /***/ }),
 
@@ -20453,7 +20453,7 @@ exports.EditableHead = AreaViewHead;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"picker":"ThemePicker-picker-1D1lp7S","text":"ThemePicker-text-2ONbNdA","pickList":"ThemePicker-pickList-1FCyKW_","pickElement":"ThemePicker-pickElement-12H7V9Q"};
+module.exports = {"picker":"ThemePicker-picker-U0BqUQT","text":"ThemePicker-text-3g2PYjU","pickList":"ThemePicker-pickList-1hZF9TD","pickElement":"ThemePicker-pickElement-2KPVTCb"};
 
 /***/ }),
 
@@ -20543,7 +20543,7 @@ exports.ThemePicker = ThemePicker;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"content":"ViewContent-content-1CItQIM","list":"ViewContent-list-22QKM5K"};
+module.exports = {"content":"ViewContent-content-3CP5Vjw","list":"ViewContent-list-1iWogZ3"};
 
 /***/ }),
 
@@ -20607,7 +20607,7 @@ exports.AreaViewContent = AreaViewContent;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"todo":"ViewItem-todo-2CST4iA","checkbox":"ViewItem-checkbox-niXRWTn","checked":"ViewItem-checked-1gioHZo","text":"ViewItem-text-i-3FWSi","done":"ViewItem-done-3El4gXD","source":"ViewItem-source-o8w7sM3","comment":"ViewItem-comment-pPrAn-_","inPrimary":"ViewItem-inPrimary-14Zj131"};
+module.exports = {"todo":"ViewItem-todo-J6m5S6_","checkbox":"ViewItem-checkbox-3WJrUe6","checked":"ViewItem-checked-2CXvd7W","text":"ViewItem-text-1OPR_y-","done":"ViewItem-done-3Kmbw1T","source":"ViewItem-source-3n4y3bx","comment":"ViewItem-comment--Ju2Bt1","inPrimary":"ViewItem-inPrimary-2b7o7tu"};
 
 /***/ }),
 
@@ -20786,7 +20786,7 @@ exports.AreaViewItem = AreaViewItem;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"actions":"Actions-actions-WJz1wjy","sideButton":"Actions-sideButton-ER0nISx","timeLabel":"Actions-timeLabel-1d-5RW0"};
+module.exports = {"actions":"Actions-actions-6AIKymX","sideButton":"Actions-sideButton-33dcHoR","timeLabel":"Actions-timeLabel-kVoYdQK"};
 
 /***/ }),
 
@@ -20937,7 +20937,7 @@ exports.Actions = Actions;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"comments":"Comments-comments-2WtPO0j"};
+module.exports = {"comments":"Comments-comments-3P7ciau"};
 
 /***/ }),
 
@@ -21029,7 +21029,7 @@ exports.Comments = Comments;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"detailView":"DetailView-detailView-_qpCAca","disappear":"DetailView-disappear-1gv2jXM"};
+module.exports = {"detailView":"DetailView-detailView-35WsUh0","disappear":"DetailView-disappear-3pc_UC6"};
 
 /***/ }),
 
@@ -21105,7 +21105,7 @@ exports.DetailView = DetailView;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"primaryCopy":"PrimaryCopy-primaryCopy-2T9ZfG9","copyArea":"PrimaryCopy-copyArea-3B5_moD","copyText":"PrimaryCopy-copyText-4Ab8XTQ","cancelButton":"PrimaryCopy-cancelButton-3gj0Xqg","copyButton":"PrimaryCopy-copyButton-33P9zp5"};
+module.exports = {"primaryCopy":"PrimaryCopy-primaryCopy-3Ihj8fl","copyArea":"PrimaryCopy-copyArea-fstF6xu","copyText":"PrimaryCopy-copyText-14KCQIT","cancelButton":"PrimaryCopy-cancelButton-3spXkhG","copyButton":"PrimaryCopy-copyButton-eR91ypR"};
 
 /***/ }),
 
@@ -21267,7 +21267,7 @@ exports.PrimaryCopy = PrimaryCopy;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"titleContent":"TitleContent-titleContent-3Gu0EB2","checkbox":"TitleContent-checkbox-1BDXzG8","checkedbox":"TitleContent-checkedbox-1c6s8p9","titleLabel":"TitleContent-titleLabel-31dP9Gu"};
+module.exports = {"titleContent":"TitleContent-titleContent-267Dplj","checkbox":"TitleContent-checkbox-PTHBlcv","checkedbox":"TitleContent-checkedbox-2sQONJD","titleLabel":"TitleContent-titleLabel-2XkbOKt"};
 
 /***/ }),
 
@@ -21396,22 +21396,22 @@ exports.TitleContent = TitleContent;
 
 /***/ }),
 
-/***/ "./src/components/listview/AddListButton.css":
-/*!***************************************************!*\
-  !*** ./src/components/listview/AddListButton.css ***!
-  \***************************************************/
+/***/ "./src/components/listview/AddNewList.css":
+/*!************************************************!*\
+  !*** ./src/components/listview/AddNewList.css ***!
+  \************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"button":"AddListButton-button-19BcYJL","text":"AddListButton-text-3UIyxVy"};
+module.exports = {"button":"AddNewList-button-vPQLZB3","text":"AddNewList-text-21LXia_"};
 
 /***/ }),
 
-/***/ "./src/components/listview/AddListButton.tsx":
-/*!***************************************************!*\
-  !*** ./src/components/listview/AddListButton.tsx ***!
-  \***************************************************/
+/***/ "./src/components/listview/AddNewList.tsx":
+/*!************************************************!*\
+  !*** ./src/components/listview/AddNewList.tsx ***!
+  \************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21429,7 +21429,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var styles = __webpack_require__(/*! ./AddListButton.css */ "./src/components/listview/AddListButton.css");
+var styles = __webpack_require__(/*! ./AddNewList.css */ "./src/components/listview/AddNewList.css");
 // const styles = {
 //     height: 40,
 //     padding: "0 10px",
@@ -21473,7 +21473,6 @@ var AddListButton = /** @class */ (function (_super) {
     // }
     AddListButton.prototype.render = function () {
         // const s = this.state.hover ? mix(styles, hoverStyles) : styles;
-        // log(s)
         return (React.createElement("div", { className: styles.button, onClick: this.props.onClick },
             React.createElement("span", { className: styles.text }, "+"),
             "\u65B0\u5EFA\u6E05\u5355"));
@@ -21493,7 +21492,7 @@ exports.default = AddListButton;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"content":"Content-content-1a8xgLs"};
+module.exports = {"content":"Content-content-9JwgpIf"};
 
 /***/ }),
 
@@ -21548,7 +21547,7 @@ exports.Content = Content;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"listView":"ListView-listView-3Ie2sLR"};
+module.exports = {"listView":"ListView-listView-3xfUY4U"};
 
 /***/ }),
 
@@ -21574,7 +21573,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var Content_1 = __webpack_require__(/*! ./Content */ "./src/components/listview/Content.tsx");
-var AddListButton_1 = __webpack_require__(/*! ./AddListButton */ "./src/components/listview/AddListButton.tsx");
+var AddNewList_1 = __webpack_require__(/*! ./AddNewList */ "./src/components/listview/AddNewList.tsx");
 var styles = __webpack_require__(/*! ./ListView.css */ "./src/components/listview/ListView.css");
 // const viewStyles = {
 //   width: 280,
@@ -21636,7 +21635,7 @@ var ListView = /** @class */ (function (_super) {
             , { 
                 // currentListName={this.props.currentListName}
                 listInfos: this.props.listInfos, onClick: this.handleClick, onDrop: this.props.onDrop }),
-            React.createElement(AddListButton_1.default, { onClick: this.addNewList })));
+            React.createElement(AddNewList_1.default, { onClick: this.addNewList })));
     };
     return ListView;
 }(React.Component));
@@ -21653,7 +21652,7 @@ exports.ListView = ListView;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"itemName":"ViewItem-itemName-3bWFULe","active":"ViewItem-active-3w22MLp","itemNumber":"ViewItem-itemNumber-uoSyxc8","listItem":"ViewItem-listItem-1T85Q8K","dragEnter":"ViewItem-dragEnter-2e2M79L"};
+module.exports = {"itemName":"ViewItem-itemName-1u7ukq-","active":"ViewItem-active-2aSG6TM","itemNumber":"ViewItem-itemNumber-v2bbzgr","listItem":"ViewItem-listItem-2d8Aq1J","dragEnter":"ViewItem-dragEnter-1YfKwoG"};
 
 /***/ }),
 
@@ -21817,101 +21816,6 @@ exports.ViewItem = ViewItem;
 
 /***/ }),
 
-/***/ "./src/components/util/AlertButton.css":
-/*!*********************************************!*\
-  !*** ./src/components/util/AlertButton.css ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-module.exports = {"alertButton":"AlertButton-alertButton-C77qSBb"};
-
-/***/ }),
-
-/***/ "./src/components/util/AlertButton.tsx":
-/*!*********************************************!*\
-  !*** ./src/components/util/AlertButton.tsx ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var styles = __webpack_require__(/*! ./AlertButton.css */ "./src/components/util/AlertButton.css");
-/**
- * 全局提示框里的按钮
- */
-var AlertButton = /** @class */ (function (_super) {
-    __extends(AlertButton, _super);
-    function AlertButton(props) {
-        var _this = _super.call(this, props) || this;
-        // this.state = {
-        //     hover: false,
-        // };
-        // this.onMouseEnter = this.onMouseEnter.bind(this);
-        // this.onMouseLeave = this.onMouseLeave.bind(this);
-        _this.onClick = _this.onClick.bind(_this);
-        return _this;
-    }
-    // private onMouseEnter(e: React.MouseEvent<HTMLButtonElement>) {
-    //     e.stopPropagation();
-    //     this.setState({
-    //         hover: true,
-    //     });
-    // }
-    // private onMouseLeave(e: React.MouseEvent<HTMLButtonElement>) {
-    //     e.stopPropagation();
-    //     this.setState({
-    //         hover: false,
-    //     });
-    // }
-    AlertButton.prototype.onClick = function (e) {
-        e.stopPropagation();
-        this.props.onClick();
-    };
-    AlertButton.prototype.render = function () {
-        // const style = this.state.hover
-        //     ? mix(confirmButtonStyles, confirmButtonHover)
-        //     : confirmButtonStyles;
-        return (React.createElement("button", { className: styles.alertButton, 
-            // style={style}
-            // onMouseEnter={this.onMouseEnter}
-            // onMouseLeave={this.onMouseLeave}
-            onClick: this.onClick }, this.props.title));
-    };
-    return AlertButton;
-}(React.Component));
-exports.AlertButton = AlertButton;
-/**
- * “确认”按钮样式
- */
-// const confirmButtonStyles: React.CSSProperties = {
-//     height: 30,
-//     border: "none",
-//     backgroundColor: "transparent",
-//     cursor: "pointer",
-//     transition: "backgroud-color 0.3s",
-// };
-// const confirmButtonHover: React.CSSProperties = {
-//     backgroundColor: "rgba(206, 197, 197, 0.5)",
-// };
-
-
-/***/ }),
-
 /***/ "./src/components/util/GlobalAlert.css":
 /*!*********************************************!*\
   !*** ./src/components/util/GlobalAlert.css ***!
@@ -21920,7 +21824,7 @@ exports.AlertButton = AlertButton;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-module.exports = {"background":"GlobalAlert-background-2zVlkm2","display":"GlobalAlert-display-zSRV4fW","alert":"GlobalAlert-alert-2Rq7EoF","message":"GlobalAlert-message-2dES97i","actions":"GlobalAlert-actions-1wrj7g1"};
+module.exports = {"background":"GlobalAlert-background-35KNT0b","display":"GlobalAlert-display-KNhi1di","alert":"GlobalAlert-alert-2OjYmj0","message":"GlobalAlert-message-1WQH8bk","actions":"GlobalAlert-actions-32As3tn"};
 
 /***/ }),
 
@@ -21945,7 +21849,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var AlertButton_1 = __webpack_require__(/*! ./AlertButton */ "./src/components/util/AlertButton.tsx");
+var GlobalAlertButton_1 = __webpack_require__(/*! ./GlobalAlertButton */ "./src/components/util/GlobalAlertButton.tsx");
 // 样式
 var styles = __webpack_require__(/*! ./GlobalAlert.css */ "./src/components/util/GlobalAlert.css");
 var AlertType;
@@ -22036,13 +21940,108 @@ var Alert = /** @class */ (function (_super) {
                 : styles.background },
             React.createElement("div", { className: styles.alert },
                 React.createElement("p", { className: styles.message }, this.props.message),
-                React.createElement("div", { className: styles.actions }, this.state.type == AlertType.Alert ? (React.createElement(AlertButton_1.AlertButton, { title: "好的", onClick: this.defaultClick })) : (React.createElement("div", null,
-                    React.createElement(AlertButton_1.AlertButton, { title: "取消", onClick: this.defaultClick }),
-                    React.createElement(AlertButton_1.AlertButton, { title: "确定", onClick: this.confirmClick })))))));
+                React.createElement("div", { className: styles.actions }, this.state.type == AlertType.Alert ? (React.createElement(GlobalAlertButton_1.AlertButton, { title: "好的", onClick: this.defaultClick })) : (React.createElement("div", null,
+                    React.createElement(GlobalAlertButton_1.AlertButton, { title: "取消", onClick: this.defaultClick }),
+                    React.createElement(GlobalAlertButton_1.AlertButton, { title: "确定", onClick: this.confirmClick })))))));
     };
     return Alert;
 }(React.Component));
 exports.Alert = Alert;
+
+
+/***/ }),
+
+/***/ "./src/components/util/GlobalAlertButton.css":
+/*!***************************************************!*\
+  !*** ./src/components/util/GlobalAlertButton.css ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"alertButton":"GlobalAlertButton-alertButton-2XdzmM7"};
+
+/***/ }),
+
+/***/ "./src/components/util/GlobalAlertButton.tsx":
+/*!***************************************************!*\
+  !*** ./src/components/util/GlobalAlertButton.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var styles = __webpack_require__(/*! ./GlobalAlertButton.css */ "./src/components/util/GlobalAlertButton.css");
+/**
+ * 全局提示框里的按钮
+ */
+var AlertButton = /** @class */ (function (_super) {
+    __extends(AlertButton, _super);
+    function AlertButton(props) {
+        var _this = _super.call(this, props) || this;
+        // this.state = {
+        //     hover: false,
+        // };
+        // this.onMouseEnter = this.onMouseEnter.bind(this);
+        // this.onMouseLeave = this.onMouseLeave.bind(this);
+        _this.onClick = _this.onClick.bind(_this);
+        return _this;
+    }
+    // private onMouseEnter(e: React.MouseEvent<HTMLButtonElement>) {
+    //     e.stopPropagation();
+    //     this.setState({
+    //         hover: true,
+    //     });
+    // }
+    // private onMouseLeave(e: React.MouseEvent<HTMLButtonElement>) {
+    //     e.stopPropagation();
+    //     this.setState({
+    //         hover: false,
+    //     });
+    // }
+    AlertButton.prototype.onClick = function (e) {
+        e.stopPropagation();
+        this.props.onClick();
+    };
+    AlertButton.prototype.render = function () {
+        // const style = this.state.hover
+        //     ? mix(confirmButtonStyles, confirmButtonHover)
+        //     : confirmButtonStyles;
+        return (React.createElement("button", { className: styles.alertButton, 
+            // style={style}
+            // onMouseEnter={this.onMouseEnter}
+            // onMouseLeave={this.onMouseLeave}
+            onClick: this.onClick }, this.props.title));
+    };
+    return AlertButton;
+}(React.Component));
+exports.AlertButton = AlertButton;
+/**
+ * “确认”按钮样式
+ */
+// const confirmButtonStyles: React.CSSProperties = {
+//     height: 30,
+//     border: "none",
+//     backgroundColor: "transparent",
+//     cursor: "pointer",
+//     transition: "backgroud-color 0.3s",
+// };
+// const confirmButtonHover: React.CSSProperties = {
+//     backgroundColor: "rgba(206, 197, 197, 0.5)",
+// };
 
 
 /***/ }),

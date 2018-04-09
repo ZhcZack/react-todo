@@ -20,6 +20,7 @@
     display: flex;
     align-items: center;
     padding: 10px;
+    margin: 0;
     box-sizing: border-box;
 }
 
@@ -36,6 +37,7 @@
 }
 
 .copyButton {
+    margin: 0;
     width: 100%;
     display: flex;
     padding: 10px;
