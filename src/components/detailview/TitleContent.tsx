@@ -2,12 +2,11 @@
  * 显示todo内容和完成状态的区域
  */
 
-import * as React from "react";
-import { TodoItem } from "../../model/interface";
-import { mix } from "../../lib";
+import * as React from 'react';
+import { TodoItem } from '../../model/interface';
 
 // 样式表
-const styles: { [prop: string]: string } = require("./TitleContent.css");
+const styles: { [prop: string]: string } = require('./TitleContent.css');
 
 interface Props {
     item: TodoItem;
@@ -24,6 +23,24 @@ export class TitleContent extends React.Component<Props, State> {
         super(props);
     }
 
+    render() {
+        return (
+            <div className={styles.titleContent}>
+                <div
+                    className={
+                        this.props.item.done
+                            ? styles.checkedbox + ' ' + styles.checkbox
+                            : styles.checkbox
+                    }
+                    onClick={this.handleToggleClicked}
+                >
+                    √
+                </div>
+                <span className={styles.titleLabel}>{this.props.item.name}</span>
+            </div>
+        );
+    }
+
     /**
      * 切换todo的完成状态
      */
@@ -31,21 +48,4 @@ export class TitleContent extends React.Component<Props, State> {
         e.stopPropagation();
         this.props.onToggleClicked();
     };
-
-    render() {
-        return (
-            <div className={styles.titleContent}>
-                <div
-                    className={
-                        this.props.item.done
-                            ? styles.checkedbox + " " + styles.checkbox
-                            : styles.checkbox
-                    }
-                    onClick={this.handleToggleClicked}>
-                    √
-                </div>
-                <span className={styles.titleLabel}>{this.props.item.name}</span>
-            </div>
-        );
-    }
 }

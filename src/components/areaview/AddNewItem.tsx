@@ -4,20 +4,27 @@
  * 根据输入的内容自动显示/隐藏“添加”、“取消”按钮
  */
 
-import * as React from "react";
-import { mix } from "../../lib";
+import * as React from 'react';
 
 // 样式表
-const styles: { [prop: string]: string } = require("./AddNewItem.css");
+const styles: { [prop: string]: string } = require('./AddNewItem.css');
 
 interface Props {
-    /**input的值，确保输入的内容与props的值保持一致 */
+    /**
+     * input的值，确保输入的内容与props的值保持一致
+     */
     value: string;
-    /**输入改变的事件处理函数 */
+    /**
+     * 输入改变的事件处理函数
+     */
     onValueChange(e: React.ChangeEvent<HTMLInputElement>): void;
-    /**点击“添加”之后，添加新todo事项的处理函数 */
+    /**点
+     * 击“添加”之后，添加新todo事项的处理函数
+     */
     onAddClicked(): void;
-    /**取消输入的处理函数 */
+    /**
+     * 取消输入的处理函数
+     */
     onCancelClicked(): void;
 }
 
@@ -29,12 +36,12 @@ export class AddNewItem extends React.Component<Props, State> {
     }
 
     render() {
-        const emptyValue = this.props.value === "";
+        const emptyValue = this.props.value === '';
 
         return (
             <div className={styles.container}>
                 <span className={emptyValue ? styles.symbol : styles.checkbox}>
-                    {emptyValue ? "+" : ""}
+                    {emptyValue ? '+' : ''}
                 </span>
                 <input
                     type="text"
@@ -45,12 +52,14 @@ export class AddNewItem extends React.Component<Props, State> {
                 />
                 <span
                     className={emptyValue ? styles.hide : styles.close}
-                    onClick={this.handleCancelClicked}>
+                    onClick={this.handleCancelClicked}
+                >
                     X
                 </span>
                 <span
                     className={emptyValue ? styles.hide : styles.add}
-                    onClick={this.handleAddClicked}>
+                    onClick={this.handleAddClicked}
+                >
                     添加
                 </span>
             </div>

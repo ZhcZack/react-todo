@@ -2,12 +2,11 @@
  * 显示todo事项的区域
  */
 
-import * as React from "react";
-import { TodoItem } from "../../model/interface";
-import { mix } from "../../lib";
+import * as React from 'react';
+import { TodoItem } from '../../model/interface';
 
 // 样式
-const styles: { [prop: string]: string } = require("./ViewTodoItem.css");
+const styles: { [prop: string]: string } = require('./ViewTodoItem.css');
 
 interface Props {
     /**
@@ -20,15 +19,25 @@ interface Props {
      * 我也不知道为什么会有这样的设定，微软这么做我也这么做……
      */
     isPrimaryList: boolean;
-    /**要显示的todo事项 */
+    /**要
+     * 显示的todo事项
+     */
     item: TodoItem;
-    /**todo点击事件，用于显示详细信息 */
+    /**
+     * todo点击事件，用于显示详细信息
+     */
     onItemClicked(itemName: string): void;
-    /**checkbox点击事件，用于切换todo的完成状态 */
+    /**
+     * checkbox点击事件，用于切换todo的完成状态
+     */
     onCheckboxClicked(itemName: string): void;
-    /**拖拽开始事件的处理方法 */
+    /**
+     * 拖拽开始事件的处理方法
+     */
     onDragStart(data: string): void;
-    /**拖拽结束事件的处理方法 */
+    /**
+     * 拖拽结束事件的处理方法
+     */
     onDragEnd(): void;
 }
 
@@ -39,13 +48,47 @@ export class AreaViewItem extends React.Component<Props, State> {
         super(props);
     }
 
+    render() {
+        const item = this.props.item;
+
+        return (
+            <li
+                draggable={true}
+                className={styles.todo}
+                onClick={this.clickItem}
+                onDragStart={this.handleDrag}
+                onDragEnd={this.handleDragEnd}
+            >
+                <div
+                    className={`${styles.checkbox} ${item.done ? styles.checked : ''}`}
+                    onClick={this.clickCheckbox}
+                >
+                    √
+                </div>
+                <div className={styles.text}>
+                    <span className={item.done ? `${styles.text} ${styles.done}` : ''}>
+                        {item.name}
+                    </span>
+                    <div className={styles.source}>
+                        {item.inPrimaryList && (
+                            <span className={styles.comment + ' ' + styles.inPrimary}>
+                                {this.props.isPrimaryList ? item.source : '我的一天'}
+                            </span>
+                        )}
+                        {item.comments && <span className={styles.comment}>备注</span>}
+                    </div>
+                </div>
+            </li>
+        );
+    }
+
     /**
      * 拖拽开始的处理方法，将todo的数据转化为字符串并交由父组件处理
      */
     private handleDrag = (e: React.DragEvent<HTMLLIElement>) => {
         const data = JSON.stringify(this.props.item);
-        e.dataTransfer.setData("text/plain", "");
-        e.dataTransfer.dropEffect = "move";
+        e.dataTransfer.setData('text/plain', '');
+        e.dataTransfer.dropEffect = 'move';
         this.props.onDragStart(data);
     };
 
@@ -72,38 +115,4 @@ export class AreaViewItem extends React.Component<Props, State> {
         e.stopPropagation();
         this.props.onCheckboxClicked(this.props.item.name);
     };
-
-    render() {
-        const item = this.props.item;
-
-        return (
-            <li
-                draggable={true}
-                className={styles.todo}
-                onClick={this.clickItem}
-                onDragStart={this.handleDrag}
-                onDragEnd={this.handleDragEnd}>
-                <div
-                    className={`${styles.checkbox} ${item.done ? styles.checked : ""}`}
-                    onClick={this.clickCheckbox}>
-                    √
-                </div>
-                <div className={styles.text}>
-                    <span className={item.done ? `${styles.text} ${styles.done}` : ""}>
-                        {item.name}
-                    </span>
-                    {
-                        <div className={styles.source}>
-                            {item.inPrimaryList && (
-                                <span className={styles.comment + " " + styles.inPrimary}>
-                                    {this.props.isPrimaryList ? item.source : "我的一天"}
-                                </span>
-                            )}
-                            {item.comments && <span className={styles.comment}>备注</span>}
-                        </div>
-                    }
-                </div>
-            </li>
-        );
-    }
 }

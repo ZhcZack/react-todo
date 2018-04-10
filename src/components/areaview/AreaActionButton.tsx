@@ -2,11 +2,10 @@
  * 操作窗口里的选项按钮
  */
 
-import * as React from "react";
-import { mix } from "../../lib";
+import * as React from 'react';
 
 // 样式表
-const styles: { [prop: string]: string } = require("./AreaActionButton.css");
+const styles: { [prop: string]: string } = require('./AreaActionButton.css');
 
 interface Props {
     /**
@@ -14,13 +13,13 @@ interface Props {
      */
     style?: React.CSSProperties;
     /**
-     * 按钮的点击事件
-     */
-    onClick(): void;
-    /**
      * 按钮的文本内容
      */
     text: string;
+    /**
+     * 按钮的点击事件
+     */
+    onClick(): void;
 }
 
 interface State {}

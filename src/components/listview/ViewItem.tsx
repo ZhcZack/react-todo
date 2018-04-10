@@ -4,17 +4,20 @@
  * 组件支持HTML5拖拽，可以将area view中的todo拖到列表上进行复制、转移操作。
  */
 
-import * as React from "react";
-import { ListInfo } from "../../model/interface";
-import { mix } from "../../lib";
+import * as React from 'react';
+import { ListInfo } from '../../model/interface';
 
 // 样式表
-const styles: { [prop: string]: string } = require("./ViewItem.css");
+const styles: { [prop: string]: string } = require('./ViewItem.css');
 
 interface Props {
-    /**此列表的信息 */
+    /**
+     * 此列表的信息
+     */
     info: ListInfo;
-    /**列表点击处理方法 */
+    /**
+     * 列表点击处理方法
+     */
     onClick(itemName: string): void;
     /**
      * 拖拽之后“放置”元素的处理方法
@@ -36,12 +39,41 @@ export class ViewItem extends React.Component<Props, State> {
         };
     }
 
+    render() {
+        const isActive = this.props.info.isActive;
+
+        return (
+            <li
+                className={`${this.state.dragEnter ? styles.dragEnter : ''} ${styles.listItem} ${
+                    isActive ? styles.active : ''
+                }`}
+                // style={listS}
+                onDragOver={this.handleDragOver}
+                onDrop={this.handleDrop}
+                onDragEnter={this.handleDragEnter}
+                onDragLeave={this.handleDragLeave}
+                onClick={this.clickList}
+            >
+                <span
+                    className={`${styles.itemName} animated ${
+                        isActive ? styles.active + ' fadeIn' : ''
+                    }`}
+                >
+                    {this.props.info.name}
+                </span>
+                <span className={styles.itemNumber}>
+                    {this.props.info.count > 0 ? this.props.info.count : ''}
+                </span>
+            </li>
+        );
+    }
+
     /**
      * 当元素被拖拽到这里的时候，拖拽结束触发这个方法
      */
     private handleDragOver = (e: React.DragEvent<HTMLLIElement>) => {
         e.preventDefault();
-        e.dataTransfer.dropEffect = "move";
+        e.dataTransfer.dropEffect = 'move';
     };
 
     /**
@@ -52,7 +84,7 @@ export class ViewItem extends React.Component<Props, State> {
     private handleDrop = (e: React.DragEvent<HTMLLIElement>) => {
         e.preventDefault();
         let target = e.target as HTMLElement;
-        if (target.nodeName.toLowerCase() !== "li") {
+        if (target.nodeName.toLowerCase() !== 'li') {
             if (target.parentElement) {
                 target = target.parentElement;
             }
@@ -95,31 +127,4 @@ export class ViewItem extends React.Component<Props, State> {
         e.stopPropagation();
         this.props.onClick(this.props.info.name);
     };
-
-    render() {
-        const isActive = this.props.info.isActive;
-
-        return (
-            <li
-                className={`${this.state.dragEnter ? styles.dragEnter : ""} ${styles.listItem} ${
-                    isActive ? styles.active : ""
-                }`}
-                // style={listS}
-                onDragOver={this.handleDragOver}
-                onDrop={this.handleDrop}
-                onDragEnter={this.handleDragEnter}
-                onDragLeave={this.handleDragLeave}
-                onClick={this.clickList}>
-                <span
-                    className={`${styles.itemName} animated ${
-                        isActive ? styles.active + " fadeIn" : ""
-                    }`}>
-                    {this.props.info.name}
-                </span>
-                <span className={styles.itemNumber}>
-                    {this.props.info.count > 0 ? this.props.info.count : ""}
-                </span>
-            </li>
-        );
-    }
 }

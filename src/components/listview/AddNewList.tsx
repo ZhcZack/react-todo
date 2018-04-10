@@ -2,11 +2,10 @@
  * “添加新列表”按钮组件
  */
 
-import * as React from "react";
-import { mix, log } from "../../lib";
+import * as React from 'react';
 
 // 样式表
-const styles: { [prop: string]: string } = require("./AddNewList.css");
+const styles: { [prop: string]: string } = require('./AddNewList.css');
 
 interface Props {
     onClick(): void;
@@ -19,14 +18,6 @@ export default class AddListButton extends React.Component<Props, State> {
         super(props);
     }
 
-    /**
-     * 点击按钮新建列表
-     */
-    private handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation();
-        this.props.onClick();
-    };
-
     render() {
         return (
             <div className={styles.button} onClick={this.handleClick}>
@@ -34,4 +25,12 @@ export default class AddListButton extends React.Component<Props, State> {
             </div>
         );
     }
+
+    /**
+     * 点击按钮新建列表
+     */
+    private handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        this.props.onClick();
+    };
 }

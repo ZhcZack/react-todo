@@ -4,25 +4,25 @@
  * 可以切换todo的完成状态、修改/添加备注信息、将todo复制到primary list，以及删除该todo
  */
 
-import * as React from "react";
-import { TodoItem } from "../../model/interface";
-import { Actions } from "./Actions";
-import { Comments } from "./Comments";
-import { PrimaryCopy } from "./PrimaryCopy";
-import { TitleContent } from "./TitleContent";
+import * as React from 'react';
+import { TodoItem } from '../../model/interface';
+import { Actions } from './Actions';
+import { Comments } from './Comments';
+import { PrimaryCopy } from './PrimaryCopy';
+import { TitleContent } from './TitleContent';
 
 // 样式表
-const styles: { [prop: string]: string } = require("./DetailView.css");
+const styles: { [prop: string]: string } = require('./DetailView.css');
 
 interface DetailViewProps {
     item?: TodoItem;
+    listName: string;
     onCloseClicked(): void;
     onDeleteClicked(): void;
     onToggleClicked(): void;
     onCommentsChange(value: string): void;
     onCopyToPrimary(): void;
     onCancelCopyToPrimary(): void;
-    listName: string;
 }
 
 interface DetailViewState {}
@@ -45,8 +45,8 @@ export class DetailView extends React.Component<DetailViewProps, DetailViewState
                     onCommentsChange={this.props.onCommentsChange}
                     initComments={
                         this.props.item
-                            ? this.props.item.comments ? this.props.item.comments : ""
-                            : ""
+                            ? this.props.item.comments ? this.props.item.comments : ''
+                            : ''
                     }
                 />
                 <Actions

@@ -8,11 +8,10 @@
  * 目前还没有提供拓展样式，后续加上
  */
 
-import * as React from "react";
-import { mix } from "../../lib";
+import * as React from 'react';
 
 // 样式表
-const styles: { [prop: string]: string } = require("./GlobalAlertButton.css");
+const styles: { [prop: string]: string } = require('./GlobalAlertButton.css');
 
 interface Props {
     title: string;
@@ -29,11 +28,6 @@ export class AlertButton extends React.Component<Props, State> {
         super(props);
     }
 
-    private onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.stopPropagation();
-        this.props.onClick();
-    };
-
     render() {
         return (
             <button className={styles.alertButton} onClick={this.onClick}>
@@ -41,4 +35,9 @@ export class AlertButton extends React.Component<Props, State> {
             </button>
         );
     }
+
+    private onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+        this.props.onClick();
+    };
 }

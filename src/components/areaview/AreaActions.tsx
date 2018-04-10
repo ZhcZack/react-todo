@@ -4,13 +4,12 @@
  * 可以重命名和删除列表，也也可以显示/隐藏已完成的todo事项
  */
 
-import * as React from "react";
-import { ThemePicker } from "../areaview/ThemePicker";
-import { mix } from "../../lib";
-import { ActionButton } from "./AreaActionButton";
+import * as React from 'react';
+import { ThemePicker } from '../areaview/ThemePicker';
+import { ActionButton } from './AreaActionButton';
 
 // 样式表
-const styles: { [prop: string]: string } = require("./AreaActions.css");
+const styles: { [prop: string]: string } = require('./AreaActions.css');
 
 interface Props {
     /**
@@ -47,6 +46,28 @@ export class AreaActions extends React.Component<Props, State> {
         super(props);
     }
 
+    render() {
+        return (
+            <div className={styles.globalBackground} onClick={this.closeActions}>
+                <div className={`${'animated fadeIn'} ${styles.actions} ${styles.display}`}>
+                    <ThemePicker onColorPick={this.props.onColorPick} />
+                    <ul className={styles.buttonList}>
+                        <ActionButton
+                            onClick={this.props.switchDoneItems}
+                            text={(this.props.doneItemsDisplay ? '隐藏' : '显示') + '已完成的项目'}
+                        />
+                        <ActionButton onClick={this.props.renameClicked} text={'重命名列表'} />
+                        <ActionButton
+                            onClick={this.props.deleteClicked}
+                            text={'删除列表'}
+                            style={{ color: 'red' }}
+                        />
+                    </ul>
+                </div>
+            </div>
+        );
+    }
+
     /**
      * 关闭操作窗口
      */
@@ -54,26 +75,4 @@ export class AreaActions extends React.Component<Props, State> {
         e.stopPropagation();
         this.props.closeActions();
     };
-
-    render() {
-        return (
-            <div className={styles.globalBackground} onClick={this.closeActions}>
-                <div className={`${"animated fadeIn"} ${styles.actions} ${styles.display}`}>
-                    <ThemePicker onColorPick={this.props.onColorPick} />
-                    <ul className={styles.buttonList}>
-                        <ActionButton
-                            onClick={this.props.switchDoneItems}
-                            text={(this.props.doneItemsDisplay ? "隐藏" : "显示") + "已完成的项目"}
-                        />
-                        <ActionButton onClick={this.props.renameClicked} text={"重命名列表"} />
-                        <ActionButton
-                            onClick={this.props.deleteClicked}
-                            text={"删除列表"}
-                            style={{ color: "red" }}
-                        />
-                    </ul>
-                </div>
-            </div>
-        );
-    }
 }

@@ -2,13 +2,13 @@
  * 显示和修改todo备注的区域
  */
 
-import * as React from "react";
+import * as React from 'react';
 
-const styles: { [propName: string]: string } = require("./Comments.css");
+const styles: { [propName: string]: string } = require('./Comments.css');
 
 interface Props {
-    onCommentsChange(value: string): void;
     initComments: string;
+    onCommentsChange(value: string): void;
 }
 
 interface State {
@@ -16,13 +16,6 @@ interface State {
 }
 
 export class Comments extends React.Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            comments: this.props.initComments,
-        };
-    }
-
     /**
      * 新的生命周期钩子
      */
@@ -30,6 +23,25 @@ export class Comments extends React.Component<Props, State> {
         return {
             comments: nextProps.initComments,
         };
+    }
+
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            comments: this.props.initComments,
+        };
+    }
+
+    render() {
+        return (
+            <textarea
+                className={styles.comments}
+                value={this.state.comments}
+                onChange={this.handleCommentsChange}
+                onBlur={this.handleCommentsOnBlur}
+                placeholder="添加备注"
+            />
+        );
     }
 
     /**
@@ -47,16 +59,4 @@ export class Comments extends React.Component<Props, State> {
         e.stopPropagation();
         this.props.onCommentsChange(this.state.comments);
     };
-
-    render() {
-        return (
-            <textarea
-                className={styles.comments}
-                value={this.state.comments}
-                onChange={this.handleCommentsChange}
-                onBlur={this.handleCommentsOnBlur}
-                placeholder="添加备注"
-            />
-        );
-    }
 }

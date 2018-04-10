@@ -4,19 +4,18 @@
  * 目前有两种使用场景，一个是数据初始化错误的提示，另一个是需要用户确认是否要删除列表
  */
 
-import * as React from "react";
-import { mix } from "../../lib";
-import { AlertButton } from "./GlobalAlertButton";
+import * as React from 'react';
+import { AlertButton } from './GlobalAlertButton';
 
 // 样式表
-const styles: { [prop: string]: string } = require("./GlobalAlert.css");
+const styles: { [prop: string]: string } = require('./GlobalAlert.css');
 
 interface Props {
     display: boolean;
     message: string;
-    alertDefaultAction(): void;
-    alertConfirmAction?: () => void;
     type: AlertType;
+    alertConfirmAction?: () => void;
+    alertDefaultAction(): void;
 }
 
 interface State {
@@ -34,6 +33,14 @@ export enum AlertType {
 }
 
 export class Alert extends React.Component<Props, State> {
+    // new lifecycle hook, replace `willReceive`
+    static getDerivedStateFromProps(nextProps: Props, prevState: State): State {
+        return {
+            type: nextProps.type,
+            // confirmButtonHover: prevState.confirmButtonHover,
+        };
+    }
+
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -42,12 +49,30 @@ export class Alert extends React.Component<Props, State> {
         };
     }
 
-    // new lifecycle hook, replace `willReceive`
-    static getDerivedStateFromProps(nextProps: Props, prevState: State): State {
-        return {
-            type: nextProps.type,
-            // confirmButtonHover: prevState.confirmButtonHover,
-        };
+    render() {
+        return (
+            <div
+                className={
+                    this.props.display
+                        ? `${styles.background} ${styles.display}`
+                        : styles.background
+                }
+            >
+                <div className={styles.alert}>
+                    <p className={styles.message}>{this.props.message}</p>
+                    <div className={styles.actions}>
+                        {this.state.type === AlertType.Alert ? (
+                            <AlertButton title={'好的'} onClick={this.defaultClick} />
+                        ) : (
+                            <div>
+                                <AlertButton title={'取消'} onClick={this.defaultClick} />
+                                <AlertButton title={'确定'} onClick={this.confirmClick} />
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     /**
@@ -65,29 +90,4 @@ export class Alert extends React.Component<Props, State> {
             this.props.alertConfirmAction();
         }
     };
-
-    render() {
-        return (
-            <div
-                className={
-                    this.props.display
-                        ? `${styles.background} ${styles.display}`
-                        : styles.background
-                }>
-                <div className={styles.alert}>
-                    <p className={styles.message}>{this.props.message}</p>
-                    <div className={styles.actions}>
-                        {this.state.type == AlertType.Alert ? (
-                            <AlertButton title={"好的"} onClick={this.defaultClick} />
-                        ) : (
-                            <div>
-                                <AlertButton title={"取消"} onClick={this.defaultClick} />
-                                <AlertButton title={"确定"} onClick={this.confirmClick} />
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>
-        );
-    }
 }

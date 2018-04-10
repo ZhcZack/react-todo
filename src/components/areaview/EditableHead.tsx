@@ -2,23 +2,36 @@
  * AreaView的顶部区域，可对列表进行“重命名”，“删除”等操作。
  */
 
-import * as React from "react";
-import { ThemePicker } from "./ThemePicker";
-import { AreaActions } from "./AreaActions";
+import * as React from 'react';
+import { AreaActions } from './AreaActions';
 // import { mix } from "../../lib";
 
 // 样式表
-const styles: { [prop: string]: string } = require("./EditableHead.css");
+const styles: { [prop: string]: string } = require('./EditableHead.css');
 
 /**
  * 从父组件得到的数据
  */
 interface HeadProps {
-    /**列表名称 */
+    /**
+     * 列表名称
+     */
     listName: string;
-    /**列表主题色 */
+    /**
+     * 列表主题色
+     */
     colorTheme: string;
-    /**重命名列表，处理方法 */
+    /**
+     * 是否要显示已完成的todo项目
+     */
+    doneItemsDisplay: boolean;
+    /**
+     * 该列表是否为“基础列表”
+     */
+    isPrimaryList: boolean;
+    /**
+     * 重命名列表，处理方法
+     */
     renameList(name: string): void;
     /**
      * 是否要删除列表
@@ -28,12 +41,7 @@ interface HeadProps {
      * 显示/隐藏已完成的todo事项
      */
     switchDoneItems(): void;
-    /**
-     * 是否要显示已完成的todo项目
-     */
-    doneItemsDisplay: boolean;
-    /**该列表是否为“基础列表” */
-    isPrimaryList: boolean;
+
     /**
      * 主题选择处理方法
      */
@@ -44,9 +52,13 @@ interface HeadProps {
  * 组件内部的状态
  */
 interface HeadState {
-    /**是否处于编辑状态 */
+    /**
+     * 是否处于编辑状态
+     */
     isEdit: boolean;
-    /**保存编辑后的名称，通过props的值初始化 */
+    /**
+     * 保存编辑后的名称，通过props的值初始化
+     */
     name: string;
     /**
      * 列表操作框是否显示
@@ -57,6 +69,14 @@ interface HeadState {
 export class EditableHead extends React.Component<HeadProps, HeadState> {
     // ref引用，是一个输入文本框
     private renameInput: HTMLInputElement | null;
+
+    static getDerivedStateFromProps(nextProps: HeadProps, prevState: HeadState): HeadState {
+        return {
+            name: nextProps.listName,
+            isEdit: false,
+            isActionDisplay: false,
+        };
+    }
 
     constructor(props: HeadProps) {
         super(props);
@@ -69,12 +89,64 @@ export class EditableHead extends React.Component<HeadProps, HeadState> {
         };
     }
 
-    static getDerivedStateFromProps(nextProps: HeadProps, prevState: HeadState): HeadState {
-        return {
-            name: nextProps.listName,
-            isEdit: false,
-            isActionDisplay: false,
-        };
+    render() {
+        const color = this.props.colorTheme;
+        if (this.props.isPrimaryList) {
+            return (
+                <div
+                    className={styles.head}
+                    style={{
+                        background: `linear-gradient(to right, ${color}, ${color + 'b3'})`,
+                    }}
+                >
+                    <div className={styles.headDirectChild + ' ' + styles.name}>
+                        {this.props.listName}
+                    </div>
+                </div>
+            );
+        }
+        return (
+            <div
+                className={styles.head}
+                style={{
+                    background: `linear-gradient(to right, ${color}, ${color + 'b3'})`,
+                }}
+            >
+                <div
+                    className={`${styles.headDirectChild} ${styles.name} ${
+                        this.state.isEdit ? styles.hide : ''
+                    }`}
+                >
+                    {this.props.listName}
+                </div>
+                <input
+                    className={`${styles.headDirectChild} ${styles.input} ${
+                        this.state.isEdit ? '' : styles.hide
+                    }`}
+                    type="text"
+                    onChange={this.inputChange}
+                    ref={input => (this.renameInput = input)}
+                    onBlur={this.inputBlur}
+                />
+                <div
+                    className={styles.switcher}
+                    style={{ backgroundColor: color }}
+                    onClick={this.handleSwitch}
+                >
+                    ···
+                </div>
+                {this.state.isActionDisplay && (
+                    <AreaActions
+                        doneItemsDisplay={this.props.doneItemsDisplay}
+                        onColorPick={this.props.onColorPick}
+                        switchDoneItems={this.switchDoneItems}
+                        renameClicked={this.renameClicked}
+                        deleteClicked={this.deleteClicked}
+                        closeActions={this.closeActions}
+                    />
+                )}
+            </div>
+        );
     }
 
     /**
@@ -152,61 +224,4 @@ export class EditableHead extends React.Component<HeadProps, HeadState> {
             isActionDisplay: false,
         });
     };
-
-    render() {
-        const color = this.props.colorTheme;
-        if (this.props.isPrimaryList) {
-            return (
-                <div
-                    className={styles.head}
-                    style={{
-                        background: `linear-gradient(to right, ${color}, ${color + "b3"})`,
-                    }}>
-                    <div className={styles.headDirectChild + " " + styles.name}>
-                        {this.props.listName}
-                    </div>
-                </div>
-            );
-        }
-        return (
-            <div
-                className={styles.head}
-                style={{
-                    background: `linear-gradient(to right, ${color}, ${color + "b3"})`,
-                }}>
-                <div
-                    className={`${styles.headDirectChild} ${styles.name} ${
-                        this.state.isEdit ? styles.hide : ""
-                    }`}>
-                    {this.props.listName}
-                </div>
-                <input
-                    className={`${styles.headDirectChild} ${styles.input} ${
-                        this.state.isEdit ? "" : styles.hide
-                    }`}
-                    type="text"
-                    onChange={this.inputChange}
-                    ref={input => (this.renameInput = input)}
-                    onBlur={this.inputBlur}
-                />
-                <div
-                    className={styles.switcher}
-                    style={{ backgroundColor: color }}
-                    onClick={this.handleSwitch}>
-                    ···
-                </div>
-                {this.state.isActionDisplay && (
-                    <AreaActions
-                        // actionsShouldDisplay={this.props.actionsShouldDisplay}
-                        doneItemsDisplay={this.props.doneItemsDisplay}
-                        onColorPick={this.props.onColorPick}
-                        switchDoneItems={this.switchDoneItems}
-                        renameClicked={this.renameClicked}
-                        deleteClicked={this.deleteClicked}
-                        closeActions={this.closeActions}
-                    />
-                )}
-            </div>
-        );
-    }
 }

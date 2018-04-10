@@ -4,20 +4,26 @@
  * 显示所有列表的名称，以及一个“添加新列表”按钮
  */
 
-import * as React from "react";
-import { Content } from "./Content";
-import { ListInfo } from "../../model/interface";
-import AddListButton from "./AddNewList";
+import * as React from 'react';
+import { Content } from './Content';
+import { ListInfo } from '../../model/interface';
+import AddListButton from './AddNewList';
 
 // 样式表
-const styles: { [prop: string]: string } = require("./ListView.css");
+const styles: { [prop: string]: string } = require('./ListView.css');
 
 interface ListViewProps {
-    /**所有列表名称 */
+    /**
+     * 所有列表名称
+     */
     listInfos: ListInfo[];
-    /**添加新列表 */
+    /**
+     * 添加新列表
+     */
     addNewList(name: string): void;
-    /**切换area view显示的列表 */
+    /**
+     * 切换area view显示的列表
+     */
     switchList(listName: string): void;
     /**
      * 鼠标放开拖拽成功后，处理放置的todo事项
@@ -32,12 +38,27 @@ interface ListViewState {}
  * 列表目录
  */
 export class ListView extends React.Component<ListViewProps, ListViewState> {
-    /**用于命名新列表的计数器 */
+    /**
+     * 用于命名新列表的计数器
+     */
     private count: number;
 
     constructor(props: ListViewProps) {
         super(props);
         this.count = -1;
+    }
+
+    render() {
+        return (
+            <div id={styles.listView}>
+                <Content
+                    listInfos={this.props.listInfos}
+                    onClick={this.handleClick}
+                    onDrop={this.props.onDrop}
+                />
+                <AddListButton onClick={this.addNewList} />
+            </div>
+        );
     }
 
     /**
@@ -53,11 +74,11 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
      */
     private addNewList = () => {
         let result = true;
-        let name = "";
+        let name = '';
         while (result) {
             name = this.getListName();
             result = this.props.listInfos.some(list => {
-                return list.name == name;
+                return list.name === name;
             });
         }
         this.props.addNewList(name);
@@ -68,19 +89,6 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
      */
     private getListName = (): string => {
         this.count++;
-        return `无命名清单${this.count > 0 ? this.count : ""}`;
+        return `无命名清单${this.count > 0 ? this.count : ''}`;
     };
-
-    render() {
-        return (
-            <div id={styles.listView}>
-                <Content
-                    listInfos={this.props.listInfos}
-                    onClick={this.handleClick}
-                    onDrop={this.props.onDrop}
-                />
-                <AddListButton onClick={this.addNewList} />
-            </div>
-        );
-    }
 }

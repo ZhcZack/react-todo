@@ -1,35 +1,52 @@
-import * as React from "react";
-import { TodoItem, TodoList, ListInfo } from "../../model/interface";
-import { DetailView } from "./../detailview/DetailView";
-import { AddNewItem } from "./AddNewItem";
-import { AreaViewContent } from "./ViewTodoContent";
-import { EditableHead } from "./EditableHead";
-import { mix } from "../../lib";
+import * as React from 'react';
+import { TodoItem, ListInfo } from '../../model/interface';
+// import { DetailView } from "./../detailview/DetailView";
+import { AddNewItem } from './AddNewItem';
+import { AreaViewContent } from './ViewTodoContent';
+import { EditableHead } from './EditableHead';
 
-const styles: { [prop: string]: string } = require("./AreaView.css");
+const styles: { [prop: string]: string } = require('./AreaView.css');
 
 interface Props {
     /**
      * 列表的信息
      */
     listInfo: ListInfo;
-    /**列表下的所有todo事项 */
+    /**
+     * 列表下的所有todo事项
+     */
     todoItems: TodoItem[];
-    /**列表是否要紧缩 */
+    /**
+     * 列表是否要紧缩
+     */
     shrink: boolean;
-    /**todo事项点击，处理方法 */
+    /**
+     * todo事项点击，处理方法
+     */
     itemClicked(itemName: string, listName: string): void;
-    /**重命名列表，处理方法 */
+    /**
+     * 重命名列表，处理方法
+     */
     renameList(oldName: string, newName: string): void;
-    /**删除列表处理方法 */
+    /**
+     * 删除列表处理方法
+     */
     shouldDeleteList(): void;
-    /**在列表中添加新todo项目，处理方法 */
+    /**
+     * 在列表中添加新todo项目，处理方法
+     */
     addNewItemInList(itemName: string, listName: string): void;
-    /**切换todo事项完成状态，处理方法 */
+    /**
+     * 切换todo事项完成状态，处理方法
+     */
     toggleItemInList(itemName: string, listName: string): void;
-    /**拖拽todo事项 */
+    /**
+     * 拖拽todo事项
+     */
     onDragStart(data: string): void;
-    /**拖拽结束/被取消 */
+    /**
+     * 拖拽结束/被取消
+     */
     onDragEnd(): void;
     /**
      * 主题选择处理函数
@@ -39,7 +56,9 @@ interface Props {
 }
 
 interface State {
-    /**文本框输入的数据内容 */
+    /**
+     * 文本框输入的数据内容
+     */
     inputValue: string;
     showDoneItems: boolean;
 }
@@ -53,10 +72,22 @@ interface State {
 // }
 
 export class AreaView extends React.Component<Props, State> {
+    static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+        if (nextProps.listInfo.name !== prevState.inputValue) {
+            return {
+                inputValue: '',
+            };
+        }
+        return {
+            inputValue: prevState.inputValue,
+            showDoneItems: prevState.showDoneItems,
+        };
+    }
+
     constructor(props: Props) {
         super(props);
         this.state = {
-            inputValue: "",
+            inputValue: '',
             showDoneItems: false,
         };
 
@@ -78,7 +109,8 @@ export class AreaView extends React.Component<Props, State> {
             <div
                 // style={this.props.shrink ? mix(viewStyles, viewShrinkStyles) : viewStyles}
                 id={styles.areaView}
-                className={this.props.shrink ? styles.shrink : ""}>
+                className={this.props.shrink ? styles.shrink : ''}
+            >
                 <EditableHead
                     isPrimaryList={listInfo.isPrimary}
                     listName={listInfo.name}
@@ -110,14 +142,6 @@ export class AreaView extends React.Component<Props, State> {
         );
     }
 
-    static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-        if (nextProps.listInfo.name != prevState.inputValue) {
-            return {
-                inputValue: "",
-            };
-        }
-    }
-
     /**
      * 显示/隐藏已完成的todo事项
      */
@@ -132,7 +156,7 @@ export class AreaView extends React.Component<Props, State> {
      * @param data todo事项的原始数据
      */
     private handleDragStart = (data: string) => {
-        const obj = JSON.parse(data);
+        // const obj = JSON.parse(data);
         // console.log(`obj: ${obj}, type: ${typeof obj}`)
         const newData = JSON.stringify({
             listName: this.props.listInfo.name,
@@ -178,7 +202,7 @@ export class AreaView extends React.Component<Props, State> {
     private addNewItem = () => {
         this.props.addNewItemInList(this.state.inputValue, this.props.listInfo.name);
         this.setState({
-            inputValue: "",
+            inputValue: '',
         });
     };
 
@@ -187,7 +211,7 @@ export class AreaView extends React.Component<Props, State> {
      * @param e 鼠标点击事件
      */
     private cancelInput = () => {
-        this.setState({ inputValue: "" });
+        this.setState({ inputValue: '' });
     };
 
     /**

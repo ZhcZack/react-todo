@@ -4,17 +4,16 @@
  * 提供“关闭detail view”以及“删除todo”的功能
  */
 
-import * as React from "react";
-import { TodoItem } from "../../model/interface";
-import { mix } from "../../lib";
+import * as React from 'react';
+import { TodoItem } from '../../model/interface';
 
 // 样式表
-const styles: { [prop: string]: string } = require("./Actions.css");
+const styles: { [prop: string]: string } = require('./Actions.css');
 
 interface Props {
+    item: TodoItem;
     onCloseClicked(): void;
     onDeleteClicked(): void;
-    item: TodoItem;
 }
 
 interface State {}
@@ -22,6 +21,20 @@ interface State {}
 export class Actions extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
+    }
+
+    render() {
+        return (
+            <div className={styles.actions}>
+                <span className={styles.sideButton} onClick={this.handleCloseClicked}>
+                    &gt;
+                </span>
+                <span className={styles.timeLabel}>创建于{this.props.item.time}</span>
+                <span className={styles.sideButton} onClick={this.handleDeleteClicked}>
+                    删除
+                </span>
+            </div>
+        );
     }
 
     /**
@@ -39,18 +52,4 @@ export class Actions extends React.Component<Props, State> {
         e.stopPropagation();
         this.props.onDeleteClicked();
     };
-
-    render() {
-        return (
-            <div className={styles.actions}>
-                <span className={styles.sideButton} onClick={this.handleCloseClicked}>
-                    &gt;
-                </span>
-                <span className={styles.timeLabel}>创建于{this.props.item.time}</span>
-                <span className={styles.sideButton} onClick={this.handleDeleteClicked}>
-                    删除
-                </span>
-            </div>
-        );
-    }
 }

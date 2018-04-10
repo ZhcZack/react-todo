@@ -1,14 +1,16 @@
-import { TodoItem, TodoList, ListInfo } from "./interface";
-import { TodoItemClass } from "./todo-item";
+import { TodoItem, TodoList, ListInfo } from './interface';
+import { TodoItemClass } from './todo-item';
 
 /**
  * 保存todo项目的列表类
  */
 export class TodoListClass implements TodoList {
-    private primaryListName = "我的一天";
-    /**保存的todo项目 */
+    private primaryListName = '我的一天';
+    /**
+     * 保存的todo项目
+     */
     private todoItems: TodoItemClass[];
-    private color = "#87cefa";
+    private color = '#87cefa';
 
     get colorTheme(): string {
         return this.color;
@@ -22,7 +24,9 @@ export class TodoListClass implements TodoList {
         return this.todoItems;
     }
 
-    /**保存项目的数量 */
+    /**
+     * 保存项目的数量
+     */
     get count(): number {
         return this.todoItems.length;
     }
@@ -41,7 +45,7 @@ export class TodoListClass implements TodoList {
             name: this.name,
             count,
             isActive: false,
-            isPrimary: this.name === "我的一天",
+            isPrimary: this.name === '我的一天',
             theme: this.colorTheme,
         };
     }
@@ -52,22 +56,13 @@ export class TodoListClass implements TodoList {
             count: this.count,
             isActive: false,
             theme: this.colorTheme,
-            isPrimary: this.name === "我的一天",
+            isPrimary: this.name === '我的一天',
         };
     }
 
     constructor(public name: string) {
         this.name = name;
         this.todoItems = [];
-    }
-
-    private toJSON() {
-        return {
-            name: this.name,
-            items: this.todoItems,
-            count: this.count,
-            theme: this.colorTheme,
-        };
     }
 
     /**
@@ -88,14 +83,14 @@ export class TodoListClass implements TodoList {
      * @param item 要添加的todo项目（有两种表示方式，一个是todo的名称，另一个是todo本身）
      */
     addNewItem(item: TodoItem | string) {
-        if (typeof item == "string") {
+        if (typeof item === 'string') {
             const inOrNot = this.containsItem(item);
             if (inOrNot) {
                 return;
             }
             const newItem = new TodoItemClass(item);
             newItem.source = this.name;
-            newItem.inPrimaryList = this.name == this.primaryListName;
+            newItem.inPrimaryList = this.name === this.primaryListName;
             this.todoItems.push(newItem);
         } else {
             const inOrNot = this.containsItem(item.name);
@@ -192,5 +187,15 @@ export class TodoListClass implements TodoList {
             }
         }
         return -1;
+    }
+
+    // @ts-ignore
+    private toJSON() {
+        return {
+            name: this.name,
+            items: this.todoItems,
+            count: this.count,
+            theme: this.colorTheme,
+        };
     }
 }

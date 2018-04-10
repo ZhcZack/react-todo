@@ -3,12 +3,11 @@
  *
  */
 
-import * as React from "react";
-import { TodoItem } from "../../model/interface";
-import { mix } from "../../lib";
+import * as React from 'react';
+import { TodoItem } from '../../model/interface';
 
 // 样式表
-const styles = require("./PrimaryCopy.css");
+const styles = require('./PrimaryCopy.css');
 
 interface Props {
     item: TodoItem;
@@ -21,6 +20,28 @@ interface State {}
 export class PrimaryCopy extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
+    }
+
+    render() {
+        return (
+            <div className={styles.primaryCopy}>
+                {this.props.item.inPrimaryList ? (
+                    <div className={styles.copyArea}>
+                        <p className={styles.copyText}>已添加到“我的一天”</p>
+                        <span
+                            className={styles.cancelButton}
+                            onClick={this.handleCancelCopyToPrimary}
+                        >
+                            X
+                        </span>
+                    </div>
+                ) : (
+                    <p className={styles.copyButton} onClick={this.handleCopyToPrimary}>
+                        添加到“我的一天”
+                    </p>
+                )}
+            </div>
+        );
     }
 
     /**
@@ -38,25 +59,4 @@ export class PrimaryCopy extends React.Component<Props, State> {
         e.stopPropagation();
         this.props.onCopyToPrimary();
     };
-
-    render() {
-        return (
-            <div className={styles.primaryCopy}>
-                {this.props.item.inPrimaryList ? (
-                    <div className={styles.copyArea}>
-                        <p className={styles.copyText}>已添加到“我的一天”</p>
-                        <span
-                            className={styles.cancelButton}
-                            onClick={this.handleCancelCopyToPrimary}>
-                            X
-                        </span>
-                    </div>
-                ) : (
-                    <p className={styles.copyButton} onClick={this.handleCopyToPrimary}>
-                        添加到“我的一天”
-                    </p>
-                )}
-            </div>
-        );
-    }
 }
