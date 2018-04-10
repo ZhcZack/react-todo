@@ -1,3 +1,7 @@
+/**
+ * 整个Todo App区域组件，负责一切功能
+ */
+
 import * as React from "react";
 import { ListView } from "./components/listview/ListView";
 import { AreaView } from "./components/areaview/AreaView";
@@ -6,6 +10,7 @@ import { DataServer } from "./model/data-server";
 import { TodoItem, ListInfo } from "./model/interface";
 import { Alert, AlertType } from "./components/util/GlobalAlert";
 
+// 样式表
 const styles: { [prop: string]: string } = require("./App.css");
 
 interface AppProps {}
@@ -41,17 +46,6 @@ interface AppState {
     deleteConfirmMessage: string;
 }
 
-// const appStyles = {
-//     width: "100vw",
-//     height: "100vh",
-//     display: "flex",
-//     flexDirection: "row",
-//     flexWrap: "nowrap",
-//     justifyContent: "flex-start",
-//     position: "relative",
-//     zIndex: 1,
-// } as React.CSSProperties;
-
 /**
  * App主内容区域
  */
@@ -71,7 +65,6 @@ export class App extends React.Component<AppProps, AppState> {
             listInfos: [],
             itemsOfList: [],
             detailItem: undefined,
-            // colorTheme: this.server.themeForList(this.server.lastModified),
             displayDataErrorAlert: false,
             dataErrorMessage: "",
             displayDeleteListAlert: false,
@@ -104,8 +97,6 @@ export class App extends React.Component<AppProps, AppState> {
 
     /**
      * 一开始载入界面时从“远端”获取必要数据的函数
-     *
-     *
      */
     private initFetch() {
         new Promise<ListInfo[]>((resolve, reject) => {
@@ -118,10 +109,6 @@ export class App extends React.Component<AppProps, AppState> {
                 this.setState({
                     listInfos: infos,
                 });
-                // let info = infos.filter(
-                //   info => info.name === this.state.lastModifiedListName,
-                // )
-                // return info[0].name
                 return new Promise((res: (name: string) => void, rej) => {
                     const name = this.server.lastModified;
                     this.setState({
@@ -232,14 +219,11 @@ export class App extends React.Component<AppProps, AppState> {
     }
 
     componentDidMount() {
-        // this.fetchItems()
-        // this.fetchListInfo()
         this.initFetch();
     }
 
     /**
      * 弹窗中”确认“按钮的点击处理函数
-     * @param e 鼠标事件
      */
     private alertDefaultAction() {
         // 默认的都是“好的”之类，要隐藏掉所有的弹出框内容
@@ -301,7 +285,6 @@ export class App extends React.Component<AppProps, AppState> {
 
     /**
      * 将todo项目移出primary list
-     * @param e 鼠标点击事件
      */
     private cancelCopyToPrimaryList() {
         if (!this.state.detailItem) {
@@ -324,7 +307,6 @@ export class App extends React.Component<AppProps, AppState> {
         }
 
         this.server.deleteItemInList(item.name, this.primaryListName);
-        // this.server.markItemNotPrimary(item.name, currentList);
         this.server.markItemPrimaryStatus(item.name, currentList, false);
 
         for (let todo of todos) {
@@ -401,13 +383,11 @@ export class App extends React.Component<AppProps, AppState> {
         }
         this.setState({
             itemsOfList: todos,
-            // detailItem: undefined,
         });
     }
 
     /**
      * 从detail view中将todo复制到primary list中
-     * @param e 鼠标点击事件
      */
     private copyItemToPrimaryListFromDetailView() {
         if (!this.state.detailItem) {
@@ -451,6 +431,11 @@ export class App extends React.Component<AppProps, AppState> {
         });
     }
 
+    /**
+     * 是否要删除列表
+     *
+     * 弹出窗口让用户选择
+     */
     private shouldDeleteList() {
         this.setState({
             displayDeleteListAlert: true,
@@ -480,8 +465,6 @@ export class App extends React.Component<AppProps, AppState> {
             listInfos: infos,
             lastModifiedListName: infos[0].name,
             displayDeleteListAlert: false,
-            // colorTheme: this.server.themeForList(this.server.lastModified),
-            // itemsOfList: this.server.itemsOfList(listName),
         });
         // 这里要继续使用这个方法，因为之前的todos要被清空换新
         this.fetchItems();
@@ -545,7 +528,6 @@ export class App extends React.Component<AppProps, AppState> {
             listInfos: infos,
             itemsOfList: [],
         });
-        // this.fetchItems()
     }
 
     /**
@@ -581,11 +563,9 @@ export class App extends React.Component<AppProps, AppState> {
         });
 
         this.setState({
-            // itemsOfList: this.server.itemsOfList(this.state.lastModifiedListName),
             listInfos: infos,
             itemsOfList: items,
         });
-        // this.fetchItems()
     }
 
     /**
@@ -689,7 +669,6 @@ export class App extends React.Component<AppProps, AppState> {
 
     /**
      * 处理detail view里的“切换状态”请求
-     * @param e 鼠标点击事件
      */
     private handleToggleFromDetailView() {
         if (!this.state.detailItem) {
@@ -716,7 +695,6 @@ export class App extends React.Component<AppProps, AppState> {
 
     /**
      * 处理detail view里的“关闭detail view”请求
-     * @param e 鼠标点击事件
      */
     private handleCloseFromDetailView() {
         this.setState({
@@ -726,7 +704,6 @@ export class App extends React.Component<AppProps, AppState> {
 
     /**
      * 处理detail view里的“删除todo事项”请求
-     * @param e 鼠标点击事件
      */
     private handleDeleteFromDetailView() {
         if (!this.state.detailItem) {
@@ -757,11 +734,9 @@ export class App extends React.Component<AppProps, AppState> {
         // 删除了todo之后，detailItem自然就没有了
         this.setState({
             detailItem: undefined,
-            // itemsOfList: this.server.itemsOfList(listName),
             listInfos: infos,
             itemsOfList: todos,
         });
-        // this.fetchItems()
     }
 
     /**
@@ -794,7 +769,6 @@ export class App extends React.Component<AppProps, AppState> {
                 : undefined,
             itemsOfList: todos,
         }));
-        // this.fetchItems()
     }
 
     /**
@@ -848,12 +822,10 @@ export class App extends React.Component<AppProps, AppState> {
                 listInfo = info;
             }
         });
-        // const infos = this.state.listInfos.splice(0)
-        // console.log(`infos: ${infos}`)
+
         return (
             <div id={styles.app}>
                 <ListView
-                    // currentListName={this.state.lastModifiedListName}
                     switchList={this.switchList}
                     addNewList={this.addNewList}
                     listInfos={this.state.listInfos}

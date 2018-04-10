@@ -1,3 +1,7 @@
+/**
+ * 显示和修改todo备注的区域
+ */
+
 import * as React from "react";
 
 const styles: { [propName: string]: string } = require("./Comments.css");
@@ -11,20 +15,6 @@ interface State {
     comments: string;
 }
 
-/**
- * 备注区域的样式
- */
-// const commentStyles = {
-//   width: "90%",
-//   height: "calc(30vh)",
-//   margin: "5%",
-//   padding: 10,
-//   resize: "none",
-//   scrollBehavior: "auto",
-//   borderColor: "rgba(206, 197, 197, 0.5)",
-//   outline: "none",
-// }
-
 export class Comments extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
@@ -37,15 +27,17 @@ export class Comments extends React.Component<Props, State> {
         this.handleCommentsOnBlur = this.handleCommentsOnBlur.bind(this);
     }
 
-    componentWillReceiveProps(newProps: Props) {
-        this.setState({
-            comments: newProps.initComments,
-        });
+    /**
+     * 新的生命周期钩子
+     */
+    static getDerivedStateFromProps(nextProps: Props, prevState: State): State {
+        return {
+            comments: nextProps.initComments,
+        };
     }
 
     /**
      * 更新comments的值
-     * @param e 键盘输入事件
      */
     private handleCommentsChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
         e.stopPropagation();
@@ -54,16 +46,15 @@ export class Comments extends React.Component<Props, State> {
 
     /**
      * textarea失去标点的时候更新todo的备注
-     * @param e 光标移出事件
      */
     private handleCommentsOnBlur(e: React.FocusEvent<HTMLTextAreaElement>) {
         e.stopPropagation();
         this.props.onCommentsChange(this.state.comments);
     }
+
     render() {
         return (
             <textarea
-                // style={commentStyles}
                 className={styles.comments}
                 value={this.state.comments}
                 onChange={this.handleCommentsChange}

@@ -1,8 +1,14 @@
+/**
+ * 全局提醒窗口
+ *
+ * 目前有两种使用场景，一个是数据初始化错误的提示，另一个是需要用户确认是否要删除列表
+ */
+
 import * as React from "react";
 import { mix } from "../../lib";
 import { AlertButton } from "./GlobalAlertButton";
 
-// 样式
+// 样式表
 const styles: { [prop: string]: string } = require("./GlobalAlert.css");
 
 interface Props {
@@ -14,62 +20,18 @@ interface Props {
 }
 
 interface State {
-    // confirmButtonHover: boolean;
     type: AlertType;
 }
 
+/**
+ * 提醒的类别
+ *
+ * 目前只有两种类别，（默认的）提醒和（需要用户确认的）确认
+ */
 export enum AlertType {
     Alert,
     Confirm,
 }
-
-/**
- * 提示框后的全屏背景遮罩层样式
- */
-// const backgroundStyles: React.CSSProperties = {
-//     left: 0,
-//     top: 0,
-//     width: "100vw",
-//     height: "100vh",
-//     position: "fixed",
-//     zIndex: 2,
-//     visibility: "hidden",
-//     backgroundColor: "rgba(90, 85, 85, 0.37)",
-//     display: "flex",
-//     justifyContent: "center",
-//     alignItems: "center",
-// };
-// const backgroundDisplay: React.CSSProperties = {
-//     visibility: "visible",
-// };
-
-/**
- * 提示框的样式
- */
-// const alertStyles: React.CSSProperties = {
-//     width: "30vw",
-//     height: "30vh",
-//     backgroundColor: "white",
-//     borderRadius: 8,
-//     borderColor: "rgba(206, 197, 197, 0.5)",
-//     padding: 10,
-//     display: "flex",
-//     flexWrap: "wrap",
-// };
-/**
- * alert的提示消息样式
- */
-// const alertMessageStyles: React.CSSProperties = {
-//     width: "100%",
-// };
-/**
- * 提示框操作部分的样式
- */
-// const alertActionStyles: React.CSSProperties = {
-//     display: "flex",
-//     flexDirection: "column-reverse",
-//     width: "100%",
-// };
 
 export class Alert extends React.Component<Props, State> {
     constructor(props: Props) {
@@ -92,10 +54,16 @@ export class Alert extends React.Component<Props, State> {
         };
     }
 
+    /**
+     * 点击“好的”（默认按钮）
+     */
     private defaultClick() {
         this.props.alertDefaultAction();
     }
 
+    /**
+     * 点击“确定”（确认按钮）
+     */
     private confirmClick() {
         if (this.props.alertConfirmAction) {
             this.props.alertConfirmAction();
@@ -103,10 +71,6 @@ export class Alert extends React.Component<Props, State> {
     }
 
     render() {
-        // let backgroundS = mix(backgroundStyles);
-        // if (this.props.display) {
-        //     backgroundS = mix(backgroundS, backgroundDisplay);
-        // }
         return (
             <div
                 className={
