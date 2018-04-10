@@ -21,27 +21,23 @@ interface State {}
 export class PrimaryCopy extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-
-        // bind methods
-        this.handleCancelCopyToPrimary = this.handleCancelCopyToPrimary.bind(this);
-        this.handleCopyToPrimary = this.handleCopyToPrimary.bind(this);
     }
 
     /**
      * 从primary list中移除todo
      */
-    private handleCancelCopyToPrimary(e: React.MouseEvent<HTMLSpanElement>) {
+    private handleCancelCopyToPrimary = (e: React.MouseEvent<HTMLSpanElement>) => {
         e.stopPropagation();
         this.props.onCancelCopyToPrimary();
-    }
+    };
 
     /**
      * 复制copy到primary list中
      */
-    private handleCopyToPrimary(e: React.MouseEvent<HTMLSpanElement>) {
+    private handleCopyToPrimary = (e: React.MouseEvent<HTMLSpanElement>) => {
         e.stopPropagation();
         this.props.onCopyToPrimary();
-    }
+    };
 
     render() {
         return (

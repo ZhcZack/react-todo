@@ -40,10 +40,6 @@ export class Alert extends React.Component<Props, State> {
             // confirmButtonHover: false,
             type: this.props.type,
         };
-
-        // bind methods
-        this.defaultClick = this.defaultClick.bind(this);
-        this.confirmClick = this.confirmClick.bind(this);
     }
 
     // new lifecycle hook, replace `willReceive`
@@ -57,18 +53,18 @@ export class Alert extends React.Component<Props, State> {
     /**
      * 点击“好的”（默认按钮）
      */
-    private defaultClick() {
+    private defaultClick = () => {
         this.props.alertDefaultAction();
-    }
+    };
 
     /**
      * 点击“确定”（确认按钮）
      */
-    private confirmClick() {
+    private confirmClick = () => {
         if (this.props.alertConfirmAction) {
             this.props.alertConfirmAction();
         }
-    }
+    };
 
     render() {
         return (

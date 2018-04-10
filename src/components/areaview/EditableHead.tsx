@@ -67,14 +67,6 @@ export class EditableHead extends React.Component<HeadProps, HeadState> {
             name: this.props.listName,
             isActionDisplay: false,
         };
-
-        this.inputChange = this.inputChange.bind(this);
-        this.renameClicked = this.renameClicked.bind(this);
-        this.deleteClicked = this.deleteClicked.bind(this);
-        this.handleSwitch = this.handleSwitch.bind(this);
-        this.inputBlur = this.inputBlur.bind(this);
-        this.switchDoneItems = this.switchDoneItems.bind(this);
-        this.closeActions = this.closeActions.bind(this);
     }
 
     static getDerivedStateFromProps(nextProps: HeadProps, prevState: HeadState): HeadState {
@@ -88,16 +80,16 @@ export class EditableHead extends React.Component<HeadProps, HeadState> {
     /**
      * 保存输入的内容，作为新的列表名
      */
-    private inputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    private inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
             name: e.target.value,
         });
-    }
+    };
 
     /**
      * 进行重命名工作
      */
-    private renameClicked() {
+    private renameClicked = () => {
         this.toggleActionsDisplay();
 
         this.setState({ isEdit: true }, () => {
@@ -106,60 +98,60 @@ export class EditableHead extends React.Component<HeadProps, HeadState> {
                 this.renameInput.value = this.props.listName;
             }
         });
-    }
+    };
 
     /**
      * 确认删除列表操作
      */
-    private deleteClicked() {
+    private deleteClicked = () => {
         this.props.shouldDeleteList();
-    }
+    };
 
     /**
      * 显示/隐藏操作列表的视图
      */
-    private handleSwitch(e: React.MouseEvent<HTMLDivElement>) {
+    private handleSwitch = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
         // this.props.onActionsDisplayClick();
         this.toggleActionsDisplay();
-    }
+    };
 
     /**
      * 这个方法用于切换列表操作框，将它显示或隐藏。
      */
-    private toggleActionsDisplay() {
+    private toggleActionsDisplay = () => {
         this.setState(prevState => ({
             isActionDisplay: !prevState.isActionDisplay,
         }));
-    }
+    };
 
     /**
      * 当焦点从输入框移走时，进行列表的重命名工作
      */
-    private inputBlur(e: React.FocusEvent<HTMLInputElement>) {
+    private inputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
         e.stopPropagation();
         this.props.renameList(this.state.name);
         this.setState({
             isEdit: false,
         });
-    }
+    };
 
     /**
      * 显示/隐藏已完成的todo事项
      */
-    private switchDoneItems() {
+    private switchDoneItems = () => {
         this.props.switchDoneItems();
         this.toggleActionsDisplay();
-    }
+    };
 
     /**
      * 关闭操作窗口
      */
-    private closeActions() {
+    private closeActions = () => {
         this.setState({
             isActionDisplay: false,
         });
-    }
+    };
 
     render() {
         const color = this.props.colorTheme;

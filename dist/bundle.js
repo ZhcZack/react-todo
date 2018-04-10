@@ -18977,6 +18977,9 @@ module.exports = {"app":"App-app-2hfFHIu"};
 
 "use strict";
 
+/**
+ * 整个Todo App区域组件，负责一切功能
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -18994,17 +18997,8 @@ var AreaView_1 = __webpack_require__(/*! ./components/areaview/AreaView */ "./sr
 var DetailView_1 = __webpack_require__(/*! ./components/detailview/DetailView */ "./src/components/detailview/DetailView.tsx");
 var data_server_1 = __webpack_require__(/*! ./model/data-server */ "./src/model/data-server.ts");
 var GlobalAlert_1 = __webpack_require__(/*! ./components/util/GlobalAlert */ "./src/components/util/GlobalAlert.tsx");
+// 样式表
 var styles = __webpack_require__(/*! ./App.css */ "./src/App.css");
-// const appStyles = {
-//     width: "100vw",
-//     height: "100vh",
-//     display: "flex",
-//     flexDirection: "row",
-//     flexWrap: "nowrap",
-//     justifyContent: "flex-start",
-//     position: "relative",
-//     zIndex: 1,
-// } as React.CSSProperties;
 /**
  * App主内容区域
  */
@@ -19013,572 +19007,544 @@ var App = /** @class */ (function (_super) {
     function App(props) {
         var _this = _super.call(this, props) || this;
         _this.primaryListName = "我的一天";
-        _this.server = new data_server_1.DataServer();
-        _this.state = {
-            lastModifiedListName: "",
-            listInfos: [],
-            itemsOfList: [],
-            detailItem: undefined,
-            // colorTheme: this.server.themeForList(this.server.lastModified),
-            displayDataErrorAlert: false,
-            dataErrorMessage: "",
-            displayDeleteListAlert: false,
-            deleteConfirmMessage: "是否要删除列表？",
-        };
-        // bind methods
-        _this.switchList = _this.switchList.bind(_this);
-        _this.itemClicked = _this.itemClicked.bind(_this);
-        _this.addNewList = _this.addNewList.bind(_this);
-        _this.renameList = _this.renameList.bind(_this);
-        _this.deleteList = _this.deleteList.bind(_this);
-        _this.addNewItemInList = _this.addNewItemInList.bind(_this);
-        _this.toggleItemInList = _this.toggleItemInList.bind(_this);
-        _this.handleToggleFromDetailView = _this.handleToggleFromDetailView.bind(_this);
-        _this.handleCloseFromDetailView = _this.handleCloseFromDetailView.bind(_this);
-        _this.handleDeleteFromDetailView = _this.handleDeleteFromDetailView.bind(_this);
-        _this.handleCommentsChange = _this.handleCommentsChange.bind(_this);
-        _this.handleDragStart = _this.handleDragStart.bind(_this);
-        _this.handleDrop = _this.handleDrop.bind(_this);
-        _this.handleDragEnd = _this.handleDragEnd.bind(_this);
-        _this.handleColorPick = _this.handleColorPick.bind(_this);
-        _this.alertDefaultAction = _this.alertDefaultAction.bind(_this);
-        _this.copyItemToPrimaryListFromDetailView = _this.copyItemToPrimaryListFromDetailView.bind(_this);
-        _this.cancelCopyToPrimaryList = _this.cancelCopyToPrimaryList.bind(_this);
-        _this.shouldDeleteList = _this.shouldDeleteList.bind(_this);
-        return _this;
-    }
-    /**
-     * 一开始载入界面时从“远端”获取必要数据的函数
-     *
-     *
-     */
-    App.prototype.initFetch = function () {
-        var _this = this;
-        new Promise(function (resolve, reject) {
-            var infos = JSON.parse(_this.server.listInfos);
-            if (Array.isArray(infos)) {
-                resolve(infos);
-            }
-        })
-            .then(function (infos) {
-            _this.setState({
-                listInfos: infos,
-            });
-            // let info = infos.filter(
-            //   info => info.name === this.state.lastModifiedListName,
-            // )
-            // return info[0].name
-            return new Promise(function (res, rej) {
-                var name = _this.server.lastModified;
-                _this.setState({
-                    lastModifiedListName: name,
-                });
-                res(name);
-            });
-        })
-            .then(function (listName) {
-            return new Promise(function (res, rej) {
-                var items = JSON.parse(_this.server.itemsOfList(listName));
-                var message = _this.server.loadError;
-                if (message) {
-                    rej("local data error");
+        /**
+         * 一开始载入界面时从“远端”获取必要数据的函数
+         */
+        _this.initFetch = function () {
+            new Promise(function (resolve, reject) {
+                var infos = JSON.parse(_this.server.listInfos);
+                if (Array.isArray(infos)) {
+                    resolve(infos);
                 }
+            })
+                .then(function (infos) {
+                _this.setState({
+                    listInfos: infos,
+                });
+                return new Promise(function (res, rej) {
+                    var name = _this.server.lastModified;
+                    _this.setState({
+                        lastModifiedListName: name,
+                    });
+                    res(name);
+                });
+            })
+                .then(function (listName) {
+                return new Promise(function (res, rej) {
+                    var items = JSON.parse(_this.server.itemsOfList(listName));
+                    var message = _this.server.loadError;
+                    if (message) {
+                        rej("local data error");
+                    }
+                    if (Array.isArray(items)) {
+                        res(items);
+                    }
+                    else {
+                        rej("local data error");
+                    }
+                    items.forEach(function (item) {
+                        if (item.name === undefined ||
+                            item.done === undefined ||
+                            item.time === undefined ||
+                            item.inPrimaryList === undefined ||
+                            item.source === undefined) {
+                            rej("local data error");
+                        }
+                    });
+                });
+            })
+                .then(function (items) {
+                _this.setState({
+                    itemsOfList: items,
+                });
+            }, function (error) {
+                // console.log('error')
+                new Promise(function (res, rej) {
+                    var message = _this.server.loadError;
+                    res(message);
+                }).then(function (message) {
+                    // console.log('error')
+                    _this.setState({
+                        displayDataErrorAlert: message !== undefined,
+                        dataErrorMessage: message ? message : "",
+                    });
+                });
+            });
+        };
+        /**
+         * 从“远端”获取列表们的信息
+         */
+        _this.fetchListInfo = function () {
+            var p = new Promise(function (res, rej) {
+                var infos = JSON.parse(_this.server.listInfos);
+                if (Array.isArray(infos)) {
+                    res(infos);
+                }
+            });
+            p.then(function (infos) {
+                // console.log(infos);
+                _this.setState({
+                    listInfos: infos,
+                });
+            });
+        };
+        /**
+         * 从“远端”获取当前列表中todo事项的信息
+         */
+        _this.fetchItems = function () {
+            var p = new Promise(function (res, rej) {
+                var listName = _this.server.lastModified;
+                var items = JSON.parse(_this.server.itemsOfList(listName));
                 if (Array.isArray(items)) {
                     res(items);
                 }
-                else {
-                    rej("local data error");
-                }
-                items.forEach(function (item) {
-                    if (item.name === undefined ||
-                        item.done === undefined ||
-                        item.time === undefined ||
-                        item.inPrimaryList === undefined ||
-                        item.source === undefined) {
-                        rej("local data error");
-                    }
+            });
+            p.then(function (items) {
+                _this.setState({
+                    itemsOfList: items,
                 });
             });
-        })
-            .then(function (items) {
-            _this.setState({
-                itemsOfList: items,
-            });
-        }, function (error) {
-            // console.log('error')
-            new Promise(function (res, rej) {
+        };
+        /**
+         * 从“远端”获取加载错误的信息
+         */
+        _this.fetchErrorMessage = function () {
+            var p = new Promise(function (res, rej) {
                 var message = _this.server.loadError;
                 res(message);
-            }).then(function (message) {
-                // console.log('error')
+            });
+            p.then(function (message) {
                 _this.setState({
                     displayDataErrorAlert: message !== undefined,
                     dataErrorMessage: message ? message : "",
                 });
             });
-        });
-    };
-    /**
-     * 从“远端”获取列表们的信息
-     */
-    App.prototype.fetchListInfo = function () {
-        var _this = this;
-        var p = new Promise(function (res, rej) {
-            var infos = JSON.parse(_this.server.listInfos);
-            if (Array.isArray(infos)) {
-                res(infos);
+        };
+        /**
+         * 弹窗中”确认“按钮的点击处理函数
+         */
+        _this.alertDefaultAction = function () {
+            // 默认的都是“好的”之类，要隐藏掉所有的弹出框内容
+            _this.setState({
+                displayDataErrorAlert: false,
+                displayDeleteListAlert: false,
+            });
+        };
+        /**
+         * 拖拽完成/结束时的处理方法，将一个todo移动到另一个列表中去。
+         * @param targetListName todo要被拖拽到的目标列表名称
+         */
+        _this.handleDrop = function (targetListName) {
+            if (!_this.dragData) {
+                return;
             }
-        });
-        p.then(function (infos) {
-            // console.log(infos);
-            _this.setState({
-                listInfos: infos,
-            });
-        });
-    };
-    /**
-     * 从“远端”获取当前列表中todo事项的信息
-     */
-    App.prototype.fetchItems = function () {
-        var _this = this;
-        var p = new Promise(function (res, rej) {
-            var listName = _this.server.lastModified;
-            var items = JSON.parse(_this.server.itemsOfList(listName));
-            if (Array.isArray(items)) {
-                res(items);
+            var data = JSON.parse(_this.dragData);
+            var sourceListName = data.listName;
+            var itemData = JSON.parse(data.data);
+            // 开始和结束的列表不能是同一个，不然拖拽没有意义
+            if (sourceListName === targetListName) {
+                return;
             }
-        });
-        p.then(function (items) {
-            _this.setState({
-                itemsOfList: items,
-            });
-        });
-    };
-    /**
-     * 从“远端”获取加载错误的信息
-     */
-    App.prototype.fetchErrorMessage = function () {
-        var _this = this;
-        var p = new Promise(function (res, rej) {
-            var message = _this.server.loadError;
-            res(message);
-        });
-        p.then(function (message) {
-            _this.setState({
-                displayDataErrorAlert: message !== undefined,
-                dataErrorMessage: message ? message : "",
-            });
-        });
-    };
-    App.prototype.componentDidMount = function () {
-        // this.fetchItems()
-        // this.fetchListInfo()
-        this.initFetch();
-    };
-    /**
-     * 弹窗中”确认“按钮的点击处理函数
-     * @param e 鼠标事件
-     */
-    App.prototype.alertDefaultAction = function () {
-        // 默认的都是“好的”之类，要隐藏掉所有的弹出框内容
-        this.setState({
-            displayDataErrorAlert: false,
-            displayDeleteListAlert: false,
-        });
-    };
-    /**
-     * 拖拽完成/结束时的处理方法，将一个todo移动到另一个列表中去。
-     * @param targetListName todo要被拖拽到的目标列表名称
-     */
-    App.prototype.handleDrop = function (targetListName) {
-        if (!this.dragData) {
-            return;
-        }
-        var data = JSON.parse(this.dragData);
-        var sourceListName = data.listName;
-        var itemData = JSON.parse(data.data);
-        // 开始和结束的列表不能是同一个，不然拖拽没有意义
-        if (sourceListName === targetListName) {
-            return;
-        }
-        this.dragData = undefined;
-        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
-        var infos = JSON.parse(JSON.stringify(this.state.listInfos));
-        // 从其他列表拉到“我的一天“
-        if (targetListName === this.primaryListName) {
-            this.copyItemToPrimaryList(itemData, sourceListName);
-        }
-        else {
-            // 拉进哪个列表，source就是哪个列表，同时primary为false
-            this.server.deleteItemInList(itemData.name, sourceListName);
-            itemData.source = targetListName;
-            itemData.inPrimaryList = false;
-            this.server.addNewItemInList(itemData, targetListName);
-            var itemIndex = 0;
-            for (var i = 0; i < todos.length; i++) {
-                if (todos[i].name === itemData.name) {
-                    itemIndex = i;
+            _this.dragData = undefined;
+            var todos = JSON.parse(JSON.stringify(_this.state.itemsOfList));
+            var infos = JSON.parse(JSON.stringify(_this.state.listInfos));
+            // 从其他列表拉到“我的一天“
+            if (targetListName === _this.primaryListName) {
+                _this.copyItemToPrimaryList(itemData, sourceListName);
+            }
+            else {
+                // 拉进哪个列表，source就是哪个列表，同时primary为false
+                _this.server.deleteItemInList(itemData.name, sourceListName);
+                itemData.source = targetListName;
+                itemData.inPrimaryList = false;
+                _this.server.addNewItemInList(itemData, targetListName);
+                var itemIndex = 0;
+                for (var i = 0; i < todos.length; i++) {
+                    if (todos[i].name === itemData.name) {
+                        itemIndex = i;
+                        break;
+                    }
+                }
+                todos.splice(itemIndex, 1);
+                _this.fetchListInfo();
+                _this.setState({
+                    listInfos: infos,
+                    itemsOfList: todos,
+                    detailItem: undefined,
+                });
+            }
+        };
+        /**
+         * 将todo项目移出primary list
+         */
+        _this.cancelCopyToPrimaryList = function () {
+            if (!_this.state.detailItem) {
+                return;
+            }
+            var item = JSON.parse(JSON.stringify(_this.state.detailItem));
+            var infos = JSON.parse(JSON.stringify(_this.state.listInfos));
+            var todos = JSON.parse(JSON.stringify(_this.state.itemsOfList));
+            var currentList = "";
+            var detailItem = undefined;
+            for (var _i = 0, infos_1 = infos; _i < infos_1.length; _i++) {
+                var info = infos_1[_i];
+                if (info.name === _this.primaryListName) {
+                    info.count -= 1;
+                }
+                if (info.isActive) {
+                    currentList = info.name;
+                }
+            }
+            _this.server.deleteItemInList(item.name, _this.primaryListName);
+            _this.server.markItemPrimaryStatus(item.name, currentList, false);
+            for (var _a = 0, todos_1 = todos; _a < todos_1.length; _a++) {
+                var todo = todos_1[_a];
+                if (todo.name === item.name) {
+                    todo.inPrimaryList = false;
+                    detailItem = todo;
+                    // todo.source =
                     break;
                 }
             }
-            todos.splice(itemIndex, 1);
-            this.fetchListInfo();
-            this.setState({
+            // 同样的问题，要区分detail item是来自于primary list还是其他列表，又得分情况处理。
+            var itemIndex = -1;
+            for (var i = 0; i < todos.length; i++) {
+                if (todos[i].name === item.name) {
+                    // 如果来自于primary list则需要删掉这个todo
+                    if (_this.state.lastModifiedListName === _this.primaryListName) {
+                        itemIndex = i;
+                    }
+                    todos[i].inPrimaryList = false;
+                    detailItem = todos[i];
+                    break;
+                }
+            }
+            if (itemIndex > -1) {
+                todos.splice(itemIndex, 1);
+            }
+            _this.setState({
                 listInfos: infos,
                 itemsOfList: todos,
-                detailItem: undefined,
+                detailItem: detailItem,
             });
-        }
-    };
-    /**
-     * 将todo项目移出primary list
-     * @param e 鼠标点击事件
-     */
-    App.prototype.cancelCopyToPrimaryList = function () {
-        if (!this.state.detailItem) {
-            return;
-        }
-        var item = JSON.parse(JSON.stringify(this.state.detailItem));
-        var infos = JSON.parse(JSON.stringify(this.state.listInfos));
-        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
-        var currentList = "";
-        var detailItem = undefined;
-        for (var _i = 0, infos_1 = infos; _i < infos_1.length; _i++) {
-            var info = infos_1[_i];
-            if (info.name === this.primaryListName) {
-                info.count -= 1;
-            }
-            if (info.isActive) {
-                currentList = info.name;
-            }
-        }
-        this.server.deleteItemInList(item.name, this.primaryListName);
-        // this.server.markItemNotPrimary(item.name, currentList);
-        this.server.markItemPrimaryStatus(item.name, currentList, false);
-        for (var _a = 0, todos_1 = todos; _a < todos_1.length; _a++) {
-            var todo = todos_1[_a];
-            if (todo.name === item.name) {
-                todo.inPrimaryList = false;
-                detailItem = todo;
-                // todo.source =
-                break;
-            }
-        }
-        // 同样的问题，要区分detail item是来自于primary list还是其他列表，又得分情况处理。
-        var itemIndex = -1;
-        for (var i = 0; i < todos.length; i++) {
-            if (todos[i].name === item.name) {
-                // 如果来自于primary list则需要删掉这个todo
-                if (this.state.lastModifiedListName === this.primaryListName) {
-                    itemIndex = i;
+        };
+        /**
+         * 将其他列表中的todo复制到primary list中
+         * @param itemData todo的信息
+         * @param sourceListName todo所在列表的名称
+         */
+        _this.copyItemToPrimaryList = function (itemData, sourceListName) {
+            // todo的source为来源列表，并且primary标记为true
+            var todos = JSON.parse(JSON.stringify(_this.state.itemsOfList));
+            itemData.source = sourceListName;
+            itemData.inPrimaryList = true;
+            _this.server.addNewItemInList(itemData, _this.primaryListName);
+            // this.server.markItemPrimary(itemData.name, sourceListName);
+            _this.server.markItemPrimaryStatus(itemData.name, sourceListName, true);
+            for (var _i = 0, todos_2 = todos; _i < todos_2.length; _i++) {
+                var todo = todos_2[_i];
+                if (todo.name == itemData.name) {
+                    todo.inPrimaryList = true;
                 }
-                todos[i].inPrimaryList = false;
-                detailItem = todos[i];
-                break;
             }
-        }
-        if (itemIndex > -1) {
-            todos.splice(itemIndex, 1);
-        }
-        this.setState({
-            listInfos: infos,
-            itemsOfList: todos,
-            detailItem: detailItem,
-        });
-    };
-    /**
-     * 将其他列表中的todo复制到primary list中
-     * @param itemData todo的信息
-     * @param sourceListName todo所在列表的名称
-     */
-    App.prototype.copyItemToPrimaryList = function (itemData, sourceListName) {
-        // todo的source为来源列表，并且primary标记为true
-        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
-        itemData.source = sourceListName;
-        itemData.inPrimaryList = true;
-        this.server.addNewItemInList(itemData, this.primaryListName);
-        // this.server.markItemPrimary(itemData.name, sourceListName);
-        this.server.markItemPrimaryStatus(itemData.name, sourceListName, true);
-        for (var _i = 0, todos_2 = todos; _i < todos_2.length; _i++) {
-            var todo = todos_2[_i];
-            if (todo.name == itemData.name) {
-                todo.inPrimaryList = true;
-            }
-        }
-        if (sourceListName == this.primaryListName) {
-            todos.push({
-                name: itemData.name,
-                done: itemData.done,
-                time: itemData.time,
-                inPrimaryList: true,
-                comments: itemData.comments,
-                source: this.primaryListName,
-            });
-        }
-        this.fetchListInfo();
-        // 根据todos的信息来更新detailItem的内容
-        for (var _a = 0, todos_3 = todos; _a < todos_3.length; _a++) {
-            var todo = todos_3[_a];
-            if (this.state.detailItem && todo.name == this.state.detailItem.name) {
-                this.setState({
-                    detailItem: todo,
+            if (sourceListName == _this.primaryListName) {
+                todos.push({
+                    name: itemData.name,
+                    done: itemData.done,
+                    time: itemData.time,
+                    inPrimaryList: true,
+                    comments: itemData.comments,
+                    source: _this.primaryListName,
                 });
             }
-        }
-        this.setState({
-            itemsOfList: todos,
-        });
-    };
-    /**
-     * 从detail view中将todo复制到primary list中
-     * @param e 鼠标点击事件
-     */
-    App.prototype.copyItemToPrimaryListFromDetailView = function () {
-        if (!this.state.detailItem) {
-            return;
-        }
-        var item = JSON.parse(JSON.stringify(this.state.detailItem));
-        this.copyItemToPrimaryList(item, this.state.lastModifiedListName);
-        // 对detail view的直接更改肯定要更新detailItem的内容
-        item.inPrimaryList = true;
-        this.setState({
-            detailItem: item,
-        });
-    };
-    /**
-     * 重命名列表
-     * @param oldName 旧列表名
-     * @param newName 新列表名
-     */
-    App.prototype.renameList = function (oldName, newName) {
-        // console.log(`oldName: ${oldName}, newName: ${newName}`)
-        this.server.renameList(oldName, newName);
-        var infos = JSON.parse(JSON.stringify(this.state.listInfos));
-        for (var _i = 0, infos_2 = infos; _i < infos_2.length; _i++) {
-            var info = infos_2[_i];
-            if (info.name === oldName) {
-                info.name = newName;
-                break;
+            _this.fetchListInfo();
+            // 根据todos的信息来更新detailItem的内容
+            for (var _a = 0, todos_3 = todos; _a < todos_3.length; _a++) {
+                var todo = todos_3[_a];
+                if (_this.state.detailItem && todo.name == _this.state.detailItem.name) {
+                    _this.setState({
+                        detailItem: todo,
+                    });
+                }
             }
-        }
-        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
-        todos.forEach(function (todo) {
-            todo.source = newName;
-        });
-        this.setState({
-            listInfos: infos,
-            lastModifiedListName: newName,
-            itemsOfList: todos,
-        });
-    };
-    App.prototype.shouldDeleteList = function () {
-        this.setState({
-            displayDeleteListAlert: true,
-        });
-    };
-    /**
-     * 删除列表
-     * @param listName 要删除的列表名
-     */
-    App.prototype.deleteList = function (listName) {
-        var name = listName ? listName : this.state.lastModifiedListName;
-        this.server.deleteList(name);
-        var infos = this.state.listInfos.slice();
-        var index = 0;
-        for (var i = 0; i < infos.length; i++) {
-            if (infos[i].name === name) {
-                index = i;
-                break;
-            }
-        }
-        infos[0].isActive = true;
-        infos.splice(index, 1);
-        this.setState({
-            listInfos: infos,
-            lastModifiedListName: infos[0].name,
-            displayDeleteListAlert: false,
-        });
-        // 这里要继续使用这个方法，因为之前的todos要被清空换新
-        this.fetchItems();
-    };
-    /**
-     * 切换当前列表
-     * @param listName 列表名称
-     */
-    App.prototype.switchList = function (listName) {
-        // console.log('switchList: name is ' + listName);
-        this.server.lastModified = listName;
-        var infos = this.state.listInfos.slice();
-        infos.forEach(function (info) {
-            info.isActive = false;
-            if (info.name === listName) {
-                info.isActive = true;
-            }
-        });
-        this.setState({
-            listInfos: infos,
-            lastModifiedListName: listName,
-        });
-        // 这里也要使用这个方法，因为切换列表也要清空换新。
-        this.fetchItems();
-    };
-    /**
-     * 添加新列表
-     * @param listName 列表名称
-     */
-    App.prototype.addNewList = function (listName) {
-        var infos = this.state.listInfos.slice();
-        var index = -1;
-        for (var i = 0; i < infos.length; i++) {
-            if (infos[i].name === listName) {
-                index = i;
-                break;
-            }
-        }
-        if (index !== -1) {
-            return;
-        }
-        this.server.addNewList(listName);
-        infos.forEach(function (info) {
-            info.isActive = false;
-        });
-        infos.push({
-            name: listName,
-            count: 0,
-            isActive: true,
-            theme: "#87cefa",
-            isPrimary: false,
-        });
-        this.setState({
-            lastModifiedListName: listName,
-            listInfos: infos,
-            itemsOfList: [],
-        });
-        // this.fetchItems()
-    };
-    /**
-     * 添加新的TodoItem到指定列表
-     * @param itemName 新TodoItem的名称
-     * @param listName item所在的列表名称
-     */
-    App.prototype.addNewItemInList = function (itemName, listName) {
-        var items = JSON.parse(JSON.stringify(this.state.itemsOfList));
-        for (var i = 0; i < items.length; i++) {
-            if (items[i].name === itemName) {
+            _this.setState({
+                itemsOfList: todos,
+            });
+        };
+        /**
+         * 从detail view中将todo复制到primary list中
+         */
+        _this.copyItemToPrimaryListFromDetailView = function () {
+            if (!_this.state.detailItem) {
                 return;
             }
-        }
-        this.server.addNewItemInList(itemName, listName);
-        var infos = JSON.parse(JSON.stringify(this.state.listInfos));
-        infos.forEach(function (info) {
-            if (info.name === listName) {
-                info.count++;
-            }
-        });
-        // 额，这样做对吗？
-        items.push({
-            name: itemName,
-            done: false,
-            time: new Date().toLocaleDateString().split(" ")[0],
-            comments: undefined,
-            source: listName,
-            inPrimaryList: listName === this.primaryListName,
-        });
-        this.setState({
-            // itemsOfList: this.server.itemsOfList(this.state.lastModifiedListName),
-            listInfos: infos,
-            itemsOfList: items,
-        });
-        // this.fetchItems()
-    };
-    /**
-     * 切换todo的完成状态
-     * @param itemName 要切换完成状态的todo名称
-     * @param listName 保存该todo的列表名称
-     */
-    App.prototype.toggleItemInList = function (itemName, listName) {
-        /** 是否在primary list中进行的操作 */
-        var actionInPrimary = listName === this.primaryListName;
-        /** 是否将todo切换为完成状态 */
-        var switchDone = false;
-        /** item所在的其他列表名称 */
-        var sourceListName = "";
-        var item = undefined;
-        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
-        var infos = JSON.parse(JSON.stringify(this.state.listInfos));
-        for (var _i = 0, todos_4 = todos; _i < todos_4.length; _i++) {
-            var todo = todos_4[_i];
-            if (todo.name === itemName) {
-                item = Object.assign({}, todo);
-                todo.done = !todo.done;
-                sourceListName = todo.source ? todo.source : "";
-                break;
-            }
-        }
-        if (!item) {
-            console.log("item: " + item);
-            return;
-        }
-        // 从todos中得知状态为“已完成”的todo的数量
-        var count = 0;
-        todos.forEach(function (todo) {
-            if (!todo.done) {
-                count += 1;
-            }
-        });
-        for (var _a = 0, infos_3 = infos; _a < infos_3.length; _a++) {
-            var info = infos_3[_a];
-            if (info.name === listName) {
-                switchDone = count < info.count;
-                break;
-            }
-        }
+            var item = JSON.parse(JSON.stringify(_this.state.detailItem));
+            _this.copyItemToPrimaryList(item, _this.state.lastModifiedListName);
+            // 对detail view的直接更改肯定要更新detailItem的内容
+            item.inPrimaryList = true;
+            _this.setState({
+                detailItem: item,
+            });
+        };
         /**
-         * 三种情况：
-         * 1：点击的todo在primary list中：
-         *  1.1：在primary list中点击
-         *  1.2：在其他列表中点击
-         * 2:点击的todo在其他列表中
-         * 三种情况分别处理
-         * （我貌似把这个东西搞得挺麻烦，这才一种特殊情况啊，要是后面多起来了不是要死人的节奏？）
+         * 重命名列表
+         * @param oldName 旧列表名
+         * @param newName 新列表名
          */
-        if (item.inPrimaryList) {
-            if (actionInPrimary) {
-                this.server.toggleItemInList(item.name, this.primaryListName);
-                this.server.toggleItemInList(item.name, sourceListName);
-                for (var _b = 0, infos_4 = infos; _b < infos_4.length; _b++) {
-                    var info = infos_4[_b];
-                    if (info.name === this.primaryListName || info.name === sourceListName) {
-                        info.count += switchDone ? -1 : 1;
+        _this.renameList = function (oldName, newName) {
+            // console.log(`oldName: ${oldName}, newName: ${newName}`)
+            _this.server.renameList(oldName, newName);
+            var infos = JSON.parse(JSON.stringify(_this.state.listInfos));
+            for (var _i = 0, infos_2 = infos; _i < infos_2.length; _i++) {
+                var info = infos_2[_i];
+                if (info.name === oldName) {
+                    info.name = newName;
+                    break;
+                }
+            }
+            var todos = JSON.parse(JSON.stringify(_this.state.itemsOfList));
+            todos.forEach(function (todo) {
+                todo.source = newName;
+            });
+            _this.setState({
+                listInfos: infos,
+                lastModifiedListName: newName,
+                itemsOfList: todos,
+            });
+        };
+        /**
+         * 是否要删除列表
+         *
+         * 弹出窗口让用户选择
+         */
+        _this.shouldDeleteList = function () {
+            _this.setState({
+                displayDeleteListAlert: true,
+            });
+        };
+        /**
+         * 删除列表
+         * @param listName 要删除的列表名
+         */
+        _this.deleteList = function (listName) {
+            var name = listName ? listName : _this.state.lastModifiedListName;
+            _this.server.deleteList(name);
+            var infos = _this.state.listInfos.slice();
+            var index = 0;
+            for (var i = 0; i < infos.length; i++) {
+                if (infos[i].name === name) {
+                    index = i;
+                    break;
+                }
+            }
+            infos[0].isActive = true;
+            infos.splice(index, 1);
+            _this.setState({
+                listInfos: infos,
+                lastModifiedListName: infos[0].name,
+                displayDeleteListAlert: false,
+            });
+            // 这里要继续使用这个方法，因为之前的todos要被清空换新
+            _this.fetchItems();
+        };
+        /**
+         * 切换当前列表
+         * @param listName 列表名称
+         */
+        _this.switchList = function (listName) {
+            // console.log('switchList: name is ' + listName);
+            _this.server.lastModified = listName;
+            var infos = _this.state.listInfos.slice();
+            infos.forEach(function (info) {
+                info.isActive = false;
+                if (info.name === listName) {
+                    info.isActive = true;
+                }
+            });
+            _this.setState({
+                listInfos: infos,
+                lastModifiedListName: listName,
+            });
+            // 这里也要使用这个方法，因为切换列表也要清空换新。
+            _this.fetchItems();
+        };
+        /**
+         * 添加新列表
+         * @param listName 列表名称
+         */
+        _this.addNewList = function (listName) {
+            var infos = _this.state.listInfos.slice();
+            var index = -1;
+            for (var i = 0; i < infos.length; i++) {
+                if (infos[i].name === listName) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index !== -1) {
+                return;
+            }
+            _this.server.addNewList(listName);
+            infos.forEach(function (info) {
+                info.isActive = false;
+            });
+            infos.push({
+                name: listName,
+                count: 0,
+                isActive: true,
+                theme: "#87cefa",
+                isPrimary: false,
+            });
+            _this.setState({
+                lastModifiedListName: listName,
+                listInfos: infos,
+                itemsOfList: [],
+            });
+        };
+        /**
+         * 添加新的TodoItem到指定列表
+         * @param itemName 新TodoItem的名称
+         * @param listName item所在的列表名称
+         */
+        _this.addNewItemInList = function (itemName, listName) {
+            var items = JSON.parse(JSON.stringify(_this.state.itemsOfList));
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].name === itemName) {
+                    return;
+                }
+            }
+            _this.server.addNewItemInList(itemName, listName);
+            var infos = JSON.parse(JSON.stringify(_this.state.listInfos));
+            infos.forEach(function (info) {
+                if (info.name === listName) {
+                    info.count++;
+                }
+            });
+            // 额，这样做对吗？
+            items.push({
+                name: itemName,
+                done: false,
+                time: new Date().toLocaleDateString().split(" ")[0],
+                comments: undefined,
+                source: listName,
+                inPrimaryList: listName === _this.primaryListName,
+            });
+            _this.setState({
+                listInfos: infos,
+                itemsOfList: items,
+            });
+        };
+        /**
+         * 切换todo的完成状态
+         * @param itemName 要切换完成状态的todo名称
+         * @param listName 保存该todo的列表名称
+         */
+        _this.toggleItemInList = function (itemName, listName) {
+            /** 是否在primary list中进行的操作 */
+            var actionInPrimary = listName === _this.primaryListName;
+            /** 是否将todo切换为完成状态 */
+            var switchDone = false;
+            /** item所在的其他列表名称 */
+            var sourceListName = "";
+            var item = undefined;
+            var todos = JSON.parse(JSON.stringify(_this.state.itemsOfList));
+            var infos = JSON.parse(JSON.stringify(_this.state.listInfos));
+            for (var _i = 0, todos_4 = todos; _i < todos_4.length; _i++) {
+                var todo = todos_4[_i];
+                if (todo.name === itemName) {
+                    item = Object.assign({}, todo);
+                    todo.done = !todo.done;
+                    sourceListName = todo.source ? todo.source : "";
+                    break;
+                }
+            }
+            if (!item) {
+                console.log("item: " + item);
+                return;
+            }
+            // 从todos中得知状态为“已完成”的todo的数量
+            var count = 0;
+            todos.forEach(function (todo) {
+                if (!todo.done) {
+                    count += 1;
+                }
+            });
+            for (var _a = 0, infos_3 = infos; _a < infos_3.length; _a++) {
+                var info = infos_3[_a];
+                if (info.name === listName) {
+                    switchDone = count < info.count;
+                    break;
+                }
+            }
+            /**
+             * 三种情况：
+             * 1：点击的todo在primary list中：
+             *  1.1：在primary list中点击
+             *  1.2：在其他列表中点击
+             * 2:点击的todo在其他列表中
+             * 三种情况分别处理
+             * （我貌似把这个东西搞得挺麻烦，这才一种特殊情况啊，要是后面多起来了不是要死人的节奏？）
+             */
+            if (item.inPrimaryList) {
+                if (actionInPrimary) {
+                    _this.server.toggleItemInList(item.name, _this.primaryListName);
+                    _this.server.toggleItemInList(item.name, sourceListName);
+                    for (var _b = 0, infos_4 = infos; _b < infos_4.length; _b++) {
+                        var info = infos_4[_b];
+                        if (info.name === _this.primaryListName || info.name === sourceListName) {
+                            info.count += switchDone ? -1 : 1;
+                        }
+                    }
+                }
+                else {
+                    _this.server.toggleItemInList(item.name, _this.primaryListName);
+                    _this.server.toggleItemInList(item.name, listName);
+                    for (var _c = 0, infos_5 = infos; _c < infos_5.length; _c++) {
+                        var info = infos_5[_c];
+                        if (info.name === _this.primaryListName || info.name === sourceListName) {
+                            info.count += switchDone ? -1 : 1;
+                        }
                     }
                 }
             }
             else {
-                this.server.toggleItemInList(item.name, this.primaryListName);
-                this.server.toggleItemInList(item.name, listName);
-                for (var _c = 0, infos_5 = infos; _c < infos_5.length; _c++) {
-                    var info = infos_5[_c];
-                    if (info.name === this.primaryListName || info.name === sourceListName) {
-                        info.count += switchDone ? -1 : 1;
+                _this.server.toggleItemInList(item.name, listName);
+                for (var _d = 0, infos_6 = infos; _d < infos_6.length; _d++) {
+                    var info = infos_6[_d];
+                    if (info.name === listName) {
+                        info.count = count;
                     }
                 }
             }
-        }
-        else {
-            this.server.toggleItemInList(item.name, listName);
-            for (var _d = 0, infos_6 = infos; _d < infos_6.length; _d++) {
-                var info = infos_6[_d];
-                if (info.name === listName) {
-                    info.count = count;
+            _this.setState({
+                itemsOfList: todos,
+                listInfos: infos,
+            });
+            // 如果点击的就是要详细显示的TodoItem，则要更新detailItem的状态
+            if (_this.state.detailItem && _this.state.detailItem.name === itemName) {
+                var index = 0;
+                for (var i = 0; i < todos.length; i++) {
+                    if (todos[i].name === itemName) {
+                        index = i;
+                        break;
+                    }
                 }
+                _this.setState({
+                    detailItem: JSON.parse(JSON.stringify(todos[index])),
+                });
             }
-        }
-        this.setState({
-            itemsOfList: todos,
-            listInfos: infos,
-        });
-        // 如果点击的就是要详细显示的TodoItem，则要更新detailItem的状态
-        if (this.state.detailItem && this.state.detailItem.name === itemName) {
+        };
+        /**
+         * 处理detail view里的“切换状态”请求
+         */
+        _this.handleToggleFromDetailView = function () {
+            if (!_this.state.detailItem) {
+                return;
+            }
+            var itemName = _this.state.detailItem.name;
+            var listName = _this.state.lastModifiedListName;
+            _this.toggleItemInList(itemName, listName);
+            var todos = JSON.parse(JSON.stringify(_this.state.itemsOfList));
             var index = 0;
             for (var i = 0; i < todos.length; i++) {
                 if (todos[i].name === itemName) {
@@ -19586,146 +19552,129 @@ var App = /** @class */ (function (_super) {
                     break;
                 }
             }
-            this.setState({
-                detailItem: JSON.parse(JSON.stringify(todos[index])),
+            todos[index].done = !todos[index].done;
+            _this.setState({
+                detailItem: todos[index],
             });
-        }
-    };
-    /**
-     * 处理detail view里的“切换状态”请求
-     * @param e 鼠标点击事件
-     */
-    App.prototype.handleToggleFromDetailView = function () {
-        if (!this.state.detailItem) {
-            return;
-        }
-        var itemName = this.state.detailItem.name;
-        var listName = this.state.lastModifiedListName;
-        this.toggleItemInList(itemName, listName);
-        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
-        var index = 0;
-        for (var i = 0; i < todos.length; i++) {
-            if (todos[i].name === itemName) {
-                index = i;
-                break;
+        };
+        /**
+         * 处理detail view里的“关闭detail view”请求
+         */
+        _this.handleCloseFromDetailView = function () {
+            _this.setState({
+                detailItem: undefined,
+            });
+        };
+        /**
+         * 处理detail view里的“删除todo事项”请求
+         */
+        _this.handleDeleteFromDetailView = function () {
+            if (!_this.state.detailItem) {
+                return;
             }
-        }
-        todos[index].done = !todos[index].done;
-        this.setState({
-            detailItem: todos[index],
-        });
-    };
-    /**
-     * 处理detail view里的“关闭detail view”请求
-     * @param e 鼠标点击事件
-     */
-    App.prototype.handleCloseFromDetailView = function () {
-        this.setState({
+            var itemName = _this.state.detailItem.name;
+            var listName = _this.state.lastModifiedListName;
+            _this.server.deleteItemInList(itemName, listName);
+            var infos = JSON.parse(JSON.stringify(_this.state.listInfos));
+            infos.forEach(function (info) {
+                if (info.name === listName) {
+                    info.count--;
+                }
+            });
+            var todos = JSON.parse(JSON.stringify(_this.state.itemsOfList));
+            var itemIndex = 0;
+            for (var i = 0; i < todos.length; i++) {
+                if (todos[i].name === itemName) {
+                    itemIndex = i;
+                    break;
+                }
+            }
+            todos.splice(itemIndex, 1);
+            // 删除了todo之后，detailItem自然就没有了
+            _this.setState({
+                detailItem: undefined,
+                listInfos: infos,
+                itemsOfList: todos,
+            });
+        };
+        /**
+         * 更改todo事项的备注
+         * @param value todo事项的新备注
+         */
+        _this.handleCommentsChange = function (value) {
+            if (!_this.state.detailItem) {
+                return;
+            }
+            _this.server.changeItemCommentsInList(value, _this.state.detailItem.name, _this.state.lastModifiedListName);
+            var todos = JSON.parse(JSON.stringify(_this.state.itemsOfList));
+            var index = 0;
+            for (var i = 0; i < todos.length; i++) {
+                if (todos[i].name === _this.state.detailItem.name) {
+                    index = i;
+                    break;
+                }
+            }
+            todos[index].comments = value;
+            _this.setState(function (prevState) { return ({
+                detailItem: prevState.detailItem
+                    ? JSON.parse(JSON.stringify(todos[index]))
+                    : undefined,
+                itemsOfList: todos,
+            }); });
+        };
+        /**
+         * 详细显示鼠标点击的todo项目
+         * @param itemName 要详细显示的todo名称
+         * @param listName 该todo所在的列表名称
+         */
+        _this.itemClicked = function (itemName, listName) {
+            var todos = JSON.parse(JSON.stringify(_this.state.itemsOfList));
+            todos = todos.filter(function (todo) { return todo.name === itemName; });
+            _this.setState({
+                detailItem: todos[0],
+            });
+        };
+        /**
+         * 保存拖拽数据
+         * @param data 拖拽的todo事项数据
+         */
+        _this.handleDragStart = function (data) {
+            _this.dragData = data;
+            // console.log(`dragData: ${data.toString()}, type: ${typeof data}`)
+        };
+        /**拖拽结束/被取消时清除保存的拖拽数据 */
+        _this.handleDragEnd = function () {
+            _this.dragData = undefined;
+        };
+        /**
+         * 更改列表的主题色
+         * @param color 新的主题色
+         */
+        _this.handleColorPick = function (color) {
+            _this.server.changeColorThemeForList(color, _this.state.lastModifiedListName);
+            var infos = JSON.parse(JSON.stringify(_this.state.listInfos));
+            infos.forEach(function (info) {
+                if (info.name === _this.state.lastModifiedListName) {
+                    info.theme = color;
+                }
+            });
+            _this.setState({
+                listInfos: infos,
+            });
+        };
+        _this.server = new data_server_1.DataServer();
+        _this.state = {
+            lastModifiedListName: "",
+            listInfos: [],
+            itemsOfList: [],
             detailItem: undefined,
-        });
-    };
-    /**
-     * 处理detail view里的“删除todo事项”请求
-     * @param e 鼠标点击事件
-     */
-    App.prototype.handleDeleteFromDetailView = function () {
-        if (!this.state.detailItem) {
-            return;
-        }
-        var itemName = this.state.detailItem.name;
-        var listName = this.state.lastModifiedListName;
-        this.server.deleteItemInList(itemName, listName);
-        var infos = JSON.parse(JSON.stringify(this.state.listInfos));
-        infos.forEach(function (info) {
-            if (info.name === listName) {
-                info.count--;
-            }
-        });
-        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
-        var itemIndex = 0;
-        for (var i = 0; i < todos.length; i++) {
-            if (todos[i].name === itemName) {
-                itemIndex = i;
-                break;
-            }
-        }
-        todos.splice(itemIndex, 1);
-        // 删除了todo之后，detailItem自然就没有了
-        this.setState({
-            detailItem: undefined,
-            // itemsOfList: this.server.itemsOfList(listName),
-            listInfos: infos,
-            itemsOfList: todos,
-        });
-        // this.fetchItems()
-    };
-    /**
-     * 更改todo事项的备注
-     * @param value todo事项的新备注
-     */
-    App.prototype.handleCommentsChange = function (value) {
-        if (!this.state.detailItem) {
-            return;
-        }
-        this.server.changeItemCommentsInList(value, this.state.detailItem.name, this.state.lastModifiedListName);
-        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
-        var index = 0;
-        for (var i = 0; i < todos.length; i++) {
-            if (todos[i].name === this.state.detailItem.name) {
-                index = i;
-                break;
-            }
-        }
-        todos[index].comments = value;
-        this.setState(function (prevState) { return ({
-            detailItem: prevState.detailItem
-                ? JSON.parse(JSON.stringify(todos[index]))
-                : undefined,
-            itemsOfList: todos,
-        }); });
-        // this.fetchItems()
-    };
-    /**
-     * 详细显示鼠标点击的todo项目
-     * @param itemName 要详细显示的todo名称
-     * @param listName 该todo所在的列表名称
-     */
-    App.prototype.itemClicked = function (itemName, listName) {
-        var todos = JSON.parse(JSON.stringify(this.state.itemsOfList));
-        todos = todos.filter(function (todo) { return todo.name === itemName; });
-        this.setState({
-            detailItem: todos[0],
-        });
-    };
-    /**
-     * 保存拖拽数据
-     * @param data 拖拽的todo事项数据
-     */
-    App.prototype.handleDragStart = function (data) {
-        this.dragData = data;
-        // console.log(`dragData: ${data.toString()}, type: ${typeof data}`)
-    };
-    /**拖拽结束/被取消时清除保存的拖拽数据 */
-    App.prototype.handleDragEnd = function () {
-        this.dragData = undefined;
-    };
-    /**
-     * 更改列表的主题色
-     * @param color 新的主题色
-     */
-    App.prototype.handleColorPick = function (color) {
-        var _this = this;
-        this.server.changeColorThemeForList(color, this.state.lastModifiedListName);
-        var infos = JSON.parse(JSON.stringify(this.state.listInfos));
-        infos.forEach(function (info) {
-            if (info.name === _this.state.lastModifiedListName) {
-                info.theme = color;
-            }
-        });
-        this.setState({
-            listInfos: infos,
-        });
-    };
+            displayDataErrorAlert: false,
+            dataErrorMessage: "",
+            displayDeleteListAlert: false,
+            deleteConfirmMessage: "是否要删除列表？",
+        };
+        return _this;
+    }
     App.prototype.render = function () {
         var _this = this;
         var listInfo = {};
@@ -19734,18 +19683,15 @@ var App = /** @class */ (function (_super) {
                 listInfo = info;
             }
         });
-        // const infos = this.state.listInfos.splice(0)
-        // console.log(`infos: ${infos}`)
         return (React.createElement("div", { id: styles.app },
-            React.createElement(ListView_1.ListView
-            // currentListName={this.state.lastModifiedListName}
-            , { 
-                // currentListName={this.state.lastModifiedListName}
-                switchList: this.switchList, addNewList: this.addNewList, listInfos: this.state.listInfos, onDrop: this.handleDrop }),
+            React.createElement(ListView_1.ListView, { switchList: this.switchList, addNewList: this.addNewList, listInfos: this.state.listInfos, onDrop: this.handleDrop }),
             React.createElement(AreaView_1.AreaView, { shrink: this.state.detailItem !== undefined, listInfo: listInfo, todoItems: this.state.itemsOfList, renameList: this.renameList, shouldDeleteList: this.shouldDeleteList, addNewItemInList: this.addNewItemInList, toggleItemInList: this.toggleItemInList, itemClicked: this.itemClicked, onDragStart: this.handleDragStart, onDragEnd: this.handleDragEnd, onColorPick: this.handleColorPick }),
             React.createElement(DetailView_1.DetailView, { listName: this.state.lastModifiedListName, item: this.state.detailItem, onCloseClicked: this.handleCloseFromDetailView, onDeleteClicked: this.handleDeleteFromDetailView, onToggleClicked: this.handleToggleFromDetailView, onCommentsChange: this.handleCommentsChange, onCopyToPrimary: this.copyItemToPrimaryListFromDetailView, onCancelCopyToPrimary: this.cancelCopyToPrimaryList }),
             this.state.displayDataErrorAlert && (React.createElement(GlobalAlert_1.Alert, { display: this.state.displayDataErrorAlert, message: this.state.dataErrorMessage, alertDefaultAction: this.alertDefaultAction, type: GlobalAlert_1.AlertType.Alert })),
             this.state.displayDeleteListAlert && (React.createElement(GlobalAlert_1.Alert, { display: this.state.displayDeleteListAlert, message: this.state.deleteConfirmMessage, alertDefaultAction: this.alertDefaultAction, alertConfirmAction: this.deleteList, type: GlobalAlert_1.AlertType.Confirm }))));
+    };
+    App.prototype.componentDidMount = function () {
+        this.initFetch();
     };
     return App;
 }(React.Component));
@@ -19775,6 +19721,11 @@ module.exports = {"container":"AddNewItem-container-1Yo5wCP","symbol":"AddNewIte
 
 "use strict";
 
+/**
+ * 添加新todo事项的组件
+ *
+ * 根据输入的内容自动显示/隐藏“添加”、“取消”按钮
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -19787,142 +19738,35 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-// 样式
+// 样式表
 var styles = __webpack_require__(/*! ./AddNewItem.css */ "./src/components/areaview/AddNewItem.css");
-// const containerStyles = {
-//     margin: "0 20px",
-//     padding: "10px 0",
-//     height: 60,
-//     display: "flex",
-//     borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
-// };
-/**
- * “添加新todo”标志的样式
- */
-// const addSymbolStyles = {
-//     fontWeight: "bold",
-//     fontSize: "1.5em",
-//     color: "blue",
-//     flex: "0 1 30px",
-//     marginRight: 10,
-//     display: "flex",
-//     alignItems: "center",
-//     justifyContent: "center",
-// } as React.CSSProperties;
-/**
- * 自定义checkbox的样式
- */
-// const checkboxStyles = {
-//     fontSize: "1.5rem",
-//     width: 30,
-//     height: 30,
-//     margin: "0 10px",
-//     borderRadius: "50%",
-//     display: "flex",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     alignSelf: "center",
-//     border: "1px solid gray",
-//     color: "transparent",
-//     backgroundColor: "transparent",
-//     cursor: "pointer",
-//     transition: "color 0.3s, background-color 0.3s",
-// } as React.CSSProperties;
-/**
- * 输入框的样式
- */
-// const inputStyles = {
-//     border: "none",
-//     flex: "10 1 100px",
-//     outline: "none",
-// };
-/**
- * "X"按钮的样式
- */
-// const closeButtonStyles = {
-//     flex: "0 1 30px",
-//     display: "flex",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     cursor: "pointer",
-// } as React.CSSProperties;
-/**
- * “添加”按钮的样式
- */
-// const addButtonStyles = mix(closeButtonStyles, { flex: "0 1 60px" });
-/**
- * 按钮hover状态的样式
- */
-// const buttonHover = {
-//     backgroundColor: "rgba(206, 197, 197, 0.2)",
-// };
 var AddNewItem = /** @class */ (function (_super) {
     __extends(AddNewItem, _super);
     function AddNewItem(props) {
         var _this = _super.call(this, props) || this;
-        // this.state = {
-        //     cancelButtonHover: false,
-        //     addButtonHover: false,
-        // };
-        // bind methods
-        _this.handleAddClicked = _this.handleAddClicked.bind(_this);
-        _this.handleCancelClicked = _this.handleCancelClicked.bind(_this);
-        _this.handleAddButtonMouseEnter = _this.handleAddButtonMouseEnter.bind(_this);
-        _this.handleAddButtonMouseLeave = _this.handleAddButtonMouseLeave.bind(_this);
-        _this.handleCloseButtonMouseEnter = _this.handleCloseButtonMouseEnter.bind(_this);
-        _this.handleCloseButtonMouseLeave = _this.handleCloseButtonMouseLeave.bind(_this);
+        /**
+         * 取消这次输入
+         */
+        _this.handleCancelClicked = function (e) {
+            e.stopPropagation();
+            _this.props.onCancelClicked();
+        };
+        /**
+         * 添加一个新的todo事项
+         */
+        _this.handleAddClicked = function (e) {
+            e.stopPropagation();
+            _this.props.onAddClicked();
+        };
         return _this;
     }
-    AddNewItem.prototype.handleCancelClicked = function (e) {
-        e.stopPropagation();
-        this.props.onCancelClicked();
-    };
-    AddNewItem.prototype.handleAddClicked = function (e) {
-        e.stopPropagation();
-        this.props.onAddClicked();
-    };
-    AddNewItem.prototype.handleCloseButtonMouseEnter = function (e) {
-        e.stopPropagation();
-        this.setState({ cancelButtonHover: true });
-    };
-    AddNewItem.prototype.handleCloseButtonMouseLeave = function (e) {
-        e.stopPropagation();
-        this.setState({ cancelButtonHover: false });
-    };
-    AddNewItem.prototype.handleAddButtonMouseEnter = function (e) {
-        e.stopPropagation();
-        this.setState({ addButtonHover: true });
-    };
-    AddNewItem.prototype.handleAddButtonMouseLeave = function (e) {
-        e.stopPropagation();
-        this.setState({ addButtonHover: false });
-    };
     AddNewItem.prototype.render = function () {
         var emptyValue = this.props.value === "";
-        // const symbolS = emptyValue ? addSymbolStyles : checkboxStyles;
-        // let addButtonS = addButtonStyles;
-        // let closeButtonS = closeButtonStyles;
-        // 输入框内容为空的时候add和close都不显示
-        // if (emptyValue) {
-        //     addButtonS = mix(addButtonS, { display: "none" });
-        //     closeButtonS = mix(closeButtonS, { display: "none" });
-        // }
-        // add和close各自hover的情况
-        // if (this.state.cancelButtonHover) {
-        //     closeButtonS = mix(closeButtonS, buttonHover);
-        // }
-        // if (this.state.addButtonHover) {
-        //     addButtonS = mix(addButtonS, buttonHover);
-        // }
         return (React.createElement("div", { className: styles.container },
             React.createElement("span", { className: emptyValue ? styles.symbol : styles.checkbox }, emptyValue ? "+" : ""),
             React.createElement("input", { type: "text", className: styles.input, placeholder: "\u6DFB\u52A0\u4EE3\u529E\u4E8B\u9879", value: this.props.value, onChange: this.props.onValueChange }),
-            React.createElement("span", { 
-                // style={closeButtonS}
-                className: emptyValue ? styles.hide : styles.close, onClick: this.handleCancelClicked, onMouseEnter: this.handleCloseButtonMouseEnter, onMouseLeave: this.handleCloseButtonMouseLeave }, "X"),
-            React.createElement("span", { 
-                // style={addButtonS}
-                className: emptyValue ? styles.hide : styles.add, onClick: this.handleAddClicked, onMouseEnter: this.handleAddButtonMouseEnter, onMouseLeave: this.handleAddButtonMouseLeave }, "\u6DFB\u52A0")));
+            React.createElement("span", { className: emptyValue ? styles.hide : styles.close, onClick: this.handleCancelClicked }, "X"),
+            React.createElement("span", { className: emptyValue ? styles.hide : styles.add, onClick: this.handleAddClicked }, "\u6DFB\u52A0")));
     };
     return AddNewItem;
 }(React.Component));
@@ -19952,6 +19796,9 @@ module.exports = {"button":"AreaActionButton-button-1E_JxHi"};
 
 "use strict";
 
+/**
+ * 操作窗口里的选项按钮
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -19964,43 +19811,23 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+// 样式表
 var styles = __webpack_require__(/*! ./AreaActionButton.css */ "./src/components/areaview/AreaActionButton.css");
-// const styles: React.CSSProperties = {
-//   height: 40,
-//   display: 'flex',
-//   justifyContent: 'center',
-//   alignItems: 'center',
-//   cursor: 'pointer',
-// }
-// const hoverStyle: React.CSSProperties = {
-//   backgroundColor: 'rgba(206, 197, 197, 0.2)',
-// }
-/**
- * 操作列表里的选项按钮
- */
 var ActionButton = /** @class */ (function (_super) {
     __extends(ActionButton, _super);
     function ActionButton(props) {
         var _this = _super.call(this, props) || this;
-        // this.state = {
-        //   hover: false,
-        // }
-        // bind methods
-        _this.handleClick = _this.handleClick.bind(_this);
+        /**
+         * 点击按钮，具体的功能由父组件决定
+         */
+        _this.handleClick = function (e) {
+            e.stopPropagation();
+            _this.props.onClick();
+        };
         return _this;
-        // this.mouseEnter = this.mouseEnter.bind(this)
-        // this.mouseLeave = this.mouseLeave.bind(this)
     }
     ActionButton.prototype.render = function () {
-        // let S = mix(styles, this.props.style ? this.props.style : {})
-        // if (this.state.hover) {
-        //   S = mix(S, hoverStyle)
-        // }
         return (React.createElement("li", { className: styles.button, onClick: this.handleClick }, this.props.text));
-    };
-    ActionButton.prototype.handleClick = function (e) {
-        e.stopPropagation();
-        this.props.onClick();
     };
     return ActionButton;
 }(React.Component));
@@ -20055,16 +19882,15 @@ var AreaActions = /** @class */ (function (_super) {
     __extends(AreaActions, _super);
     function AreaActions(props) {
         var _this = _super.call(this, props) || this;
-        _this.closeActions = _this.closeActions.bind(_this);
+        /**
+         * 关闭操作窗口
+         */
+        _this.closeActions = function (e) {
+            e.stopPropagation();
+            _this.props.closeActions();
+        };
         return _this;
     }
-    /**
-     * 关闭操作窗口
-     */
-    AreaActions.prototype.closeActions = function (e) {
-        e.stopPropagation();
-        this.props.closeActions();
-    };
     AreaActions.prototype.render = function () {
         return (React.createElement("div", { className: styles.globalBackground, onClick: this.closeActions },
             React.createElement("div", { className: "animated fadeIn" + " " + styles.actions + " " + styles.display },
@@ -20129,6 +19955,79 @@ var AreaView = /** @class */ (function (_super) {
     __extends(AreaView, _super);
     function AreaView(props) {
         var _this = _super.call(this, props) || this;
+        /**
+         * 显示/隐藏已完成的todo事项
+         */
+        _this.switchDoneItems = function () {
+            _this.setState(function (prev) { return ({
+                showDoneItems: !prev.showDoneItems,
+            }); });
+        };
+        /**
+         * 往数据中添加拖拽事项所在的列表名称
+         * @param data todo事项的原始数据
+         */
+        _this.handleDragStart = function (data) {
+            var obj = JSON.parse(data);
+            // console.log(`obj: ${obj}, type: ${typeof obj}`)
+            var newData = JSON.stringify({
+                listName: _this.props.listInfo.name,
+                data: data,
+            });
+            _this.props.onDragStart(newData);
+        };
+        /**
+         * 更改列表名称
+         * @param name 新的列表名称
+         */
+        _this.renameList = function (name) {
+            _this.props.renameList(_this.props.listInfo.name, name);
+        };
+        /**
+         * 处理文本框的输入内容
+         * @param e input的`value`变动事件
+         */
+        _this.handleInput = function (e) {
+            // console.log(e.target)
+            var value = e.target.value;
+            _this.setState({
+                inputValue: value,
+            });
+        };
+        /**
+         * 切换item的完成状态
+         * @param e 鼠标点击事件
+         * @param name `TodoItem`的名称
+         */
+        _this.toggleItem = function (name) {
+            // 切换完成状态
+            _this.props.toggleItemInList(name, _this.props.listInfo.name);
+        };
+        /**
+         * 添加新的`TodoItem`
+         * @param e 鼠标点击事件
+         */
+        _this.addNewItem = function () {
+            _this.props.addNewItemInList(_this.state.inputValue, _this.props.listInfo.name);
+            _this.setState({
+                inputValue: "",
+            });
+        };
+        /**
+         * 中止文本框输入
+         * @param e 鼠标点击事件
+         */
+        _this.cancelInput = function () {
+            _this.setState({ inputValue: "" });
+        };
+        /**
+         * 在detail view显示选中`TodoItem`的详细内容
+         * @param e 鼠标点击事件
+         * @param name 选中`TodoItem`的名称
+         */
+        _this.displayDetailView = function (name) {
+            _this.props.itemClicked(name, _this.props.listInfo.name);
+        };
         _this.state = {
             inputValue: "",
             showDoneItems: false,
@@ -20150,7 +20049,7 @@ var AreaView = /** @class */ (function (_super) {
             // style={this.props.shrink ? mix(viewStyles, viewShrinkStyles) : viewStyles}
             id: styles.areaView, className: this.props.shrink ? styles.shrink : "" },
             React.createElement(EditableHead_1.EditableHead, { isPrimaryList: listInfo.isPrimary, listName: listInfo.name, colorTheme: listInfo.theme, renameList: this.renameList, shouldDeleteList: this.props.shouldDeleteList, switchDoneItems: this.switchDoneItems, doneItemsDisplay: this.state.showDoneItems, onColorPick: this.props.onColorPick }),
-            React.createElement(ViewTodoContent_1.AreaViewContent, { isPrimary: listInfo.isPrimary, items: this.props.todoItems, checkboxClicked: this.toggleItem, itemClicked: this.displayDetailView, onDragStart: this.handleDragStart, onDragEnd: this.props.onDragEnd, showDoneItems: this.state.showDoneItems }),
+            React.createElement(ViewTodoContent_1.AreaViewContent, { isPrimaryList: listInfo.isPrimary, items: this.props.todoItems, checkboxClicked: this.toggleItem, itemClicked: this.displayDetailView, onDragStart: this.handleDragStart, onDragEnd: this.props.onDragEnd, showDoneItems: this.state.showDoneItems }),
             React.createElement(AddNewItem_1.AddNewItem, { value: this.state.inputValue, onValueChange: this.handleInput, onAddClicked: this.addNewItem, onCancelClicked: this.cancelInput })));
     };
     AreaView.getDerivedStateFromProps = function (nextProps, prevState) {
@@ -20159,91 +20058,6 @@ var AreaView = /** @class */ (function (_super) {
                 inputValue: "",
             };
         }
-    };
-    /**
-     * @deprecated from v16.3 deprecated
-     */
-    // componentWillReceiveProps(nextProps: Props) {
-    //   // 切换列表的时候将输入框中的内容清空
-    //   if (nextProps.listInfo.name !== this.props.listInfo.name) {
-    //     this.setState({
-    //       inputValue: '',
-    //     })
-    //   }
-    // }
-    /**
-     * 显示/隐藏已完成的todo事项
-     */
-    AreaView.prototype.switchDoneItems = function () {
-        this.setState(function (prev) { return ({
-            showDoneItems: !prev.showDoneItems,
-        }); });
-    };
-    /**
-     * 往数据中添加拖拽事项所在的列表名称
-     * @param data todo事项的原始数据
-     */
-    AreaView.prototype.handleDragStart = function (data) {
-        var obj = JSON.parse(data);
-        // console.log(`obj: ${obj}, type: ${typeof obj}`)
-        var newData = JSON.stringify({
-            listName: this.props.listInfo.name,
-            data: data,
-        });
-        this.props.onDragStart(newData);
-    };
-    /**
-     * 更改列表名称
-     * @param name 新的列表名称
-     */
-    AreaView.prototype.renameList = function (name) {
-        this.props.renameList(this.props.listInfo.name, name);
-    };
-    /**
-     * 处理文本框的输入内容
-     * @param e input的`value`变动事件
-     */
-    AreaView.prototype.handleInput = function (e) {
-        // console.log(e.target)
-        var value = e.target.value;
-        this.setState({
-            inputValue: value,
-        });
-    };
-    /**
-     * 切换item的完成状态
-     * @param e 鼠标点击事件
-     * @param name `TodoItem`的名称
-     */
-    AreaView.prototype.toggleItem = function (e, name) {
-        e.stopPropagation();
-        // 切换完成状态
-        this.props.toggleItemInList(name, this.props.listInfo.name);
-    };
-    /**
-     * 添加新的`TodoItem`
-     * @param e 鼠标点击事件
-     */
-    AreaView.prototype.addNewItem = function () {
-        this.props.addNewItemInList(this.state.inputValue, this.props.listInfo.name);
-        this.setState({
-            inputValue: "",
-        });
-    };
-    /**
-     * 中止文本框输入
-     * @param e 鼠标点击事件
-     */
-    AreaView.prototype.cancelInput = function () {
-        this.setState({ inputValue: "" });
-    };
-    /**
-     * 在detail view显示选中`TodoItem`的详细内容
-     * @param e 鼠标点击事件
-     * @param name 选中`TodoItem`的名称
-     */
-    AreaView.prototype.displayDetailView = function (e, name) {
-        this.props.itemClicked(name, this.props.listInfo.name);
     };
     return AreaView;
 }(React.Component));
@@ -20296,19 +20110,79 @@ var EditableHead = /** @class */ (function (_super) {
     __extends(EditableHead, _super);
     function EditableHead(props) {
         var _this = _super.call(this, props) || this;
+        /**
+         * 保存输入的内容，作为新的列表名
+         */
+        _this.inputChange = function (e) {
+            _this.setState({
+                name: e.target.value,
+            });
+        };
+        /**
+         * 进行重命名工作
+         */
+        _this.renameClicked = function () {
+            _this.toggleActionsDisplay();
+            _this.setState({ isEdit: true }, function () {
+                if (_this.renameInput) {
+                    _this.renameInput.focus();
+                    _this.renameInput.value = _this.props.listName;
+                }
+            });
+        };
+        /**
+         * 确认删除列表操作
+         */
+        _this.deleteClicked = function () {
+            _this.props.shouldDeleteList();
+        };
+        /**
+         * 显示/隐藏操作列表的视图
+         */
+        _this.handleSwitch = function (e) {
+            e.stopPropagation();
+            // this.props.onActionsDisplayClick();
+            _this.toggleActionsDisplay();
+        };
+        /**
+         * 这个方法用于切换列表操作框，将它显示或隐藏。
+         */
+        _this.toggleActionsDisplay = function () {
+            _this.setState(function (prevState) { return ({
+                isActionDisplay: !prevState.isActionDisplay,
+            }); });
+        };
+        /**
+         * 当焦点从输入框移走时，进行列表的重命名工作
+         */
+        _this.inputBlur = function (e) {
+            e.stopPropagation();
+            _this.props.renameList(_this.state.name);
+            _this.setState({
+                isEdit: false,
+            });
+        };
+        /**
+         * 显示/隐藏已完成的todo事项
+         */
+        _this.switchDoneItems = function () {
+            _this.props.switchDoneItems();
+            _this.toggleActionsDisplay();
+        };
+        /**
+         * 关闭操作窗口
+         */
+        _this.closeActions = function () {
+            _this.setState({
+                isActionDisplay: false,
+            });
+        };
         _this.renameInput = null;
         _this.state = {
             isEdit: false,
             name: _this.props.listName,
             isActionDisplay: false,
         };
-        _this.inputChange = _this.inputChange.bind(_this);
-        _this.renameClicked = _this.renameClicked.bind(_this);
-        _this.deleteClicked = _this.deleteClicked.bind(_this);
-        _this.handleSwitch = _this.handleSwitch.bind(_this);
-        _this.inputBlur = _this.inputBlur.bind(_this);
-        _this.switchDoneItems = _this.switchDoneItems.bind(_this);
-        _this.closeActions = _this.closeActions.bind(_this);
         return _this;
     }
     EditableHead.getDerivedStateFromProps = function (nextProps, prevState) {
@@ -20317,74 +20191,6 @@ var EditableHead = /** @class */ (function (_super) {
             isEdit: false,
             isActionDisplay: false,
         };
-    };
-    /**
-     * 保存输入的内容，作为新的列表名
-     */
-    EditableHead.prototype.inputChange = function (e) {
-        this.setState({
-            name: e.target.value,
-        });
-    };
-    /**
-     * 进行重命名工作
-     */
-    EditableHead.prototype.renameClicked = function () {
-        var _this = this;
-        this.toggleActionsDisplay();
-        this.setState({ isEdit: true }, function () {
-            if (_this.renameInput) {
-                _this.renameInput.focus();
-                _this.renameInput.value = _this.props.listName;
-            }
-        });
-    };
-    /**
-     * 确认删除列表操作
-     */
-    EditableHead.prototype.deleteClicked = function () {
-        this.props.shouldDeleteList();
-    };
-    /**
-     * 显示/隐藏操作列表的视图
-     */
-    EditableHead.prototype.handleSwitch = function (e) {
-        e.stopPropagation();
-        // this.props.onActionsDisplayClick();
-        this.toggleActionsDisplay();
-    };
-    /**
-     * 这个方法用于切换列表操作框，将它显示或隐藏。
-     */
-    EditableHead.prototype.toggleActionsDisplay = function () {
-        this.setState(function (prevState) { return ({
-            isActionDisplay: !prevState.isActionDisplay,
-        }); });
-    };
-    /**
-     * 当焦点从输入框移走时，进行列表的重命名工作
-     */
-    EditableHead.prototype.inputBlur = function (e) {
-        e.stopPropagation();
-        this.props.renameList(this.state.name);
-        this.setState({
-            isEdit: false,
-        });
-    };
-    /**
-     * 显示/隐藏已完成的todo事项
-     */
-    EditableHead.prototype.switchDoneItems = function () {
-        this.props.switchDoneItems();
-        this.toggleActionsDisplay();
-    };
-    /**
-     * 关闭操作窗口
-     */
-    EditableHead.prototype.closeActions = function () {
-        this.setState({
-            isActionDisplay: false,
-        });
     };
     EditableHead.prototype.render = function () {
         var _this = this;
@@ -20530,21 +20336,13 @@ var AreaViewContent = /** @class */ (function (_super) {
         var _this = this;
         return this.props.items.map(function (item) {
             if (_this.props.showDoneItems) {
-                return (React.createElement(ViewTodoItem_1.AreaViewItem
-                // isPrimary={this.props.isPrimary}
-                , { 
-                    // isPrimary={this.props.isPrimary}
-                    item: item, onItemClicked: _this.props.itemClicked, onCheckboxClicked: _this.props.checkboxClicked, onDragStart: _this.props.onDragStart, onDragEnd: _this.props.onDragEnd, key: item.name }));
+                return (React.createElement(ViewTodoItem_1.AreaViewItem, { isPrimaryList: _this.props.isPrimaryList, item: item, onItemClicked: _this.props.itemClicked, onCheckboxClicked: _this.props.checkboxClicked, onDragStart: _this.props.onDragStart, onDragEnd: _this.props.onDragEnd, key: item.name }));
             }
             // primary list中的todo是不会被隐藏的，不在primary list中的才会被隐藏
-            if (item.done && !_this.props.isPrimary) {
+            if (item.done && !_this.props.isPrimaryList) {
                 return null;
             }
-            return (React.createElement(ViewTodoItem_1.AreaViewItem
-            // isPrimary={this.props.isPrimary}
-            , { 
-                // isPrimary={this.props.isPrimary}
-                item: item, onItemClicked: _this.props.itemClicked, onCheckboxClicked: _this.props.checkboxClicked, onDragStart: _this.props.onDragStart, onDragEnd: _this.props.onDragEnd, key: item.name }));
+            return (React.createElement(ViewTodoItem_1.AreaViewItem, { isPrimaryList: _this.props.isPrimaryList, item: item, onItemClicked: _this.props.itemClicked, onCheckboxClicked: _this.props.checkboxClicked, onDragStart: _this.props.onDragStart, onDragEnd: _this.props.onDragEnd, key: item.name }));
         });
     };
     AreaViewContent.prototype.render = function () {
@@ -20600,36 +20398,46 @@ var AreaViewItem = /** @class */ (function (_super) {
     __extends(AreaViewItem, _super);
     function AreaViewItem(props) {
         var _this = _super.call(this, props) || this;
-        // bind methods
-        _this.handleDrag = _this.handleDrag.bind(_this);
-        _this.handleDragEnd = _this.handleDragEnd.bind(_this);
+        /**
+         * 拖拽开始的处理方法，将todo的数据转化为字符串并交由父组件处理
+         */
+        _this.handleDrag = function (e) {
+            var data = JSON.stringify(_this.props.item);
+            e.dataTransfer.setData("text/plain", "");
+            e.dataTransfer.dropEffect = "move";
+            _this.props.onDragStart(data);
+        };
+        /**
+         * 拖拽结束/被取消了
+         */
+        _this.handleDragEnd = function (e) {
+            e.stopPropagation();
+            _this.props.onDragEnd();
+        };
+        /**
+         * 点击todo事项
+         */
+        _this.clickItem = function (e) {
+            e.stopPropagation();
+            _this.props.onItemClicked(_this.props.item.name);
+        };
+        /**
+         * 点击checkbox
+         */
+        _this.clickCheckbox = function (e) {
+            e.stopPropagation();
+            _this.props.onCheckboxClicked(_this.props.item.name);
+        };
         return _this;
     }
-    /**
-     * 拖拽开始的处理方法，将todo的数据转化为字符串并交由父组件处理
-     */
-    AreaViewItem.prototype.handleDrag = function (e) {
-        var data = JSON.stringify(this.props.item);
-        e.dataTransfer.setData("text/plain", "");
-        e.dataTransfer.dropEffect = "move";
-        this.props.onDragStart(data);
-    };
-    /**
-     * 拖拽结束/被取消了
-     */
-    AreaViewItem.prototype.handleDragEnd = function (e) {
-        e.stopPropagation();
-        this.props.onDragEnd();
-    };
     AreaViewItem.prototype.render = function () {
-        var _this = this;
         var item = this.props.item;
-        return (React.createElement("li", { draggable: true, className: styles.todo, onClick: function (e) { return _this.props.onItemClicked(e, item.name); }, onDragStart: this.handleDrag, onDragEnd: this.handleDragEnd },
-            React.createElement("div", { className: styles.checkbox + " " + (item.done ? styles.checked : ""), onClick: function (e) { return _this.props.onCheckboxClicked(e, item.name); } }, "\u221A"),
+        return (React.createElement("li", { draggable: true, className: styles.todo, onClick: this.clickItem, onDragStart: this.handleDrag, onDragEnd: this.handleDragEnd },
+            React.createElement("div", { className: styles.checkbox + " " + (item.done ? styles.checked : ""), onClick: this.clickCheckbox }, "\u221A"),
             React.createElement("div", { className: styles.text },
                 React.createElement("span", { className: item.done ? styles.text + " " + styles.done : "" }, item.name),
                 React.createElement("div", { className: styles.source },
-                    item.inPrimaryList && (React.createElement("span", { className: styles.comment + " " + styles.inPrimary }, item.source)),
+                    item.inPrimaryList && (React.createElement("span", { className: styles.comment + " " + styles.inPrimary }, this.props.isPrimaryList ? item.source : "我的一天")),
                     item.comments && React.createElement("span", { className: styles.comment }, "\u5907\u6CE8")))));
     };
     return AreaViewItem;
@@ -20660,6 +20468,11 @@ module.exports = {"actions":"Actions-actions-6AIKymX","sideButton":"Actions-side
 
 "use strict";
 
+/**
+ * detail view底部的操作区域组件
+ *
+ * 提供“关闭detail view”以及“删除todo”的功能
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -20672,110 +20485,29 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+// 样式表
 var styles = __webpack_require__(/*! ./Actions.css */ "./src/components/detailview/Actions.css");
-/**
- * 整个actions bar的样式
- */
-// const actionStyles = {
-//   position: "absolute",
-//   bottom: 0,
-//   left: 0,
-//   width: "100%",
-//   height: 40,
-//   display: "flex",
-//   backgroundColor: "white",
-// } as React.CSSProperties;
-/**
- * 两侧按钮的样式
- */
-// const sideButtonStyles = {
-//   flex: "1 1 30px",
-//   display: "flex",
-//   justifyContent: "center",
-//   alignItems: "center",
-//   cursor: "pointer",
-// } as React.CSSProperties;
-/**
- * 两侧按钮hover样式
- */
-// const sideButtonHover = {
-//   backgroundColor: "rgba(206, 197, 197, 0.5)",
-// };
-/**
- * 中间展示创建时间的标签的样式
- */
-// const timeLabelStyles = {
-//   flex: "8 1 auto",
-//   display: "flex",
-//   justifyContent: "center",
-//   alignItems: "center",
-// } as React.CSSProperties;
 var Actions = /** @class */ (function (_super) {
     __extends(Actions, _super);
     function Actions(props) {
         var _this = _super.call(this, props) || this;
-        // this.state = {
-        //   disappearHover: false,
-        //   deleteHover: false,
-        // };
-        // bind methods
-        // this.handleCloseMouseEnter = this.handleCloseMouseEnter.bind(this);
-        // this.handleCloseMouseLeave = this.handleCloseMouseLeave.bind(this);
-        // this.handleDeleteMouseEnter = this.handleDeleteMouseEnter.bind(this);
-        // this.handleDeleteMouseLeave = this.handleDeleteMouseLeave.bind(this);
-        _this.handleCloseClicked = _this.handleCloseClicked.bind(_this);
-        _this.handleDeleteClicked = _this.handleDeleteClicked.bind(_this);
+        /**
+         * 关闭detail view
+         */
+        _this.handleCloseClicked = function (e) {
+            e.stopPropagation();
+            _this.props.onCloseClicked();
+        };
+        /**
+         * 删除对应的todo
+         */
+        _this.handleDeleteClicked = function (e) {
+            e.stopPropagation();
+            _this.props.onDeleteClicked();
+        };
         return _this;
     }
-    // private handleCloseMouseEnter(e: React.MouseEvent<HTMLSpanElement>) {
-    //   e.stopPropagation();
-    //   this.setState({
-    //     disappearHover: true,
-    //   });
-    // }
-    // private handleCloseMouseLeave(e: React.MouseEvent<HTMLSpanElement>) {
-    //   e.stopPropagation();
-    //   this.setState({
-    //     disappearHover: false,
-    //   });
-    // }
-    // private handleDeleteMouseEnter(e: React.MouseEvent<HTMLSpanElement>) {
-    //   e.stopPropagation();
-    //   this.setState({
-    //     deleteHover: true,
-    //   });
-    // }
-    // private handleDeleteMouseLeave(e: React.MouseEvent<HTMLSpanElement>) {
-    //   e.stopPropagation();
-    //   this.setState({
-    //     deleteHover: false,
-    //   });
-    // }
-    /**
-     * 关闭detail view
-     * @param e 鼠标点击事件
-     */
-    Actions.prototype.handleCloseClicked = function (e) {
-        e.stopPropagation();
-        this.props.onCloseClicked();
-    };
-    /**
-     * 删除对应的todo
-     * @param e 鼠标点击事件
-     */
-    Actions.prototype.handleDeleteClicked = function (e) {
-        e.stopPropagation();
-        this.props.onDeleteClicked();
-    };
     Actions.prototype.render = function () {
-        // let disappearStyle = mix(sideButtonStyles);
-        // let deleteStyle = mix(sideButtonStyles);
-        // if (this.state.disappearHover) {
-        //     disappearStyle = mix(disappearStyle, sideButtonHover);
-        // }
-        // if (this.state.deleteHover) {
-        //     deleteStyle = mix(deleteStyle, sideButtonHover);
-        // }
         return (React.createElement("div", { className: styles.actions },
             React.createElement("span", { className: styles.sideButton, onClick: this.handleCloseClicked }, ">"),
             React.createElement("span", { className: styles.timeLabel },
@@ -20811,6 +20543,9 @@ module.exports = {"comments":"Comments-comments-3P7ciau"};
 
 "use strict";
 
+/**
+ * 显示和修改todo备注的区域
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -20824,56 +20559,39 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var styles = __webpack_require__(/*! ./Comments.css */ "./src/components/detailview/Comments.css");
-/**
- * 备注区域的样式
- */
-// const commentStyles = {
-//   width: "90%",
-//   height: "calc(30vh)",
-//   margin: "5%",
-//   padding: 10,
-//   resize: "none",
-//   scrollBehavior: "auto",
-//   borderColor: "rgba(206, 197, 197, 0.5)",
-//   outline: "none",
-// }
 var Comments = /** @class */ (function (_super) {
     __extends(Comments, _super);
     function Comments(props) {
         var _this = _super.call(this, props) || this;
+        /**
+         * 更新comments的值
+         */
+        _this.handleCommentsChange = function (e) {
+            e.stopPropagation();
+            _this.setState({ comments: e.target.value });
+        };
+        /**
+         * textarea失去标点的时候更新todo的备注
+         */
+        _this.handleCommentsOnBlur = function (e) {
+            e.stopPropagation();
+            _this.props.onCommentsChange(_this.state.comments);
+        };
         _this.state = {
             comments: _this.props.initComments,
         };
-        // bind methods
-        _this.handleCommentsChange = _this.handleCommentsChange.bind(_this);
-        _this.handleCommentsOnBlur = _this.handleCommentsOnBlur.bind(_this);
         return _this;
     }
-    Comments.prototype.componentWillReceiveProps = function (newProps) {
-        this.setState({
-            comments: newProps.initComments,
-        });
-    };
     /**
-     * 更新comments的值
-     * @param e 键盘输入事件
+     * 新的生命周期钩子
      */
-    Comments.prototype.handleCommentsChange = function (e) {
-        e.stopPropagation();
-        this.setState({ comments: e.target.value });
-    };
-    /**
-     * textarea失去标点的时候更新todo的备注
-     * @param e 光标移出事件
-     */
-    Comments.prototype.handleCommentsOnBlur = function (e) {
-        e.stopPropagation();
-        this.props.onCommentsChange(this.state.comments);
+    Comments.getDerivedStateFromProps = function (nextProps, prevState) {
+        return {
+            comments: nextProps.initComments,
+        };
     };
     Comments.prototype.render = function () {
-        return (React.createElement("textarea", { 
-            // style={commentStyles}
-            className: styles.comments, value: this.state.comments, onChange: this.handleCommentsChange, onBlur: this.handleCommentsOnBlur, placeholder: "\u6DFB\u52A0\u5907\u6CE8" }));
+        return (React.createElement("textarea", { className: styles.comments, value: this.state.comments, onChange: this.handleCommentsChange, onBlur: this.handleCommentsOnBlur, placeholder: "\u6DFB\u52A0\u5907\u6CE8" }));
     };
     return Comments;
 }(React.Component));
@@ -20903,6 +20621,11 @@ module.exports = {"detailView":"DetailView-detailView-35WsUh0","disappear":"Deta
 
 "use strict";
 
+/**
+ * 显示todo详细内容的区域
+ *
+ * 可以切换todo的完成状态、修改/添加备注信息、将todo复制到primary list，以及删除该todo
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -20919,20 +20642,8 @@ var Actions_1 = __webpack_require__(/*! ./Actions */ "./src/components/detailvie
 var Comments_1 = __webpack_require__(/*! ./Comments */ "./src/components/detailview/Comments.tsx");
 var PrimaryCopy_1 = __webpack_require__(/*! ./PrimaryCopy */ "./src/components/detailview/PrimaryCopy.tsx");
 var TitleContent_1 = __webpack_require__(/*! ./TitleContent */ "./src/components/detailview/TitleContent.tsx");
+// 样式表
 var styles = __webpack_require__(/*! ./DetailView.css */ "./src/components/detailview/DetailView.css");
-/**
- * detail view的样式
- */
-// const detailViewStyles = {
-//   width: 280,
-//   position: "relative",
-//   overflow: "hidden",
-//   borderLeft: "1px solid rgba(206, 197, 197, 0.5)",
-//   backgroundColor: "rgba(206, 197, 197, 0.2)",
-// } as React.CSSProperties;
-// const detailViewDisappear = {
-//   width: 0,
-// };
 var DetailView = /** @class */ (function (_super) {
     __extends(DetailView, _super);
     function DetailView() {
@@ -20979,6 +20690,10 @@ module.exports = {"primaryCopy":"PrimaryCopy-primaryCopy-3Ihj8fl","copyArea":"Pr
 
 "use strict";
 
+/**
+ * 将todo事项复制到`primary list`中，或者将todo从`primary list`中移除
+ *
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -20991,124 +20706,29 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-// import * as styles from "./DetailPrimaryCopy.css"
+// 样式表
 var styles = __webpack_require__(/*! ./PrimaryCopy.css */ "./src/components/detailview/PrimaryCopy.css");
-// const primaryStyles: React.CSSProperties = {
-//     width: "90%",
-//     height: 40,
-//     margin: "5%",
-//     display: "flex",
-//     border: "1px solid ,rgba(206, 197, 197, 0.5)",
-//     backgroundColor: "white",
-// };
-/**
- * copy area直接子元素基本样式
- */
-// const directChildStyles: React.CSSProperties = {
-//     width: "100%",
-//     display: "flex",
-// };
-/**
- * 添加到primary list后文字的样式
- */
-// const textLabelStyles: React.CSSProperties = {
-//     color: "blue",
-//     flex: "1 0 100px",
-//     display: "flex",
-//     alignItems: "center",
-//     padding: 10,
-// };
-/**
- * “取消添加到primary list”按钮的样式
- */
-// const cancelButtonStyles: React.CSSProperties = {
-//     flex: "0 0 40px",
-//     display: "flex",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     fontSize: "0.8em",
-//     cursor: "pointer",
-// };
-/**
- * “添加到primary list”按钮的样式
- */
-// const copyButtonStyles: React.CSSProperties = {
-//     padding: 10,
-//     alignItems: "center",
-//     cursor: "pointer",
-// };
-// const hoverStyles: React.CSSProperties = {
-//     backgroundColor: "rgba(206, 197, 197, 0.2)",
-// };
-/**
- * “添加到primary list”按钮
- */
 var PrimaryCopy = /** @class */ (function (_super) {
     __extends(PrimaryCopy, _super);
     function PrimaryCopy(props) {
         var _this = _super.call(this, props) || this;
-        // this.state = {
-        //   cancelButtonHover: false,
-        //   copyButtonHover: false,
-        // }
-        // bind methods
-        _this.handleCancelCopyToPrimary = _this.handleCancelCopyToPrimary.bind(_this);
-        _this.handleCopyToPrimary = _this.handleCopyToPrimary.bind(_this);
+        /**
+         * 从primary list中移除todo
+         */
+        _this.handleCancelCopyToPrimary = function (e) {
+            e.stopPropagation();
+            _this.props.onCancelCopyToPrimary();
+        };
+        /**
+         * 复制copy到primary list中
+         */
+        _this.handleCopyToPrimary = function (e) {
+            e.stopPropagation();
+            _this.props.onCopyToPrimary();
+        };
         return _this;
-        // this.handleCancelButtonMouseEnter = this.handleCancelButtonMouseEnter.bind(this)
-        // this.handleCancelButtonMouseLeave = this.handleCancelButtonMouseLeave.bind(this)
-        // this.handleCopyButtonMouseEnter = this.handleCopyButtonMouseEnter.bind(this)
-        // this.handleCopyButtonMouseLeave = this.handleCopyButtonMouseLeave.bind(this)
     }
-    /**
-     * 从primary list中移除todo
-     * @param e 鼠标事件
-     */
-    PrimaryCopy.prototype.handleCancelCopyToPrimary = function (e) {
-        e.stopPropagation();
-        this.props.onCancelCopyToPrimary();
-    };
-    /**
-     * 复制copy到primary list中
-     * @param e 鼠标事件
-     */
-    PrimaryCopy.prototype.handleCopyToPrimary = function (e) {
-        e.stopPropagation();
-        this.props.onCopyToPrimary();
-    };
-    PrimaryCopy.prototype.handleCopyButtonMouseEnter = function (e) {
-        e.stopPropagation();
-        this.setState({
-            copyButtonHover: true,
-        });
-    };
-    PrimaryCopy.prototype.handleCopyButtonMouseLeave = function (e) {
-        e.stopPropagation();
-        this.setState({
-            copyButtonHover: false,
-        });
-    };
-    PrimaryCopy.prototype.handleCancelButtonMouseEnter = function (e) {
-        e.stopPropagation();
-        this.setState({
-            cancelButtonHover: true,
-        });
-    };
-    PrimaryCopy.prototype.handleCancelButtonMouseLeave = function (e) {
-        e.stopPropagation();
-        this.setState({
-            cancelButtonHover: false,
-        });
-    };
     PrimaryCopy.prototype.render = function () {
-        // let cancelStyle = mix(cancelButtonStyles)
-        // let copyStyle = mix(copyButtonStyles, directChildStyles)
-        // if (this.state.cancelButtonHover) {
-        //   cancelStyle = mix(cancelStyle, hoverStyles)
-        // }
-        // if (this.state.copyButtonHover) {
-        //   copyStyle = mix(copyStyle, hoverStyles)
-        // }
         return (React.createElement("div", { className: styles.primaryCopy }, this.props.item.inPrimaryList ? (React.createElement("div", { className: styles.copyArea },
             React.createElement("p", { className: styles.copyText }, "\u5DF2\u6DFB\u52A0\u5230\u201C\u6211\u7684\u4E00\u5929\u201D"),
             React.createElement("span", { className: styles.cancelButton, onClick: this.handleCancelCopyToPrimary }, "X"))) : (React.createElement("p", { className: styles.copyButton, onClick: this.handleCopyToPrimary }, "\u6DFB\u52A0\u5230\u201C\u6211\u7684\u4E00\u5929\u201D"))));
@@ -21141,6 +20761,9 @@ module.exports = {"titleContent":"TitleContent-titleContent-267Dplj","checkbox":
 
 "use strict";
 
+/**
+ * 显示todo内容和完成状态的区域
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -21153,99 +20776,24 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+// 样式表
 var styles = __webpack_require__(/*! ./TitleContent.css */ "./src/components/detailview/TitleContent.css");
-/**
- * 名称部分的样式
- */
-// const contentStyles = {
-//     minHeight: 80,
-//     padding: "10px 10px 20px 10px",
-//     borderBottom: "1px solid rgba(206, 197, 197, 0.5)",
-//     backgroundColor: "white",
-//     display: "flex",
-// };
-/**
- * 自定义checkbox的样式
- */
-// const checkboxStyles = {
-//     flex: "1 0 30px",
-//     fontSize: "1.5rem",
-//     width: 30,
-//     height: 30,
-//     margin: "0 10px",
-//     borderRadius: "50%",
-//     display: "flex",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     border: "1px solid gray",
-//     color: "transparent",
-//     backgroundColor: "transparent",
-//     cursor: "pointer",
-//     transition: "color 0.3s, background-color 0.3s",
-// } as React.CSSProperties;
-/**
- * checkbox的hover状态
- */
-// const checkboxHoverStyles = {
-//     color: "white",
-//     backgroundColor: "gray",
-// };
-/**
- * checkbox的checked状态
- */
-// const checkedBoxStyle = {
-//     color: "white",
-//     backgroundColor: "green",
-// };
-/**
- * todo名称label的样式
- */
-// const titleLabelStyles = {
-//     flex: "4 0 calc(100% - 50px)",
-//     fontWeight: "bold",
-//     wordBreak: "break-all",
-// } as React.CSSProperties;
 var TitleContent = /** @class */ (function (_super) {
     __extends(TitleContent, _super);
     function TitleContent(props) {
         var _this = _super.call(this, props) || this;
-        // this.state = {
-        //     checkboxHover: false,
-        // };
-        // bind methods
-        _this.handleToggleClicked = _this.handleToggleClicked.bind(_this);
-        _this.handleCheckboxMouseEnter = _this.handleCheckboxMouseEnter.bind(_this);
-        _this.handleCheckboxMouseLeave = _this.handleCheckboxMouseLeave.bind(_this);
+        /**
+         * 切换todo的完成状态
+         */
+        _this.handleToggleClicked = function (e) {
+            e.stopPropagation();
+            _this.props.onToggleClicked();
+        };
         return _this;
     }
-    TitleContent.prototype.handleCheckboxMouseEnter = function (e) {
-        e.stopPropagation();
-        this.setState({
-            checkboxHover: true,
-        });
-    };
-    TitleContent.prototype.handleCheckboxMouseLeave = function (e) {
-        e.stopPropagation();
-        this.setState({
-            checkboxHover: false,
-        });
-    };
-    TitleContent.prototype.handleToggleClicked = function (e) {
-        e.stopPropagation();
-        this.props.onToggleClicked();
-    };
     TitleContent.prototype.render = function () {
-        // let checkStyle = mix(checkboxStyles);
-        // if (this.props.item.done) {
-        //     checkStyle = mix(checkStyle, checkedBoxStyle);
-        // }
-        // if (this.state.checkboxHover) {
-        //     checkStyle = mix(checkStyle, checkboxHoverStyles);
-        // }
         return (React.createElement("div", { className: styles.titleContent },
-            React.createElement("div", { 
-                // style={checkStyle}
-                className: this.props.item.done
+            React.createElement("div", { className: this.props.item.done
                     ? styles.checkedbox + " " + styles.checkbox
                     : styles.checkbox, onClick: this.handleToggleClicked }, "\u221A"),
             React.createElement("span", { className: styles.titleLabel }, this.props.item.name)));
@@ -21278,6 +20826,9 @@ module.exports = {"button":"AddNewList-button-vPQLZB3","text":"AddNewList-text-2
 
 "use strict";
 
+/**
+ * “添加新列表”按钮组件
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -21290,51 +20841,23 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+// 样式表
 var styles = __webpack_require__(/*! ./AddNewList.css */ "./src/components/listview/AddNewList.css");
-// const styles = {
-//     height: 40,
-//     padding: "0 10px",
-//     cursor: "pointer",
-//     color: "blue",
-// };
-// const hoverStyles = {
-//     backgroundColor: "rgba(206, 197, 197, 0.5)",
-// };
-// const spanStyles = {
-//     fontSize: "1.5em",
-//     marginRight: 10,
-// };
 var AddListButton = /** @class */ (function (_super) {
     __extends(AddListButton, _super);
     function AddListButton(props) {
         var _this = _super.call(this, props) || this;
-        // this.state = {
-        //   hover: false,
-        // }
-        _this.handleClick = _this.handleClick.bind(_this);
+        /**
+         * 点击按钮新建列表
+         */
+        _this.handleClick = function (e) {
+            e.stopPropagation();
+            _this.props.onClick();
+        };
         return _this;
-        // this.buttonMouseEnter = this.buttonMouseEnter.bind(this)
-        // this.buttonMouseLeave = this.buttonMouseLeave.bind(this)
     }
-    AddListButton.prototype.handleClick = function (e) {
-        e.stopPropagation();
-        this.props.onClick();
-    };
-    // private buttonMouseEnter(e: React.MouseEvent<HTMLDivElement>) {
-    //   e.stopPropagation()
-    //   this.setState({
-    //     hover: true,
-    //   })
-    // }
-    // private buttonMouseLeave(e: React.MouseEvent<HTMLDivElement>) {
-    //   e.stopPropagation()
-    //   this.setState({
-    //     hover: false,
-    //   })
-    // }
     AddListButton.prototype.render = function () {
-        // const s = this.state.hover ? mix(styles, hoverStyles) : styles;
-        return (React.createElement("div", { className: styles.button, onClick: this.props.onClick },
+        return (React.createElement("div", { className: styles.button, onClick: this.handleClick },
             React.createElement("span", { className: styles.text }, "+"),
             "\u65B0\u5EFA\u6E05\u5355"));
     };
@@ -21366,6 +20889,9 @@ module.exports = {"content":"Content-content-9JwgpIf"};
 
 "use strict";
 
+/**
+ * 显示所有列表的区域
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -21379,6 +20905,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var ViewItem_1 = __webpack_require__(/*! ./ViewItem */ "./src/components/listview/ViewItem.tsx");
+// 样式表
 var styles = __webpack_require__(/*! ./Content.css */ "./src/components/listview/Content.css");
 var Content = /** @class */ (function (_super) {
     __extends(Content, _super);
@@ -21421,6 +20948,11 @@ module.exports = {"listView":"ListView-listView-3xfUY4U"};
 
 "use strict";
 
+/**
+ * 列表区域组件
+ *
+ * 显示所有列表的名称，以及一个“添加新列表”按钮
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -21435,13 +20967,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var Content_1 = __webpack_require__(/*! ./Content */ "./src/components/listview/Content.tsx");
 var AddNewList_1 = __webpack_require__(/*! ./AddNewList */ "./src/components/listview/AddNewList.tsx");
+// 样式表
 var styles = __webpack_require__(/*! ./ListView.css */ "./src/components/listview/ListView.css");
-// const viewStyles = {
-//   width: 280,
-//   position: 'relative',
-//   overflow: 'hidden',
-//   borderRight: '1px solid rgba(206, 197, 197, 0.5)',
-// } as React.CSSProperties
 /**
  * 列表目录
  */
@@ -21449,49 +20976,40 @@ var ListView = /** @class */ (function (_super) {
     __extends(ListView, _super);
     function ListView(props) {
         var _this = _super.call(this, props) || this;
+        /**
+         * 切换列表，显示列表中的todo
+         */
+        _this.handleClick = function (name) {
+            // console.log('handleClick: name is ' + name);
+            _this.props.switchList(name);
+        };
+        /**
+         * 添加新列表
+         */
+        _this.addNewList = function () {
+            var result = true;
+            var name = "";
+            while (result) {
+                name = _this.getListName();
+                result = _this.props.listInfos.some(function (list) {
+                    return list.name == name;
+                });
+            }
+            _this.props.addNewList(name);
+        };
+        /**
+         * 返回添加的新列表的名称
+         */
+        _this.getListName = function () {
+            _this.count++;
+            return "\u65E0\u547D\u540D\u6E05\u5355" + (_this.count > 0 ? _this.count : "");
+        };
         _this.count = -1;
-        // bind methods
-        _this.addNewList = _this.addNewList.bind(_this);
-        _this.handleClick = _this.handleClick.bind(_this);
         return _this;
     }
-    /**
-     * 用户点击处理函数
-     * @param e `click`事件
-     */
-    ListView.prototype.handleClick = function (e, name) {
-        e.stopPropagation();
-        // console.log('handleClick: name is ' + name);
-        this.props.switchList(name);
-    };
-    /**
-     * 添加新列表
-     */
-    ListView.prototype.addNewList = function () {
-        var result = true;
-        var name = "";
-        while (result) {
-            name = this.getListName();
-            result = this.props.listInfos.some(function (list) {
-                return list.name == name;
-            });
-        }
-        this.props.addNewList(name);
-    };
-    /**
-     * 返回添加的新列表的名称
-     */
-    ListView.prototype.getListName = function () {
-        this.count++;
-        return "\u65E0\u547D\u540D\u6E05\u5355" + (this.count > 0 ? this.count : "");
-    };
     ListView.prototype.render = function () {
         return (React.createElement("div", { id: styles.listView },
-            React.createElement(Content_1.Content
-            // currentListName={this.props.currentListName}
-            , { 
-                // currentListName={this.props.currentListName}
-                listInfos: this.props.listInfos, onClick: this.handleClick, onDrop: this.props.onDrop }),
+            React.createElement(Content_1.Content, { listInfos: this.props.listInfos, onClick: this.handleClick, onDrop: this.props.onDrop }),
             React.createElement(AddNewList_1.default, { onClick: this.addNewList })));
     };
     return ListView;
@@ -21522,6 +21040,11 @@ module.exports = {"itemName":"ViewItem-itemName-1u7ukq-","active":"ViewItem-acti
 
 "use strict";
 
+/**
+ * 显示每一个列表的组件
+ *
+ * 组件支持HTML5拖拽，可以将area view中的todo拖到列表上进行复制、转移操作。
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -21534,135 +21057,77 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+// 样式表
 var styles = __webpack_require__(/*! ./ViewItem.css */ "./src/components/listview/ViewItem.css");
-/**
- * 列表名称的样式
- */
-// const itemNameStyles = {
-//   flex: "9 1 100px",
-//   pointerEvents: "none",
-// } as React.CSSProperties;
-// const itemNameStylesWithActive = {
-//   fontWeight: "bold",
-// } as React.CSSProperties;
-/**
- * 表示列表还有多少未完成todo事项数字的样式
- */
-// const itemNumberStyles = {
-//   flex: "1 1 20px",
-//   textAlign: "center",
-//   pointerEvents: "none",
-// };
-/**
- * 列表样式
- */
-// const listItemStyles = {
-//   height: 40,
-//   display: "flex",
-//   justifyContent: "flex-start",
-//   alignItems: "center",
-//   cursor: "pointer",
-//   border: "3px solid transparent",
-// } as React.CSSProperties;
-/**
- * 正常情况下列表hover样式
- */
-// const listItemHover = {
-//   backgroundColor: "rgba(206, 197, 197, 0.5)",
-// };
-/**
- * active时列表hover样式
- */
-// const listItemActiveHover = {
-//   backgroundColor: "#87ceeb",
-// };
-/**
- * active时列表的背景色样式
- */
-// const listItemStylesWithActive = {
-//   backgroundColor: "#abddf1",
-// };
-// const listItemDragEnter = {
-//   border: "3px solid blue",
-// };
 var ViewItem = /** @class */ (function (_super) {
     __extends(ViewItem, _super);
     function ViewItem(props) {
         var _this = _super.call(this, props) || this;
+        /**
+         * 当元素被拖拽到这里的时候，拖拽结束触发这个方法
+         */
+        _this.handleDragOver = function (e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = "move";
+        };
+        /**
+         * 元素“放”在这里的时候，触发这个方法。
+         *
+         * 这里把处理数据的工作交由父组件代劳
+         */
+        _this.handleDrop = function (e) {
+            e.preventDefault();
+            var target = e.target;
+            if (target.nodeName.toLowerCase() !== "li") {
+                if (target.parentElement) {
+                    target = target.parentElement;
+                }
+            }
+            // const data = e.dataTransfer.getData('text')
+            // console.log(`drop data: ${data}`)
+            _this.props.onDrop(_this.props.info.name);
+            // console.log('拖拽结束目标列表名称：' + this.props.info.name)
+            _this.setState({
+                dragEnter: false,
+            });
+        };
+        /**
+         * 列表处于`dragenter`状态时的操作
+         */
+        _this.handleDragEnter = function (e) {
+            e.stopPropagation();
+            // const target = e.target as HTMLElement;
+            _this.setState({
+                dragEnter: true,
+            });
+        };
+        /**
+         * 列表处于`dragend`状态时的操作
+         */
+        _this.handleDragLeave = function (e) {
+            e.stopPropagation();
+            // const target = e.target as HTMLElement;
+            _this.setState({
+                dragEnter: false,
+            });
+        };
+        /**
+         * 点击列表，显示todo内容
+         */
+        _this.clickList = function (e) {
+            e.stopPropagation();
+            _this.props.onClick(_this.props.info.name);
+        };
         _this.state = {
-            // hover: false,
             dragEnter: false,
         };
-        // bind methods
-        _this.handleDragOver = _this.handleDragOver.bind(_this);
-        _this.handleDrop = _this.handleDrop.bind(_this);
-        _this.handleDragEnter = _this.handleDragEnter.bind(_this);
-        _this.handleDragLeave = _this.handleDragLeave.bind(_this);
         return _this;
     }
-    /**
-     * 当元素被拖拽到这里的时候，拖拽结束触发这个方法
-     * @param e 拖拽事件
-     */
-    ViewItem.prototype.handleDragOver = function (e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = "move";
-    };
-    /**
-     * 元素“放”在这里的时候，触发这个方法。
-     *
-     * 这里把处理数据的工作交由父组件代劳
-     * @param e 拖拽事件
-     */
-    ViewItem.prototype.handleDrop = function (e) {
-        e.preventDefault();
-        var target = e.target;
-        if (target.nodeName.toLowerCase() !== "li") {
-            if (target.parentElement) {
-                target = target.parentElement;
-            }
-        }
-        // const data = e.dataTransfer.getData('text')
-        // console.log(`drop data: ${data}`)
-        this.props.onDrop(this.props.info.name);
-        // console.log('拖拽结束目标列表名称：' + this.props.info.name)
-        this.setState({
-            dragEnter: false,
-        });
-    };
-    ViewItem.prototype.handleDragEnter = function (e) {
-        var target = e.target;
-        this.setState({
-            dragEnter: true,
-        });
-    };
-    ViewItem.prototype.handleDragLeave = function (e) {
-        var target = e.target;
-        this.setState({
-            dragEnter: false,
-        });
-    };
     ViewItem.prototype.render = function () {
-        var _this = this;
         var isActive = this.props.info.isActive;
-        // const isHover = this.state.hover;
-        // let listS: React.CSSProperties = listItemStyles;
-        // let itemS = itemNameStyles;
-        // if (isActive) {
-        //     if (isHover) {
-        //         listS = mix(listS, listItemActiveHover);
-        //     } else {
-        //         listS = mix(listS, listItemStylesWithActive);
-        //     }
-        //     itemS = mix(itemS, itemNameStylesWithActive);
-        // } else {
-        //     if (isHover) {
-        //         listS = mix(listS, listItemHover);
-        //     }
-        // }
         return (React.createElement("li", { className: (this.state.dragEnter ? styles.dragEnter : "") + " " + styles.listItem + " " + (isActive ? styles.active : ""), 
             // style={listS}
-            onDragOver: this.handleDragOver, onDrop: this.handleDrop, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onClick: function (e) { return _this.props.onClick(e, _this.props.info.name); } },
+            onDragOver: this.handleDragOver, onDrop: this.handleDrop, onDragEnter: this.handleDragEnter, onDragLeave: this.handleDragLeave, onClick: this.clickList },
             React.createElement("span", { className: styles.itemName + " animated " + (isActive ? styles.active + " fadeIn" : "") }, this.props.info.name),
             React.createElement("span", { className: styles.itemNumber }, this.props.info.count > 0 ? this.props.info.count : "")));
     };
@@ -21694,6 +21159,11 @@ module.exports = {"background":"GlobalAlert-background-35KNT0b","display":"Globa
 
 "use strict";
 
+/**
+ * 全局提醒窗口
+ *
+ * 目前有两种使用场景，一个是数据初始化错误的提示，另一个是需要用户确认是否要删除列表
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -21707,70 +21177,40 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var GlobalAlertButton_1 = __webpack_require__(/*! ./GlobalAlertButton */ "./src/components/util/GlobalAlertButton.tsx");
-// 样式
+// 样式表
 var styles = __webpack_require__(/*! ./GlobalAlert.css */ "./src/components/util/GlobalAlert.css");
+/**
+ * 提醒的类别
+ *
+ * 目前只有两种类别，（默认的）提醒和（需要用户确认的）确认
+ */
 var AlertType;
 (function (AlertType) {
     AlertType[AlertType["Alert"] = 0] = "Alert";
     AlertType[AlertType["Confirm"] = 1] = "Confirm";
 })(AlertType = exports.AlertType || (exports.AlertType = {}));
-/**
- * 提示框后的全屏背景遮罩层样式
- */
-// const backgroundStyles: React.CSSProperties = {
-//     left: 0,
-//     top: 0,
-//     width: "100vw",
-//     height: "100vh",
-//     position: "fixed",
-//     zIndex: 2,
-//     visibility: "hidden",
-//     backgroundColor: "rgba(90, 85, 85, 0.37)",
-//     display: "flex",
-//     justifyContent: "center",
-//     alignItems: "center",
-// };
-// const backgroundDisplay: React.CSSProperties = {
-//     visibility: "visible",
-// };
-/**
- * 提示框的样式
- */
-// const alertStyles: React.CSSProperties = {
-//     width: "30vw",
-//     height: "30vh",
-//     backgroundColor: "white",
-//     borderRadius: 8,
-//     borderColor: "rgba(206, 197, 197, 0.5)",
-//     padding: 10,
-//     display: "flex",
-//     flexWrap: "wrap",
-// };
-/**
- * alert的提示消息样式
- */
-// const alertMessageStyles: React.CSSProperties = {
-//     width: "100%",
-// };
-/**
- * 提示框操作部分的样式
- */
-// const alertActionStyles: React.CSSProperties = {
-//     display: "flex",
-//     flexDirection: "column-reverse",
-//     width: "100%",
-// };
 var Alert = /** @class */ (function (_super) {
     __extends(Alert, _super);
     function Alert(props) {
         var _this = _super.call(this, props) || this;
+        /**
+         * 点击“好的”（默认按钮）
+         */
+        _this.defaultClick = function () {
+            _this.props.alertDefaultAction();
+        };
+        /**
+         * 点击“确定”（确认按钮）
+         */
+        _this.confirmClick = function () {
+            if (_this.props.alertConfirmAction) {
+                _this.props.alertConfirmAction();
+            }
+        };
         _this.state = {
             // confirmButtonHover: false,
             type: _this.props.type,
         };
-        // bind methods
-        _this.defaultClick = _this.defaultClick.bind(_this);
-        _this.confirmClick = _this.confirmClick.bind(_this);
         return _this;
     }
     // new lifecycle hook, replace `willReceive`
@@ -21779,19 +21219,7 @@ var Alert = /** @class */ (function (_super) {
             type: nextProps.type,
         };
     };
-    Alert.prototype.defaultClick = function () {
-        this.props.alertDefaultAction();
-    };
-    Alert.prototype.confirmClick = function () {
-        if (this.props.alertConfirmAction) {
-            this.props.alertConfirmAction();
-        }
-    };
     Alert.prototype.render = function () {
-        // let backgroundS = mix(backgroundStyles);
-        // if (this.props.display) {
-        //     backgroundS = mix(backgroundS, backgroundDisplay);
-        // }
         return (React.createElement("div", { className: this.props.display
                 ? styles.background + " " + styles.display
                 : styles.background },
@@ -21829,6 +21257,15 @@ module.exports = {"alertButton":"GlobalAlertButton-alertButton-2XdzmM7"};
 
 "use strict";
 
+/**
+ * 全局提示框里的按钮
+ *
+ * （就是“好的”，“确认”这种）
+ *
+ * 这个组件只提供基本的操作逻辑和样式，按钮具体的功能（onClick）需要父组件指定
+ *
+ * 目前还没有提供拓展样式，后续加上
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -21841,6 +21278,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+// 样式表
 var styles = __webpack_require__(/*! ./GlobalAlertButton.css */ "./src/components/util/GlobalAlertButton.css");
 /**
  * 全局提示框里的按钮
@@ -21849,56 +21287,18 @@ var AlertButton = /** @class */ (function (_super) {
     __extends(AlertButton, _super);
     function AlertButton(props) {
         var _this = _super.call(this, props) || this;
-        // this.state = {
-        //     hover: false,
-        // };
-        // this.onMouseEnter = this.onMouseEnter.bind(this);
-        // this.onMouseLeave = this.onMouseLeave.bind(this);
-        _this.onClick = _this.onClick.bind(_this);
+        _this.onClick = function (e) {
+            e.stopPropagation();
+            _this.props.onClick();
+        };
         return _this;
     }
-    // private onMouseEnter(e: React.MouseEvent<HTMLButtonElement>) {
-    //     e.stopPropagation();
-    //     this.setState({
-    //         hover: true,
-    //     });
-    // }
-    // private onMouseLeave(e: React.MouseEvent<HTMLButtonElement>) {
-    //     e.stopPropagation();
-    //     this.setState({
-    //         hover: false,
-    //     });
-    // }
-    AlertButton.prototype.onClick = function (e) {
-        e.stopPropagation();
-        this.props.onClick();
-    };
     AlertButton.prototype.render = function () {
-        // const style = this.state.hover
-        //     ? mix(confirmButtonStyles, confirmButtonHover)
-        //     : confirmButtonStyles;
-        return (React.createElement("button", { className: styles.alertButton, 
-            // style={style}
-            // onMouseEnter={this.onMouseEnter}
-            // onMouseLeave={this.onMouseLeave}
-            onClick: this.onClick }, this.props.title));
+        return (React.createElement("button", { className: styles.alertButton, onClick: this.onClick }, this.props.title));
     };
     return AlertButton;
 }(React.Component));
 exports.AlertButton = AlertButton;
-/**
- * “确认”按钮样式
- */
-// const confirmButtonStyles: React.CSSProperties = {
-//     height: 30,
-//     border: "none",
-//     backgroundColor: "transparent",
-//     cursor: "pointer",
-//     transition: "backgroud-color 0.3s",
-// };
-// const confirmButtonHover: React.CSSProperties = {
-//     backgroundColor: "rgba(206, 197, 197, 0.5)",
-// };
 
 
 /***/ }),
@@ -21916,8 +21316,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 var App_1 = __webpack_require__(/*! ./App */ "./src/App.tsx");
-// import 'animate.css'
-// import "./styles/index.scss";
 ReactDOM.render(React.createElement(App_1.App, null), document.getElementById("root"));
 
 

@@ -38,24 +38,20 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
     constructor(props: ListViewProps) {
         super(props);
         this.count = -1;
-
-        // bind methods
-        this.addNewList = this.addNewList.bind(this);
-        this.handleClick = this.handleClick.bind(this);
     }
 
     /**
      * 切换列表，显示列表中的todo
      */
-    private handleClick(name: string) {
+    private handleClick = (name: string) => {
         // console.log('handleClick: name is ' + name);
         this.props.switchList(name);
-    }
+    };
 
     /**
      * 添加新列表
      */
-    private addNewList() {
+    private addNewList = () => {
         let result = true;
         let name = "";
         while (result) {
@@ -65,15 +61,15 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
             });
         }
         this.props.addNewList(name);
-    }
+    };
 
     /**
      * 返回添加的新列表的名称
      */
-    private getListName(): string {
+    private getListName = (): string => {
         this.count++;
         return `无命名清单${this.count > 0 ? this.count : ""}`;
-    }
+    };
 
     render() {
         return (

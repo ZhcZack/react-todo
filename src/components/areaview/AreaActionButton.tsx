@@ -28,9 +28,6 @@ interface State {}
 export class ActionButton extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-
-        // bind methods
-        this.handleClick = this.handleClick.bind(this);
     }
 
     render() {
@@ -44,8 +41,8 @@ export class ActionButton extends React.Component<Props, State> {
     /**
      * 点击按钮，具体的功能由父组件决定
      */
-    private handleClick(e: React.MouseEvent<HTMLLIElement>) {
+    private handleClick = (e: React.MouseEvent<HTMLLIElement>) => {
         e.stopPropagation();
         this.props.onClick();
-    }
+    };
 }

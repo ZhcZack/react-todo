@@ -21,10 +21,6 @@ export class Comments extends React.Component<Props, State> {
         this.state = {
             comments: this.props.initComments,
         };
-
-        // bind methods
-        this.handleCommentsChange = this.handleCommentsChange.bind(this);
-        this.handleCommentsOnBlur = this.handleCommentsOnBlur.bind(this);
     }
 
     /**
@@ -39,18 +35,18 @@ export class Comments extends React.Component<Props, State> {
     /**
      * 更新comments的值
      */
-    private handleCommentsChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    private handleCommentsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         e.stopPropagation();
         this.setState({ comments: e.target.value });
-    }
+    };
 
     /**
      * textarea失去标点的时候更新todo的备注
      */
-    private handleCommentsOnBlur(e: React.FocusEvent<HTMLTextAreaElement>) {
+    private handleCommentsOnBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
         e.stopPropagation();
         this.props.onCommentsChange(this.state.comments);
-    }
+    };
 
     render() {
         return (

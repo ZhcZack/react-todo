@@ -45,16 +45,15 @@ interface State {}
 export class AreaActions extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.closeActions = this.closeActions.bind(this);
     }
 
     /**
      * 关闭操作窗口
      */
-    private closeActions(e: React.MouseEvent<HTMLDivElement>) {
+    private closeActions = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
         this.props.closeActions();
-    }
+    };
 
     render() {
         return (

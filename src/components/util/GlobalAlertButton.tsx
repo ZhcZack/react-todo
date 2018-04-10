@@ -27,14 +27,12 @@ interface State {}
 export class AlertButton extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-
-        this.onClick = this.onClick.bind(this);
     }
 
-    private onClick(e: React.MouseEvent<HTMLButtonElement>) {
+    private onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
         this.props.onClick();
-    }
+    };
 
     render() {
         return (

@@ -26,26 +26,6 @@ interface State {}
 export class AddNewItem extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-
-        // bind methods
-        this.handleAddClicked = this.handleAddClicked.bind(this);
-        this.handleCancelClicked = this.handleCancelClicked.bind(this);
-    }
-
-    /**
-     * 取消这次输入
-     */
-    private handleCancelClicked(e: React.MouseEvent<HTMLSpanElement>) {
-        e.stopPropagation();
-        this.props.onCancelClicked();
-    }
-
-    /**
-     * 添加一个新的todo事项
-     */
-    private handleAddClicked(e: React.MouseEvent<HTMLSpanElement>) {
-        e.stopPropagation();
-        this.props.onAddClicked();
     }
 
     render() {
@@ -76,4 +56,20 @@ export class AddNewItem extends React.Component<Props, State> {
             </div>
         );
     }
+
+    /**
+     * 取消这次输入
+     */
+    private handleCancelClicked = (e: React.MouseEvent<HTMLSpanElement>) => {
+        e.stopPropagation();
+        this.props.onCancelClicked();
+    };
+
+    /**
+     * 添加一个新的todo事项
+     */
+    private handleAddClicked = (e: React.MouseEvent<HTMLSpanElement>) => {
+        e.stopPropagation();
+        this.props.onAddClicked();
+    };
 }

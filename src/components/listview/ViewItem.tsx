@@ -34,28 +34,22 @@ export class ViewItem extends React.Component<Props, State> {
         this.state = {
             dragEnter: false,
         };
-
-        // bind methods
-        this.handleDragOver = this.handleDragOver.bind(this);
-        this.handleDrop = this.handleDrop.bind(this);
-        this.handleDragEnter = this.handleDragEnter.bind(this);
-        this.handleDragLeave = this.handleDragLeave.bind(this);
     }
 
     /**
      * 当元素被拖拽到这里的时候，拖拽结束触发这个方法
      */
-    private handleDragOver(e: React.DragEvent<HTMLLIElement>) {
+    private handleDragOver = (e: React.DragEvent<HTMLLIElement>) => {
         e.preventDefault();
         e.dataTransfer.dropEffect = "move";
-    }
+    };
 
     /**
      * 元素“放”在这里的时候，触发这个方法。
      *
      * 这里把处理数据的工作交由父组件代劳
      */
-    private handleDrop(e: React.DragEvent<HTMLLIElement>) {
+    private handleDrop = (e: React.DragEvent<HTMLLIElement>) => {
         e.preventDefault();
         let target = e.target as HTMLElement;
         if (target.nodeName.toLowerCase() !== "li") {
@@ -70,37 +64,37 @@ export class ViewItem extends React.Component<Props, State> {
         this.setState({
             dragEnter: false,
         });
-    }
+    };
 
     /**
      * 列表处于`dragenter`状态时的操作
      */
-    private handleDragEnter(e: React.DragEvent<HTMLLIElement>) {
+    private handleDragEnter = (e: React.DragEvent<HTMLLIElement>) => {
         e.stopPropagation();
         // const target = e.target as HTMLElement;
         this.setState({
             dragEnter: true,
         });
-    }
+    };
 
     /**
      * 列表处于`dragend`状态时的操作
      */
-    private handleDragLeave(e: React.DragEvent<HTMLLIElement>) {
+    private handleDragLeave = (e: React.DragEvent<HTMLLIElement>) => {
         e.stopPropagation();
         // const target = e.target as HTMLElement;
         this.setState({
             dragEnter: false,
         });
-    }
+    };
 
     /**
      * 点击列表，显示todo内容
      */
-    private clickList(e: React.MouseEvent<HTMLLIElement>) {
+    private clickList = (e: React.MouseEvent<HTMLLIElement>) => {
         e.stopPropagation();
         this.props.onClick(this.props.info.name);
-    }
+    };
 
     render() {
         const isActive = this.props.info.isActive;

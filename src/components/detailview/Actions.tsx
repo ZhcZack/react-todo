@@ -22,26 +22,23 @@ interface State {}
 export class Actions extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-
-        this.handleCloseClicked = this.handleCloseClicked.bind(this);
-        this.handleDeleteClicked = this.handleDeleteClicked.bind(this);
     }
 
     /**
      * 关闭detail view
      */
-    private handleCloseClicked(e: React.MouseEvent<HTMLSpanElement>) {
+    private handleCloseClicked = (e: React.MouseEvent<HTMLSpanElement>) => {
         e.stopPropagation();
         this.props.onCloseClicked();
-    }
+    };
 
     /**
      * 删除对应的todo
      */
-    private handleDeleteClicked(e: React.MouseEvent<HTMLSpanElement>) {
+    private handleDeleteClicked = (e: React.MouseEvent<HTMLSpanElement>) => {
         e.stopPropagation();
         this.props.onDeleteClicked();
-    }
+    };
 
     render() {
         return (

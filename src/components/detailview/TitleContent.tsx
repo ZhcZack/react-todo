@@ -22,18 +22,15 @@ interface State {}
 export class TitleContent extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-
-        // bind methods
-        this.handleToggleClicked = this.handleToggleClicked.bind(this);
     }
 
     /**
      * 切换todo的完成状态
      */
-    private handleToggleClicked(e: React.MouseEvent<HTMLDivElement>) {
+    private handleToggleClicked = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
         this.props.onToggleClicked();
-    }
+    };
 
     render() {
         return (

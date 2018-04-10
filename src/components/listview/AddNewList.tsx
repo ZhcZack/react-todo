@@ -17,16 +17,15 @@ interface State {}
 export default class AddListButton extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.handleClick = this.handleClick.bind(this);
     }
 
     /**
      * 点击按钮新建列表
      */
-    private handleClick(e: React.MouseEvent<HTMLDivElement>) {
+    private handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
         this.props.onClick();
-    }
+    };
 
     render() {
         return (

@@ -37,47 +37,41 @@ interface State {}
 export class AreaViewItem extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-
-        // bind methods
-        this.handleDrag = this.handleDrag.bind(this);
-        this.handleDragEnd = this.handleDragEnd.bind(this);
-        this.clickCheckbox = this.clickCheckbox.bind(this);
-        this.clickItem = this.clickItem.bind(this);
     }
 
     /**
      * 拖拽开始的处理方法，将todo的数据转化为字符串并交由父组件处理
      */
-    private handleDrag(e: React.DragEvent<HTMLLIElement>) {
+    private handleDrag = (e: React.DragEvent<HTMLLIElement>) => {
         const data = JSON.stringify(this.props.item);
         e.dataTransfer.setData("text/plain", "");
         e.dataTransfer.dropEffect = "move";
         this.props.onDragStart(data);
-    }
+    };
 
     /**
      * 拖拽结束/被取消了
      */
-    private handleDragEnd(e: React.DragEvent<HTMLLIElement>) {
+    private handleDragEnd = (e: React.DragEvent<HTMLLIElement>) => {
         e.stopPropagation();
         this.props.onDragEnd();
-    }
+    };
 
     /**
      * 点击todo事项
      */
-    private clickItem(e: React.MouseEvent<HTMLLIElement>) {
+    private clickItem = (e: React.MouseEvent<HTMLLIElement>) => {
         e.stopPropagation();
         this.props.onItemClicked(this.props.item.name);
-    }
+    };
 
     /**
      * 点击checkbox
      */
-    private clickCheckbox(e: React.MouseEvent<HTMLDivElement>) {
+    private clickCheckbox = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
         this.props.onCheckboxClicked(this.props.item.name);
-    }
+    };
 
     render() {
         const item = this.props.item;

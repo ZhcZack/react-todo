@@ -119,31 +119,19 @@ export class AreaView extends React.Component<Props, State> {
     }
 
     /**
-     * @deprecated from v16.3 deprecated
-     */
-    // componentWillReceiveProps(nextProps: Props) {
-    //   // 切换列表的时候将输入框中的内容清空
-    //   if (nextProps.listInfo.name !== this.props.listInfo.name) {
-    //     this.setState({
-    //       inputValue: '',
-    //     })
-    //   }
-    // }
-
-    /**
      * 显示/隐藏已完成的todo事项
      */
-    private switchDoneItems() {
+    private switchDoneItems = () => {
         this.setState(prev => ({
             showDoneItems: !prev.showDoneItems,
         }));
-    }
+    };
 
     /**
      * 往数据中添加拖拽事项所在的列表名称
      * @param data todo事项的原始数据
      */
-    private handleDragStart(data: string) {
+    private handleDragStart = (data: string) => {
         const obj = JSON.parse(data);
         // console.log(`obj: ${obj}, type: ${typeof obj}`)
         const newData = JSON.stringify({
@@ -151,63 +139,63 @@ export class AreaView extends React.Component<Props, State> {
             data,
         });
         this.props.onDragStart(newData);
-    }
+    };
 
     /**
      * 更改列表名称
      * @param name 新的列表名称
      */
-    private renameList(name: string) {
+    private renameList = (name: string) => {
         this.props.renameList(this.props.listInfo.name, name);
-    }
+    };
 
     /**
      * 处理文本框的输入内容
      * @param e input的`value`变动事件
      */
-    private handleInput(e: React.ChangeEvent<HTMLInputElement>) {
+    private handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         // console.log(e.target)
         const value = e.target.value;
         this.setState({
             inputValue: value,
         });
-    }
+    };
 
     /**
      * 切换item的完成状态
      * @param e 鼠标点击事件
      * @param name `TodoItem`的名称
      */
-    private toggleItem(name: string) {
+    private toggleItem = (name: string) => {
         // 切换完成状态
         this.props.toggleItemInList(name, this.props.listInfo.name);
-    }
+    };
 
     /**
      * 添加新的`TodoItem`
      * @param e 鼠标点击事件
      */
-    private addNewItem() {
+    private addNewItem = () => {
         this.props.addNewItemInList(this.state.inputValue, this.props.listInfo.name);
         this.setState({
             inputValue: "",
         });
-    }
+    };
 
     /**
      * 中止文本框输入
      * @param e 鼠标点击事件
      */
-    private cancelInput() {
+    private cancelInput = () => {
         this.setState({ inputValue: "" });
-    }
+    };
 
     /**
      * 在detail view显示选中`TodoItem`的详细内容
      * @param e 鼠标点击事件
      * @param name 选中`TodoItem`的名称
      */
-    private displayDetailView(name: string) {
+    private displayDetailView = (name: string) => {
         this.props.itemClicked(name, this.props.listInfo.name);
-    }
+    };
 }
