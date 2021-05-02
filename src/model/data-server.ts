@@ -16,6 +16,7 @@ interface Data {
 // }
 
 export class DataServer {
+    private static instance: DataServer | null = null;
     // private data: Data
     private todoLists: TodoListClass[];
     /**
@@ -26,6 +27,13 @@ export class DataServer {
      * 初始化数据出错时的错误信息
      */
     private loadDataError: string;
+
+    static getInstance(): DataServer {
+        if (!this.instance) {
+            this.instance = new this();
+        }
+        return this.instance;
+    }
 
     constructor() {
         // this.data = {} as Data

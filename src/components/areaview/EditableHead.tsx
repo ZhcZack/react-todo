@@ -70,13 +70,13 @@ export class EditableHead extends React.Component<HeadProps, HeadState> {
     // ref引用，是一个输入文本框
     private renameInput: HTMLInputElement | null;
 
-    static getDerivedStateFromProps(nextProps: HeadProps, prevState: HeadState): HeadState {
-        return {
-            name: nextProps.listName,
-            isEdit: false,
-            isActionDisplay: false,
-        };
-    }
+    // static getDerivedStateFromProps(nextProps: HeadProps, prevState: HeadState): HeadState {
+    //     return {
+    //         name: nextProps.listName,
+    //         isEdit: false,
+    //         isActionDisplay: false,
+    //     };
+    // }
 
     constructor(props: HeadProps) {
         super(props);

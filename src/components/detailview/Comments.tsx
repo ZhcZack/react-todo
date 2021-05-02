@@ -16,14 +16,14 @@ interface State {
 }
 
 export class Comments extends React.Component<Props, State> {
-    /**
-     * 新的生命周期钩子
-     */
-    static getDerivedStateFromProps(nextProps: Props, prevState: State): State {
-        return {
-            comments: nextProps.initComments,
-        };
-    }
+    // /**
+    //  * 新的生命周期钩子
+    //  */
+    // static getDerivedStateFromProps(nextProps: Props, prevState: State): State {
+    //     return {
+    //         comments: nextProps.initComments,
+    //     };
+    // }
 
     constructor(props: Props) {
         super(props);

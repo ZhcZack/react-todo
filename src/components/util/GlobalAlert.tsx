@@ -33,13 +33,14 @@ export enum AlertType {
 }
 
 export class Alert extends React.Component<Props, State> {
-    // new lifecycle hook, replace `willReceive`
-    static getDerivedStateFromProps(nextProps: Props, prevState: State): State {
-        return {
-            type: nextProps.type,
-            // confirmButtonHover: prevState.confirmButtonHover,
-        };
-    }
+    private myRef: React.RefObject<HTMLDivElement>;
+    // // new lifecycle hook, replace `willReceive`
+    // static getDerivedStateFromProps(nextProps: Props, prevState: State): State {
+    //     return {
+    //         type: nextProps.type,
+    //         // confirmButtonHover: prevState.confirmButtonHover,
+    //     };
+    // }
 
     constructor(props: Props) {
         super(props);
@@ -47,11 +48,21 @@ export class Alert extends React.Component<Props, State> {
             // confirmButtonHover: false,
             type: this.props.type,
         };
+        this.myRef = React.createRef();
     }
+
+    // componentDidMount() {
+    //   this.myRef.current?.focus();
+    // }
+    //
+    // componentDidUpdate() {
+    //   this.myRef.current?.focus();
+    // }
 
     render() {
         return (
             <div
+                ref={this.myRef}
                 className={
                     this.props.display
                         ? `${styles.background} ${styles.display}`

@@ -72,17 +72,17 @@ interface State {
 // }
 
 export class AreaView extends React.Component<Props, State> {
-    static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-        if (nextProps.listInfo.name !== prevState.inputValue) {
-            return {
-                inputValue: '',
-            };
-        }
-        return {
-            inputValue: prevState.inputValue,
-            showDoneItems: prevState.showDoneItems,
-        };
-    }
+    // static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    //     if (nextProps.listInfo.name !== prevState.inputValue) {
+    //         return {
+    //             inputValue: '',
+    //         };
+    //     }
+    //     return {
+    //         inputValue: prevState.inputValue,
+    //         showDoneItems: prevState.showDoneItems,
+    //     };
+    // }
 
     constructor(props: Props) {
         super(props);

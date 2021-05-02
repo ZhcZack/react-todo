@@ -48,7 +48,7 @@ export class AreaActions extends React.Component<Props, State> {
 
     render() {
         return (
-            <div className={styles.globalBackground} onClick={this.closeActions}>
+            <div className={styles.globalBackground} onClick={this.closeActions} onBlur={this.closeActions}>
                 <div className={`${'animated fadeIn'} ${styles.actions} ${styles.display}`}>
                     <ThemePicker onColorPick={this.props.onColorPick} />
                     <ul className={styles.buttonList}>
@@ -71,7 +71,7 @@ export class AreaActions extends React.Component<Props, State> {
     /**
      * 关闭操作窗口
      */
-    private closeActions = (e: React.MouseEvent<HTMLDivElement>) => {
+    private closeActions = (e: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>) => {
         e.stopPropagation();
         this.props.closeActions();
     };
