@@ -3,11 +3,11 @@
  *
  */
 
-import * as React from 'react';
-import { TodoItem } from '../../model/interface';
+import * as React from "react"
+import { TodoItem } from "../../model/interface"
 
 // 样式表
-const styles = require('./PrimaryCopy.css');
+import styles from "./PrimaryCopy.module.css"
 
 interface Props {
     item: TodoItem;
@@ -19,7 +19,7 @@ interface State {}
 
 export class PrimaryCopy extends React.Component<Props, State> {
     constructor(props: Props) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -41,22 +41,22 @@ export class PrimaryCopy extends React.Component<Props, State> {
                     </p>
                 )}
             </div>
-        );
+        )
     }
 
     /**
      * 从primary list中移除todo
      */
     private handleCancelCopyToPrimary = (e: React.MouseEvent<HTMLSpanElement>) => {
-        e.stopPropagation();
-        this.props.onCancelCopyToPrimary();
-    };
+        e.stopPropagation()
+        this.props.onCancelCopyToPrimary()
+    }
 
     /**
      * 复制copy到primary list中
      */
     private handleCopyToPrimary = (e: React.MouseEvent<HTMLSpanElement>) => {
-        e.stopPropagation();
-        this.props.onCopyToPrimary();
-    };
+        e.stopPropagation()
+        this.props.onCopyToPrimary()
+    }
 }

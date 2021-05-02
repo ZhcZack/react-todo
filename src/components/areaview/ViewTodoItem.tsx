@@ -2,11 +2,11 @@
  * 显示todo事项的区域
  */
 
-import * as React from 'react';
-import { TodoItem } from '../../model/interface';
+import * as React from "react"
+import { TodoItem } from "../../model/interface"
 
 // 样式
-const styles: { [prop: string]: string } = require('./ViewTodoItem.css');
+import styles from "./ViewTodoItem.module.css"
 
 interface Props {
     /**
@@ -45,11 +45,11 @@ interface State {}
 
 export class AreaViewItem extends React.Component<Props, State> {
     constructor(props: Props) {
-        super(props);
+        super(props)
     }
 
     render() {
-        const item = this.props.item;
+        const item = this.props.item
 
         return (
             <li
@@ -60,59 +60,59 @@ export class AreaViewItem extends React.Component<Props, State> {
                 onDragEnd={this.handleDragEnd}
             >
                 <div
-                    className={`${styles.checkbox} ${item.done ? styles.checked : ''}`}
+                    className={`${styles.checkbox} ${item.done ? styles.checked : ""}`}
                     onClick={this.clickCheckbox}
                 >
                     √
                 </div>
                 <div className={styles.text}>
-                    <span className={item.done ? `${styles.text} ${styles.done}` : ''}>
+                    <span className={item.done ? `${styles.text} ${styles.done}` : ""}>
                         {item.name}
                     </span>
                     <div className={styles.source}>
                         {item.inPrimaryList && (
-                            <span className={styles.comment + ' ' + styles.inPrimary}>
-                                {this.props.isPrimaryList ? item.source : '我的一天'}
+                            <span className={styles.comment + " " + styles.inPrimary}>
+                                {this.props.isPrimaryList ? item.source : "我的一天"}
                             </span>
                         )}
                         {item.comments && <span className={styles.comment}>备注</span>}
                     </div>
                 </div>
             </li>
-        );
+        )
     }
 
     /**
      * 拖拽开始的处理方法，将todo的数据转化为字符串并交由父组件处理
      */
     private handleDrag = (e: React.DragEvent<HTMLLIElement>) => {
-        const data = JSON.stringify(this.props.item);
-        e.dataTransfer.setData('text/plain', '');
-        e.dataTransfer.dropEffect = 'move';
-        this.props.onDragStart(data);
-    };
+        const data = JSON.stringify(this.props.item)
+        e.dataTransfer.setData("text/plain", "")
+        e.dataTransfer.dropEffect = "move"
+        this.props.onDragStart(data)
+    }
 
     /**
      * 拖拽结束/被取消了
      */
     private handleDragEnd = (e: React.DragEvent<HTMLLIElement>) => {
-        e.stopPropagation();
-        this.props.onDragEnd();
-    };
+        e.stopPropagation()
+        this.props.onDragEnd()
+    }
 
     /**
      * 点击todo事项
      */
     private clickItem = (e: React.MouseEvent<HTMLLIElement>) => {
-        e.stopPropagation();
-        this.props.onItemClicked(this.props.item.name);
-    };
+        e.stopPropagation()
+        this.props.onItemClicked(this.props.item.name)
+    }
 
     /**
      * 点击checkbox
      */
     private clickCheckbox = (e: React.MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation();
-        this.props.onCheckboxClicked(this.props.item.name);
-    };
+        e.stopPropagation()
+        this.props.onCheckboxClicked(this.props.item.name)
+    }
 }

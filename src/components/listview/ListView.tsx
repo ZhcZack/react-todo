@@ -10,7 +10,8 @@ import { ListInfo } from '../../model/interface';
 import AddListButton from './AddNewList';
 
 // 样式表
-const styles: { [prop: string]: string } = require('./ListView.css');
+// const styles: { [prop: string]: string } = require('./ListView.module.css');
+import style from "./ListView.module.css"
 
 interface ListViewProps {
     /**
@@ -50,7 +51,7 @@ export class ListView extends React.Component<ListViewProps, ListViewState> {
 
     render() {
         return (
-            <div id={styles.listView}>
+            <div className={style.listView}>
                 <Content
                     listInfos={this.props.listInfos}
                     onClick={this.handleClick}

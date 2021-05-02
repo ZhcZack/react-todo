@@ -4,10 +4,10 @@
  * 根据输入的内容自动显示/隐藏“添加”、“取消”按钮
  */
 
-import * as React from 'react';
+import * as React from "react"
 
 // 样式表
-const styles: { [prop: string]: string } = require('./AddNewItem.css');
+import styles from "./AddNewItem.module.css"
 
 interface Props {
     /**
@@ -32,16 +32,16 @@ interface State {}
 
 export class AddNewItem extends React.Component<Props, State> {
     constructor(props: Props) {
-        super(props);
+        super(props)
     }
 
     render() {
-        const emptyValue = this.props.value === '';
+        const emptyValue = this.props.value === ""
 
         return (
             <div className={styles.container}>
                 <span className={emptyValue ? styles.symbol : styles.checkbox}>
-                    {emptyValue ? '+' : ''}
+                    {emptyValue ? "+" : ""}
                 </span>
                 <input
                     type="text"
@@ -63,22 +63,22 @@ export class AddNewItem extends React.Component<Props, State> {
                     添加
                 </span>
             </div>
-        );
+        )
     }
 
     /**
      * 取消这次输入
      */
     private handleCancelClicked = (e: React.MouseEvent<HTMLSpanElement>) => {
-        e.stopPropagation();
-        this.props.onCancelClicked();
-    };
+        e.stopPropagation()
+        this.props.onCancelClicked()
+    }
 
     /**
      * 添加一个新的todo事项
      */
     private handleAddClicked = (e: React.MouseEvent<HTMLSpanElement>) => {
-        e.stopPropagation();
-        this.props.onAddClicked();
-    };
+        e.stopPropagation()
+        this.props.onAddClicked()
+    }
 }

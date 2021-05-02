@@ -2,12 +2,12 @@
  * AreaView的顶部区域，可对列表进行“重命名”，“删除”等操作。
  */
 
-import * as React from 'react';
-import { AreaActions } from './AreaActions';
+import * as React from "react"
+import { AreaActions } from "./AreaActions"
 // import { mix } from "../../lib";
 
 // 样式表
-const styles: { [prop: string]: string } = require('./EditableHead.css');
+import styles from "./EditableHead.module.css"
 
 /**
  * 从父组件得到的数据
@@ -68,7 +68,7 @@ interface HeadState {
 
 export class EditableHead extends React.Component<HeadProps, HeadState> {
     // ref引用，是一个输入文本框
-    private renameInput: HTMLInputElement | null;
+    private renameInput: HTMLInputElement | null
 
     // static getDerivedStateFromProps(nextProps: HeadProps, prevState: HeadState): HeadState {
     //     return {
@@ -79,49 +79,49 @@ export class EditableHead extends React.Component<HeadProps, HeadState> {
     // }
 
     constructor(props: HeadProps) {
-        super(props);
-        this.renameInput = null;
+        super(props)
+        this.renameInput = null
 
         this.state = {
             isEdit: false,
             name: this.props.listName,
-            isActionDisplay: false,
-        };
+            isActionDisplay: false
+        }
     }
 
     render() {
-        const color = this.props.colorTheme;
+        const color = this.props.colorTheme
         if (this.props.isPrimaryList) {
             return (
                 <div
                     className={styles.head}
                     style={{
-                        background: `linear-gradient(to right, ${color}, ${color + 'b3'})`,
+                        background: `linear-gradient(to right, ${color}, ${color + "b3"})`
                     }}
                 >
-                    <div className={styles.headDirectChild + ' ' + styles.name}>
+                    <div className={styles.headDirectChild + " " + styles.name}>
                         {this.props.listName}
                     </div>
                 </div>
-            );
+            )
         }
         return (
             <div
                 className={styles.head}
                 style={{
-                    background: `linear-gradient(to right, ${color}, ${color + 'b3'})`,
+                    background: `linear-gradient(to right, ${color}, ${color + "b3"})`
                 }}
             >
                 <div
                     className={`${styles.headDirectChild} ${styles.name} ${
-                        this.state.isEdit ? styles.hide : ''
+                        this.state.isEdit ? styles.hide : ""
                     }`}
                 >
                     {this.props.listName}
                 </div>
                 <input
                     className={`${styles.headDirectChild} ${styles.input} ${
-                        this.state.isEdit ? '' : styles.hide
+                        this.state.isEdit ? "" : styles.hide
                     }`}
                     type="text"
                     onChange={this.inputChange}
@@ -146,7 +146,7 @@ export class EditableHead extends React.Component<HeadProps, HeadState> {
                     />
                 )}
             </div>
-        );
+        )
     }
 
     /**
@@ -154,74 +154,74 @@ export class EditableHead extends React.Component<HeadProps, HeadState> {
      */
     private inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
-            name: e.target.value,
-        });
-    };
+            name: e.target.value
+        })
+    }
 
     /**
      * 进行重命名工作
      */
     private renameClicked = () => {
-        this.toggleActionsDisplay();
+        this.toggleActionsDisplay()
 
         this.setState({ isEdit: true }, () => {
             if (this.renameInput) {
-                this.renameInput.focus();
-                this.renameInput.value = this.props.listName;
+                this.renameInput.focus()
+                this.renameInput.value = this.props.listName
             }
-        });
-    };
+        })
+    }
 
     /**
      * 确认删除列表操作
      */
     private deleteClicked = () => {
-        this.props.shouldDeleteList();
-    };
+        this.props.shouldDeleteList()
+    }
 
     /**
      * 显示/隐藏操作列表的视图
      */
     private handleSwitch = (e: React.MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation();
+        e.stopPropagation()
         // this.props.onActionsDisplayClick();
-        this.toggleActionsDisplay();
-    };
+        this.toggleActionsDisplay()
+    }
 
     /**
      * 这个方法用于切换列表操作框，将它显示或隐藏。
      */
     private toggleActionsDisplay = () => {
         this.setState(prevState => ({
-            isActionDisplay: !prevState.isActionDisplay,
-        }));
-    };
+            isActionDisplay: !prevState.isActionDisplay
+        }))
+    }
 
     /**
      * 当焦点从输入框移走时，进行列表的重命名工作
      */
     private inputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-        e.stopPropagation();
-        this.props.renameList(this.state.name);
+        e.stopPropagation()
+        this.props.renameList(this.state.name)
         this.setState({
-            isEdit: false,
-        });
-    };
+            isEdit: false
+        })
+    }
 
     /**
      * 显示/隐藏已完成的todo事项
      */
     private switchDoneItems = () => {
-        this.props.switchDoneItems();
-        this.toggleActionsDisplay();
-    };
+        this.props.switchDoneItems()
+        this.toggleActionsDisplay()
+    }
 
     /**
      * 关闭操作窗口
      */
     private closeActions = () => {
         this.setState({
-            isActionDisplay: false,
-        });
-    };
+            isActionDisplay: false
+        })
+    }
 }

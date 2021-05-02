@@ -1,8 +1,8 @@
-#areaView {
+.areaView {
     width: calc(100% - 280px);
     overflow: hidden;
 }
 
-#areaView.shrink {
+.areaView.shrink {
     width: calc(100% - 280px - 280px);
 }

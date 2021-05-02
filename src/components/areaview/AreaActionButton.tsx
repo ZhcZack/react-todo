@@ -2,10 +2,10 @@
  * 操作窗口里的选项按钮
  */
 
-import * as React from 'react';
+import * as React from "react"
 
 // 样式表
-const styles: { [prop: string]: string } = require('./AreaActionButton.css');
+import styles from "./AreaActionButton.module.css"
 
 interface Props {
     /**
@@ -26,7 +26,7 @@ interface State {}
 
 export class ActionButton extends React.Component<Props, State> {
     constructor(props: Props) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -34,14 +34,14 @@ export class ActionButton extends React.Component<Props, State> {
             <li className={styles.button} onClick={this.handleClick}>
                 {this.props.text}
             </li>
-        );
+        )
     }
 
     /**
      * 点击按钮，具体的功能由父组件决定
      */
     private handleClick = (e: React.MouseEvent<HTMLLIElement>) => {
-        e.stopPropagation();
-        this.props.onClick();
-    };
+        e.stopPropagation()
+        this.props.onClick()
+    }
 }

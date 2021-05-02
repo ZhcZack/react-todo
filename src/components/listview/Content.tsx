@@ -7,7 +7,8 @@ import { ListInfo } from '../../model/interface';
 import { ViewItem } from './ViewItem';
 
 // 样式表
-const styles: { [prop: string]: string } = require('./Content.css');
+// const styles: { [prop: string]: string } = require('./Content.module.css');
+import style from "./Content.module.css"
 
 interface Props {
     /**
@@ -29,7 +30,7 @@ interface State {}
 export class Content extends React.Component<Props, State> {
     render() {
         return (
-            <ul className={styles.content}>
+            <ul className={style.content}>
                 {this.props.listInfos.map(info => (
                     <ViewItem
                         // currentListName={this.props.currentListName}

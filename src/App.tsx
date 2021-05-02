@@ -14,10 +14,11 @@ import { Alert, AlertType } from './components/util/GlobalAlert';
 import { useLastModifiedLastName } from './hooks/useLastModifiedListName';
 import { useListInfo } from './hooks/useListInfo';
 
-// import * as styles from './App.css';
+// import * as styles from './App.module.css';
 
 // 样式表
-const styles: { [prop: string]: string } = require('./App.css');
+// const styles: { [prop: string]: string } = require('./App.module.css');
+import style from './App.module.css';
 
 /**
  * App主内容区域
@@ -37,7 +38,7 @@ export function App() {
     const [listInfo, {
         addList, updateList, toggleList,
         reloadList, renameList: renameListHook, addItemInList,
-        updateThemeInList, removeItemInList, removeList
+        updateThemeInList, removeItemInList, removeList,
     }] = useListInfo([]);
 
     const [itemsOfList, setItemsOfList] = React.useState([] as TodoItem[]);
@@ -580,7 +581,7 @@ export function App() {
     }());
 
     return (
-        <div id={styles.app}>
+        <div className={style.app}>
             <ListView
                 listInfos={listInfo}
                 addNewList={addNewList}

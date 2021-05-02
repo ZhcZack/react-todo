@@ -4,9 +4,9 @@
  * 目前只有五种颜色供选择
  */
 
-import * as React from 'react';
+import * as React from "react"
 
-const styles: { [prop: string]: string } = require('./ThemePicker.css');
+import styles from "./ThemePicker.module.css"
 
 interface ThemePickerProps {
   onColorPick(color: string): void;
@@ -14,12 +14,12 @@ interface ThemePickerProps {
 
 export class ThemePicker extends React.Component<ThemePickerProps, {}> {
   private colors = [
-    { name: 'purple', value: '#a525a5' },
-    { name: 'pink', value: '#FFC0CB' },
-    { name: 'green', value: '#34bc34' },
-    { name: 'orange', value: '#f29f08' },
-    { name: 'skyblue', value: '#87cefa' },
-  ];
+    { name: "purple", value: "#a525a5" },
+    { name: "pink", value: "#FFC0CB" },
+    { name: "green", value: "#34bc34" },
+    { name: "orange", value: "#f29f08" },
+    { name: "skyblue", value: "#87cefa" }
+  ]
 
   render() {
     return (
@@ -36,6 +36,6 @@ export class ThemePicker extends React.Component<ThemePickerProps, {}> {
           ))}
         </ul>
       </div>
-    );
+    )
   }
 }

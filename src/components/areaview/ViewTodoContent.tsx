@@ -2,12 +2,12 @@
  * 显示todo列表内容的区域
  */
 
-import * as React from 'react';
-import { TodoItem } from '../../model/interface';
-import { AreaViewItem } from './ViewTodoItem';
+import * as React from "react"
+import { TodoItem } from "../../model/interface"
+import { AreaViewItem } from "./ViewTodoItem"
 
 // 样式
-const styles: { [prop: string]: string } = require('./ViewTodoContent.css');
+import styles from "./ViewTodoContent.module.css"
 
 interface Props {
     /**
@@ -50,7 +50,7 @@ export class AreaViewContent extends React.Component<Props, State> {
             <div className={styles.content}>
                 <ul className={styles.list}>{this.createList()}</ul>
             </div>
-        );
+        )
     }
     /**
      * 根据todo的内容以及列表的状态生成`<li>`元素
@@ -68,11 +68,11 @@ export class AreaViewContent extends React.Component<Props, State> {
                         onDragEnd={this.props.onDragEnd}
                         key={item.name}
                     />
-                );
+                )
             }
             // primary list中的todo是不会被隐藏的，不在primary list中的才会被隐藏
             if (item.done && !this.props.isPrimaryList) {
-                return null;
+                return null
             }
             return (
                 <AreaViewItem
@@ -84,7 +84,7 @@ export class AreaViewContent extends React.Component<Props, State> {
                     onDragEnd={this.props.onDragEnd}
                     key={item.name}
                 />
-            );
-        });
+            )
+        })
     }
 }

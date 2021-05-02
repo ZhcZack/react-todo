@@ -5,7 +5,7 @@ import { AddNewItem } from './AddNewItem';
 import { AreaViewContent } from './ViewTodoContent';
 import { EditableHead } from './EditableHead';
 
-const styles: { [prop: string]: string } = require('./AreaView.css');
+import styles from './AreaView.module.css'
 
 interface Props {
     /**
@@ -108,8 +108,8 @@ export class AreaView extends React.Component<Props, State> {
         return (
             <div
                 // style={this.props.shrink ? mix(viewStyles, viewShrinkStyles) : viewStyles}
-                id={styles.areaView}
-                className={this.props.shrink ? styles.shrink : ''}
+                // id={styles["#areaView"]}
+                className={styles.areaView + (this.props.shrink ? ' ' + styles.shrink : '')}
             >
                 <EditableHead
                     isPrimaryList={listInfo.isPrimary}

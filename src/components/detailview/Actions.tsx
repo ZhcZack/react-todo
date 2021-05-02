@@ -4,11 +4,11 @@
  * 提供“关闭detail view”以及“删除todo”的功能
  */
 
-import * as React from 'react';
-import { TodoItem } from '../../model/interface';
+import * as React from "react"
+import { TodoItem } from "../../model/interface"
 
 // 样式表
-const styles: { [prop: string]: string } = require('./Actions.css');
+import styles from "./Actions.module.css"
 
 interface Props {
     item: TodoItem;
@@ -20,7 +20,7 @@ interface State {}
 
 export class Actions extends React.Component<Props, State> {
     constructor(props: Props) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -34,22 +34,22 @@ export class Actions extends React.Component<Props, State> {
                     删除
                 </span>
             </div>
-        );
+        )
     }
 
     /**
      * 关闭detail view
      */
     private handleCloseClicked = (e: React.MouseEvent<HTMLSpanElement>) => {
-        e.stopPropagation();
-        this.props.onCloseClicked();
-    };
+        e.stopPropagation()
+        this.props.onCloseClicked()
+    }
 
     /**
      * 删除对应的todo
      */
     private handleDeleteClicked = (e: React.MouseEvent<HTMLSpanElement>) => {
-        e.stopPropagation();
-        this.props.onDeleteClicked();
-    };
+        e.stopPropagation()
+        this.props.onDeleteClicked()
+    }
 }

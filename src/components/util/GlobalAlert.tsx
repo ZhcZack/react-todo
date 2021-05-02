@@ -4,11 +4,11 @@
  * 目前有两种使用场景，一个是数据初始化错误的提示，另一个是需要用户确认是否要删除列表
  */
 
-import * as React from 'react';
-import { AlertButton } from './GlobalAlertButton';
+import * as React from "react"
+import { AlertButton } from "./GlobalAlertButton"
 
 // 样式表
-const styles: { [prop: string]: string } = require('./GlobalAlert.css');
+import styles from "./GlobalAlert.module.css"
 
 interface Props {
     display: boolean;
@@ -33,7 +33,7 @@ export enum AlertType {
 }
 
 export class Alert extends React.Component<Props, State> {
-    private myRef: React.RefObject<HTMLDivElement>;
+    private myRef: React.RefObject<HTMLDivElement>
     // // new lifecycle hook, replace `willReceive`
     // static getDerivedStateFromProps(nextProps: Props, prevState: State): State {
     //     return {
@@ -43,12 +43,12 @@ export class Alert extends React.Component<Props, State> {
     // }
 
     constructor(props: Props) {
-        super(props);
+        super(props)
         this.state = {
             // confirmButtonHover: false,
-            type: this.props.type,
-        };
-        this.myRef = React.createRef();
+            type: this.props.type
+        }
+        this.myRef = React.createRef()
     }
 
     // componentDidMount() {
@@ -73,32 +73,32 @@ export class Alert extends React.Component<Props, State> {
                     <p className={styles.message}>{this.props.message}</p>
                     <div className={styles.actions}>
                         {this.state.type === AlertType.Alert ? (
-                            <AlertButton title={'好的'} onClick={this.defaultClick} />
+                            <AlertButton title={"好的"} onClick={this.defaultClick} />
                         ) : (
                             <div>
-                                <AlertButton title={'取消'} onClick={this.defaultClick} />
-                                <AlertButton title={'确定'} onClick={this.confirmClick} />
+                                <AlertButton title={"取消"} onClick={this.defaultClick} />
+                                <AlertButton title={"确定"} onClick={this.confirmClick} />
                             </div>
                         )}
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 
     /**
      * 点击“好的”（默认按钮）
      */
     private defaultClick = () => {
-        this.props.alertDefaultAction();
-    };
+        this.props.alertDefaultAction()
+    }
 
     /**
      * 点击“确定”（确认按钮）
      */
     private confirmClick = () => {
         if (this.props.alertConfirmAction) {
-            this.props.alertConfirmAction();
+            this.props.alertConfirmAction()
         }
-    };
+    }
 }

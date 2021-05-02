@@ -2,11 +2,11 @@
  * 显示todo内容和完成状态的区域
  */
 
-import * as React from 'react';
-import { TodoItem } from '../../model/interface';
+import * as React from "react"
+import { TodoItem } from "../../model/interface"
 
 // 样式表
-const styles: { [prop: string]: string } = require('./TitleContent.css');
+import styles from "./TitleContent.module.css"
 
 interface Props {
     item: TodoItem;
@@ -20,7 +20,7 @@ interface State {}
 
 export class TitleContent extends React.Component<Props, State> {
     constructor(props: Props) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -29,7 +29,7 @@ export class TitleContent extends React.Component<Props, State> {
                 <div
                     className={
                         this.props.item.done
-                            ? styles.checkedbox + ' ' + styles.checkbox
+                            ? styles.checkedbox + " " + styles.checkbox
                             : styles.checkbox
                     }
                     onClick={this.handleToggleClicked}
@@ -38,14 +38,14 @@ export class TitleContent extends React.Component<Props, State> {
                 </div>
                 <span className={styles.titleLabel}>{this.props.item.name}</span>
             </div>
-        );
+        )
     }
 
     /**
      * 切换todo的完成状态
      */
     private handleToggleClicked = (e: React.MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation();
-        this.props.onToggleClicked();
-    };
+        e.stopPropagation()
+        this.props.onToggleClicked()
+    }
 }

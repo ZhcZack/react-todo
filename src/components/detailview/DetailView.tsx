@@ -4,15 +4,15 @@
  * 可以切换todo的完成状态、修改/添加备注信息、将todo复制到primary list，以及删除该todo
  */
 
-import * as React from 'react';
-import { TodoItem } from '../../model/interface';
-import { Actions } from './Actions';
-import { Comments } from './Comments';
-import { PrimaryCopy } from './PrimaryCopy';
-import { TitleContent } from './TitleContent';
+import * as React from "react"
+import { TodoItem } from "../../model/interface"
+import { Actions } from "./Actions"
+import { Comments } from "./Comments"
+import { PrimaryCopy } from "./PrimaryCopy"
+import { TitleContent } from "./TitleContent"
 
 // 样式表
-const styles: { [prop: string]: string } = require('./DetailView.css');
+import styles from "./DetailView.module.css"
 
 interface DetailViewProps {
     item?: TodoItem;
@@ -29,12 +29,12 @@ interface DetailViewState {}
 
 export class DetailView extends React.Component<DetailViewProps, DetailViewState> {
     render() {
-        const item = this.props.item;
+        const item = this.props.item
         if (!item) {
-            return null;
+            return null
         }
         return (
-            <div id={styles.detailView} className={this.props.item ? `` : `${styles.disappear}`}>
+            <div className={styles.detailView + (this.props.item ? `` : `${styles.disappear}`)}>
                 <TitleContent item={item} onToggleClicked={this.props.onToggleClicked} />
                 <PrimaryCopy
                     item={item}
@@ -45,8 +45,8 @@ export class DetailView extends React.Component<DetailViewProps, DetailViewState
                     onCommentsChange={this.props.onCommentsChange}
                     initComments={
                         this.props.item
-                            ? this.props.item.comments ? this.props.item.comments : ''
-                            : ''
+                            ? this.props.item.comments ? this.props.item.comments : ""
+                            : ""
                     }
                 />
                 <Actions
@@ -55,6 +55,6 @@ export class DetailView extends React.Component<DetailViewProps, DetailViewState
                     item={item}
                 />
             </div>
-        );
+        )
     }
 }

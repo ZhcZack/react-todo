@@ -2,9 +2,9 @@
  * 显示和修改todo备注的区域
  */
 
-import * as React from 'react';
+import * as React from "react"
 
-const styles: { [propName: string]: string } = require('./Comments.css');
+import styles from "./Comments.module.css"
 
 interface Props {
     initComments: string;
@@ -26,10 +26,10 @@ export class Comments extends React.Component<Props, State> {
     // }
 
     constructor(props: Props) {
-        super(props);
+        super(props)
         this.state = {
-            comments: this.props.initComments,
-        };
+            comments: this.props.initComments
+        }
     }
 
     render() {
@@ -41,22 +41,22 @@ export class Comments extends React.Component<Props, State> {
                 onBlur={this.handleCommentsOnBlur}
                 placeholder="添加备注"
             />
-        );
+        )
     }
 
     /**
      * 更新comments的值
      */
     private handleCommentsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        e.stopPropagation();
-        this.setState({ comments: e.target.value });
-    };
+        e.stopPropagation()
+        this.setState({ comments: e.target.value })
+    }
 
     /**
      * textarea失去标点的时候更新todo的备注
      */
     private handleCommentsOnBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
-        e.stopPropagation();
-        this.props.onCommentsChange(this.state.comments);
-    };
+        e.stopPropagation()
+        this.props.onCommentsChange(this.state.comments)
+    }
 }

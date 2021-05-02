@@ -8,7 +8,8 @@ import * as React from 'react';
 import { ListInfo } from '../../model/interface';
 
 // 样式表
-const styles: { [prop: string]: string } = require('./ViewItem.css');
+// const styles: { [prop: string]: string } = require('./ViewItem.module.css');
+import style from "./ViewItem.module.css"
 
 interface Props {
     /**
@@ -44,8 +45,8 @@ export class ViewItem extends React.Component<Props, State> {
 
         return (
             <li
-                className={`${this.state.dragEnter ? styles.dragEnter : ''} ${styles.listItem} ${
-                    isActive ? styles.active : ''
+                className={`${this.state.dragEnter ? style.dragEnter : ''} ${style.listItem} ${
+                    isActive ? style.active : ''
                 }`}
                 // style={listS}
                 onDragOver={this.handleDragOver}
@@ -55,13 +56,13 @@ export class ViewItem extends React.Component<Props, State> {
                 onClick={this.clickList}
             >
                 <span
-                    className={`${styles.itemName} animated ${
-                        isActive ? styles.active + ' fadeIn' : ''
+                    className={`${style.itemName} animated ${
+                        isActive ? style.active + ' fadeIn' : ''
                     }`}
                 >
                     {this.props.info.name}
                 </span>
-                <span className={styles.itemNumber}>
+                <span className={style.itemNumber}>
                     {this.props.info.count > 0 ? this.props.info.count : ''}
                 </span>
             </li>
