@@ -16,36 +16,18 @@ interface Props {
     onToggleClicked(): void;
 }
 
-interface State {}
-
-export class TitleContent extends React.Component<Props, State> {
-    constructor(props: Props) {
-        super(props)
-    }
-
-    render() {
-        return (
-            <div className={styles.titleContent}>
-                <div
-                    className={
-                        this.props.item.done
-                            ? styles.checkedbox + " " + styles.checkbox
-                            : styles.checkbox
-                    }
-                    onClick={this.handleToggleClicked}
-                >
-                    √
-                </div>
-                <span className={styles.titleLabel}>{this.props.item.name}</span>
+export function TitleContent(props: Props) {
+    return (
+        <div className={styles.titleContent}>
+            <div
+                className={
+                    props.item.done
+                        ? styles.checkedbox + " " + styles.checkbox
+                        : styles.checkbox}
+                onClick={props.onToggleClicked}>
+                √
             </div>
-        )
-    }
-
-    /**
-     * 切换todo的完成状态
-     */
-    private handleToggleClicked = (e: React.MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation()
-        this.props.onToggleClicked()
-    }
+            <span className={styles.titleLabel}>{props.item.name}</span>
+        </div>
+    )
 }

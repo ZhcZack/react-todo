@@ -18,26 +18,10 @@ interface Props {
     onClick(): void;
 }
 
-interface State {}
-
-/**
- * 全局提示框里的按钮
- */
-export class AlertButton extends React.Component<Props, State> {
-    constructor(props: Props) {
-        super(props)
-    }
-
-    render() {
-        return (
-            <button className={styles.alertButton} onClick={this.onClick}>
-                {this.props.title}
-            </button>
-        )
-    }
-
-    private onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.stopPropagation()
-        this.props.onClick()
-    }
+export function AlertButton(props: Props) {
+    return (
+        <button className={styles.alertButton} onClick={props.onClick}>
+            {props.title}
+        </button>
+    )
 }

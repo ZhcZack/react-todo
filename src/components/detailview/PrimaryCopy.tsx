@@ -15,48 +15,24 @@ interface Props {
     onCopyToPrimary(): void;
 }
 
-interface State {}
-
-export class PrimaryCopy extends React.Component<Props, State> {
-    constructor(props: Props) {
-        super(props)
-    }
-
-    render() {
-        return (
-            <div className={styles.primaryCopy}>
-                {this.props.item.inPrimaryList ? (
-                    <div className={styles.copyArea}>
-                        <p className={styles.copyText}>已添加到“我的一天”</p>
-                        <span
-                            className={styles.cancelButton}
-                            onClick={this.handleCancelCopyToPrimary}
-                        >
+export function PrimaryCopy(props: Props) {
+    return (
+        <div className={styles.primaryCopy}>
+            {props.item.inPrimaryList ? (
+                <div className={styles.copyArea}>
+                    <p className={styles.copyText}>已添加到“我的一天”</p>
+                    <span
+                        className={styles.cancelButton}
+                        onClick={props.onCancelCopyToPrimary}
+                    >
                             X
                         </span>
-                    </div>
-                ) : (
-                    <p className={styles.copyButton} onClick={this.handleCopyToPrimary}>
-                        添加到“我的一天”
-                    </p>
-                )}
-            </div>
-        )
-    }
-
-    /**
-     * 从primary list中移除todo
-     */
-    private handleCancelCopyToPrimary = (e: React.MouseEvent<HTMLSpanElement>) => {
-        e.stopPropagation()
-        this.props.onCancelCopyToPrimary()
-    }
-
-    /**
-     * 复制copy到primary list中
-     */
-    private handleCopyToPrimary = (e: React.MouseEvent<HTMLSpanElement>) => {
-        e.stopPropagation()
-        this.props.onCopyToPrimary()
-    }
+                </div>
+            ) : (
+                <p className={styles.copyButton} onClick={props.onCopyToPrimary}>
+                    添加到“我的一天”
+                </p>
+            )}
+        </div>
+    )
 }

@@ -12,26 +12,10 @@ interface Props {
     onClick(): void;
 }
 
-interface State {}
-
-export default class AddListButton extends React.Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div className={style.button} onClick={this.handleClick}>
-                <span className={style.text}>+</span>新建清单
-            </div>
-        );
-    }
-
-    /**
-     * 点击按钮新建列表
-     */
-    private handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation();
-        this.props.onClick();
-    };
+export default function AddListButton(props: Props) {
+    return (
+        <div className={style.button} onClick={props.onClick}>
+            <span className={style.text}>+</span>新建清单
+        </div>
+    );
 }
