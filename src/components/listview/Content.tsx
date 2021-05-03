@@ -3,7 +3,7 @@
  */
 
 import * as React from 'react';
-import { ListInfo } from '../../model/interface';
+import { AppTodoList, ListInfo } from '../../model/interface';
 import { ViewItem } from './ViewItem';
 
 // 样式表
@@ -14,7 +14,7 @@ interface Props {
     /**
      * 所有列表的信息
      */
-    listInfos: ListInfo[];
+    todoList: AppTodoList[];
     /**
      * 列表的点击事件，用于切换编辑的列表
      */
@@ -31,13 +31,13 @@ export class Content extends React.Component<Props, State> {
     render() {
         return (
             <ul className={style.content}>
-                {this.props.listInfos.map(info => (
+                {this.props.todoList.map(list => (
                     <ViewItem
                         // currentListName={this.props.currentListName}
-                        info={info}
+                        list={list}
                         onClick={this.props.onClick}
                         onDrop={this.props.onDrop}
-                        key={info.name}
+                        key={list.name}
                     />
                 ))}
             </ul>

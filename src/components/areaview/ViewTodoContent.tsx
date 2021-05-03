@@ -27,7 +27,7 @@ interface Props {
     /**
      * 切换todo事项的完成状态，处理方法
      */
-    checkboxClicked(name: string): void;
+    checkboxClicked(item: TodoItem): void;
     /**
      * 在detail view里显示/编辑todo事项的详细内容，处理方法
      */

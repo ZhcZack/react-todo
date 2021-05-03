@@ -32,7 +32,7 @@ interface Props {
     /**
      * checkbox点击事件，用于切换todo的完成状态
      */
-    onCheckboxClicked(itemName: string): void;
+    onCheckboxClicked(item: TodoItem): void;
 
     /**
      * 拖拽开始事件的处理方法
@@ -67,7 +67,7 @@ export function AreaViewItem(props: Props) {
 
     const handleClickCheckbox = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
-        props.onCheckboxClicked(props.item.name);
+        props.onCheckboxClicked(props.item);
     };
 
     return (

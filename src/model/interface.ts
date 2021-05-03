@@ -71,3 +71,11 @@ export interface ListInfo {
      */
     isPrimary: boolean;
 }
+
+export interface AppTodoList {
+    name: string
+    todos: TodoItem[]
+    active: boolean
+    theme: string
+    primary: boolean
+}

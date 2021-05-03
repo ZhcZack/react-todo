@@ -7,7 +7,7 @@ import { ListView } from './components/listview/ListView';
 import { AreaView } from './components/areaview/AreaView';
 import { DetailView } from './components/detailview/DetailView';
 import { DataServer } from './model/data-server';
-import { ListInfo, TodoItem } from './model/interface';
+import { AppTodoList, ListInfo, TodoItem, TodoList } from './model/interface';
 import { Alert, AlertType } from './components/util/GlobalAlert';
 // import { log } from './lib';
 
@@ -19,6 +19,7 @@ import { useListInfo } from './hooks/useListInfo';
 // 样式表
 // const styles: { [prop: string]: string } = require('./App.module.css');
 import style from './App.module.css';
+import { useState } from 'react';
 
 /**
  * App主内容区域
@@ -35,83 +36,85 @@ export function App() {
     const [dataErrorMessage, setDataErrorMessage] = React.useState('');
     const [deleteConfirmMessage] = React.useState('是否要删除列表？');
 
-    const [listInfo, {
-        addList, updateList, toggleList,
-        reloadList, renameList: renameListHook, addItemInList,
-        updateThemeInList, removeItemInList, removeList,
-    }] = useListInfo([]);
+    // const [listInfo, {
+    //     addList, updateList, toggleList,
+    //     reloadList, renameList: renameListHook, addItemInList,
+    //     updateThemeInList, removeItemInList, removeList,
+    // }] = useListInfo([]);
+
+    const [todoList, setTodoList] = useState([] as AppTodoList[]);
 
     const [itemsOfList, setItemsOfList] = React.useState([] as TodoItem[]);
     const [detailItem, setDetailItem] = React.useState(undefined as TodoItem | undefined);
 
     React.useEffect(() => {
-        initFetch();
+        // initFetch();
     }, []);
 
-    function initFetch() {
-        new Promise<ListInfo[]>((resolve, reject) => {
-            const infos: ListInfo[] = JSON.parse(Server.listInfos);
-            if (Array.isArray(infos)) {
-                resolve(infos);
-            }
-        })
-            .then(infos => {
-                // setListInfos(infos);
-                updateList(infos);
-                return new Promise((res: (name: string) => void, rej) => {
-                    const name = Server.lastModified;
-                    setLastModifiedListName(name);
-                    res(name);
-                });
-            })
-            .then(listName => {
-                return new Promise((res: (items: TodoItem[]) => void, rej: (error: string) => void) => {
-                    const items = JSON.parse(Server.itemsOfList(listName)) as TodoItem[];
-                    let message = Server.loadError;
-                    if (message) {
-                        rej('local data error');
-                    }
-                    if (Array.isArray(items)) {
-                        res(items);
-                    } else {
-                        rej('local data error');
-                    }
-                    items.forEach(item => {
-                        if (
-                            item.name === undefined ||
-                            item.done === undefined ||
-                            item.time === undefined ||
-                            item.inPrimaryList === undefined ||
-                            item.source === undefined
-                        ) {
-                            rej('local data error');
-                        }
-                    });
-                });
-            })
-            .then(
-                items => {
-                    setItemsOfList(items);
-                },
-                error => {
-                    // console.log('error')
-                    new Promise((res: (value: string | undefined) => void, rej) => {
-                        let message = Server.loadError;
-                        res(message);
-                    }).then(message => {
-                        // console.log('error')
-                        setDisplayDeleteListAlert(message !== undefined);
-                        setDataErrorMessage(message ? message : '');
-                    });
-                },
-            );
-    }
+    // function initFetch() {
+    //     new Promise<ListInfo[]>((resolve, reject) => {
+    //         const infos: ListInfo[] = JSON.parse(Server.listInfos);
+    //         if (Array.isArray(infos)) {
+    //             resolve(infos);
+    //         }
+    //     })
+    //         .then(infos => {
+    //             // setListInfos(infos);
+    //             updateList(infos);
+    //             return new Promise((res: (name: string) => void, rej) => {
+    //                 const name = Server.lastModified;
+    //                 setLastModifiedListName(name);
+    //                 res(name);
+    //             });
+    //         })
+    //         .then(listName => {
+    //             return new Promise((res: (items: TodoItem[]) => void, rej: (error: string) => void) => {
+    //                 const items = JSON.parse(Server.itemsOfList(listName)) as TodoItem[];
+    //                 let message = Server.loadError;
+    //                 if (message) {
+    //                     rej('local data error');
+    //                 }
+    //                 if (Array.isArray(items)) {
+    //                     res(items);
+    //                 } else {
+    //                     rej('local data error');
+    //                 }
+    //                 items.forEach(item => {
+    //                     if (
+    //                         item.name === undefined ||
+    //                         item.done === undefined ||
+    //                         item.time === undefined ||
+    //                         item.inPrimaryList === undefined ||
+    //                         item.source === undefined
+    //                     ) {
+    //                         rej('local data error');
+    //                     }
+    //                 });
+    //             });
+    //         })
+    //         .then(
+    //             items => {
+    //                 setItemsOfList(items);
+    //             },
+    //             error => {
+    //                 // console.log('error')
+    //                 new Promise((res: (value: string | undefined) => void, rej) => {
+    //                     let message = Server.loadError;
+    //                     res(message);
+    //                 }).then(message => {
+    //                     // console.log('error')
+    //                     setDisplayDeleteListAlert(message !== undefined);
+    //                     setDataErrorMessage(message ? message : '');
+    //                 });
+    //             },
+    //         );
+    // }
 
     function addNewList(name: string) {
-        let infos = listInfo.slice();
+        let list = todoList.slice();
         let index = -1;
-        for (let i = 0; i < infos.length; i++) {
-            if (infos[i].name === name) {
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].name === name) {
                 index = i;
                 break;
             }
@@ -119,36 +122,64 @@ export function App() {
         if (index !== -1) {
             return;
         }
-        Server.addNewList(name);
-        infos.forEach(info => {
-            info.isActive = false;
+        // Server.addNewList(name);
+        list.forEach(info => {
+            info.active = false;
         });
-        infos.push({
+        list.push({
             name: name,
-            count: 0,
-            isActive: true,
+            todos: [],
+            active: true,
             theme: '#87cefa',
-            isPrimary: false,
+            primary: false,
         });
         setLastModifiedListName(name);
-        // setListInfos(infos);
-        addList(name);
+        setTodoList(list);
+        // addList(name);
         setItemsOfList([]);
     }
 
-    function switchList(name: string) {
-        Server.lastModified = name;
-        const infos = listInfo.slice();
-        infos.forEach(info => {
-            info.isActive = false;
-            if (info.name === name) {
-                info.isActive = true;
+    function handleAddNewList() {
+        function getListname(): string {
+            const basename = 'No title list ';
+            let index = 1;
+            let result = true;
+            while (result) {
+                if (todoList.map(list => list.name).indexOf(basename + index) >= 0) {
+                    index += 1;
+                    if (index >= 100) {
+                        index = Math.floor(Math.random() * 100 + 100);
+                        result = false;
+                    }
+                } else {
+                    result = false;
+                }
             }
+            return basename + index;
+        }
+
+        const list = todoList.slice();
+        list.forEach(l => l.active = false);
+        list.push({
+            name: getListname(),
+            todos: [],
+            active: true,
+            theme: '#aabbcc',
+            primary: false,
         });
-        // setListInfos(infos);
-        toggleList(name);
-        setLastModifiedListName(name);
-        fetchItems();
+        setTodoList(list);
+    }
+
+    function switchList(name: string) {
+        // Server.lastModified = name;
+        const list = todoList.slice();
+        list.forEach(info => {
+            info.active = info.name === name;
+        });
+        setTodoList(list);
+        // toggleList(name);
+        // setLastModifiedListName(name);
+        // fetchItems();
     }
 
     function fetchItems() {
@@ -179,16 +210,16 @@ export function App() {
         dragData = undefined;
 
         const todos = JSON.parse(JSON.stringify(itemsOfList)) as TodoItem[];
-        // const infos = JSON.parse(JSON.stringify(listInfos)) as ListInfo[];
+        const list = JSON.parse(JSON.stringify(todoList)) as AppTodoList[];
 
         if (targetListname === primaryListname) {
             copyItemToPrimaryList(itemData, sourceListname);
         } else {
             // 拉进哪个列表，source就是哪个列表，同时primary为false
-            Server.deleteItemInList(itemData.name, sourceListname);
+            // Server.deleteItemInList(itemData.name, sourceListname);
             itemData.source = targetListname;
             itemData.inPrimaryList = false;
-            Server.addNewItemInList(itemData, targetListname);
+            // Server.addNewItemInList(itemData, targetListname);
 
             let itemIndex = 0;
             for (let i = 0; i < todos.length; i++) {
@@ -199,8 +230,8 @@ export function App() {
             }
 
             todos.splice(itemIndex, 1);
-            reloadList();
-            // setListInfos(infos);
+            // reloadList();
+            setTodoList(list);
             setItemsOfList(todos);
             setDetailItem(undefined);
         }
@@ -230,7 +261,7 @@ export function App() {
                 source: primaryListname,
             });
         }
-        reloadList();
+        // reloadList();
 
         // 根据todos的信息来更新detailItem的内容
         for (let todo of todos) {
@@ -250,8 +281,8 @@ export function App() {
     function renameList(oldName: string, newName: string) {
         Server.renameList(oldName, newName);
 
-        const infos = JSON.parse(JSON.stringify(listInfo)) as ListInfo[];
-        for (let info of infos) {
+        const list = JSON.parse(JSON.stringify(todoList)) as AppTodoList[];
+        for (let info of list) {
             if (info.name === oldName) {
                 info.name = newName;
                 break;
@@ -263,10 +294,31 @@ export function App() {
             todo.source = newName;
         });
 
-        // setListInfos(infos);
-        renameListHook(oldName, newName);
+        setTodoList(list);
+        // renameListHook(oldName, newName);
         setLastModifiedListName(newName);
         setItemsOfList(todos);
+    }
+
+    // add item in active list
+    function handleAddNewItemInList(name: string) {
+        const list = todoList.slice();
+        list.forEach(l => {
+            if (l.active) {
+                const todos = l.todos.slice();
+                // TODO: todo-item need unique id
+                todos.push({
+                    name,
+                    done: false,
+                    time: new Date().toLocaleDateString().split(' ')[0],
+                    comments: undefined,
+                    source: l.name,
+                    inPrimaryList: l.name === primaryListname,
+                });
+                l.todos = todos;
+            }
+        });
+        setTodoList(list);
     }
 
     function addNewItemInList(itemName: string, listName: string) {
@@ -277,28 +329,73 @@ export function App() {
             }
         }
 
-        Server.addNewItemInList(itemName, listName);
+        // Server.addNewItemInList(itemName, listName);
 
-        const infos = JSON.parse(JSON.stringify(listInfo)) as ListInfo[];
-        infos.forEach(info => {
+        const list = JSON.parse(JSON.stringify(todoList)) as AppTodoList[];
+        list.forEach(info => {
             if (info.name === listName) {
-                info.count++;
+                // info.count++;
+                const items = info.todos.slice();
+                items.push({
+                    name: itemName,
+                    done: false,
+                    time: new Date().toLocaleDateString().split(' ')[0],
+                    comments: undefined,
+                    source: listName,
+                    inPrimaryList: listName === primaryListname,
+                });
+                info.todos = items;
             }
         });
+        setTodoList(list);
 
-        // 额，这样做对吗？
-        items.push({
-            name: itemName,
-            done: false,
-            time: new Date().toLocaleDateString().split(' ')[0],
-            comments: undefined,
-            source: listName,
-            inPrimaryList: listName === primaryListname,
-        });
+        // // 额，这样做对吗？
+        // items.push({
+        //     name: itemName,
+        //     done: false,
+        //     time: new Date().toLocaleDateString().split(' ')[0],
+        //     comments: undefined,
+        //     source: listName,
+        //     inPrimaryList: listName === primaryListname,
+        // });
+        //
+        // setTodoList(list);
+        // // addItemInList(listName);
+        // setItemsOfList(items);
+    }
 
-        // setListInfos(infos);
-        addItemInList(listName);
-        setItemsOfList(items);
+    function handleToggleItemInList(item: TodoItem) {
+        todoList.filter(list => list.active).forEach(list => {
+            list.todos.forEach(todo => {
+                if (todo === item) {
+                    todo.done = !todo.done
+                }
+            })
+        })
+        const list = todoList.slice()
+        setTodoList(list)
+        // let itemIndex = -1;
+        // todoList.forEach(list => {
+        //     if (list.active) {
+        //         for (let i = 0; i < list.todos.length; i++) {
+        //             if (list.todos[i] === item) {
+        //                 itemIndex = i;
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // });
+        // if (itemIndex === -1) {
+        //     return;
+        // }
+        // const list = todoList.slice();
+        // list.forEach(list => {
+        //     if (list.active) {
+        //         let todos = list.todos.slice();
+        //         todos[itemIndex].done = !todos[itemIndex].done;
+        //     }
+        // });
+        // setTodoList(list);
     }
 
     function toggleItemInList(itemName: string, listName: string) {
@@ -311,7 +408,7 @@ export function App() {
         let item: TodoItem | undefined = undefined;
 
         const todos = JSON.parse(JSON.stringify(itemsOfList)) as TodoItem[];
-        const infos = JSON.parse(JSON.stringify(listInfo)) as ListInfo[];
+        const list = JSON.parse(JSON.stringify(todoList)) as AppTodoList[];
         for (let todo of todos) {
             if (todo.name === itemName) {
                 item = Object.assign({}, todo);
@@ -333,9 +430,9 @@ export function App() {
                 count += 1;
             }
         });
-        for (let info of infos) {
+        for (let info of list) {
             if (info.name === listName) {
-                switchDone = count < info.count;
+                switchDone = count < info.todos.length;
                 break;
             }
         }
@@ -353,32 +450,32 @@ export function App() {
             if (actionInPrimary) {
                 Server.toggleItemInList(item.name, primaryListname);
                 Server.toggleItemInList(item.name, sourceListName);
-                for (let info of infos) {
+                for (let info of list) {
                     if (info.name === primaryListname || info.name === sourceListName) {
-                        info.count += switchDone ? -1 : 1;
+                        // info.count += switchDone ? -1 : 1; todo: need fix
                     }
                 }
             } else {
                 Server.toggleItemInList(item.name, primaryListname);
                 Server.toggleItemInList(item.name, listName);
-                for (let info of infos) {
+                for (let info of list) {
                     if (info.name === primaryListname || info.name === sourceListName) {
-                        info.count += switchDone ? -1 : 1;
+                        // info.count += switchDone ? -1 : 1; todo: need fix
                     }
                 }
             }
         } else {
             Server.toggleItemInList(item.name, listName);
-            for (let info of infos) {
+            for (let info of list) {
                 if (info.name === listName) {
-                    info.count = count;
+                    // info.count = count; todo: need fix
                 }
             }
         }
 
         setItemsOfList(todos);
-        // setListInfos(infos);
-        updateList(infos);
+        setTodoList(list);
+        // updateList(infos);
         // 如果点击的就是要详细显示的TodoItem，则要更新detailItem的状态
         if (detailItem && detailItem.name === itemName) {
             let index = 0;
@@ -393,15 +490,15 @@ export function App() {
     }
 
     function handleColorPick(color: string) {
-        Server.changeColorThemeForList(color, lastModifiedListName);
-        const infos = JSON.parse(JSON.stringify(listInfo)) as ListInfo[];
-        infos.forEach(info => {
+        // Server.changeColorThemeForList(color, lastModifiedListName);
+        const list = JSON.parse(JSON.stringify(todoList)) as AppTodoList[];
+        list.forEach(info => {
             if (info.name === lastModifiedListName) {
                 info.theme = color;
             }
         });
-        // setListInfos(infos);
-        updateThemeInList(lastModifiedListName, color);
+        setTodoList(list);
+        // updateThemeInList(lastModifiedListName, color);
     }
 
     function handleDeleteFromDetailView() {
@@ -413,10 +510,10 @@ export function App() {
         const listName = lastModifiedListName;
         Server.deleteItemInList(itemName, listName);
 
-        const infos = JSON.parse(JSON.stringify(listInfo)) as ListInfo[];
-        infos.forEach(info => {
+        const list = JSON.parse(JSON.stringify(todoList)) as AppTodoList[];
+        list.forEach(info => {
             if (info.name === listName) {
-                info.count--;
+                // info.count--; // todo: need fix
             }
         });
 
@@ -431,8 +528,8 @@ export function App() {
         todos.splice(itemIndex, 1);
 
         setDetailItem(undefined);
-        // setListInfos(infos);
-        removeItemInList(listName);
+        setTodoList(list);
+        // removeItemInList(listName);
         setItemsOfList(todos);
         // 删除了todo之后，detailItem自然就没有了
     }
@@ -498,17 +595,17 @@ export function App() {
             return;
         }
         const item = JSON.parse(JSON.stringify(detailItem)) as TodoItem;
-        const infos = JSON.parse(JSON.stringify(listInfo)) as ListInfo[];
+        const list = JSON.parse(JSON.stringify(todoList)) as AppTodoList[];
         const todos = JSON.parse(JSON.stringify(itemsOfList)) as TodoItem[];
 
         let currentList = '';
         let _detailItem: TodoItem | undefined = undefined;
 
-        for (let info of infos) {
+        for (let info of list) {
             if (info.name === primaryListname) {
-                info.count -= 1;
+                // info.count -= 1; todo: need fix
             }
-            if (info.isActive) {
+            if (info.active) {
                 currentList = info.name;
             }
         }
@@ -541,8 +638,8 @@ export function App() {
             todos.splice(itemIndex, 1);
         }
 
-        // setListInfos(infos);
-        updateList(infos);
+        setTodoList(list);
+        // updateList(infos);
         setItemsOfList(todos);
         setDetailItem(_detailItem);
     }
@@ -551,7 +648,7 @@ export function App() {
         const name = listname ? listname : lastModifiedListName;
         Server.deleteList(name);
 
-        const infos = listInfo.slice();
+        const infos = todoList.slice();
         let index = 0;
         for (let i = 0; i < infos.length; i++) {
             if (infos[i].name === name) {
@@ -559,21 +656,21 @@ export function App() {
                 break;
             }
         }
-        infos[0].isActive = true;
+        infos[0].active = true;
         infos.splice(index, 1);
 
-        // setListInfos(infos);
-        removeList(name);
+        setTodoList(infos);
+        // removeList(name);
         setLastModifiedListName(infos[0].name);
         setDisplayDeleteListAlert(false);
         // 这里要继续使用这个方法，因为之前的todos要被清空换新
         fetchItems();
     }
 
-    const lastModifiedList = (function() {
-        let result = {} as ListInfo;
-        listInfo.slice().forEach(info => {
-            if (info.name === lastModifiedListName) {
+    const activeList = (function() {
+        let result: AppTodoList | undefined = undefined;
+        todoList.slice().forEach(info => {
+            if (info.active) {
                 result = info;
             }
         });
@@ -583,57 +680,56 @@ export function App() {
     return (
         <div className={style.app}>
             <ListView
-                listInfos={listInfo}
-                addNewList={addNewList}
+                todoList={todoList}
+                addNewList={handleAddNewList}
                 switchList={switchList}
                 onDrop={handleDrop}
             />
-            <AreaView
-                listInfo={lastModifiedList}
-                todoItems={itemsOfList}
-                shrink={detailItem !== undefined}
-                itemClicked={itemClicked}
-                renameList={renameList}
-                shouldDeleteList={() => setDisplayDeleteListAlert(true)}
-                addNewItemInList={addNewItemInList}
-                toggleItemInList={toggleItemInList}
-                onDragStart={(data: string) => dragData = data}
-                onDragEnd={() => dragData = undefined}
-                onColorPick={handleColorPick}
-            />
-            <DetailView
-                listName={lastModifiedListName}
-                item={detailItem}
-                onCloseClicked={() => setDetailItem(undefined)}
-                onDeleteClicked={handleDeleteFromDetailView}
-                onToggleClicked={handleToggleFromDetailView}
-                onCommentsChange={handleCommentsChange}
-                onCopyToPrimary={copyItemToPrimaryListFromDetailView}
-                onCancelCopyToPrimary={cancelCopyToPrimaryList}
-            />
-            {displayDataErrorAlert && (
-                <Alert
-                    display={displayDataErrorAlert}
-                    message={dataErrorMessage}
-                    type={AlertType.Alert}
-                    alertDefaultAction={() => {
-                        setDisplayDataErrorAlert(false);
-                        setDisplayDeleteListAlert(false);
-                    }}
-                />
-            )}
-            {displayDeleteListAlert && (
-                <Alert
-                    display={displayDeleteListAlert}
-                    message={deleteConfirmMessage}
-                    type={AlertType.Confirm}
-                    alertDefaultAction={() => {
-                        setDisplayDataErrorAlert(false);
-                        setDisplayDeleteListAlert(false);
-                    }}
-                    alertConfirmAction={deleteList}
-                />
-            )}
+            {activeList && <AreaView
+              todoList={activeList}
+              shrink={detailItem !== undefined}
+              itemClicked={itemClicked}
+              renameList={renameList}
+              shouldDeleteList={() => setDisplayDeleteListAlert(true)}
+              addNewItemInList={handleAddNewItemInList}
+              toggleItemInList={handleToggleItemInList}
+              onDragStart={(data: string) => dragData = data}
+              onDragEnd={() => dragData = undefined}
+              onColorPick={handleColorPick}
+            />}
+            {/*<DetailView*/}
+            {/*listName={lastModifiedListName}*/}
+            {/*item={detailItem}*/}
+            {/*onCloseClicked={() => setDetailItem(undefined)}*/}
+            {/*onDeleteClicked={handleDeleteFromDetailView}*/}
+            {/*onToggleClicked={handleToggleFromDetailView}*/}
+            {/*onCommentsChange={handleCommentsChange}*/}
+            {/*onCopyToPrimary={copyItemToPrimaryListFromDetailView}*/}
+            {/*onCancelCopyToPrimary={cancelCopyToPrimaryList}*/}
+            {/*/>*/}
+            {/*{displayDataErrorAlert && (*/}
+            {/*<Alert*/}
+            {/*display={displayDataErrorAlert}*/}
+            {/*message={dataErrorMessage}*/}
+            {/*type={AlertType.Alert}*/}
+            {/*alertDefaultAction={() => {*/}
+            {/*setDisplayDataErrorAlert(false);*/}
+            {/*setDisplayDeleteListAlert(false);*/}
+            {/*}}*/}
+            {/*/>*/}
+            {/*)}*/}
+            {/*{displayDeleteListAlert && (*/}
+            {/*<Alert*/}
+            {/*display={displayDeleteListAlert}*/}
+            {/*message={deleteConfirmMessage}*/}
+            {/*type={AlertType.Confirm}*/}
+            {/*alertDefaultAction={() => {*/}
+            {/*setDisplayDataErrorAlert(false);*/}
+            {/*setDisplayDeleteListAlert(false);*/}
+            {/*}}*/}
+            {/*alertConfirmAction={deleteList}*/}
+            {/*/>*/}
+            {/*)}*/}
         </div>
     );
 }

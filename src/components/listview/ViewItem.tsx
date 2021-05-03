@@ -5,7 +5,7 @@
  */
 
 import * as React from 'react';
-import { ListInfo } from '../../model/interface';
+import { AppTodoList, ListInfo } from '../../model/interface';
 
 // 样式表
 // const styles: { [prop: string]: string } = require('./ViewItem.module.css');
@@ -15,7 +15,7 @@ interface Props {
     /**
      * 此列表的信息
      */
-    info: ListInfo;
+    list: AppTodoList;
     /**
      * 列表点击处理方法
      */
@@ -41,8 +41,8 @@ export class ViewItem extends React.Component<Props, State> {
     }
 
     render() {
-        const isActive = this.props.info.isActive;
-
+        const isActive = this.props.list.active;
+        const length = this.props.list.todos.filter(todo => !todo.done).length || ""
         return (
             <li
                 className={`${this.state.dragEnter ? style.dragEnter : ''} ${style.listItem} ${
@@ -60,10 +60,10 @@ export class ViewItem extends React.Component<Props, State> {
                         isActive ? style.active + ' fadeIn' : ''
                     }`}
                 >
-                    {this.props.info.name}
+                    {this.props.list.name}
                 </span>
                 <span className={style.itemNumber}>
-                    {this.props.info.count > 0 ? this.props.info.count : ''}
+                    {length}
                 </span>
             </li>
         );
@@ -92,7 +92,7 @@ export class ViewItem extends React.Component<Props, State> {
         }
         // const data = e.dataTransfer.getData('text')
         // console.log(`drop data: ${data}`)
-        this.props.onDrop(this.props.info.name);
+        this.props.onDrop(this.props.list.name);
         // console.log('拖拽结束目标列表名称：' + this.props.info.name)
         this.setState({
             dragEnter: false,
@@ -126,6 +126,6 @@ export class ViewItem extends React.Component<Props, State> {
      */
     private clickList = (e: React.MouseEvent<HTMLLIElement>) => {
         e.stopPropagation();
-        this.props.onClick(this.props.info.name);
+        this.props.onClick(this.props.list.name);
     };
 }

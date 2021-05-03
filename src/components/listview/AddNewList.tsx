@@ -15,7 +15,7 @@ interface Props {
 export default function AddListButton(props: Props) {
     return (
         <div className={style.button} onClick={props.onClick}>
-            <span className={style.text}>+</span>新建清单
+            <span className={style.text}>+</span>Add list
         </div>
     );
 }

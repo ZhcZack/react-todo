@@ -6,7 +6,7 @@
 
 import * as React from 'react';
 import { Content } from './Content';
-import { ListInfo } from '../../model/interface';
+import { AppTodoList, ListInfo } from '../../model/interface';
 import AddListButton from './AddNewList';
 
 // 样式表
@@ -17,12 +17,12 @@ interface ListViewProps {
     /**
      * 所有列表名称
      */
-    listInfos: ListInfo[];
+    todoList: AppTodoList[];
 
     /**
      * 添加新列表
      */
-    addNewList(name: string): void;
+    addNewList(): void;
 
     /**
      * 切换area view显示的列表
@@ -36,36 +36,15 @@ interface ListViewProps {
     onDrop(targetListName: string): void;
 }
 
-let COUNT = 0;
-
 export function ListView(props: ListViewProps) {
-
-    const addList = () => {
-        // todo: 这里要放在一个service中去
-        let result = true;
-        let name = '';
-        while (result) {
-            name = getListName();
-            result = props.listInfos.some(info => {
-                return info.name === name;
-            });
-        }
-        props.addNewList(name);
-    };
-
-    const getListName: (() => string) = () => {
-        COUNT++;
-        return `无命名清单${COUNT > 0 ? COUNT : ''}`;
-    };
-
     return (
         <div className={style.listView}>
             <Content
-                listInfos={props.listInfos}
+                todoList={props.todoList}
                 onClick={props.switchList}
                 onDrop={props.onDrop}
             />
-            <AddListButton onClick={addList}/>
+            <AddListButton onClick={props.addNewList}/>
         </div>
     );
 }
