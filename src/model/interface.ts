@@ -73,9 +73,20 @@ export interface ListInfo {
 }
 
 export interface AppTodoList {
+    id: number
     name: string
-    todos: TodoItem[]
+    todos: AppTodoItem[]
     active: boolean
     theme: string
     primary: boolean
+}
+
+export interface AppTodoItem {
+    id: number
+    name: string;
+    done: boolean;
+    time: string;
+    comments?: string;
+    source?: string;
+    inPrimaryList: boolean;
 }

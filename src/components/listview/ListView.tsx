@@ -27,7 +27,7 @@ interface ListViewProps {
     /**
      * 切换area view显示的列表
      */
-    switchList(listName: string): void;
+    switchList(list: AppTodoList): void;
 
     /**
      * 鼠标放开拖拽成功后，处理放置的todo事项

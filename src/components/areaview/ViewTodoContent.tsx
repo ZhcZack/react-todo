@@ -3,7 +3,7 @@
  */
 
 import * as React from "react"
-import { TodoItem } from "../../model/interface"
+import { AppTodoItem, TodoItem } from '../../model/interface';
 import { AreaViewItem } from "./ViewTodoItem"
 
 // 样式
@@ -13,7 +13,7 @@ interface Props {
     /**
      * 要显示的todo事项
      */
-    items: TodoItem[];
+    items: AppTodoItem[];
     /**
      * 是否显示已标记为“完成”的项目
      */
@@ -27,7 +27,7 @@ interface Props {
     /**
      * 切换todo事项的完成状态，处理方法
      */
-    checkboxClicked(item: TodoItem): void;
+    checkboxClicked(item: AppTodoItem): void;
     /**
      * 在detail view里显示/编辑todo事项的详细内容，处理方法
      */
@@ -66,7 +66,7 @@ export class AreaViewContent extends React.Component<Props, State> {
                         onCheckboxClicked={this.props.checkboxClicked}
                         onDragStart={this.props.onDragStart}
                         onDragEnd={this.props.onDragEnd}
-                        key={item.name}
+                        key={item.id}
                     />
                 )
             }
@@ -82,7 +82,7 @@ export class AreaViewContent extends React.Component<Props, State> {
                     onCheckboxClicked={this.props.checkboxClicked}
                     onDragStart={this.props.onDragStart}
                     onDragEnd={this.props.onDragEnd}
-                    key={item.name}
+                    key={item.id}
                 />
             )
         })

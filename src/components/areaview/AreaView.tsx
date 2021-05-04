@@ -52,7 +52,7 @@ interface Props {
      * 主题选择处理函数
      * @param color 主题色
      */
-    onColorPick(color: string): void;
+    onColorPick(color: string, list: AppTodoList): void;
 }
 
 interface State {
@@ -100,6 +100,7 @@ export class AreaView extends React.Component<Props, State> {
         this.renameList = this.renameList.bind(this);
         this.handleDragStart = this.handleDragStart.bind(this);
         this.switchDoneItems = this.switchDoneItems.bind(this);
+        this.handleColorPick = this.handleColorPick.bind(this)
     }
 
     render() {
@@ -118,7 +119,7 @@ export class AreaView extends React.Component<Props, State> {
                     shouldDeleteList={this.props.shouldDeleteList}
                     switchDoneItems={this.switchDoneItems}
                     doneItemsDisplay={this.state.showDoneItems}
-                    onColorPick={this.props.onColorPick}
+                    onColorPick={this.handleColorPick}
                     // onActionsDisplayClick={this.props.onActionsDisplayClick}
                     // actionsShouldDisplay={this.props.actionsShouldDisplay}
                 />
@@ -139,6 +140,10 @@ export class AreaView extends React.Component<Props, State> {
                 />
             </div>
         );
+    }
+
+    private handleColorPick(color: string) {
+        this.props.onColorPick(color, this.props.todoList);
     }
 
     /**

@@ -20,6 +20,8 @@ import { useListInfo } from './hooks/useListInfo';
 // const styles: { [prop: string]: string } = require('./App.module.css');
 import style from './App.module.css';
 import { useState } from 'react';
+import { AppTodoListFactory } from './model/AppTodoListFactory';
+import { AppTodoItemFactory } from './model/AppTodoItemFactory';
 
 /**
  * App主内容区域
@@ -126,13 +128,14 @@ export function App() {
         list.forEach(info => {
             info.active = false;
         });
-        list.push({
-            name: name,
-            todos: [],
-            active: true,
-            theme: '#87cefa',
-            primary: false,
-        });
+        list.push(AppTodoListFactory.getInstance().makeTodoList(name, [], true, '#87cefa', false));
+        // list.push({
+        //     name: name,
+        //     todos: [],
+        //     active: true,
+        //     theme: '#87cefa',
+        //     primary: false,
+        // });
         setLastModifiedListName(name);
         setTodoList(list);
         // addList(name);
@@ -160,23 +163,29 @@ export function App() {
 
         const list = todoList.slice();
         list.forEach(l => l.active = false);
-        list.push({
-            name: getListname(),
-            todos: [],
-            active: true,
-            theme: '#aabbcc',
-            primary: false,
-        });
+        list.push(AppTodoListFactory.getInstance().makeTodoList(getListname(), [], true, '#aabbcc', false));
+        // list.push({
+        //     name: getListname(),
+        //     todos: [],
+        //     active: true,
+        //     theme: '#aabbcc',
+        //     primary: false,
+        // });
         setTodoList(list);
     }
 
-    function switchList(name: string) {
-        // Server.lastModified = name;
+    function switchList(toList: AppTodoList) {
         const list = todoList.slice();
-        list.forEach(info => {
-            info.active = info.name === name;
+        list.forEach(l => {
+            l.active = l.id === toList.id;
         });
         setTodoList(list);
+        // Server.lastModified = name;
+        // const list = todoList.slice();
+        // list.forEach(info => {
+        //     info.active = info.name === name;
+        // });
+        // setTodoList(list);
         // toggleList(name);
         // setLastModifiedListName(name);
         // fetchItems();
@@ -306,15 +315,16 @@ export function App() {
         list.forEach(l => {
             if (l.active) {
                 const todos = l.todos.slice();
-                // TODO: todo-item need unique id
-                todos.push({
-                    name,
-                    done: false,
-                    time: new Date().toLocaleDateString().split(' ')[0],
-                    comments: undefined,
-                    source: l.name,
-                    inPrimaryList: l.name === primaryListname,
-                });
+                todos.push(AppTodoItemFactory.getInstance().makeTodoItem(name, false, l.name,
+                    l.name === primaryListname, undefined));
+                // todos.push({
+                //     name,
+                //     done: false,
+                //     time: new Date().toLocaleDateString().split(' ')[0],
+                //     comments: undefined,
+                //     source: l.name,
+                //     inPrimaryList: l.name === primaryListname,
+                // });
                 l.todos = todos;
             }
         });
@@ -336,14 +346,16 @@ export function App() {
             if (info.name === listName) {
                 // info.count++;
                 const items = info.todos.slice();
-                items.push({
-                    name: itemName,
-                    done: false,
-                    time: new Date().toLocaleDateString().split(' ')[0],
-                    comments: undefined,
-                    source: listName,
-                    inPrimaryList: listName === primaryListname,
-                });
+                items.push(AppTodoItemFactory.getInstance().makeTodoItem(itemName, false, listName,
+                    listName === primaryListname, undefined));
+                // items.push({
+                //     name: itemName,
+                //     done: false,
+                //     time: new Date().toLocaleDateString().split(' ')[0],
+                //     comments: undefined,
+                //     source: listName,
+                //     inPrimaryList: listName === primaryListname,
+                // });
                 info.todos = items;
             }
         });
@@ -368,12 +380,12 @@ export function App() {
         todoList.filter(list => list.active).forEach(list => {
             list.todos.forEach(todo => {
                 if (todo === item) {
-                    todo.done = !todo.done
+                    todo.done = !todo.done;
                 }
-            })
-        })
-        const list = todoList.slice()
-        setTodoList(list)
+            });
+        });
+        const list = todoList.slice();
+        setTodoList(list);
         // let itemIndex = -1;
         // todoList.forEach(list => {
         //     if (list.active) {
@@ -489,15 +501,22 @@ export function App() {
         }
     }
 
-    function handleColorPick(color: string) {
-        // Server.changeColorThemeForList(color, lastModifiedListName);
-        const list = JSON.parse(JSON.stringify(todoList)) as AppTodoList[];
-        list.forEach(info => {
-            if (info.name === lastModifiedListName) {
-                info.theme = color;
+    function handleColorPick(color: string, list: AppTodoList) {
+        const lists = todoList.slice();
+        lists.forEach(l => {
+            if (l.id === list.id) {
+                l.theme = color;
             }
         });
-        setTodoList(list);
+        setTodoList(lists);
+        // Server.changeColorThemeForList(color, lastModifiedListName);
+        // const list = JSON.parse(JSON.stringify(todoList)) as AppTodoList[];
+        // list.forEach(info => {
+        //     if (info.name === lastModifiedListName) {
+        //         info.theme = color;
+        //     }
+        // });
+        // setTodoList(list);
         // updateThemeInList(lastModifiedListName, color);
     }
 

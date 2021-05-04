@@ -19,7 +19,7 @@ interface Props {
     /**
      * 列表点击处理方法
      */
-    onClick(itemName: string): void;
+    onClick(list: AppTodoList): void;
     /**
      * 拖拽之后“放置”元素的处理方法
      *
@@ -126,6 +126,6 @@ export class ViewItem extends React.Component<Props, State> {
      */
     private clickList = (e: React.MouseEvent<HTMLLIElement>) => {
         e.stopPropagation();
-        this.props.onClick(this.props.list.name);
+        this.props.onClick(this.props.list);
     };
 }

@@ -2,12 +2,13 @@
  * AreaView的顶部区域，可对列表进行“重命名”，“删除”等操作。
  */
 
-import * as React from "react"
-import { AreaActions } from "./AreaActions"
+import * as React from 'react';
+import { AreaActions } from './AreaActions';
 // import { mix } from "../../lib";
 
 // 样式表
-import styles from "./EditableHead.module.css"
+import styles from './EditableHead.module.css';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 /**
  * 从父组件得到的数据
@@ -29,14 +30,17 @@ interface HeadProps {
      * 该列表是否为“基础列表”
      */
     isPrimaryList: boolean;
+
     /**
      * 重命名列表，处理方法
      */
     renameList(name: string): void;
+
     /**
      * 是否要删除列表
      */
     shouldDeleteList(): void;
+
     /**
      * 显示/隐藏已完成的todo事项
      */
@@ -48,180 +52,78 @@ interface HeadProps {
     onColorPick(color: string): void;
 }
 
-/**
- * 组件内部的状态
- */
-interface HeadState {
-    /**
-     * 是否处于编辑状态
-     */
-    isEdit: boolean;
-    /**
-     * 保存编辑后的名称，通过props的值初始化
-     */
-    name: string;
-    /**
-     * 列表操作框是否显示
-     */
-    isActionDisplay: boolean;
-}
+export function EditableHead(props: HeadProps) {
+    const inputEl = useRef<HTMLInputElement>(null);
+    const [name, setName] = useState('');
+    const [edit, setEdit] = useState(false);
+    const [actionDisplay, setActionDisplay] = useState(false);
 
-export class EditableHead extends React.Component<HeadProps, HeadState> {
-    // ref引用，是一个输入文本框
-    private renameInput: HTMLInputElement | null
-
-    // static getDerivedStateFromProps(nextProps: HeadProps, prevState: HeadState): HeadState {
-    //     return {
-    //         name: nextProps.listName,
-    //         isEdit: false,
-    //         isActionDisplay: false,
-    //     };
-    // }
-
-    constructor(props: HeadProps) {
-        super(props)
-        this.renameInput = null
-
-        this.state = {
-            isEdit: false,
-            name: this.props.listName,
-            isActionDisplay: false
+    useEffect(() => {
+        if (edit) {
+            inputEl.current?.focus();
         }
+    });
+
+    function handleInputBlur() {
+        setEdit(false);
+        props.renameList(name);
+
     }
 
-    render() {
-        const color = this.props.colorTheme
-        if (this.props.isPrimaryList) {
-            return (
-                <div
-                    className={styles.head}
-                    style={{
-                        background: `linear-gradient(to right, ${color}, ${color + "b3"})`
-                    }}
-                >
-                    <div className={styles.headDirectChild + " " + styles.name}>
-                        {this.props.listName}
-                    </div>
-                </div>
-            )
-        }
-        return (
+    function handleSwitchDoneClick() {
+        setActionDisplay(false);
+        props.switchDoneItems();
+    }
+
+    function handleRenameClick() {
+        setActionDisplay(false);
+        setEdit(true);
+        setName(props.listName);
+    }
+
+    return (
+        props.isPrimaryList ? (
             <div
                 className={styles.head}
                 style={{
-                    background: `linear-gradient(to right, ${color}, ${color + "b3"})`
-                }}
-            >
-                <div
-                    className={`${styles.headDirectChild} ${styles.name} ${
-                        this.state.isEdit ? styles.hide : ""
-                    }`}
-                >
-                    {this.props.listName}
+                    background: `linear-gradient(to right, ${props.colorTheme}, ${props.colorTheme + 'b3'})`,
+                }}>
+                <div className={styles.headDirectChild + ' ' + styles.name}>
+                    {props.listName}
                 </div>
-                <input
-                    className={`${styles.headDirectChild} ${styles.input} ${
-                        this.state.isEdit ? "" : styles.hide
-                    }`}
-                    type="text"
-                    onChange={this.inputChange}
-                    ref={input => (this.renameInput = input)}
-                    onBlur={this.inputBlur}
-                />
+            </div>
+        ) : (
+            <div
+                className={styles.head}
+                style={{
+                    background: `linear-gradient(to right, ${props.colorTheme}, ${props.colorTheme + 'b3'})`,
+                }}>
+                {edit ? <input
+                        value={name}
+                        className={`${styles.headDirectChild} ${styles.input} ${edit ? '' : styles.hide}`}
+                        type="text"
+                        onChange={e => setName(e.target.value)}
+                        ref={inputEl}
+                        onBlur={handleInputBlur}/>
+                    : <div
+                        className={`${styles.headDirectChild} ${styles.name} ${edit ? styles.hide : ''}`}>
+                        {props.listName}
+                    </div>}
                 <div
                     className={styles.switcher}
-                    style={{ backgroundColor: color }}
-                    onClick={this.handleSwitch}
-                >
-                    ···
+                    style={{ backgroundColor: props.colorTheme }}
+                    onClick={() => setActionDisplay(!actionDisplay)}>···
                 </div>
-                {this.state.isActionDisplay && (
+                {actionDisplay && (
                     <AreaActions
-                        doneItemsDisplay={this.props.doneItemsDisplay}
-                        onColorPick={this.props.onColorPick}
-                        switchDoneItems={this.switchDoneItems}
-                        renameClicked={this.renameClicked}
-                        deleteClicked={this.deleteClicked}
-                        closeActions={this.closeActions}
-                    />
+                        doneItemsDisplay={props.doneItemsDisplay}
+                        onColorPick={props.onColorPick}
+                        switchDoneItems={handleSwitchDoneClick}
+                        renameClicked={handleRenameClick}
+                        deleteClicked={() => props.shouldDeleteList()}
+                        closeActions={() => setActionDisplay(false)}/>
                 )}
             </div>
         )
-    }
-
-    /**
-     * 保存输入的内容，作为新的列表名
-     */
-    private inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({
-            name: e.target.value
-        })
-    }
-
-    /**
-     * 进行重命名工作
-     */
-    private renameClicked = () => {
-        this.toggleActionsDisplay()
-
-        this.setState({ isEdit: true }, () => {
-            if (this.renameInput) {
-                this.renameInput.focus()
-                this.renameInput.value = this.props.listName
-            }
-        })
-    }
-
-    /**
-     * 确认删除列表操作
-     */
-    private deleteClicked = () => {
-        this.props.shouldDeleteList()
-    }
-
-    /**
-     * 显示/隐藏操作列表的视图
-     */
-    private handleSwitch = (e: React.MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation()
-        // this.props.onActionsDisplayClick();
-        this.toggleActionsDisplay()
-    }
-
-    /**
-     * 这个方法用于切换列表操作框，将它显示或隐藏。
-     */
-    private toggleActionsDisplay = () => {
-        this.setState(prevState => ({
-            isActionDisplay: !prevState.isActionDisplay
-        }))
-    }
-
-    /**
-     * 当焦点从输入框移走时，进行列表的重命名工作
-     */
-    private inputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-        e.stopPropagation()
-        this.props.renameList(this.state.name)
-        this.setState({
-            isEdit: false
-        })
-    }
-
-    /**
-     * 显示/隐藏已完成的todo事项
-     */
-    private switchDoneItems = () => {
-        this.props.switchDoneItems()
-        this.toggleActionsDisplay()
-    }
-
-    /**
-     * 关闭操作窗口
-     */
-    private closeActions = () => {
-        this.setState({
-            isActionDisplay: false
-        })
-    }
+    );
 }

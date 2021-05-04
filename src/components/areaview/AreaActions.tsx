@@ -51,7 +51,7 @@ export function AreaActions(props: Props) {
     };
 
     return (
-        <div className={styles.globalBackground} onClick={closeAction} onBlur={closeAction}>
+        <div className={styles.globalBackground} onClick={props.closeActions} onBlur={props.closeActions}>
             <div className={`${'animated fadeIn'} ${styles.actions} ${styles.display}`}>
                 <ThemePicker onColorPick={props.onColorPick}/>
                 <ul className={styles.buttonList}>
